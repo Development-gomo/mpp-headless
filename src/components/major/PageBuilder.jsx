@@ -1,0 +1,47 @@
+//src/components/major/PageBuilder.jsx
+
+import dynamic from "next/dynamic";
+
+const HeroCenteredBg = dynamic(() => import("../sections/hero-sections/HeroCenteredBg"));
+const HeroWithImage  = dynamic(() => import("../sections/hero-sections/HeroWithImage"));
+const HeroBannerWithFeatures = dynamic(() => import("../sections/hero-sections/HeroBannerWithFeatures"));
+const CenteredHero = dynamic(() => import("../sections/hero-sections/Centeredhero"));
+const ContentMediaBlock = dynamic(() => import("../sections/content-sections/ContentMediaBlock"));
+const ProductCategoriesSection = dynamic(() => import("../sections/content-sections/ProductCategoriesSection"));
+const LatestBlogsSection = dynamic(() => import("../sections/content-sections/LatestBlogsSection"));
+const LatestCaseStudiesSection = dynamic(() => import("../sections/content-sections/LatestCaseStudiesSection"));
+const HomeServicesSection = dynamic(() => import("../sections/content-sections/HomeServicesSection")); 
+
+export default function PageBuilder({ sections = [], categoriesWithImages = [], posts = [], caseStudies = [] }) {
+  if (!sections?.length) return null;
+
+  return (
+    <>
+      {sections.map((block, i) => {
+        switch (block.acf_fc_layout) {
+          case "hero_centered_bg":
+            return <HeroCenteredBg key={i} data={block} />;
+          case "hero_with_image":
+            return <HeroWithImage key={i} data={block} />; 
+          case "homepage_banner_with_features":
+            return <HeroBannerWithFeatures key={i} data={block} />;
+          case "centered_hero":   
+            return <CenteredHero key={i} data={block} />;  
+          case "content_media_block":
+            return <ContentMediaBlock key={i} data={block} />;
+          case "home_product_categories":
+            return <ProductCategoriesSection key={i} data={block} categoriesWithImages={categoriesWithImages} />;
+          case "latest_blogs":
+            return <LatestBlogsSection key={i} data={block} posts={posts} />;
+          case "latest_case_studies":
+            return <LatestCaseStudiesSection key={i} data={block} caseStudies={caseStudies} />;
+          case "home_services_section":
+            return <HomeServicesSection key={i} data={block} />;
+
+          default:
+            return null;
+        }
+      })}
+    </>
+  );
+}
