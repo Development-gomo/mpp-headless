@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function getColumnClass(layoutType) {
   if (layoutType === "three_column") return "md:grid-cols-3";
@@ -11,29 +11,71 @@ function getColumnClass(layoutType) {
 }
 
 export default function HeaderComponent(props) {
-  const { logoUrl, megaMenuRows, navLinks, ctaText, ctaUrl, ctaTarget } = props;
+  const {
+    logoUrl,
+    megaMenuRows = [],
+    navLinks = [],
+    headerTelephoneLink = "tel:+46300521930",
+    cta1Text = "Defence",
+    cta1Url = "#",
+    cta1Target = "_self",
+    cta2Text = "Reseller",
+    cta2Url = "#",
+    cta2Target = "_self",
+  } = props;
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openSubmenus, setOpenSubmenus] = useState({});
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const toggleSubmenu = (key) => {
-    setOpenSubmenus((prev) => ({ ...prev, [key]: !prev[key] }));
+    setOpenSubmenus((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
   };
 
+  const menuLinkClass =
+    "inline-flex items-center gap-1.5 text-white text-[14px] font-normal leading-[24px] tracking-[-0.28px] font-heading transition-colors hover:text-white";
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[rgb(23,29,45)]/95 text-white backdrop-blur-sm">
-      <div className="web-width px-6 mx-auto flex items-center justify-between h-20 gap-4">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 text-white transition-all duration-300 ${
+        scrolled ? "bg-black/25 backdrop-blur-[7.5px]" : "bg-transparent"
+      }`}
+    >
+      <div
+        className={`web-width relative mx-auto flex h-[104px] items-center justify-between gap-6 px-6 transition-all duration-300 ${
+          scrolled ? "" : "pt-7"
+        }`}
+      >
         {/* LOGO */}
         <Link href="/" className="shrink-0">
           {logoUrl ? (
-            <Image src={logoUrl} alt="Logo" width={160} height={40} className="object-contain" />
+            <Image
+              src={logoUrl}
+              alt="Logo"
+              width={168}
+              height={56}
+              priority
+              className="h-auto w-[168px] object-contain"
+            />
           ) : (
-            <span className="text-xl font-semibold">GO MO</span>
+            <span className="text-xl font-semibold">MPP</span>
           )}
         </Link>
 
         {/* DESKTOP NAV */}
-        <nav className="hidden lg:flex items-center gap-7 grow justify-center">
+        <nav className="hidden lg:flex items-center justify-center rounded-[4px] bg-white/25 backdrop-blur-[7.5px] border border-white/10 px-8 h-[42px] gap-8">
           {megaMenuRows.length > 0
             ? megaMenuRows.map((menuRow) => {
                 if (menuRow.layoutType === "no_column") {
@@ -42,7 +84,7 @@ export default function HeaderComponent(props) {
                       key={menuRow.key}
                       href={menuRow.titleLink.href}
                       target={menuRow.titleLink.target}
-                      className="text-[15px] leading-none tracking-wide text-white/90 transition-colors hover:text-white"
+                      className={menuLinkClass}
                     >
                       {menuRow.title}
                     </Link>
@@ -54,31 +96,61 @@ export default function HeaderComponent(props) {
                     <Link
                       href={menuRow.titleLink.href}
                       target={menuRow.titleLink.target}
-                      className="inline-flex items-center gap-1.5 text-[15px] leading-none tracking-wide text-white/90 transition-colors hover:text-white"
+                      className={menuLinkClass}
                     >
                       <span>{menuRow.title}</span>
-                      <svg width="10" height="6" viewBox="0 0 10 6" fill="none" className="transition-transform group-hover:rotate-180">
-                        <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.4" />
+
+                      <svg
+                        width="10"
+                        height="6"
+                        viewBox="0 0 10 6"
+                        fill="none"
+                        className="transition-transform group-hover:rotate-180"
+                      >
+                        <path
+                          d="M1 1L5 5L9 1"
+                          stroke="currentColor"
+                          strokeWidth="1.4"
+                        />
                       </svg>
                     </Link>
 
                     <div className="pointer-events-none absolute left-1/2 top-full w-[min(1180px,calc(100vw-3rem))] -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
                       <div className="overflow-hidden rounded-xl border border-slate-200/80 bg-white text-slate-900 shadow-[0_30px_70px_-25px_rgba(8,15,40,0.55)]">
-                        <div className={`grid ${menuRow.sideImage ? "md:grid-cols-[1fr_380px]" : "grid-cols-1"}`}>
+                        <div
+                          className={`grid ${
+                            menuRow.sideImage
+                              ? "md:grid-cols-[1fr_380px]"
+                              : "grid-cols-1"
+                          }`}
+                        >
                           <div className="bg-[#f5f6f9] p-6">
-                            <div className={`grid gap-5 ${getColumnClass(menuRow.layoutType)}`}>
+                            <div
+                              className={`grid gap-5 ${getColumnClass(
+                                menuRow.layoutType
+                              )}`}
+                            >
                               {menuRow.columns.map((column) =>
                                 column.card ? (
-                                  <article key={`${column.key}-card`} className="rounded-md border border-slate-200 bg-white p-5">
+                                  <article
+                                    key={`${column.key}-card`}
+                                    className="rounded-md border border-slate-200 bg-white p-5"
+                                  >
                                     {column.card.title && (
-                                      <h3 className="text-xl font-semibold leading-snug text-slate-900">{column.card.title}</h3>
+                                      <h3 className="text-xl font-semibold leading-snug text-slate-900">
+                                        {column.card.title}
+                                      </h3>
                                     )}
+
                                     {column.card.description && (
                                       <div
                                         className="mt-2 text-sm leading-relaxed text-slate-600"
-                                        dangerouslySetInnerHTML={{ __html: column.card.description }}
+                                        dangerouslySetInnerHTML={{
+                                          __html: column.card.description,
+                                        }}
                                       />
                                     )}
+
                                     {column.card.button?.href && (
                                       <Link
                                         href={column.card.button.href}
@@ -86,31 +158,62 @@ export default function HeaderComponent(props) {
                                         className="mt-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#2f56d3] text-white transition-colors hover:bg-[#2849b5]"
                                         aria-label={column.card.button.label}
                                       >
-                                        <svg width="14" height="14" viewBox="0 0 18 18" fill="none">
-                                          <path d="M3 9H15" stroke="currentColor" strokeWidth="1.6" />
-                                          <path d="M10 4L15 9L10 14" stroke="currentColor" strokeWidth="1.6" />
+                                        <svg
+                                          width="14"
+                                          height="14"
+                                          viewBox="0 0 18 18"
+                                          fill="none"
+                                        >
+                                          <path
+                                            d="M3 9H15"
+                                            stroke="currentColor"
+                                            strokeWidth="1.6"
+                                          />
+                                          <path
+                                            d="M10 4L15 9L10 14"
+                                            stroke="currentColor"
+                                            strokeWidth="1.6"
+                                          />
                                         </svg>
                                       </Link>
                                     )}
                                   </article>
                                 ) : (
-                                  <div key={`${column.key}-spacer`} className="hidden md:block" />
+                                  <div
+                                    key={`${column.key}-spacer`}
+                                    className="hidden md:block"
+                                  />
                                 )
                               )}
                             </div>
 
-                            <div className={`mt-6 grid gap-7 ${getColumnClass(menuRow.layoutType)}`}>
+                            <div
+                              className={`mt-6 grid gap-7 ${getColumnClass(
+                                menuRow.layoutType
+                              )}`}
+                            >
                               {menuRow.columns.map((column) => (
-                                <ul key={`${column.key}-links`} className="space-y-1">
+                                <ul
+                                  key={`${column.key}-links`}
+                                  className="space-y-1"
+                                >
                                   {column.links.map((subLink) => (
-                                    <li key={subLink.key} className="border-b border-slate-200">
+                                    <li
+                                      key={subLink.key}
+                                      className="border-b border-slate-200"
+                                    >
                                       <Link
                                         href={subLink.href}
                                         target={subLink.target}
                                         className="group/link flex items-center justify-between gap-3 py-3 text-sm text-slate-600 transition-colors hover:text-slate-900"
                                       >
-                                        <span className="leading-tight">{subLink.label}</span>
-                                        <span className="translate-x-0 transition-transform group-hover/link:translate-x-1">-&gt;</span>
+                                        <span className="leading-tight">
+                                          {subLink.label}
+                                        </span>
+
+                                        <span className="translate-x-0 transition-transform group-hover/link:translate-x-1">
+                                          -&gt;
+                                        </span>
                                       </Link>
                                     </li>
                                   ))}
@@ -140,14 +243,86 @@ export default function HeaderComponent(props) {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm font-normal font-heading text-white/80 hover:text-white transition-colors"
+                  className={menuLinkClass}
                 >
                   {link.label}
                 </Link>
               ))}
         </nav>
 
-        {/* MOBILE NAV - FLYOUT */}
+        {/* RIGHT SIDE */}
+        <div className="hidden lg:flex items-center gap-2">
+          {/* Top menu: hidden on scroll */}
+          <div
+            className={`absolute right-6 top-[10px] flex items-center gap-1 transition-all duration-300 ${
+              scrolled
+                ? "pointer-events-none opacity-0 -translate-y-2"
+                : "opacity-100 translate-y-0"
+            }`}
+          >
+            <Link
+              href={headerTelephoneLink || "tel:+46300521930"}
+              className="flex h-[28px] w-[28px] items-center justify-center rounded-[4px] bg-white/25 backdrop-blur-[7.5px]"
+              aria-label="Call"
+            >
+              <Image
+                src="/call.svg"
+                alt=""
+                width={14}
+                height={14}
+                className="h-auto w-[14px] object-contain"
+              />
+            </Link>
+
+            <button
+              type="button"
+              className="flex h-[28px] items-center gap-1 rounded-[4px] bg-white/25 backdrop-blur-[7.5px] px-2 text-white text-[14px] font-heading tracking-[-0.28px]"
+            >
+              EN
+              <span className="text-[12px] leading-none">⌄</span>
+            </button>
+          </div>
+
+          {/* CTA 1 */}
+          <Link
+            href={cta1Url || "#"}
+            target={cta1Target || "_self"}
+            className="inline-flex h-[48px] items-center gap-4 rounded-[4px] bg-[#445641] py-[6px] pr-[6px] pl-5 text-white font-heading text-[14px] tracking-[-0.28px] hover:opacity-90 transition-opacity"
+          >
+            <span>{cta1Text}</span>
+
+            <span className="flex h-[36px] w-[36px] items-center justify-center rounded-[4px] bg-white">
+              <Image
+                src="/defence.svg"
+                alt=""
+                width={36}
+                height={36}
+                className="h-auto w-[36px] object-contain"
+              />
+            </span>
+          </Link>
+
+          {/* CTA 2 */}
+          <Link
+            href={cta2Url || "#"}
+            target={cta2Target || "_self"}
+            className="group inline-flex h-[48px] items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-5 text-black font-heading text-[14px] tracking-[-0.28px] hover:opacity-90 transition-opacity"
+          >
+            <span>{cta2Text}</span>
+
+            <span className="flex h-[36px] w-[36px] items-center justify-center rounded-[4px] bg-white">
+              <Image
+                src="/reseller.svg"
+                alt=""
+                width={36}
+                height={36}
+                className="h-auto w-[36px] object-contain transition-transform"
+              />
+            </span>
+          </Link>
+        </div>
+
+        {/* MOBILE MENU BUTTON */}
         <button
           className="lg:hidden ml-auto flex items-center justify-center w-10 h-10 rounded border border-white/25 text-white hover:bg-white/10"
           aria-label="Open menu"
@@ -155,14 +330,27 @@ export default function HeaderComponent(props) {
         >
           <svg width="28" height="28" fill="none" viewBox="0 0 28 28">
             <rect y="6" width="28" height="2.5" rx="1.25" fill="currentColor" />
-            <rect y="13" width="28" height="2.5" rx="1.25" fill="currentColor" />
-            <rect y="20" width="28" height="2.5" rx="1.25" fill="currentColor" />
+            <rect
+              y="13"
+              width="28"
+              height="2.5"
+              rx="1.25"
+              fill="currentColor"
+            />
+            <rect
+              y="20"
+              width="28"
+              height="2.5"
+              rx="1.25"
+              fill="currentColor"
+            />
           </svg>
         </button>
 
+        {/* MOBILE NAV */}
         {mobileOpen && (
-          <div className="fixed inset-0 z-999 bg-black/40 flex">
-            <div className="relative w-[min(92vw,360px)] max-w-90 bg-white text-slate-900 shadow-xl h-full flex flex-col">
+          <div className="fixed inset-0 z-[999] bg-black/40 flex">
+            <div className="relative w-[min(92vw,360px)] bg-white text-slate-900 shadow-xl h-full flex flex-col">
               <button
                 className="absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100"
                 aria-label="Close menu"
@@ -173,11 +361,15 @@ export default function HeaderComponent(props) {
                   <path d="M16 6L6 16" stroke="currentColor" strokeWidth="2" />
                 </svg>
               </button>
+
               <div className="p-6 pt-12 flex-1 overflow-y-auto">
                 <ul className="space-y-2">
                   {megaMenuRows.length > 0
                     ? megaMenuRows.map((menuRow) => (
-                        <li key={`mobile-${menuRow.key}`} className="border-b border-slate-200 pb-2">
+                        <li
+                          key={`mobile-${menuRow.key}`}
+                          className="border-b border-slate-200 pb-2"
+                        >
                           {menuRow.layoutType !== "no_column" ? (
                             <>
                               <button
@@ -186,24 +378,42 @@ export default function HeaderComponent(props) {
                                 aria-expanded={!!openSubmenus[menuRow.key]}
                               >
                                 <span>{menuRow.title}</span>
-                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className={`transition-transform ${openSubmenus[menuRow.key] ? "rotate-90" : "rotate-0"}`}>
-                                  <path d="M6 4L12 9L6 14" stroke="currentColor" strokeWidth="2" />
+
+                                <svg
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 18 18"
+                                  fill="none"
+                                  className={`transition-transform ${
+                                    openSubmenus[menuRow.key]
+                                      ? "rotate-90"
+                                      : "rotate-0"
+                                  }`}
+                                >
+                                  <path
+                                    d="M6 4L12 9L6 14"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                  />
                                 </svg>
                               </button>
+
                               {openSubmenus[menuRow.key] && (
                                 <ul className="pl-3 pb-2">
-                                  {menuRow.columns.flatMap((column) => column.links).map((link) => (
-                                    <li key={`mobile-${link.key}`}>
-                                      <Link
-                                        href={link.href}
-                                        target={link.target}
-                                        className="block py-1 text-[15px] text-slate-700 hover:text-slate-900"
-                                        onClick={() => setMobileOpen(false)}
-                                      >
-                                        {link.label}
-                                      </Link>
-                                    </li>
-                                  ))}
+                                  {menuRow.columns
+                                    .flatMap((column) => column.links)
+                                    .map((link) => (
+                                      <li key={`mobile-${link.key}`}>
+                                        <Link
+                                          href={link.href}
+                                          target={link.target}
+                                          className="block py-1 text-[15px] text-slate-700 hover:text-slate-900"
+                                          onClick={() => setMobileOpen(false)}
+                                        >
+                                          {link.label}
+                                        </Link>
+                                      </li>
+                                    ))}
                                 </ul>
                               )}
                             </>
@@ -220,7 +430,10 @@ export default function HeaderComponent(props) {
                         </li>
                       ))
                     : navLinks.map((link) => (
-                        <li key={`mobile-${link.href}`} className="border-b border-slate-200 pb-2">
+                        <li
+                          key={`mobile-${link.href}`}
+                          className="border-b border-slate-200 pb-2"
+                        >
                           <Link
                             href={link.href}
                             className="block py-2 text-[16px] font-semibold"
@@ -231,28 +444,74 @@ export default function HeaderComponent(props) {
                         </li>
                       ))}
                 </ul>
+
+                <div className="mt-8 flex flex-col gap-3">
+                  {/* Mobile CTA 1 */}
+                  <Link
+                    href={cta1Url || "#"}
+                    target={cta1Target || "_self"}
+                    className="inline-flex items-center justify-between rounded-[4px] bg-[#445641] py-[6px] pr-[6px] pl-5 text-white font-heading text-[14px]"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <span>{cta1Text}</span>
+
+                    <span className="flex h-[36px] w-[37px] items-center justify-center rounded-[4px] bg-white">
+                      <Image
+                        src="/defence.svg"
+                        alt=""
+                        width={18}
+                        height={18}
+                        className="h-auto w-[18px]"
+                      />
+                    </span>
+                  </Link>
+
+                  {/* Mobile CTA 2 */}
+                  <Link
+                    href={cta2Url || "#"}
+                    target={cta2Target || "_self"}
+                    className="inline-flex items-center justify-between rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-5 text-black font-heading text-[14px]"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <span>{cta2Text}</span>
+
+                    <span className="flex h-[36px] w-[37px] items-center justify-center rounded-[4px] bg-white">
+                      <Image
+                        src="/reseller.svg"
+                        alt=""
+                        width={18}
+                        height={18}
+                        className="h-auto w-[18px]"
+                      />
+                    </span>
+                  </Link>
+
+                  {/* Mobile Phone */}
+                  <Link
+                    href={headerTelephoneLink || "tel:+46300521930"}
+                    className="inline-flex items-center justify-between rounded-[4px] bg-slate-100 py-3 px-5 text-slate-900 font-heading text-[14px]"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <span>Call us</span>
+
+                    <Image
+                      src="/call.svg"
+                      alt=""
+                      width={16}
+                      height={16}
+                      className="h-auto w-[16px]"
+                    />
+                  </Link>
+                </div>
               </div>
             </div>
-            <div className="flex-1" onClick={() => setMobileOpen(false)} />
-          </div>
-        )}
 
-        {/* CTA */}
-        {ctaText && (
-          <Link
-            href={ctaUrl}
-            className="inline-flex justify-end items-center gap-4 py-[6px] pr-[6px] pl-6 rounded-[4px] bg-[var(--color-yellow)] text-black font-[var(--font-heading)] text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"
-          >
-            <span>{ctaText}</span>
-
-            <Image
-              src="/black-white-arrow.svg"
-              alt=""
-              width={36}
-              height={36}
-              className="object-contain transition-transform group-hover:translate-x-1"
+            <button
+              aria-label="Close menu overlay"
+              className="flex-1"
+              onClick={() => setMobileOpen(false)}
             />
-          </Link>
+          </div>
         )}
       </div>
     </header>
