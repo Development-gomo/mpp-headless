@@ -1,6 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 
+function getCategoryImage(cat) {
+  return (
+    cat?.acf?.category_image?.url ||
+    cat?.acf?.category_image?.sizes?.large ||
+    cat?.acf?.category_image?.sizes?.full ||
+    cat?.category_image?.url ||
+    cat?.category_image?.sizes?.large ||
+    cat?.category_image?.sizes?.full ||
+    cat?.image ||
+    ""
+  );
+}
 export default function ProductCategoriesSection({
   data,
   categoriesWithImages = [],
@@ -39,12 +51,8 @@ export default function ProductCategoriesSection({
 
       return {
         ...cat,
-        image:
-          matched?.image ||
-          matched?.image?.src ||
-          matched?.image?.url ||
-          cat?.image ||
-          "",
+        ...matched,
+        acf: matched?.acf || cat?.acf || {},
         link:
           matched?.link ||
           cat?.link ||
@@ -120,97 +128,83 @@ export default function ProductCategoriesSection({
 
         {/* Categories */}
         {mergedCategories.length > 0 && (
-        <>
-          {mergedCategories.length === 1 ? (
-            <div className="relative h-[360px] overflow-hidden rounded-[8px] bg-black md:h-[526px]">
-              {(() => {
-                const cat = mergedCategories[0];
-                const title = cat?.name || cat?.title;
+          <>
+            {mergedCategories.length === 1 ? (
+              <div className="relative h-[360px] overflow-hidden rounded-[8px] bg-black md:h-[526px]">
+                {(() => {
+                  const cat = mergedCategories[0];
+                  const title = cat?.name || cat?.title;
+                  const image = getCategoryImage(cat);
 
-                const image =
-                  cat?.category_image?.url ||
-                  cat?.category_image?.sizes?.large ||
-                  cat?.category_image?.sizes?.full ||
-                  (typeof cat?.image === "string"
-                    ? cat.image
-                    : cat?.image?.src || cat?.image?.url || "");
+                  return (
+                    <>
+                      {image && (
+                        <Image
+                          src={image}
+                          alt={title || "Product category"}
+                          fill
+                          sizes="100vw"
+                          className="object-cover"
+                        />
+                      )}
+                    </>
+                  );
+                })()}
+              </div>
+            ) : (
+              <div
+                className={`grid grid-cols-1 ${
+                  gridCols[columnCount] || "lg:grid-cols-2"
+                } gap-6`}
+              >
+                {mergedCategories.map((cat, index) => {
+                  const title = cat?.name || cat?.title;
+                  const image = getCategoryImage(cat);
 
-                return (
-                  <>
-                    {image && (
-                      <Image
-                        src={image}
-                        alt={title || "Product category"}
-                        fill
-                        sizes="100vw"
-                        className="object-cover"
-                      />
-                    )}
-                  </>
-                );
-              })()}
-            </div>
-          ) : (
-            <div
-              className={`grid grid-cols-1 ${
-                gridCols[columnCount] || "lg:grid-cols-2"
-              } gap-6`}
-            >
-              {mergedCategories.map((cat, index) => {
-                const title = cat?.name || cat?.title;
+                  return (
+                    <Link
+                      key={cat?.term_id || cat?.id || index}
+                      href={cat?.link || "#"}
+                      className="group relative h-[360px] overflow-hidden rounded-[8px] bg-black md:h-[405px]"
+                    >
+                      {image && (
+                        <Image
+                          src={image}
+                          alt={title || "Product category"}
+                          fill
+                          sizes="(min-width: 1024px) 50vw, 100vw"
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      )}
 
-                const image =
-                  cat?.category_image?.url ||
-                  cat?.category_image?.sizes?.large ||
-                  cat?.category_image?.sizes?.full ||
-                  (typeof cat?.image === "string"
-                    ? cat.image
-                    : cat?.image?.src || cat?.image?.url || "");
+                      <div className="absolute inset-0 bg-black/10" />
 
-                return (
-                  <Link
-                    key={cat?.term_id || cat?.id || index}
-                    href={cat?.link || "#"}
-                    className="group relative h-[360px] overflow-hidden rounded-[8px] bg-black md:h-[405px]"
-                  >
-                    {image && (
-                      <Image
-                        src={image}
-                        alt={title || "Product category"}
-                        fill
-                        sizes="(min-width: 1024px) 50vw, 100vw"
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    )}
+                      <div className="absolute inset-x-2 bottom-2 z-10 rounded-[4px] bg-[rgba(58,58,58,0.45)] px-6 py-7 backdrop-blur-[6px] md:inset-x-2 md:bottom-2">
+                        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                          <h3 className="text-white text-[24px] leading-[32px] font-medium tracking-[-0.48px] font-heading">
+                            {title}
+                          </h3>
 
-                    <div className="absolute inset-0 bg-black/10" />
+                          <span className="inline-flex w-fit items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 text-white font-heading text-[14px] font-normal tracking-[-0.28px]">
+                            <span>View products</span>
 
-                    <div className="absolute inset-x-2 bottom-2 z-10 rounded-[4px] bg-[rgba(58,58,58,0.45)] px-6 py-7 backdrop-blur-[6px] md:inset-x-2 md:bottom-2">
-                      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-                        <h3 className="text-white text-[24px] leading-[32px] font-medium tracking-[-0.48px] font-heading">
-                          {title}
-                        </h3>
-
-                        <span className="inline-flex w-fit items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 text-white font-heading text-[14px] font-normal tracking-[-0.28px]">
-                          <span>View products</span>
-
-                          <Image
-                            src="/black-white-arrow.svg"
-                            alt=""
-                            width={40}
-                            height={40}
-                            className="h-auto w-[40px] object-contain transition-transform"
-                          />
-                        </span>
+                            <Image
+                              src="/black-white-arrow.svg"
+                              alt=""
+                              width={40}
+                              height={40}
+                              className="h-auto w-[40px] object-contain transition-transform"
+                            />
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          )}
-        </>
-      )}
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </>
+        )}
       </div>
     </section>
   );
