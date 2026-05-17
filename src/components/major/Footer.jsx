@@ -23,7 +23,7 @@ export default function Footer() {
 
           <Link
             href="#"
-            className="group inline-flex items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 text-black font-heading text-[14px] tracking-[-0.28px] hover:opacity-90 transition-opacity absolute right-10 top-1/2 -translate-y-1/2 group inline-flex items-center gap-4 bg-[var(--color-yellow)] px-6 py-[6px] rounded-[4px] text-black text-[14px]"
+            className="group inline-flex items-center gap-4 py-[6px] pr-[6px] pl-6 rounded-[4px] bg-[var(--color-yellow)] text-black font-[var(--font-heading)] text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity absolute right-10 top-1/2 -translate-y-1/2 z-10"
           >
             <span>Get in touch with us</span>
             <Image
@@ -36,7 +36,7 @@ export default function Footer() {
           </Link>
 
           {/* Decorative shapes (optional) */}
-          <div className="absolute right-0 top-0 h-full w-[300px] opacity-20 bg-[radial-gradient(circle_at_top_right,#4F7FFF,transparent)]" />
+          <div className="absolute right-0 top-0 h-full w-[300px] opacity-20 bg-[url('/mpp-pattern.svg')] bg-no-repeat bg-[length:105%] bg-[-100%]" />
         </div>
 
         {/* MAIN FOOTER GRID */}

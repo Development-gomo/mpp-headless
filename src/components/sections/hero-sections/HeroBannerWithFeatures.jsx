@@ -30,7 +30,7 @@ export default function HeroBannerWithFeatures({ data }) {
   return (
     <section
       id={custom_id || undefined}
-      className={`relative min-h-screen flex items-center overflow-hidden${
+      className={`relative min-h-[720px] lg:min-h-screen flex flex-col md:flex-row md:items-center overflow-hidden ${
         custom_class ? ` ${custom_class}` : ""
       }`}
       style={
@@ -67,23 +67,23 @@ export default function HeroBannerWithFeatures({ data }) {
       )}
 
       {/* Main Content */}
-      <div className="relative web-width px-6 py-24 pb-48 w-full">
-        <div className="max-w-4xl flex flex-col gap-8">
+      <div className="relative web-width px-6 pt-28 pb-16 md:py-24 md:pb-48 w-full">
+        <div className="max-w-4xl flex flex-col gap-6 md:gap-8">
           {hero_title && (
-            <h1 className="text-5xl lg:text-7xl font-normal font-heading text-white ">
+            <h1 className="text-[42px] leading-[1.05] tracking-[-1px] sm:text-[56px] lg:text-[84px] font-normal font-heading text-white max-w-[900px]">
               {hero_title}
             </h1>
           )}
 
           {hero_description && (
             <div
-              className="text-white text-lg max-w-xl font-body" 
+              className="text-white text-[16px] leading-[24px] md:text-[18px] md:leading-[30px] max-w-[620px] font-body" 
               dangerouslySetInnerHTML={{ __html: hero_description }}
             />
           )}
 
           {button_row?.length > 0 && (
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-4">
               {button_row.map((btn, i) => (
                 <Link
                   key={i}
@@ -101,7 +101,7 @@ export default function HeroBannerWithFeatures({ data }) {
                     alt=""
                     width={36}
                     height={36}
-                    className="w-[36px] h-autoobject-contain transition-transform group-hover:translate-x-1"
+                    className="w-[36px] h-auto object-contain transition-transform group-hover:translate-x-1"
                   />
                 </Link>
               ))}
@@ -112,14 +112,14 @@ export default function HeroBannerWithFeatures({ data }) {
 
       {/* Features Bottom Bar */}
       {features?.length > 0 && (
-        <div className="absolute bottom-0 left-0 right-0 z-10 border-t border-white/10 bg-black/25 backdrop-blur-[2px]">
-          <div className="web-width px-6 py-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div className="relative md:absolute md:bottom-0 md:left-0 md:right-0 z-10 border-t border-white/10 bg-black/25 backdrop-blur-[2px] w-full">
+          <div className="web-width px-6 py-8 md:py-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 md:gap-6">
               {features.map((feature, index) => {
                 const iconUrl = getImageUrl(feature.feature_icon);
 
                 return (
-                  <div key={index} className="flex flex-col items-start gap-2">
+                  <div key={index} className="flex items-start gap-4 lg:flex-col lg:gap-2">
                     {iconUrl ? (
                       <Image
                         src={iconUrl}
@@ -136,7 +136,7 @@ export default function HeroBannerWithFeatures({ data }) {
 
                     {feature.feature_text && (
                       <div
-                        className="text-white text-sm leading-relaxed max-w-[180px]"
+                        className="text-white text-[14px] leading-[22px] max-w-[220px] font-body"
                         dangerouslySetInnerHTML={{
                           __html: feature.feature_text,
                         }}
