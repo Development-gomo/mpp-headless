@@ -11,6 +11,7 @@ const ProductCategoriesSection = dynamic(() => import("../sections/content-secti
 const LatestBlogsSection = dynamic(() => import("../sections/content-sections/LatestBlogsSection"));
 const LatestCaseStudiesSection = dynamic(() => import("../sections/content-sections/LatestCaseStudiesSection"));
 const HomeServicesSection = dynamic(() => import("../sections/content-sections/HomeServicesSection")); 
+const HomeTankSection = dynamic(() => import("../sections/content-sections/HomeTankSection"));
 
 export default function PageBuilder({ sections = [], categoriesWithImages = [], posts = [], caseStudies = [] }) {
   if (!sections?.length) return null;
@@ -37,6 +38,8 @@ export default function PageBuilder({ sections = [], categoriesWithImages = [], 
             return <LatestCaseStudiesSection key={i} data={block} caseStudies={caseStudies} />;
           case "home_services_section":
             return <HomeServicesSection key={i} data={block} />;
+          case "homepage_tank_section":
+            return <HomeTankSection key={i} data={block} />;
 
           default:
             return null;

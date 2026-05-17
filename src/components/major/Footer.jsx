@@ -3,11 +3,11 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0F1E1C] text-white">
+    <footer className="bg-[#18201F] text-white">
       <div className="web-width px-6 py-16">
 
         {/* CTA BOX */}
-        <div className="relative mb-16 overflow-hidden rounded-[8px] bg-[#2C3533] px-10 py-12">
+        <div className="relative mb-16 overflow-hidden rounded-[8px] bg-[#303736] px-10 py-12">
           <div className="max-w-[720px]">
             <div className="flex items-center gap-2 mb-5">
               <span className="w-[2px] h-[12px] bg-[var(--color-yellow)]" />
@@ -23,7 +23,7 @@ export default function Footer() {
 
           <Link
             href="#"
-            className="group inline-flex items-center gap-4 py-[6px] pr-[6px] pl-6 rounded-[4px] bg-[var(--color-yellow)] text-black font-[var(--font-heading)] text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity absolute right-10 top-1/2 -translate-y-1/2 z-10"
+            className="group inline-flex items-center gap-4 py-[6px] pr-[6px] pl-6 rounded-[4px] bg-[var(--color-yellow)] text-black font-[var(--font-heading)] text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity relative md:absolute right-0 md:right-10 top-0 md:top-1/2 md:-translate-y-1/2 z-10"
           >
             <span>Get in touch with us</span>
             <Image

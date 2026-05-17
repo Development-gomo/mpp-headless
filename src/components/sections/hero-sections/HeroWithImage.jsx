@@ -59,8 +59,18 @@ export default function HeroWithImage({ data }) {
         <div className="absolute inset-0 bg-black/40 -z-10" />
       )}
 
+      {/* Right-side pattern */}
+      <div
+        className="pointer-events-none absolute right-0 top-1/2 z-0 hidden h-full w-[55%] -translate-y-1/2 bg-no-repeat opacity-20 lg:block"
+        style={{
+          backgroundImage: "url('/mpp-pattern.svg')",
+          backgroundSize: "80%",
+          backgroundPosition: "right center",
+        }}
+      />
+
       {/* Content */}
-      <div className="relative web-width px-6 py-24 w-full grid lg:grid-cols-2 gap-12 items-center">
+      <div className="relative z-10 web-width px-6 py-24 w-full grid lg:grid-cols-2 gap-12 items-center">
         {/* LEFT — Text */}
         <div className="flex flex-col gap-8">
           <div className="flex items-center gap-3">
@@ -113,16 +123,17 @@ export default function HeroWithImage({ data }) {
 
         {/* RIGHT — Hero Image */}
         {heroImg && (
-          <div className="relative h-[400px] lg:h-[600px] rounded-lg overflow-hidden">
-            <Image
-              src={heroImg}
-              alt={hero_title || "Hero image"}
-              fill
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              priority
-              className="object-cover"
-            />
-          </div>
+        <div className="flex w-full items-center justify-center lg:justify-end">
+          <Image
+            src={heroImg}
+            alt={hero_title || "Hero image"}
+            width={900}
+            height={600}
+            priority
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="h-auto w-full max-w-[560px] object-contain z-10"
+          />
+        </div>
         )}
       </div>
     </section>
