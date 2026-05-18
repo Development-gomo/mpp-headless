@@ -13,6 +13,7 @@ const LatestCaseStudiesSection = dynamic(() => import("../sections/content-secti
 const HomeServicesSection = dynamic(() => import("../sections/content-sections/HomeServicesSection")); 
 const HomeTankSection = dynamic(() => import("../sections/content-sections/HomeTankSection"));
 const ServiceOverviewSection = dynamic(() => import("../sections/content-sections/service/ServiceOverviewSection"));
+const ServiceProcessSection = dynamic(() => import("../sections/content-sections/service/ServiceProcessSection"));
 
 export default function PageBuilder({ sections = [], categoriesWithImages = [], posts = [], caseStudies = [] }) {
   if (!sections?.length) return null;
@@ -43,7 +44,9 @@ export default function PageBuilder({ sections = [], categoriesWithImages = [], 
             return <HomeTankSection key={i} data={block} />;
           case "service_overview_section":
             return <ServiceOverviewSection key={i} data={block} />;
-          
+          case "service_process_section":
+            return <ServiceProcessSection key={i} data={block} />;
+
           default:
             return null;
         }

@@ -1,9 +1,12 @@
 import { WP_BASE } from "@/config";
 
-// Generic fetch helper with ISR revalidation (60s by default).
+// Generic fetch helper with ISR revalidation.
 export async function fetchWP(endpoint, { revalidate = 10 } = {}) {
   try {
-    const url = `${WP_BASE}/wp-json${endpoint.startsWith("/") ? "" : "/"}${endpoint}`;
+    const url = `${WP_BASE}/wp-json${
+      endpoint.startsWith("/") ? "" : "/"
+    }${endpoint}`;
+
     const res = await fetch(url, { next: { revalidate } });
 
     if (!res.ok) {
@@ -18,13 +21,37 @@ export async function fetchWP(endpoint, { revalidate = 10 } = {}) {
   }
 }
 
+// Helper to safely add query params
+function withParams(endpoint, params = {}) {
+  const [path, queryString = ""] = endpoint.split("?");
+  const searchParams = new URLSearchParams(queryString);
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      searchParams.set(key, value);
+    }
+  });
+
+  const finalQuery = searchParams.toString();
+  return finalQuery ? `${path}?${finalQuery}` : path;
+}
+
 // ─── Generic helpers ────────────────────────────────────────────────────────
 
 async function getSingleEntry(endpoint, slug) {
   if (!slug) return null;
+
   try {
-    const entries = await fetchWP(`/wp/v2/${endpoint}?slug=${encodeURIComponent(slug)}&_embed`);
+    const entries = await fetchWP(
+      withParams(`/wp/v2/${endpoint}`, {
+        slug: encodeURIComponent(slug),
+        _embed: "1",
+        acf_format: "standard",
+      })
+    );
+
     if (!Array.isArray(entries) || entries.length === 0) return null;
+
     return entries.find((e) => e.slug === slug) || entries[0];
   } catch {
     return null;
@@ -33,8 +60,14 @@ async function getSingleEntry(endpoint, slug) {
 
 async function getEntryById(endpoint, id) {
   if (!id) return null;
+
   try {
-    return await fetchWP(`/wp/v2/${endpoint}/${id}`);
+    return await fetchWP(
+      withParams(`/wp/v2/${endpoint}/${id}`, {
+        _embed: "1",
+        acf_format: "standard",
+      })
+    );
   } catch {
     return null;
   }
@@ -51,7 +84,13 @@ export async function getPageById(id) {
 }
 
 export async function getAllPages() {
-  return fetchWP(`/wp/v2/pages?per_page=100`);
+  return fetchWP(
+    withParams(`/wp/v2/pages`, {
+      per_page: 100,
+      _embed: "1",
+      acf_format: "standard",
+    })
+  );
 }
 
 // ─── Posts ──────────────────────────────────────────────────────────────────
@@ -61,28 +100,42 @@ export async function getPostBySlug(slug) {
 }
 
 export async function getAllPosts() {
-  return fetchWP(`/wp/v2/posts?per_page=100&_embed`);
+  return fetchWP(
+    withParams(`/wp/v2/posts`, {
+      per_page: 100,
+      _embed: "1",
+      acf_format: "standard",
+    })
+  );
 }
 
-// ─── Case studies (custom post type) ───────────────────────────────────────
+// ─── Case studies ───────────────────────────────────────────────────────────
 
 export async function getCaseStudyBySlug(slug) {
   return getSingleEntry("case-study", slug);
 }
 
 export async function getCaseStudies() {
-  const data = await fetchWP(`/wp/v2/case-study?per_page=100&_embed`);
+  const data = await fetchWP(
+    withParams(`/wp/v2/case-study`, {
+      per_page: 100,
+      _embed: "1",
+      acf_format: "standard",
+    })
+  );
+
   return Array.isArray(data) ? data : [];
 }
 
-// ─── Media ────
+// ─── Media ──────────────────────────────────────────────────────────────────
 
 export async function getMediaById(id) {
   if (!id) return null;
+
   return fetchWP(`/wp/v2/media/${id}`);
 }
 
-// ─── Menu (headless/v1 — the only custom namespace available) ───────────────
+// ─── Menu ───────────────────────────────────────────────────────────────────
 
 export async function getMenu(location = "primary") {
   try {
@@ -93,13 +146,12 @@ export async function getMenu(location = "primary") {
   }
 }
 
-// ─── Theme options (ACF Options page via wp/v2) ──────────────────────────────
-// Reads from the ACF options page if registered, otherwise returns empty shell.
+// ─── Theme options ──────────────────────────────────────────────────────────
 
 export async function getThemeOptions() {
   const endpoints = [
     `/headless/v1/theme-options`,
-    `/wp/v2/acf/options`,
+    `/wp/v2/acf/options?acf_format=standard`,
     `/acf/v3/options/options`,
   ];
 
@@ -113,6 +165,8 @@ export async function getThemeOptions() {
   return {};
 }
 
+// ─── Product categories ─────────────────────────────────────────────────────
+
 export async function getProductCategoriesWithImages() {
   const data = await fetchWP(`/headless/v1/product-categories`);
 
@@ -121,6 +175,7 @@ export async function getProductCategoriesWithImages() {
 
 export async function getProductCategories() {
   const data = await fetchWP(`/headless/v1/product-categories`);
+
   return Array.isArray(data) ? data : [];
 }
 
@@ -130,22 +185,47 @@ export async function getProductCategoryBySlug(slug) {
   return categories.find((cat) => cat.slug === slug) || null;
 }
 
+// ─── Products ───────────────────────────────────────────────────────────────
+
 export async function getProductsByCategory(categoryId) {
   if (!categoryId) return [];
 
   const data = await fetchWP(
-    `/wp/v2/product?product_cat=${categoryId}&per_page=100&_embed`
+    withParams(`/wp/v2/product`, {
+      product_cat: categoryId,
+      per_page: 100,
+      _embed: "1",
+      acf_format: "standard",
+    })
   );
 
   return Array.isArray(data) ? data : [];
 }
 
+// ─── Latest posts ───────────────────────────────────────────────────────────
+
 export async function getLatestPosts() {
-  const data = await fetchWP(`/wp/v2/posts?per_page=3&_embed`);
+  const data = await fetchWP(
+    withParams(`/wp/v2/posts`, {
+      per_page: 3,
+      _embed: "1",
+      acf_format: "standard",
+    })
+  );
+
   return Array.isArray(data) ? data : [];
 }
 
+// ─── Latest case studies ────────────────────────────────────────────────────
+
 export async function getLatestCaseStudies() {
-  const data = await fetchWP(`/wp/v2/case-study?per_page=2&_embed`);
+  const data = await fetchWP(
+    withParams(`/wp/v2/case-study`, {
+      per_page: 2,
+      _embed: "1",
+      acf_format: "standard",
+    })
+  );
+
   return Array.isArray(data) ? data : [];
 }

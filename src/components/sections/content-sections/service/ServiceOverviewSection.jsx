@@ -5,13 +5,16 @@ function getImageUrl(image) {
   if (!image) return "";
 
   if (typeof image === "string") return image;
-
+    
   return (
     image?.url ||
     image?.source_url ||
     image?.sizes?.full ||
     image?.sizes?.large ||
     image?.sizes?.medium_large ||
+    image?.sizes?.medium ||
+    image?.media_details?.sizes?.large?.source_url ||
+    image?.media_details?.sizes?.full?.source_url ||
     ""
   );
 }
@@ -31,8 +34,7 @@ export default function ServiceOverviewSection({ data }) {
     custom_id,
   } = data;
 
-  const heroImg = hero_image?.url || hero_image?.sizes?.large || "";
-
+  const heroImg = getImageUrl(hero_image);
   return (
     <section
       id={custom_id || undefined}
