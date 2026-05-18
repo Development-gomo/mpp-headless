@@ -119,6 +119,27 @@ export async function getProductCategoriesWithImages() {
   return Array.isArray(data) ? data : [];
 }
 
+export async function getProductCategories() {
+  const data = await fetchWP(`/headless/v1/product-categories`);
+  return Array.isArray(data) ? data : [];
+}
+
+export async function getProductCategoryBySlug(slug) {
+  const categories = await getProductCategories();
+
+  return categories.find((cat) => cat.slug === slug) || null;
+}
+
+export async function getProductsByCategory(categoryId) {
+  if (!categoryId) return [];
+
+  const data = await fetchWP(
+    `/wp/v2/product?product_cat=${categoryId}&per_page=100&_embed`
+  );
+
+  return Array.isArray(data) ? data : [];
+}
+
 export async function getLatestPosts() {
   const data = await fetchWP(`/wp/v2/posts?per_page=3&_embed`);
   return Array.isArray(data) ? data : [];

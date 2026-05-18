@@ -11,6 +11,16 @@ const nextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: wpHostname, pathname: "/**" },
       { protocol: "https", hostname: `www.${wpHostname}`, pathname: "/**" },
+      {
+        protocol: "http",
+        hostname: "gomowebb.com",
+        pathname: "/headless-mpp/wp-content/uploads/**",
+      },
+      {
+        protocol: "https",
+        hostname: "gomowebb.com",
+        pathname: "/headless-mpp/wp-content/uploads/**",
+      },
     ], 
   },
 };

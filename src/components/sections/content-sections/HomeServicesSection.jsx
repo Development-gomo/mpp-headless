@@ -113,7 +113,7 @@ export default function HomeServicesSection({ data }) {
 
                       {isActive && (
                         <Link
-                          href="#"
+                          href={service.service_link || "#"}
                           className="mt-6 inline-flex"
                           aria-label={service.service_title}
                         >

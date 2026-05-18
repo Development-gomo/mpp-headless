@@ -32,6 +32,7 @@ export default function HeroBannerWithFeatures({ data }) {
     background_image,
     background_color,
     background_video_url,
+    banner_height,
     custom_class,
     custom_id,
   } = data;
@@ -88,7 +89,11 @@ export default function HeroBannerWithFeatures({ data }) {
       )}
 
       {/* Main Content */}
-      <div className="relative web-width px-6 pt-28 pb-16 md:py-24 md:pb-48 w-full">
+      <div
+        className={`relative web-width px-6 pt-28 pb-16 md:pt-24 w-full ${
+          features?.length > 0 ? "md:pb-48" : "md:pb-24"
+        }`}
+      >
         <div className="max-w-4xl flex flex-col gap-6 md:gap-8">
           {hero_title && (
             <h1 className="text-[42px] leading-[1.05] tracking-[-1px] sm:text-[56px] lg:text-[84px] font-normal font-heading text-white max-w-[900px]">
