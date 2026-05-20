@@ -1,0 +1,169 @@
+{
+  "global": {
+    "footer": {
+      "footer_cta": {
+        "cta_eyebrow": "Get Started",
+        "cta_heading": "Ready to find the right fuel solution for your operation?",
+        "cta_button_text": "Get in touch with us",
+        "cta_button_link": {
+          "title": "Get in touch with us",
+          "url": "/contact",
+          "target": ""
+        }
+      },
+      "product_links": [
+        {
+          "label": "Mobila br\u00e4nsletankar",
+          "link": {
+            "title": "Mobila br\u00e4nsletankar",
+            "url": "/product-category/mobila-bransletankar",
+            "target": ""
+          }
+        },
+        {
+          "label": "Station\u00e4ra br\u00e4nsletankar",
+          "link": {
+            "title": "Station\u00e4ra br\u00e4nsletankar",
+            "url": "/product-category/stationara-bransletankar",
+            "target": ""
+          }
+        }
+      ],
+      "quick_links": [
+        {
+          "label": "Services",
+          "link": {
+            "title": "Services",
+            "url": "/services",
+            "target": ""
+          }
+        },
+        {
+          "label": "Industries",
+          "link": {
+            "title": "Industries",
+            "url": "/industries",
+            "target": ""
+          }
+        },
+        {
+          "label": "About us",
+          "link": {
+            "title": "About us",
+            "url": "/about-us",
+            "target": ""
+          }
+        },
+        {
+          "label": "Customer cases",
+          "link": {
+            "title": "Customer cases",
+            "url": "/case-study",
+            "target": ""
+          }
+        },
+        {
+          "label": "News & Blogs",
+          "link": {
+            "title": "News & Blogs",
+            "url": "/post",
+            "target": ""
+          }
+        }
+      ],
+      "support_links": [
+        {
+          "label": "FAQ mobile tanks",
+          "link": {
+            "title": "FAQ mobile tanks",
+            "url": "/faq-mobile-tanks",
+            "target": ""
+          }
+        },
+        {
+          "label": "FAQ cisterns",
+          "link": {
+            "title": "FAQ cisterns",
+            "url": "/faq-cisterns",
+            "target": ""
+          }
+        },
+        {
+          "label": "Certifications",
+          "link": {
+            "title": "Certifications",
+            "url": "/certifications",
+            "target": ""
+          }
+        }
+      ],
+      "contact": {
+        "address": "Fj\u00e4r\u00e5s industrial road 17, 439 74 Fj\u00e4r\u00e5s, Sweden",
+        "map_url": "https://goo.gl/maps/GiUoAHLm7gjy2Xfm7",
+        "phone": "+46 300 521 930",
+        "email": "kontakt@mpp.se"
+      },
+      "social_links": [
+        {
+          "name": "LinkedIn",
+          "link": {
+            "title": "LinkedIn",
+            "url": "#",
+            "target": "_blank"
+          }
+        },
+        {
+          "name": "Instagram",
+          "link": {
+            "title": "Instagram",
+            "url": "#",
+            "target": "_blank"
+          }
+        },
+        {
+          "name": "Facebook",
+          "link": {
+            "title": "Facebook",
+            "url": "#",
+            "target": "_blank"
+          }
+        },
+        {
+          "name": "YouTube",
+          "link": {
+            "title": "YouTube",
+            "url": "#",
+            "target": "_blank"
+          }
+        }
+      ],
+      "legal_links": [
+        {
+          "label": "Terms & Conditions",
+          "link": {
+            "title": "Terms & Conditions",
+            "url": "/terms-and-conditions",
+            "target": ""
+          }
+        },
+        {
+          "label": "Privacy policy",
+          "link": {
+            "title": "Privacy policy",
+            "url": "/privacy-policy",
+            "target": ""
+          }
+        },
+        {
+          "label": "Cookie policy",
+          "link": {
+            "title": "Cookie policy",
+            "url": "/cookie-policy",
+            "target": ""
+          }
+        }
+      ],
+      "copyright_text": "Copyright 2026 \u00a9 MPP. All Rights Reserved."
+    }
+  }
+}

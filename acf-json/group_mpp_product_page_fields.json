@@ -1,0 +1,421 @@
+{
+  "key": "group_mpp_product_page_fields",
+  "title": "MPP Product Page Fields",
+  "fields": [
+    {
+      "key": "field_mpp_product_tab_content_source",
+      "label": "Content Source",
+      "name": "",
+      "type": "tab",
+      "placement": "top",
+      "endpoint": 0
+    },
+    {
+      "key": "field_mpp_product_source_note",
+      "label": "WooCommerce Fields Used by the Template",
+      "name": "",
+      "type": "message",
+      "message": "The product template uses WooCommerce Product title for the H1, Short description for the hero intro, Description for overview content, Product image for the main visual, Product gallery for gallery images, and Yoast SEO data for metadata. Use the fields below only for layout-specific content that WooCommerce does not provide.",
+      "new_lines": "wpautop",
+      "esc_html": 0
+    },
+    {
+      "key": "field_mpp_product_tab_hero",
+      "label": "Hero & CTAs",
+      "name": "",
+      "type": "tab",
+      "placement": "top",
+      "endpoint": 0
+    },
+    {
+      "key": "field_mpp_product_eyebrow",
+      "label": "Hero Eyebrow",
+      "name": "product_eyebrow",
+      "type": "text",
+      "instructions": "Small label above the WooCommerce product title.",
+      "required": 0,
+      "default_value": "Fuel storage"
+    },
+    {
+      "key": "field_mpp_product_primary_cta_text",
+      "label": "Primary CTA Text",
+      "name": "product_primary_cta_text",
+      "type": "text",
+      "required": 0,
+      "default_value": "Find a dealer",
+      "wrapper": {
+        "width": "50"
+      }
+    },
+    {
+      "key": "field_mpp_product_primary_cta_link",
+      "label": "Primary CTA URL",
+      "name": "product_primary_cta_link",
+      "type": "text",
+      "instructions": "Use a relative frontend URL, for example /contact or /product/pickuptank.",
+      "required": 0,
+      "default_value": "",
+      "placeholder": "/contact",
+      "wrapper": {
+        "width": "50"
+      }
+    },
+    {
+      "key": "field_mpp_product_secondary_cta_text",
+      "label": "Secondary CTA Text",
+      "name": "product_secondary_cta_text",
+      "type": "text",
+      "required": 0,
+      "default_value": "Download datasheet",
+      "wrapper": {
+        "width": "50"
+      }
+    },
+    {
+      "key": "field_mpp_product_secondary_cta_link",
+      "label": "Secondary CTA URL",
+      "name": "product_secondary_cta_link",
+      "type": "text",
+      "instructions": "Use a relative frontend URL, for example /downloads/product-datasheet.pdf or #downloads.",
+      "required": 0,
+      "default_value": "",
+      "placeholder": "#downloads",
+      "wrapper": {
+        "width": "50"
+      }
+    },
+    {
+      "key": "field_mpp_product_tab_specs",
+      "label": "Specs",
+      "name": "",
+      "type": "tab",
+      "placement": "top",
+      "endpoint": 0
+    },
+    {
+      "key": "field_mpp_product_specs_note",
+      "label": "Specs Note",
+      "name": "",
+      "type": "message",
+      "message": "Use this repeater for the visible spec strip. If empty, the template will fall back to older fields named capacity/product_capacity, fuel_type/product_fuel_type, product_material, and product_dimensions when available.",
+      "new_lines": "wpautop",
+      "esc_html": 0
+    },
+    {
+      "key": "field_mpp_product_specs",
+      "label": "Product Specs",
+      "name": "product_specs",
+      "type": "repeater",
+      "required": 0,
+      "layout": "table",
+      "button_label": "Add spec",
+      "sub_fields": [
+        {
+          "key": "field_mpp_product_spec_label",
+          "label": "Label",
+          "name": "spec_label",
+          "type": "text",
+          "required": 0,
+          "wrapper": {
+            "width": "30"
+          }
+        },
+        {
+          "key": "field_mpp_product_spec_value",
+          "label": "Value",
+          "name": "spec_value",
+          "type": "wysiwyg",
+          "required": 0,
+          "tabs": "all",
+          "toolbar": "basic",
+          "media_upload": 0,
+          "wrapper": {
+            "width": "50"
+          }
+        },
+        {
+          "key": "field_mpp_product_spec_icon",
+          "label": "Icon",
+          "name": "spec_icon",
+          "type": "image",
+          "required": 0,
+          "return_format": "array",
+          "preview_size": "thumbnail",
+          "library": "all",
+          "wrapper": {
+            "width": "20"
+          }
+        }
+      ]
+    },
+    {
+      "key": "field_mpp_product_tab_overview",
+      "label": "Overview",
+      "name": "",
+      "type": "tab",
+      "placement": "top",
+      "endpoint": 0
+    },
+    {
+      "key": "field_mpp_product_overview_eyebrow",
+      "label": "Overview Eyebrow",
+      "name": "product_overview_eyebrow",
+      "type": "text",
+      "required": 0,
+      "default_value": "Overview",
+      "wrapper": {
+        "width": "35"
+      }
+    },
+    {
+      "key": "field_mpp_product_overview_title",
+      "label": "Overview Title",
+      "name": "product_overview_title",
+      "type": "wysiwyg",
+      "instructions": "Optional section heading. The main overview body uses the WooCommerce product Description unless overridden below.",
+      "required": 0,
+      "tabs": "all",
+      "toolbar": "basic",
+      "media_upload": 0,
+      "wrapper": {
+        "width": "65"
+      }
+    },
+    {
+      "key": "field_mpp_product_overview_content",
+      "label": "Overview Content Override",
+      "name": "product_overview_content",
+      "type": "wysiwyg",
+      "instructions": "Leave empty to use the WooCommerce product Description.",
+      "required": 0,
+      "tabs": "all",
+      "toolbar": "full",
+      "media_upload": 1
+    },
+    {
+      "key": "field_mpp_product_tab_features",
+      "label": "Features",
+      "name": "",
+      "type": "tab",
+      "placement": "top",
+      "endpoint": 0
+    },
+    {
+      "key": "field_mpp_product_features_eyebrow",
+      "label": "Features Eyebrow",
+      "name": "product_features_eyebrow",
+      "type": "text",
+      "required": 0,
+      "default_value": "Features",
+      "wrapper": {
+        "width": "35"
+      }
+    },
+    {
+      "key": "field_mpp_product_features_title",
+      "label": "Features Title",
+      "name": "product_features_title",
+      "type": "wysiwyg",
+      "required": 0,
+      "tabs": "all",
+      "toolbar": "basic",
+      "media_upload": 0,
+      "wrapper": {
+        "width": "65"
+      }
+    },
+    {
+      "key": "field_mpp_product_features",
+      "label": "Features",
+      "name": "product_features",
+      "type": "repeater",
+      "required": 0,
+      "layout": "block",
+      "button_label": "Add feature",
+      "sub_fields": [
+        {
+          "key": "field_mpp_product_feature_title",
+          "label": "Feature Title",
+          "name": "feature_title",
+          "type": "text",
+          "required": 0
+        },
+        {
+          "key": "field_mpp_product_feature_text",
+          "label": "Feature Text",
+          "name": "feature_text",
+          "type": "wysiwyg",
+          "required": 0,
+          "tabs": "all",
+          "toolbar": "basic",
+          "media_upload": 0
+        }
+      ]
+    },
+    {
+      "key": "field_mpp_product_tab_media",
+      "label": "Media & Downloads",
+      "name": "",
+      "type": "tab",
+      "placement": "top",
+      "endpoint": 0
+    },
+    {
+      "key": "field_mpp_product_media_note",
+      "label": "Media Note",
+      "name": "",
+      "type": "message",
+      "message": "Product image and product gallery come from WooCommerce. This tab only controls the gallery section heading and downloadable links.",
+      "new_lines": "wpautop",
+      "esc_html": 0
+    },
+    {
+      "key": "field_mpp_product_gallery_title",
+      "label": "Gallery Title",
+      "name": "product_gallery_title",
+      "type": "text",
+      "required": 0,
+      "default_value": "Product gallery"
+    },
+    {
+      "key": "field_mpp_product_downloads",
+      "label": "Downloads",
+      "name": "product_downloads",
+      "type": "repeater",
+      "required": 0,
+      "layout": "table",
+      "button_label": "Add download",
+      "sub_fields": [
+        {
+          "key": "field_mpp_product_download_label",
+          "label": "Label",
+          "name": "download_label",
+          "type": "text",
+          "required": 0,
+          "wrapper": {
+            "width": "40"
+          }
+        },
+        {
+          "key": "field_mpp_product_download_file",
+          "label": "File or Link",
+          "name": "download_file",
+          "type": "link",
+          "required": 0,
+          "return_format": "array",
+          "wrapper": {
+            "width": "60"
+          }
+        }
+      ]
+    },
+    {
+      "key": "field_mpp_product_tab_faq",
+      "label": "FAQ",
+      "name": "",
+      "type": "tab",
+      "placement": "top",
+      "endpoint": 0
+    },
+    {
+      "key": "field_mpp_product_faqs",
+      "label": "Product FAQs",
+      "name": "product_faqs",
+      "type": "repeater",
+      "required": 0,
+      "layout": "block",
+      "button_label": "Add FAQ",
+      "sub_fields": [
+        {
+          "key": "field_mpp_product_faq_title",
+          "label": "Question",
+          "name": "faq_title",
+          "type": "text",
+          "required": 0
+        },
+        {
+          "key": "field_mpp_product_faq_content",
+          "label": "Answer",
+          "name": "faq_content",
+          "type": "wysiwyg",
+          "required": 0,
+          "tabs": "all",
+          "toolbar": "basic",
+          "media_upload": 0
+        }
+      ]
+    },
+    {
+      "key": "field_mpp_product_tab_cta",
+      "label": "CTA",
+      "name": "",
+      "type": "tab",
+      "placement": "top",
+      "endpoint": 0
+    },
+    {
+      "key": "field_mpp_product_cta_title",
+      "label": "CTA Title",
+      "name": "product_cta_title",
+      "type": "wysiwyg",
+      "required": 0,
+      "tabs": "all",
+      "toolbar": "basic",
+      "media_upload": 0,
+      "default_value": "Ready to find the right fuel solution?"
+    },
+    {
+      "key": "field_mpp_product_cta_text",
+      "label": "CTA Text",
+      "name": "product_cta_text",
+      "type": "wysiwyg",
+      "required": 0,
+      "tabs": "all",
+      "toolbar": "basic",
+      "media_upload": 0
+    },
+    {
+      "key": "field_mpp_product_cta_button_text",
+      "label": "CTA Button Text",
+      "name": "product_cta_button_text",
+      "type": "text",
+      "required": 0,
+      "default_value": "Get in touch with us",
+      "wrapper": {
+        "width": "50"
+      }
+    },
+    {
+      "key": "field_mpp_product_cta_button_link",
+      "label": "CTA Button URL",
+      "name": "product_cta_button_link",
+      "type": "text",
+      "instructions": "Use a relative frontend URL, for example /contact.",
+      "required": 0,
+      "default_value": "",
+      "placeholder": "/contact",
+      "wrapper": {
+        "width": "50"
+      }
+    }
+  ],
+  "location": [
+    [
+      {
+        "param": "post_type",
+        "operator": "==",
+        "value": "product"
+      }
+    ]
+  ],
+  "menu_order": 0,
+  "position": "normal",
+  "style": "default",
+  "label_placement": "top",
+  "instruction_placement": "label",
+  "hide_on_screen": "",
+  "active": true,
+  "description": "Layout-specific fields for the headless Next.js product template. WooCommerce remains the source for title, descriptions, product image, and product gallery.",
+  "show_in_rest": 1,
+  "modified": 1779280200
+}

@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 
-const wpHostname = process.env.NEXT_PUBLIC_WP_BASE
-  ? new URL(process.env.NEXT_PUBLIC_WP_BASE).hostname
+const wpBase = process.env.WP_BASE || process.env.NEXT_PUBLIC_WP_BASE;
+
+const wpHostname = wpBase
+  ? new URL(wpBase).hostname
   : "localhost";
 
 const nextConfig = {

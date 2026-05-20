@@ -1,22 +1,30 @@
 // Internal API route — called by middleware to fetch WP redirects
 // Runs on Node.js runtime (full process.env access)
 
-import { WP_BASE } from "@/config";
+import { getWPBaseUrl } from "@/config";
 
 const PER_PAGE = 200;
 
 export async function GET() {
+  let wpBaseUrl;
+
+  try {
+    wpBaseUrl = getWPBaseUrl();
+  } catch (error) {
+    return Response.json({ error: error.message }, { status: 500 });
+  }
+
   const allItems = [];
   // Redirection API paging is zero-based (page=0 is the first page).
   let page = 0;
 
   const credentials = Buffer.from(
-  `${process.env.WP_API_USER}:${process.env.WP_API_PASS}`
+    `${process.env.WP_API_USER}:${process.env.WP_API_PASS}`
   ).toString("base64");
 
   while (true) {
     const res = await fetch(
-      `${WP_BASE}/wp-json/redirection/v1/redirect?per_page=${PER_PAGE}&page=${page}`,
+      `${wpBaseUrl}/wp-json/redirection/v1/redirect?per_page=${PER_PAGE}&page=${page}`,
       {
         cache: "no-store",
         headers: { Authorization: `Basic ${credentials}` },

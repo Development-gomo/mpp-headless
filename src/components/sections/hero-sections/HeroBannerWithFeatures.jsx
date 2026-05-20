@@ -22,8 +22,6 @@ function getImageUrl(image) {
 export default function HeroBannerWithFeatures({ data }) {
   const [activeFeature, setActiveFeature] = useState(0);
 
-  if (!data) return null;
-
   const {
     hero_title,
     hero_description,
@@ -35,7 +33,7 @@ export default function HeroBannerWithFeatures({ data }) {
     banner_height,
     custom_class,
     custom_id,
-  } = data;
+  } = data || {};
 
   const bgImg = getImageUrl(background_image);
 
@@ -48,6 +46,8 @@ export default function HeroBannerWithFeatures({ data }) {
 
     return () => clearInterval(interval);
   }, [features.length]);
+
+  if (!data) return null;
 
   return (
     <section
@@ -113,7 +113,8 @@ export default function HeroBannerWithFeatures({ data }) {
               {button_row.map((btn, i) => (
                 <Link
                   key={i}
-                  href={btn.button_link || "#"}
+                  href={typeof btn.button_link === "string" ? btn.button_link : btn.button_link?.url || "#"}
+                  target={typeof btn.button_link === "object" ? btn.button_link?.target : undefined}
                   className={
                     i === 0
                       ? "inline-flex w-fit justify-end items-center gap-4 py-[6px] pr-[6px] pl-6 rounded-[4px] bg-[image:var(--mpp-gradient)] text-white font-heading text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"

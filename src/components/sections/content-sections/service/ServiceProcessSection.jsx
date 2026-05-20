@@ -93,7 +93,7 @@ export default function ServiceProcessSection({ data }) {
             >
               {process_pointers.map((_, index) => (
                 <div key={index} className="flex justify-start">
-                  <span className="relative z-10 h-[14px] w-[14px] rounded-full border-[3px] border-[var(--color-yellow)] bg-white" />
+                  <span className="process-dot relative z-10 h-[14px] w-[14px] rounded-full border-[3px] border-[var(--color-yellow)] bg-white opacity-0" style={{ animationDelay: `${index * 140}ms` }} />
                 </div>
               ))}
             </div>
@@ -102,39 +102,39 @@ export default function ServiceProcessSection({ data }) {
 
         {/* Cards */}
         {process_pointers?.length > 0 && (
-          <div
-            className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
-          >
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {process_pointers.map((item, index) => {
-              const number = String(index + 1).padStart(2, "0");
+            const number = String(index + 1).padStart(2, "0");
 
-              return (
+            return (
                 <article
-                  key={index}
-                  className="relative rounded-[4px] bg-[var(--color-accent)] px-6 py-7 min-h-[260px] text-white"
+                key={index}
+                className="process-card relative min-h-[260px] rounded-[4px] bg-[var(--color-accent)] px-6 py-7 text-white opacity-0"
+                style={{
+                    animationDelay: `${index * 140}ms`,
+                }}
                 >
-                  {/* Mobile dot */}
-                  <span className="absolute left-6 top-0 block h-[14px] w-[14px] -translate-y-1/2 rounded-full border-[3px] border-[var(--color-yellow)] bg-white lg:hidden" />
+                <span className="absolute left-6 top-0 block h-[14px] w-[14px] -translate-y-1/2 rounded-full border-[3px] border-[var(--color-yellow)] bg-white lg:hidden" />
 
-                  <span className="mb-8 block font-heading text-[56px] font-medium leading-[60px] tracking-[-1.12px] text-white/20 md:text-[64px] md:leading-[68px]">
+                <span className="mb-8 block font-heading text-[56px] font-medium leading-[60px] tracking-[-1.12px] text-white/20 md:text-[64px] md:leading-[68px]">
                     {number}.
-                  </span>
+                </span>
 
-                  {item?.process_title && (
+                {item?.process_title && (
                     <h3 className="mb-12 font-heading text-[24px] font-medium leading-[32px] tracking-[-0.48px] text-white">
-                      {item.process_title}
+                    {item.process_title}
                     </h3>
-                  )}
+                )}
 
-                  {item?.process_description && (
+                {item?.process_description && (
                     <p className="font-body text-[16px] font-normal leading-[24px] text-white">
-                      {item.process_description}
+                    {item.process_description}
                     </p>
-                  )}
+                )}
                 </article>
-              );
+            );
             })}
-          </div>
+        </div>
         )}
       </div>
     </section>

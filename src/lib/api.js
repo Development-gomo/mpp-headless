@@ -1,13 +1,35 @@
-import { WP_BASE } from "@/config";
+import { getWPBaseUrl } from "@/config";
+
+const DEFAULT_TIMEOUT_MS = 15000;
+
+function timeoutSignal(timeoutMs) {
+  if (
+    typeof AbortSignal !== "undefined" &&
+    typeof AbortSignal.timeout === "function"
+  ) {
+    return AbortSignal.timeout(timeoutMs);
+  }
+
+  const controller = new AbortController();
+  setTimeout(() => controller.abort(), timeoutMs);
+  return controller.signal;
+}
 
 // Generic fetch helper with ISR revalidation.
-export async function fetchWP(endpoint, { revalidate = 10 } = {}) {
+export async function fetchWP(
+  endpoint,
+  { revalidate = 10, timeoutMs = DEFAULT_TIMEOUT_MS } = {}
+) {
   try {
-    const url = `${WP_BASE}/wp-json${
+    const wpBaseUrl = getWPBaseUrl();
+    const url = `${wpBaseUrl}/wp-json${
       endpoint.startsWith("/") ? "" : "/"
     }${endpoint}`;
 
-    const res = await fetch(url, { next: { revalidate } });
+    const res = await fetch(url, {
+      next: { revalidate },
+      signal: timeoutSignal(timeoutMs),
+    });
 
     if (!res.ok) {
       console.log("WP fetch failed:", res.status, url);
@@ -193,6 +215,22 @@ export async function getProductsByCategory(categoryId) {
   const data = await fetchWP(
     withParams(`/wp/v2/product`, {
       product_cat: categoryId,
+      per_page: 100,
+      _embed: "1",
+      acf_format: "standard",
+    })
+  );
+
+  return Array.isArray(data) ? data : [];
+}
+
+export async function getProductBySlug(slug) {
+  return getSingleEntry("product", slug);
+}
+
+export async function getAllProducts() {
+  const data = await fetchWP(
+    withParams(`/wp/v2/product`, {
       per_page: 100,
       _embed: "1",
       acf_format: "standard",

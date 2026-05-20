@@ -22,6 +22,7 @@ export default function HeaderComponent(props) {
     cta2Text = "Reseller",
     cta2Url = "#",
     cta2Target = "_self",
+    variant = "light",
   } = props;
 
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -44,14 +45,28 @@ export default function HeaderComponent(props) {
     }));
   };
 
-  const menuLinkClass =
-    "inline-flex items-center gap-1.5 text-white text-[14px] font-normal leading-[24px] tracking-[-0.28px] font-heading transition-colors hover:text-white";
+  const isDark = variant === "dark";
+  const menuLinkClass = `inline-flex items-center gap-1.5 text-[14px] font-normal leading-[24px] tracking-[-0.28px] font-heading transition-colors ${
+    isDark ? "text-black hover:text-[var(--color-accent)]" : "text-white hover:text-white"
+  }`;
+  const headerClass = isDark
+    ? scrolled
+      ? "bg-white/90 text-black shadow-sm backdrop-blur-[7.5px]"
+      : "bg-white/80 text-black backdrop-blur-[7.5px]"
+    : scrolled
+    ? "bg-black/25 text-white backdrop-blur-[7.5px]"
+    : "bg-transparent text-white";
+  const navShellClass = isDark
+    ? "bg-black/[0.04] border-black/10"
+    : "bg-white/25 border-white/10";
+  const topPillClass = isDark ? "bg-black/[0.06] text-black" : "bg-white/25 text-white";
+  const mobileButtonClass = isDark
+    ? "border-black/25 text-black hover:bg-black/5"
+    : "border-white/25 text-white hover:bg-white/10";
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 text-white transition-all duration-300 ${
-        scrolled ? "bg-black/25 backdrop-blur-[7.5px]" : "bg-transparent"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${headerClass}`}
     >
       <div
         className={`web-width relative mx-auto flex h-[104px] items-center justify-between gap-6 px-6 transition-all duration-300 ${
@@ -75,7 +90,7 @@ export default function HeaderComponent(props) {
         </Link>
 
         {/* DESKTOP NAV */}
-        <nav className="hidden lg:flex items-center justify-center rounded-[4px] bg-white/25 backdrop-blur-[7.5px] border border-white/10 px-8 h-[42px] gap-8">
+        <nav className={`hidden lg:flex items-center justify-center rounded-[4px] backdrop-blur-[7.5px] border px-8 h-[42px] gap-8 ${navShellClass}`}>
           {megaMenuRows.length > 0
             ? megaMenuRows.map((menuRow) => {
                 if (menuRow.layoutType === "no_column") {
@@ -262,7 +277,7 @@ export default function HeaderComponent(props) {
           >
             <Link
               href={headerTelephoneLink || "tel:+46300521930"}
-              className="flex h-[28px] w-[28px] items-center justify-center rounded-[4px] bg-white/25 backdrop-blur-[7.5px]"
+              className={`flex h-[28px] w-[28px] items-center justify-center rounded-[4px] backdrop-blur-[7.5px] ${topPillClass}`}
               aria-label="Call"
             >
               <Image
@@ -276,7 +291,7 @@ export default function HeaderComponent(props) {
 
             <button
               type="button"
-              className="flex h-[28px] items-center gap-1 rounded-[4px] bg-white/25 backdrop-blur-[7.5px] px-2 text-white text-[14px] font-heading tracking-[-0.28px]"
+              className={`flex h-[28px] items-center gap-1 rounded-[4px] backdrop-blur-[7.5px] px-2 text-[14px] font-heading tracking-[-0.28px] ${topPillClass}`}
             >
               EN
               <span className="text-[12px] leading-none">⌄</span>
@@ -324,7 +339,7 @@ export default function HeaderComponent(props) {
 
         {/* MOBILE MENU BUTTON */}
         <button
-          className="lg:hidden ml-auto flex items-center justify-center w-10 h-10 rounded border border-white/25 text-white hover:bg-white/10"
+          className={`lg:hidden ml-auto flex items-center justify-center w-10 h-10 rounded border ${mobileButtonClass}`}
           aria-label="Open menu"
           onClick={() => setMobileOpen(true)}
         >

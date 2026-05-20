@@ -1,0 +1,322 @@
+{
+  "key": "group_693c0e1df0ce0",
+  "title": "Theme Options - Footer",
+  "fields": [
+    {
+      "key": "field_mpp_global",
+      "label": "Global",
+      "name": "global",
+      "aria-label": "",
+      "type": "group",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "layout": "block",
+      "sub_fields": [
+        {
+          "key": "field_mpp_footer",
+          "label": "Footer",
+          "name": "footer",
+          "aria-label": "",
+          "type": "group",
+          "instructions": "Footer content matching the MPP April 2026 Figma footer.",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "layout": "block",
+          "sub_fields": [
+            {
+              "key": "field_mpp_footer_cta",
+              "label": "Footer CTA",
+              "name": "footer_cta",
+              "type": "group",
+              "layout": "block",
+              "sub_fields": [
+                {
+                  "key": "field_mpp_footer_cta_eyebrow",
+                  "label": "CTA Eyebrow",
+                  "name": "cta_eyebrow",
+                  "type": "text",
+                  "default_value": "Get Started"
+                },
+                {
+                  "key": "field_mpp_footer_cta_heading",
+                  "label": "CTA Heading",
+                  "name": "cta_heading",
+                  "type": "textarea",
+                  "rows": 3,
+                  "new_lines": "",
+                  "default_value": "Ready to find the right fuel solution for your operation?"
+                },
+                {
+                  "key": "field_mpp_footer_cta_button_text",
+                  "label": "CTA Button Text",
+                  "name": "cta_button_text",
+                  "type": "text",
+                  "default_value": "Get in touch with us",
+                  "wrapper": {
+                    "width": "40"
+                  }
+                },
+                {
+                  "key": "field_mpp_footer_cta_button_link",
+                  "label": "CTA Button Link",
+                  "name": "cta_button_link",
+                  "type": "link",
+                  "return_format": "array",
+                  "wrapper": {
+                    "width": "60"
+                  }
+                }
+              ]
+            },
+            {
+              "key": "field_mpp_footer_product_links",
+              "label": "Primary Product Links",
+              "name": "product_links",
+              "type": "repeater",
+              "layout": "table",
+              "button_label": "Add product link",
+              "sub_fields": [
+                {
+                  "key": "field_mpp_footer_product_link_label",
+                  "label": "Label",
+                  "name": "label",
+                  "type": "text",
+                  "wrapper": {
+                    "width": "40"
+                  }
+                },
+                {
+                  "key": "field_mpp_footer_product_link_link",
+                  "label": "Link",
+                  "name": "link",
+                  "type": "link",
+                  "return_format": "array",
+                  "wrapper": {
+                    "width": "60"
+                  }
+                }
+              ]
+            },
+            {
+              "key": "field_mpp_footer_quick_links",
+              "label": "Quick Links",
+              "name": "quick_links",
+              "type": "repeater",
+              "layout": "table",
+              "button_label": "Add quick link",
+              "sub_fields": [
+                {
+                  "key": "field_mpp_footer_quick_link_label",
+                  "label": "Label",
+                  "name": "label",
+                  "type": "text",
+                  "wrapper": {
+                    "width": "40"
+                  }
+                },
+                {
+                  "key": "field_mpp_footer_quick_link_link",
+                  "label": "Link",
+                  "name": "link",
+                  "type": "link",
+                  "return_format": "array",
+                  "wrapper": {
+                    "width": "60"
+                  }
+                }
+              ]
+            },
+            {
+              "key": "field_mpp_footer_support_links",
+              "label": "Support Links",
+              "name": "support_links",
+              "type": "repeater",
+              "layout": "table",
+              "button_label": "Add support link",
+              "sub_fields": [
+                {
+                  "key": "field_mpp_footer_support_link_label",
+                  "label": "Label",
+                  "name": "label",
+                  "type": "text",
+                  "wrapper": {
+                    "width": "40"
+                  }
+                },
+                {
+                  "key": "field_mpp_footer_support_link_link",
+                  "label": "Link",
+                  "name": "link",
+                  "type": "link",
+                  "return_format": "array",
+                  "wrapper": {
+                    "width": "60"
+                  }
+                }
+              ]
+            },
+            {
+              "key": "field_mpp_footer_contact",
+              "label": "Contact",
+              "name": "contact",
+              "type": "group",
+              "layout": "block",
+              "sub_fields": [
+                {
+                  "key": "field_mpp_footer_contact_address",
+                  "label": "Address",
+                  "name": "address",
+                  "type": "textarea",
+                  "rows": 3,
+                  "new_lines": "br",
+                  "default_value": "Fj\u00e4r\u00e5s industrial road 17, 439 74 Fj\u00e4r\u00e5s, Sweden"
+                },
+                {
+                  "key": "field_mpp_footer_contact_map_url",
+                  "label": "Address / Map URL",
+                  "name": "map_url",
+                  "type": "url",
+                  "default_value": "https://goo.gl/maps/GiUoAHLm7gjy2Xfm7"
+                },
+                {
+                  "key": "field_mpp_footer_contact_phone",
+                  "label": "Phone",
+                  "name": "phone",
+                  "type": "text",
+                  "default_value": "+46 300 521 930",
+                  "wrapper": {
+                    "width": "50"
+                  }
+                },
+                {
+                  "key": "field_mpp_footer_contact_email",
+                  "label": "Email",
+                  "name": "email",
+                  "type": "email",
+                  "default_value": "kontakt@mpp.se",
+                  "wrapper": {
+                    "width": "50"
+                  }
+                }
+              ]
+            },
+            {
+              "key": "field_mpp_footer_social_links",
+              "label": "Social Links",
+              "name": "social_links",
+              "type": "repeater",
+              "layout": "table",
+              "button_label": "Add social link",
+              "sub_fields": [
+                {
+                  "key": "field_mpp_footer_social_name",
+                  "label": "Name",
+                  "name": "name",
+                  "type": "select",
+                  "choices": {
+                    "LinkedIn": "LinkedIn",
+                    "Instagram": "Instagram",
+                    "Facebook": "Facebook",
+                    "YouTube": "YouTube"
+                  },
+                  "ui": 1,
+                  "wrapper": {
+                    "width": "30"
+                  }
+                },
+                {
+                  "key": "field_mpp_footer_social_link",
+                  "label": "Link",
+                  "name": "link",
+                  "type": "link",
+                  "return_format": "array",
+                  "wrapper": {
+                    "width": "50"
+                  }
+                },
+                {
+                  "key": "field_mpp_footer_social_icon",
+                  "label": "Optional Icon Override",
+                  "name": "icon",
+                  "type": "image",
+                  "return_format": "array",
+                  "preview_size": "thumbnail",
+                  "library": "all",
+                  "wrapper": {
+                    "width": "20"
+                  }
+                }
+              ]
+            },
+            {
+              "key": "field_mpp_footer_legal_links",
+              "label": "Legal Links",
+              "name": "legal_links",
+              "type": "repeater",
+              "layout": "table",
+              "button_label": "Add legal link",
+              "sub_fields": [
+                {
+                  "key": "field_mpp_footer_legal_link_label",
+                  "label": "Label",
+                  "name": "label",
+                  "type": "text",
+                  "wrapper": {
+                    "width": "40"
+                  }
+                },
+                {
+                  "key": "field_mpp_footer_legal_link_link",
+                  "label": "Link",
+                  "name": "link",
+                  "type": "link",
+                  "return_format": "array",
+                  "wrapper": {
+                    "width": "60"
+                  }
+                }
+              ]
+            },
+            {
+              "key": "field_mpp_footer_copyright_text",
+              "label": "Copyright Text",
+              "name": "copyright_text",
+              "type": "text",
+              "default_value": "Copyright 2026 \u00a9 MPP. All Rights Reserved."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "location": [
+    [
+      {
+        "param": "options_page",
+        "operator": "==",
+        "value": "theme-options"
+      }
+    ]
+  ],
+  "menu_order": 0,
+  "position": "normal",
+  "style": "default",
+  "label_placement": "top",
+  "instruction_placement": "label",
+  "hide_on_screen": "",
+  "active": true,
+  "description": "Footer fields used by the headless Next.js footer template.",
+  "show_in_rest": 1,
+  "modified": 1779288000
+}

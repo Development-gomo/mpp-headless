@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 import Header from "@/components/major/Header";
 import Footer from "@/components/major/Footer";
-import ProductCategoryBanner from "@/components/sections/product/ProductCategoryBanner";
-import ProductCategoryProductSections from "@/components/sections/product/ProductCategoryProductSections";
-import ProductCategorySeoSection from "@/components/sections/product/ProductCategorySeoSection";
-import ProductCategoryFaqSection from "@/components/sections/product/ProductCategoryFaqSection";
+import ProductCategoryBanner from "@/components/sections/product-category/ProductCategoryBanner";
+import ProductCategoryProductSections from "@/components/sections/product-category/ProductCategoryProductSections";
+import ProductCategorySeoSection from "@/components/sections/product-category/ProductCategorySeoSection";
+import ProductCategoryFaqSection from "@/components/sections/product-category/ProductCategoryFaqSection";
 import { getProductsByCategory } from "@/lib/api";
 
 import {

@@ -131,7 +131,7 @@ function normalizeMegaMenuRows(rawRows = []) {
     .filter((row) => row.title);
 }
 
-export default async function Header() {
+export default async function Header({ variant = "light" }) {
   const themeOptions = await getThemeOptions();
   const optionsRoot = resolveThemeOptions(themeOptions);
 
@@ -226,6 +226,7 @@ export default async function Header() {
       cta2Text={cta2Text}
       cta2Url={cta2Link.href}
       cta2Target={cta2Link.target}
+      variant={variant}
     />
   );
 }
