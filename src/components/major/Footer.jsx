@@ -130,15 +130,15 @@ function resolveFooterData(optionsRoot) {
       buttonLink: normalizeLink(cta.cta_button_link || cta.button_link, DEFAULT_FOOTER.cta.buttonLink.url),
     },
     productLinks: normalizeList(
-      footer?.product_links || global?.footer_product_links,
+      footer?.product_links || global?.product_links || global?.footer_product_links,
       DEFAULT_FOOTER.productLinks
     ),
     quickLinks: normalizeList(
-      footer?.quick_links || global?.quick_links_group?.quick_links,
+      footer?.quick_links || global?.quick_links || global?.quick_links_group?.quick_links,
       DEFAULT_FOOTER.quickLinks
     ),
     supportLinks: normalizeList(
-      footer?.support_links || global?.support_links_group?.support_links || global?.resources?.resource_links,
+      footer?.support_links || global?.support_links || global?.support_links_group?.support_links || global?.resources?.resource_links,
       DEFAULT_FOOTER.supportLinks
     ),
     contact: {

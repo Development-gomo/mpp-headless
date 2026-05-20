@@ -1,11 +1,11 @@
 {
   "key": "group_693c0e1df0ce0",
-  "title": "Theme Options - Footer",
+  "title": "Footer Settings",
   "fields": [
     {
-      "key": "field_mpp_global",
-      "label": "Global",
-      "name": "global",
+      "key": "field_mpp_footer_cta",
+      "label": "Footer CTA",
+      "name": "footer_cta",
       "aria-label": "",
       "type": "group",
       "instructions": "",
@@ -19,12 +19,12 @@
       "layout": "block",
       "sub_fields": [
         {
-          "key": "field_mpp_footer",
-          "label": "Footer",
-          "name": "footer",
+          "key": "field_mpp_footer_cta_eyebrow",
+          "label": "CTA Eyebrow",
+          "name": "cta_eyebrow",
           "aria-label": "",
-          "type": "group",
-          "instructions": "Footer content matching the MPP April 2026 Figma footer.",
+          "type": "text",
+          "instructions": "",
           "required": 0,
           "conditional_logic": 0,
           "wrapper": {
@@ -32,272 +32,527 @@
             "class": "",
             "id": ""
           },
-          "layout": "block",
-          "sub_fields": [
-            {
-              "key": "field_mpp_footer_cta",
-              "label": "Footer CTA",
-              "name": "footer_cta",
-              "type": "group",
-              "layout": "block",
-              "sub_fields": [
-                {
-                  "key": "field_mpp_footer_cta_eyebrow",
-                  "label": "CTA Eyebrow",
-                  "name": "cta_eyebrow",
-                  "type": "text",
-                  "default_value": "Get Started"
-                },
-                {
-                  "key": "field_mpp_footer_cta_heading",
-                  "label": "CTA Heading",
-                  "name": "cta_heading",
-                  "type": "textarea",
-                  "rows": 3,
-                  "new_lines": "",
-                  "default_value": "Ready to find the right fuel solution for your operation?"
-                },
-                {
-                  "key": "field_mpp_footer_cta_button_text",
-                  "label": "CTA Button Text",
-                  "name": "cta_button_text",
-                  "type": "text",
-                  "default_value": "Get in touch with us",
-                  "wrapper": {
-                    "width": "40"
-                  }
-                },
-                {
-                  "key": "field_mpp_footer_cta_button_link",
-                  "label": "CTA Button Link",
-                  "name": "cta_button_link",
-                  "type": "link",
-                  "return_format": "array",
-                  "wrapper": {
-                    "width": "60"
-                  }
-                }
-              ]
-            },
-            {
-              "key": "field_mpp_footer_product_links",
-              "label": "Primary Product Links",
-              "name": "product_links",
-              "type": "repeater",
-              "layout": "table",
-              "button_label": "Add product link",
-              "sub_fields": [
-                {
-                  "key": "field_mpp_footer_product_link_label",
-                  "label": "Label",
-                  "name": "label",
-                  "type": "text",
-                  "wrapper": {
-                    "width": "40"
-                  }
-                },
-                {
-                  "key": "field_mpp_footer_product_link_link",
-                  "label": "Link",
-                  "name": "link",
-                  "type": "link",
-                  "return_format": "array",
-                  "wrapper": {
-                    "width": "60"
-                  }
-                }
-              ]
-            },
-            {
-              "key": "field_mpp_footer_quick_links",
-              "label": "Quick Links",
-              "name": "quick_links",
-              "type": "repeater",
-              "layout": "table",
-              "button_label": "Add quick link",
-              "sub_fields": [
-                {
-                  "key": "field_mpp_footer_quick_link_label",
-                  "label": "Label",
-                  "name": "label",
-                  "type": "text",
-                  "wrapper": {
-                    "width": "40"
-                  }
-                },
-                {
-                  "key": "field_mpp_footer_quick_link_link",
-                  "label": "Link",
-                  "name": "link",
-                  "type": "link",
-                  "return_format": "array",
-                  "wrapper": {
-                    "width": "60"
-                  }
-                }
-              ]
-            },
-            {
-              "key": "field_mpp_footer_support_links",
-              "label": "Support Links",
-              "name": "support_links",
-              "type": "repeater",
-              "layout": "table",
-              "button_label": "Add support link",
-              "sub_fields": [
-                {
-                  "key": "field_mpp_footer_support_link_label",
-                  "label": "Label",
-                  "name": "label",
-                  "type": "text",
-                  "wrapper": {
-                    "width": "40"
-                  }
-                },
-                {
-                  "key": "field_mpp_footer_support_link_link",
-                  "label": "Link",
-                  "name": "link",
-                  "type": "link",
-                  "return_format": "array",
-                  "wrapper": {
-                    "width": "60"
-                  }
-                }
-              ]
-            },
-            {
-              "key": "field_mpp_footer_contact",
-              "label": "Contact",
-              "name": "contact",
-              "type": "group",
-              "layout": "block",
-              "sub_fields": [
-                {
-                  "key": "field_mpp_footer_contact_address",
-                  "label": "Address",
-                  "name": "address",
-                  "type": "textarea",
-                  "rows": 3,
-                  "new_lines": "br",
-                  "default_value": "Fj\u00e4r\u00e5s industrial road 17, 439 74 Fj\u00e4r\u00e5s, Sweden"
-                },
-                {
-                  "key": "field_mpp_footer_contact_map_url",
-                  "label": "Address / Map URL",
-                  "name": "map_url",
-                  "type": "url",
-                  "default_value": "https://goo.gl/maps/GiUoAHLm7gjy2Xfm7"
-                },
-                {
-                  "key": "field_mpp_footer_contact_phone",
-                  "label": "Phone",
-                  "name": "phone",
-                  "type": "text",
-                  "default_value": "+46 300 521 930",
-                  "wrapper": {
-                    "width": "50"
-                  }
-                },
-                {
-                  "key": "field_mpp_footer_contact_email",
-                  "label": "Email",
-                  "name": "email",
-                  "type": "email",
-                  "default_value": "kontakt@mpp.se",
-                  "wrapper": {
-                    "width": "50"
-                  }
-                }
-              ]
-            },
-            {
-              "key": "field_mpp_footer_social_links",
-              "label": "Social Links",
-              "name": "social_links",
-              "type": "repeater",
-              "layout": "table",
-              "button_label": "Add social link",
-              "sub_fields": [
-                {
-                  "key": "field_mpp_footer_social_name",
-                  "label": "Name",
-                  "name": "name",
-                  "type": "select",
-                  "choices": {
-                    "LinkedIn": "LinkedIn",
-                    "Instagram": "Instagram",
-                    "Facebook": "Facebook",
-                    "YouTube": "YouTube"
-                  },
-                  "ui": 1,
-                  "wrapper": {
-                    "width": "30"
-                  }
-                },
-                {
-                  "key": "field_mpp_footer_social_link",
-                  "label": "Link",
-                  "name": "link",
-                  "type": "link",
-                  "return_format": "array",
-                  "wrapper": {
-                    "width": "50"
-                  }
-                },
-                {
-                  "key": "field_mpp_footer_social_icon",
-                  "label": "Optional Icon Override",
-                  "name": "icon",
-                  "type": "image",
-                  "return_format": "array",
-                  "preview_size": "thumbnail",
-                  "library": "all",
-                  "wrapper": {
-                    "width": "20"
-                  }
-                }
-              ]
-            },
-            {
-              "key": "field_mpp_footer_legal_links",
-              "label": "Legal Links",
-              "name": "legal_links",
-              "type": "repeater",
-              "layout": "table",
-              "button_label": "Add legal link",
-              "sub_fields": [
-                {
-                  "key": "field_mpp_footer_legal_link_label",
-                  "label": "Label",
-                  "name": "label",
-                  "type": "text",
-                  "wrapper": {
-                    "width": "40"
-                  }
-                },
-                {
-                  "key": "field_mpp_footer_legal_link_link",
-                  "label": "Link",
-                  "name": "link",
-                  "type": "link",
-                  "return_format": "array",
-                  "wrapper": {
-                    "width": "60"
-                  }
-                }
-              ]
-            },
-            {
-              "key": "field_mpp_footer_copyright_text",
-              "label": "Copyright Text",
-              "name": "copyright_text",
-              "type": "text",
-              "default_value": "Copyright 2026 \u00a9 MPP. All Rights Reserved."
-            }
-          ]
+          "default_value": "Get Started",
+          "maxlength": "",
+          "placeholder": "",
+          "prepend": "",
+          "append": ""
+        },
+        {
+          "key": "field_mpp_footer_cta_heading",
+          "label": "CTA Heading",
+          "name": "cta_heading",
+          "aria-label": "",
+          "type": "textarea",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "default_value": "Ready to find the right fuel solution for your operation?",
+          "maxlength": "",
+          "rows": 3,
+          "placeholder": "",
+          "new_lines": ""
+        },
+        {
+          "key": "field_mpp_footer_cta_button_text",
+          "label": "CTA Button Text",
+          "name": "cta_button_text",
+          "aria-label": "",
+          "type": "text",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "40",
+            "class": "",
+            "id": ""
+          },
+          "default_value": "Get in touch with us",
+          "maxlength": "",
+          "placeholder": "",
+          "prepend": "",
+          "append": ""
+        },
+        {
+          "key": "field_mpp_footer_cta_button_link",
+          "label": "CTA Button Link",
+          "name": "cta_button_link",
+          "aria-label": "",
+          "type": "link",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "60",
+            "class": "",
+            "id": ""
+          },
+          "return_format": "array"
         }
       ]
+    },
+    {
+      "key": "field_mpp_footer_product_links",
+      "label": "Primary Product Links",
+      "name": "footer_product_links",
+      "aria-label": "",
+      "type": "repeater",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "layout": "table",
+      "pagination": 0,
+      "min": 0,
+      "max": 0,
+      "collapsed": "",
+      "button_label": "Add product link",
+      "rows_per_page": 20,
+      "sub_fields": [
+        {
+          "key": "field_mpp_footer_product_link_label",
+          "label": "Label",
+          "name": "label",
+          "aria-label": "",
+          "type": "text",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "40",
+            "class": "",
+            "id": ""
+          },
+          "default_value": "",
+          "maxlength": "",
+          "placeholder": "",
+          "prepend": "",
+          "append": "",
+          "parent_repeater": "field_mpp_footer_product_links"
+        },
+        {
+          "key": "field_mpp_footer_product_link_link",
+          "label": "Link",
+          "name": "link",
+          "aria-label": "",
+          "type": "link",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "60",
+            "class": "",
+            "id": ""
+          },
+          "return_format": "array",
+          "parent_repeater": "field_mpp_footer_product_links"
+        }
+      ]
+    },
+    {
+      "key": "field_mpp_footer_quick_links",
+      "label": "Quick Links",
+      "name": "quick_links",
+      "aria-label": "",
+      "type": "repeater",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "layout": "table",
+      "pagination": 0,
+      "min": 0,
+      "max": 0,
+      "collapsed": "",
+      "button_label": "Add quick link",
+      "rows_per_page": 20,
+      "sub_fields": [
+        {
+          "key": "field_mpp_footer_quick_link_label",
+          "label": "Label",
+          "name": "label",
+          "aria-label": "",
+          "type": "text",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "40",
+            "class": "",
+            "id": ""
+          },
+          "default_value": "",
+          "maxlength": "",
+          "placeholder": "",
+          "prepend": "",
+          "append": "",
+          "parent_repeater": "field_mpp_footer_quick_links"
+        },
+        {
+          "key": "field_mpp_footer_quick_link_link",
+          "label": "Link",
+          "name": "link",
+          "aria-label": "",
+          "type": "link",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "60",
+            "class": "",
+            "id": ""
+          },
+          "return_format": "array",
+          "parent_repeater": "field_mpp_footer_quick_links"
+        }
+      ]
+    },
+    {
+      "key": "field_mpp_footer_support_links",
+      "label": "Support Links",
+      "name": "support_links",
+      "aria-label": "",
+      "type": "repeater",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "layout": "table",
+      "pagination": 0,
+      "min": 0,
+      "max": 0,
+      "collapsed": "",
+      "button_label": "Add support link",
+      "rows_per_page": 20,
+      "sub_fields": [
+        {
+          "key": "field_mpp_footer_support_link_label",
+          "label": "Label",
+          "name": "label",
+          "aria-label": "",
+          "type": "text",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "40",
+            "class": "",
+            "id": ""
+          },
+          "default_value": "",
+          "maxlength": "",
+          "placeholder": "",
+          "prepend": "",
+          "append": "",
+          "parent_repeater": "field_mpp_footer_support_links"
+        },
+        {
+          "key": "field_mpp_footer_support_link_link",
+          "label": "Link",
+          "name": "link",
+          "aria-label": "",
+          "type": "link",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "60",
+            "class": "",
+            "id": ""
+          },
+          "return_format": "array",
+          "parent_repeater": "field_mpp_footer_support_links"
+        }
+      ]
+    },
+    {
+      "key": "field_mpp_footer_contact",
+      "label": "Contact",
+      "name": "contact",
+      "aria-label": "",
+      "type": "group",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "layout": "block",
+      "sub_fields": [
+        {
+          "key": "field_mpp_footer_contact_address",
+          "label": "Address",
+          "name": "address",
+          "aria-label": "",
+          "type": "textarea",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "default_value": "Fj\u00e4r\u00e5s industrial road 17, 439 74 Fj\u00e4r\u00e5s, Sweden",
+          "maxlength": "",
+          "rows": 3,
+          "placeholder": "",
+          "new_lines": "br"
+        },
+        {
+          "key": "field_mpp_footer_contact_map_url",
+          "label": "Address / Map URL",
+          "name": "map_url",
+          "aria-label": "",
+          "type": "url",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "default_value": "https://goo.gl/maps/GiUoAHLm7gjy2Xfm7",
+          "placeholder": ""
+        },
+        {
+          "key": "field_mpp_footer_contact_phone",
+          "label": "Phone",
+          "name": "phone",
+          "aria-label": "",
+          "type": "text",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "50",
+            "class": "",
+            "id": ""
+          },
+          "default_value": "+46 300 521 930",
+          "maxlength": "",
+          "placeholder": "",
+          "prepend": "",
+          "append": ""
+        },
+        {
+          "key": "field_mpp_footer_contact_email",
+          "label": "Email",
+          "name": "email",
+          "aria-label": "",
+          "type": "email",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "50",
+            "class": "",
+            "id": ""
+          },
+          "default_value": "kontakt@mpp.se",
+          "placeholder": "",
+          "prepend": "",
+          "append": ""
+        }
+      ]
+    },
+    {
+      "key": "field_mpp_footer_social_links",
+      "label": "Social Links",
+      "name": "social_links",
+      "aria-label": "",
+      "type": "repeater",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "layout": "table",
+      "pagination": 0,
+      "min": 0,
+      "max": 0,
+      "collapsed": "",
+      "button_label": "Add social link",
+      "rows_per_page": 20,
+      "sub_fields": [
+        {
+          "key": "field_mpp_footer_social_name",
+          "label": "Name",
+          "name": "name",
+          "aria-label": "",
+          "type": "select",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "30",
+            "class": "",
+            "id": ""
+          },
+          "choices": {
+            "LinkedIn": "LinkedIn",
+            "Instagram": "Instagram",
+            "Facebook": "Facebook",
+            "YouTube": "YouTube"
+          },
+          "default_value": false,
+          "return_format": "value",
+          "multiple": 0,
+          "allow_null": 0,
+          "ui": 1,
+          "ajax": 0,
+          "placeholder": "",
+          "parent_repeater": "field_mpp_footer_social_links"
+        },
+        {
+          "key": "field_mpp_footer_social_link",
+          "label": "Link",
+          "name": "link",
+          "aria-label": "",
+          "type": "link",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "50",
+            "class": "",
+            "id": ""
+          },
+          "return_format": "array",
+          "parent_repeater": "field_mpp_footer_social_links"
+        },
+        {
+          "key": "field_mpp_footer_social_icon",
+          "label": "Optional Icon Override",
+          "name": "icon",
+          "aria-label": "",
+          "type": "image",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "20",
+            "class": "",
+            "id": ""
+          },
+          "return_format": "array",
+          "library": "all",
+          "min_width": "",
+          "min_height": "",
+          "min_size": "",
+          "max_width": "",
+          "max_height": "",
+          "max_size": "",
+          "mime_types": "",
+          "preview_size": "thumbnail",
+          "parent_repeater": "field_mpp_footer_social_links"
+        }
+      ]
+    },
+    {
+      "key": "field_mpp_footer_legal_links",
+      "label": "Legal Links",
+      "name": "legal_links",
+      "aria-label": "",
+      "type": "repeater",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "layout": "table",
+      "pagination": 0,
+      "min": 0,
+      "max": 0,
+      "collapsed": "",
+      "button_label": "Add legal link",
+      "rows_per_page": 20,
+      "sub_fields": [
+        {
+          "key": "field_mpp_footer_legal_link_label",
+          "label": "Label",
+          "name": "label",
+          "aria-label": "",
+          "type": "text",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "40",
+            "class": "",
+            "id": ""
+          },
+          "default_value": "",
+          "maxlength": "",
+          "placeholder": "",
+          "prepend": "",
+          "append": "",
+          "parent_repeater": "field_mpp_footer_legal_links"
+        },
+        {
+          "key": "field_mpp_footer_legal_link_link",
+          "label": "Link",
+          "name": "link",
+          "aria-label": "",
+          "type": "link",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "60",
+            "class": "",
+            "id": ""
+          },
+          "return_format": "array",
+          "parent_repeater": "field_mpp_footer_legal_links"
+        }
+      ]
+    },
+    {
+      "key": "field_mpp_footer_copyright_text",
+      "label": "Copyright Text",
+      "name": "copyright_text",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "Copyright 2026 \u00a9 MPP. All Rights Reserved.",
+      "maxlength": "",
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
     }
   ],
   "location": [
@@ -316,7 +571,7 @@
   "instruction_placement": "label",
   "hide_on_screen": "",
   "active": true,
-  "description": "Footer fields used by the headless Next.js footer template.",
+  "description": "Direct footer fields used by the headless Next.js footer template.",
   "show_in_rest": 1,
   "modified": 1779288000
 }
