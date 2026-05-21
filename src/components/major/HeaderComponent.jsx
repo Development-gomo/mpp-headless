@@ -72,10 +72,17 @@ export default function HeaderComponent(props) {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${headerClass}`}
     >
       <div
-        className="relative mx-auto flex h-[88px] max-w-[1280px] items-center px-5 transition-all duration-300 xl:h-[104px] xl:px-0"
+        className={`relative mx-auto flex max-w-[1280px] items-center px-5 transition-all duration-300 xl:px-0 ${
+          scrolled ? "h-[72px]" : "h-[88px] xl:h-[104px]"
+        }`}
       >
         {/* LOGO */}
-        <Link href="/" className="shrink-0 xl:absolute xl:left-0 xl:top-[42px]">
+        <Link
+          href="/"
+          className={`shrink-0 transition-all duration-300 xl:absolute xl:left-0 ${
+            scrolled ? "xl:top-[16px]" : "xl:top-[42px]"
+          }`}
+        >
           {logoUrl ? (
             <Image
               src={logoUrl}
@@ -83,7 +90,9 @@ export default function HeaderComponent(props) {
               width={168}
               height={56}
               priority
-              className="h-auto w-[132px] object-contain xl:w-[168px]"
+              className={`h-auto object-contain transition-all duration-300 ${
+                scrolled ? "w-[120px] xl:w-[144px]" : "w-[132px] xl:w-[168px]"
+              }`}
             />
           ) : (
             <span className="text-xl font-semibold">MPP</span>
@@ -92,7 +101,9 @@ export default function HeaderComponent(props) {
 
         {/* DESKTOP NAV */}
         <nav
-          className={`hidden h-[50px] w-[647px] items-center rounded-[4px] border p-1 backdrop-blur-[10px] xl:absolute xl:left-[316px] xl:top-[47px] xl:flex ${navShellClass}`}
+          className={`hidden h-[50px] w-[647px] items-center rounded-[4px] border p-1 backdrop-blur-[10px] transition-all duration-300 xl:absolute xl:left-[316px] xl:flex ${
+            scrolled ? "xl:top-[11px]" : "xl:top-[47px]"
+          } ${navShellClass}`}
         >
           <div
             className={`flex h-[42px] w-full items-center justify-between rounded-[4px] px-8 backdrop-blur-[15px] ${navInnerClass}`}
@@ -273,7 +284,11 @@ export default function HeaderComponent(props) {
         </nav>
 
         {/* RIGHT SIDE */}
-        <div className="hidden items-center gap-2 xl:absolute xl:right-0 xl:top-[48px] xl:flex">
+        <div
+          className={`hidden items-center gap-2 transition-all duration-300 xl:absolute xl:right-0 xl:flex ${
+            scrolled ? "xl:top-[12px]" : "xl:top-[48px]"
+          }`}
+        >
           {/* Top menu: hidden on scroll */}
           <div
             className={`absolute right-0 top-[-36px] flex items-center gap-2 transition-all duration-300 ${
@@ -284,7 +299,7 @@ export default function HeaderComponent(props) {
           >
             <Link
               href={headerTelephoneLink || "tel:+46300521930"}
-              className={`flex h-[28px] w-[28px] items-center justify-center rounded-[4px] backdrop-blur-[10px] ${topPillClass}`}
+              className="flex"
               aria-label="Call"
             >
               <Image
@@ -292,7 +307,7 @@ export default function HeaderComponent(props) {
                 alt=""
                 width={14}
                 height={14}
-                className="h-auto w-[14px] object-contain"
+                className={`h-[28px] w-[28px] items-center justify-center rounded-[4px] backdrop-blur-[10px] ${topPillClass}`}
               />
             </Link>
 

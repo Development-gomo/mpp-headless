@@ -72,7 +72,11 @@ function getProductExcerpt(product) {
 }
 
 function getProductLink(product) {
-  return product?.link || `/product/${product?.slug || ""}`;
+  if (product?.slug) return `/product/${product.slug}`;
+
+  const productPath = product?.link?.match(/\/product\/([^/?#]+)\/?/i)?.[1];
+
+  return productPath ? `/product/${productPath}` : "#";
 }
 
 export default function ProductCategoryProductSections({

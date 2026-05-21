@@ -1,7 +1,7 @@
 import Header from "@/components/major/Header";
 import Footer from "@/components/major/Footer";
 import ProductPageTemplate from "@/components/sections/product/ProductPageTemplate";
-import { getAllProducts, getProductBySlug } from "@/lib/api";
+import { getAllProducts, getProductBySlug, getProductCategories } from "@/lib/api";
 import { resolveParams } from "@/lib/params";
 import { buildMetadataFromYoast } from "@/lib/seo";
 import { notFound } from "next/navigation";
@@ -27,12 +27,16 @@ export default async function ProductSinglePage({ params }) {
 
   const product = await getProductBySlug(slug);
   if (!product) notFound();
+  const productCategories = await getProductCategories();
 
   return (
     <>
       <Header variant="dark" />
       <main>
-        <ProductPageTemplate product={product} />
+        <ProductPageTemplate
+          product={product}
+          productCategories={productCategories}
+        />
       </main>
       <Footer />
     </>

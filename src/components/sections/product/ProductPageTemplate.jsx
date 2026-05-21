@@ -36,10 +36,13 @@ function ProductAnchorNav() {
   );
 }
 
-export default function ProductPageTemplate({ product }) {
+export default function ProductPageTemplate({ product, productCategories = [] }) {
   return (
     <>
-      <ProductBreadcrumbs product={product} />
+      <ProductBreadcrumbs
+        product={product}
+        productCategories={productCategories}
+      />
       <ProductHero product={product} />
       <ProductAnchorNav />
       <ProductSpecsSection product={product} />

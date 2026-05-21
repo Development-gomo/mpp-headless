@@ -1,10 +1,56 @@
 import Link from "next/link";
 import { getProductCategories, getRendered, stripHtml } from "./productUtils";
 
-export default function ProductBreadcrumbs({ product }) {
+function getCategoryId(category) {
+  return category?.term_id || category?.id;
+}
+
+function getCategoryParentId(category) {
+  return category?.parent || category?.parent_id || 0;
+}
+
+function getMainProductCategory(productCategories, allCategories) {
+  const usableProductCategories = productCategories.filter(
+    (category) => category?.slug && category.slug !== "uncategorized"
+  );
+
+  const categoryMap = new Map(
+    [...allCategories, ...usableProductCategories]
+      .map((category) => [String(getCategoryId(category)), category])
+      .filter(([id]) => id && id !== "undefined")
+  );
+
+  const topLevelProductCategory = usableProductCategories.find(
+    (category) => Number(getCategoryParentId(category)) === 0
+  );
+
+  if (topLevelProductCategory) return topLevelProductCategory;
+
+  const firstCategory = usableProductCategories[0];
+  if (!firstCategory) return null;
+
+  let currentCategory = firstCategory;
+  const visitedIds = new Set();
+
+  while (Number(getCategoryParentId(currentCategory)) > 0) {
+    const parentId = String(getCategoryParentId(currentCategory));
+
+    if (visitedIds.has(parentId)) break;
+    visitedIds.add(parentId);
+
+    const parentCategory = categoryMap.get(parentId);
+    if (!parentCategory) break;
+
+    currentCategory = parentCategory;
+  }
+
+  return currentCategory;
+}
+
+export default function ProductBreadcrumbs({ product, productCategories = [] }) {
   const title = stripHtml(getRendered(product?.title));
   const categories = getProductCategories(product);
-  const primaryCategory = categories.find((category) => category?.slug !== "uncategorized");
+  const primaryCategory = getMainProductCategory(categories, productCategories);
 
   return (
     <nav aria-label="Breadcrumb" className="bg-white pt-[126px] md:pt-[136px]">
