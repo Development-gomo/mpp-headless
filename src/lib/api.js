@@ -195,10 +195,54 @@ export async function getProductCategoriesWithImages() {
   return Array.isArray(data) ? data : [];
 }
 
-export async function getProductCategories() {
-  const data = await fetchWP(`/headless/v1/product-categories`);
+function normalizeProductCategory(category) {
+  if (!category || typeof category !== "object") return null;
 
-  return Array.isArray(data) ? data : [];
+  return {
+    ...category,
+    term_id: category.term_id || category.id,
+  };
+}
+
+function mergeProductCategories(primary = [], fallback = []) {
+  const merged = new Map();
+
+  [...fallback, ...primary].forEach((category) => {
+    const normalized = normalizeProductCategory(category);
+    const key = normalized?.term_id || normalized?.slug;
+
+    if (key) {
+      const existing = merged.get(String(key)) || {};
+      const existingParent = Number(existing.parent || existing.parent_id || 0);
+      const nextParent = Number(normalized.parent || normalized.parent_id || 0);
+
+      merged.set(String(key), {
+        ...existing,
+        ...normalized,
+        parent: nextParent || existingParent,
+      });
+    }
+  });
+
+  return Array.from(merged.values());
+}
+
+export async function getProductCategories() {
+  const [headlessCategories, taxonomyCategories] = await Promise.all([
+    fetchWP(`/headless/v1/product-categories`),
+    fetchWP(
+      withParams(`/wp/v2/product_cat`, {
+        per_page: 100,
+        hide_empty: false,
+        acf_format: "standard",
+      })
+    ),
+  ]);
+
+  return mergeProductCategories(
+    Array.isArray(headlessCategories) ? headlessCategories : [],
+    Array.isArray(taxonomyCategories) ? taxonomyCategories : []
+  );
 }
 
 export async function getProductCategoryBySlug(slug) {

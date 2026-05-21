@@ -9,42 +9,64 @@ function getCategoryParentId(category) {
   return category?.parent || category?.parent_id || 0;
 }
 
+function getCategoryByIdentity(category, categoryMap, slugMap) {
+  const id = getCategoryId(category);
+
+  if (id && categoryMap.has(String(id))) {
+    return categoryMap.get(String(id));
+  }
+
+  if (category?.slug && slugMap.has(category.slug)) {
+    return slugMap.get(category.slug);
+  }
+
+  return category;
+}
+
 function getMainProductCategory(productCategories, allCategories) {
   const usableProductCategories = productCategories.filter(
     (category) => category?.slug && category.slug !== "uncategorized"
   );
 
-  const categoryMap = new Map(
-    [...allCategories, ...usableProductCategories]
-      .map((category) => [String(getCategoryId(category)), category])
-      .filter(([id]) => id && id !== "undefined")
-  );
+  const categoryMap = new Map();
+  const slugMap = new Map();
 
-  const topLevelProductCategory = usableProductCategories.find(
-    (category) => Number(getCategoryParentId(category)) === 0
-  );
+  [...usableProductCategories, ...allCategories].forEach((category) => {
+    const id = getCategoryId(category);
 
-  if (topLevelProductCategory) return topLevelProductCategory;
+    if (id) categoryMap.set(String(id), category);
+    if (category?.slug) slugMap.set(category.slug, category);
+  });
 
-  const firstCategory = usableProductCategories[0];
-  if (!firstCategory) return null;
+  const categoryPaths = usableProductCategories.map((category) => {
+    const resolvedCategory = getCategoryByIdentity(category, categoryMap, slugMap);
+    const path = [resolvedCategory];
+    let currentCategory = resolvedCategory;
+    const visitedIds = new Set([String(getCategoryId(category))]);
 
-  let currentCategory = firstCategory;
-  const visitedIds = new Set();
+    while (Number(getCategoryParentId(currentCategory)) > 0) {
+      const parentId = String(getCategoryParentId(currentCategory));
 
-  while (Number(getCategoryParentId(currentCategory)) > 0) {
-    const parentId = String(getCategoryParentId(currentCategory));
+      if (visitedIds.has(parentId)) break;
+      visitedIds.add(parentId);
 
-    if (visitedIds.has(parentId)) break;
-    visitedIds.add(parentId);
+      const parentCategory = categoryMap.get(parentId);
+      if (!parentCategory) break;
 
-    const parentCategory = categoryMap.get(parentId);
-    if (!parentCategory) break;
+      path.unshift(parentCategory);
+      currentCategory = parentCategory;
+    }
 
-    currentCategory = parentCategory;
-  }
+    return path.filter(
+      (item) => item?.slug && item.slug !== "uncategorized"
+    );
+  });
 
-  return currentCategory;
+  const deepestPath = categoryPaths
+    .filter((path) => path.length > 0)
+    .sort((a, b) => b.length - a.length)[0];
+
+  return deepestPath?.[0] || null;
 }
 
 export default function ProductBreadcrumbs({ product, productCategories = [] }) {

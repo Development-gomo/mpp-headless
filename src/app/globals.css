@@ -28,6 +28,10 @@ body {
   line-height: 24px;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* Global heading tags default */
 h1,
 h2,

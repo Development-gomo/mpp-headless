@@ -86,7 +86,7 @@ export default function ProductCategoryProductSections({
   if (!currentCategory || childCategories.length === 0) return null;
 
   return (
-    <section className="bg-white">
+    <section data-category-products className="scroll-mt-[144px] bg-white">
       <div className="web-width px-6 py-20 md:py-[120px]">
         {childCategories.map((childCategory, sectionIndex) => (
           <ProductSubcategoryBlock
