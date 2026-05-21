@@ -6,9 +6,31 @@ import { FaLink } from "react-icons/fa";
 export default function CopyLinkButton({ shareUrl }) {
   const [copied, setCopied] = useState(false);
 
+  const getFullShareUrl = () => {
+    if (typeof window === "undefined") return shareUrl || "";
+    if (!shareUrl) return window.location.href;
+
+    return new URL(shareUrl, window.location.origin).href;
+  };
+
   const copyLink = async () => {
     try {
-      await navigator.clipboard.writeText(shareUrl);
+      const fullShareUrl = getFullShareUrl();
+
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(fullShareUrl);
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = fullShareUrl;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
+
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1800);
     } catch {

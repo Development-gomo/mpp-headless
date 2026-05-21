@@ -1,5 +1,6 @@
 import Header from "@/components/major/Header";
 import Footer from "@/components/major/Footer";
+import SingleCaseStudyTemplate from "@/components/sections/case-study/SingleCaseStudyTemplate";
 import { resolveParams } from "@/lib/params";
 import { getCaseStudyBySlug, getCaseStudies } from "@/lib/api";
 import { buildMetadataFromYoast } from "@/lib/seo";
@@ -19,19 +20,16 @@ export default async function CaseStudySinglePage({ params }) {
   const caseStudy = await getCaseStudyBySlug(slug);
   if (!caseStudy) notFound();
 
-  const title = caseStudy?.title?.rendered || "";
-  const content = caseStudy?.content?.rendered || "";
-  const featuredImg = caseStudy?._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
+  const caseStudies = await getCaseStudies();
 
   return (
     <>
       <Header />
-      <main className="web-width px-6 py-24 mx-auto">
-        {featuredImg && (
-          <img src={featuredImg} alt={title} className="w-full max-h-125 object-cover rounded-lg mb-10" />
-        )}
-        <h1 className="section-heading mb-8" dangerouslySetInnerHTML={{ __html: title }} />
-        <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: content }} />
+      <main>
+        <SingleCaseStudyTemplate
+          caseStudy={caseStudy}
+          relatedCaseStudies={caseStudies}
+        />
       </main>
       <Footer />
     </>

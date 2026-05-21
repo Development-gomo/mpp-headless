@@ -76,7 +76,7 @@ export default function LatestCaseStudiesSection({ data, caseStudies = [] }) {
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             {latestCaseStudies.map((item, index) => {
               const title = item?.title?.rendered || item?.title || "";
-              const link = item?.link || `/case-study/${item?.slug || ""}`;
+              const link = item?.slug ? `/${item.slug}` : item?.link || "#";
 
               const image =
                 item?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ||
