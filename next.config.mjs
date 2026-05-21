@@ -6,23 +6,25 @@ const wpHostname = wpBase
   ? new URL(wpBase).hostname
   : "localhost";
 
+const imageHostnames = Array.from(
+  new Set([
+    wpHostname,
+    wpHostname.replace(/^www\./, ""),
+    `www.${wpHostname.replace(/^www\./, "")}`,
+    "gomowebb.com",
+    "www.gomowebb.com",
+  ])
+);
+
 const nextConfig = {
   reactStrictMode: true,
 
   images: {
     remotePatterns: [
-      { protocol: "https", hostname: wpHostname, pathname: "/**" },
-      { protocol: "https", hostname: `www.${wpHostname}`, pathname: "/**" },
-      {
-        protocol: "http",
-        hostname: "gomowebb.com",
-        pathname: "/headless-mpp/wp-content/uploads/**",
-      },
-      {
-        protocol: "https",
-        hostname: "gomowebb.com",
-        pathname: "/headless-mpp/wp-content/uploads/**",
-      },
+      ...imageHostnames.flatMap((hostname) => [
+        { protocol: "https", hostname, pathname: "/**" },
+        { protocol: "http", hostname, pathname: "/**" },
+      ]),
     ], 
   },
 };

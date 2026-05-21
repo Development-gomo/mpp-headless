@@ -190,9 +190,21 @@ export async function getThemeOptions() {
 // ─── Product categories ─────────────────────────────────────────────────────
 
 export async function getProductCategoriesWithImages() {
-  const data = await fetchWP(`/headless/v1/product-categories`);
+  const [headlessCategories, taxonomyCategories] = await Promise.all([
+    fetchWP(`/headless/v1/product-categories`),
+    fetchWP(
+      withParams(`/wp/v2/product_cat`, {
+        per_page: 100,
+        hide_empty: false,
+        acf_format: "standard",
+      })
+    ),
+  ]);
 
-  return Array.isArray(data) ? data : [];
+  return mergeProductCategories(
+    Array.isArray(headlessCategories) ? headlessCategories : [],
+    Array.isArray(taxonomyCategories) ? taxonomyCategories : []
+  );
 }
 
 function normalizeProductCategory(category) {

@@ -2,14 +2,26 @@ import Image from "next/image";
 import Link from "next/link";
 
 function getCategoryImage(cat) {
-  return (
-    cat?.acf?.category_image?.url ||
-    cat?.acf?.category_image?.sizes?.large ||
-    cat?.acf?.category_image?.sizes?.full ||
-    cat?.category_image?.url ||
-    cat?.category_image?.sizes?.large ||
-    cat?.category_image?.sizes?.full ||
+  const image =
+    cat?.acf?.category_image ||
+    cat?.category_image ||
     cat?.image ||
+    cat?.acf?.image ||
+    cat?.acf?.thumbnail;
+
+  if (!image || typeof image === "number") return "";
+  if (typeof image === "string") return image;
+
+  return (
+    image.url ||
+    image.src ||
+    image.source_url ||
+    image.sizes?.large ||
+    image.sizes?.medium_large ||
+    image.sizes?.full ||
+    image.media_details?.sizes?.large?.source_url ||
+    image.media_details?.sizes?.medium_large?.source_url ||
+    image.media_details?.sizes?.full?.source_url ||
     ""
   );
 }
