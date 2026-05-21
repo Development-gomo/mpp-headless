@@ -84,7 +84,7 @@ export default function LatestBlogsSection({
             {latestPosts.map((post, index) => {
               const title = post?.title?.rendered || post?.title || "";
               const excerpt = post?.excerpt?.rendered || post?.excerpt || "";
-              const link = post?.link || `/post/${post?.slug || ""}`;
+              const link = post?.slug ? `/${post.slug}` : "#";
 
               const image =
                 post?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ||

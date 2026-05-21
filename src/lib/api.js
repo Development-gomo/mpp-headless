@@ -187,6 +187,64 @@ export async function getThemeOptions() {
   return {};
 }
 
+function pickFirstObject(candidates = []) {
+  return (
+    candidates.find(
+      (item) => item && typeof item === "object" && !Array.isArray(item)
+    ) || {}
+  );
+}
+
+function resolveOptionsData(data) {
+  return pickFirstObject([
+    data?.options?.acf,
+    data?.options,
+    data?.data?.acf,
+    data?.data,
+    data?.acf,
+    data,
+  ]);
+}
+
+function resolveBlogSettingsData(data) {
+  const options = resolveOptionsData(data);
+
+  return pickFirstObject([
+    options?.blog_settings,
+    options?.blog_setting,
+    options?.global?.blog_settings,
+    options?.global?.blog_setting,
+    options?.global,
+    options,
+  ]);
+}
+
+export async function getBlogSettings() {
+  const endpoints = [
+    `/headless/v1/blog-settings`,
+    `/headless/v1/blog-setting`,
+    `/headless/v1/theme-options`,
+    `/wp/v2/acf/options/blog-setting?acf_format=standard`,
+    `/wp/v2/acf/options/blog-settings?acf_format=standard`,
+    `/wp/v2/acf/options?acf_format=standard`,
+    `/acf/v3/options/blog-setting`,
+    `/acf/v3/options/blog-settings`,
+    `/acf/v3/options/options`,
+  ];
+
+  for (const endpoint of endpoints) {
+    try {
+      const data = await fetchWP(endpoint);
+      const options = resolveBlogSettingsData(data);
+      if (options && !options.code && Object.keys(options).length > 0) {
+        return options;
+      }
+    } catch {}
+  }
+
+  return {};
+}
+
 // ─── Product categories ─────────────────────────────────────────────────────
 
 export async function getProductCategoriesWithImages() {
