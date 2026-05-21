@@ -46,8 +46,8 @@ export default function HeaderComponent(props) {
   };
 
   const isDark = variant === "dark";
-  const menuLinkClass = `inline-flex items-center gap-1.5 text-[14px] font-normal leading-[24px] tracking-[-0.28px] font-heading transition-colors ${
-    isDark ? "text-black hover:text-[var(--color-accent)]" : "text-white hover:text-white"
+  const menuLinkClass = `inline-flex h-6 items-center gap-1 text-[14px] font-normal leading-[24px] tracking-[-0.28px] font-heading transition-colors ${
+    isDark ? "text-black hover:text-[var(--color-accent)]" : "text-white hover:text-white/80"
   }`;
   const headerClass = isDark
     ? scrolled
@@ -58,8 +58,11 @@ export default function HeaderComponent(props) {
     : "bg-transparent text-white";
   const navShellClass = isDark
     ? "bg-black/[0.04] border-black/10"
-    : "bg-white/25 border-white/10";
-  const topPillClass = isDark ? "bg-black/[0.06] text-black" : "bg-white/25 text-white";
+    : "bg-[#8A8A8A]/20 border-white/10";
+  const navInnerClass = isDark ? "bg-white/55" : "bg-white/25";
+  const topPillClass = isDark
+    ? "border border-black/10 bg-black/[0.06] text-black"
+    : "border border-white/10 bg-[#8A8A8A]/20 text-white";
   const mobileButtonClass = isDark
     ? "border-black/25 text-black hover:bg-black/5"
     : "border-white/25 text-white hover:bg-white/10";
@@ -69,12 +72,10 @@ export default function HeaderComponent(props) {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${headerClass}`}
     >
       <div
-        className={`web-width relative mx-auto flex h-[104px] items-center justify-between gap-6 px-6 transition-all duration-300 ${
-          scrolled ? "" : "pt-7"
-        }`}
+        className="relative mx-auto flex h-[88px] max-w-[1280px] items-center px-5 transition-all duration-300 xl:h-[104px] xl:px-0"
       >
         {/* LOGO */}
-        <Link href="/" className="shrink-0">
+        <Link href="/" className="shrink-0 xl:absolute xl:left-0 xl:top-[42px]">
           {logoUrl ? (
             <Image
               src={logoUrl}
@@ -82,7 +83,7 @@ export default function HeaderComponent(props) {
               width={168}
               height={56}
               priority
-              className="h-auto w-[168px] object-contain"
+              className="h-auto w-[132px] object-contain xl:w-[168px]"
             />
           ) : (
             <span className="text-xl font-semibold">MPP</span>
@@ -90,8 +91,13 @@ export default function HeaderComponent(props) {
         </Link>
 
         {/* DESKTOP NAV */}
-        <nav className={`hidden lg:flex items-center justify-center rounded-[4px] backdrop-blur-[7.5px] border px-8 h-[42px] gap-8 ${navShellClass}`}>
-          {megaMenuRows.length > 0
+        <nav
+          className={`hidden h-[50px] w-[647px] items-center rounded-[4px] border p-1 backdrop-blur-[10px] xl:absolute xl:left-[316px] xl:top-[47px] xl:flex ${navShellClass}`}
+        >
+          <div
+            className={`flex h-[42px] w-full items-center justify-between rounded-[4px] px-8 backdrop-blur-[15px] ${navInnerClass}`}
+          >
+            {megaMenuRows.length > 0
             ? megaMenuRows.map((menuRow) => {
                 if (menuRow.layoutType === "no_column") {
                   return (
@@ -263,13 +269,14 @@ export default function HeaderComponent(props) {
                   {link.label}
                 </Link>
               ))}
+          </div>
         </nav>
 
         {/* RIGHT SIDE */}
-        <div className="hidden lg:flex items-center gap-2">
+        <div className="hidden items-center gap-2 xl:absolute xl:right-0 xl:top-[48px] xl:flex">
           {/* Top menu: hidden on scroll */}
           <div
-            className={`absolute right-6 top-[10px] flex items-center gap-1 transition-all duration-300 ${
+            className={`absolute right-0 top-[-36px] flex items-center gap-2 transition-all duration-300 ${
               scrolled
                 ? "pointer-events-none opacity-0 -translate-y-2"
                 : "opacity-100 translate-y-0"
@@ -277,7 +284,7 @@ export default function HeaderComponent(props) {
           >
             <Link
               href={headerTelephoneLink || "tel:+46300521930"}
-              className={`flex h-[28px] w-[28px] items-center justify-center rounded-[4px] backdrop-blur-[7.5px] ${topPillClass}`}
+              className={`flex h-[28px] w-[28px] items-center justify-center rounded-[4px] backdrop-blur-[10px] ${topPillClass}`}
               aria-label="Call"
             >
               <Image
@@ -291,10 +298,16 @@ export default function HeaderComponent(props) {
 
             <button
               type="button"
-              className={`flex h-[28px] items-center gap-1 rounded-[4px] backdrop-blur-[7.5px] px-2 text-[14px] font-heading tracking-[-0.28px] ${topPillClass}`}
+              className={`flex h-[28px] w-[45px] items-center justify-center gap-1 rounded-[4px] backdrop-blur-[10px] text-[14px] leading-6 tracking-[-0.28px] font-heading ${topPillClass}`}
             >
               EN
-              <span className="text-[12px] leading-none">⌄</span>
+              <Image
+                src="/down-arrow.svg"
+                alt=""
+                width={9}
+                height={5}
+                className="h-auto w-[9px]"
+              />
             </button>
           </div>
 
@@ -302,11 +315,11 @@ export default function HeaderComponent(props) {
           <Link
             href={cta1Url || "#"}
             target={cta1Target || "_self"}
-            className="inline-flex h-[48px] items-center gap-4 rounded-[4px] bg-[#445641] py-[6px] pr-[6px] pl-5 text-white font-heading text-[14px] tracking-[-0.28px] hover:opacity-90 transition-opacity"
+            className="inline-flex h-[48px] w-[127px] items-center justify-between rounded-[4px] bg-[#445641] py-[6px] pr-[6px] pl-4 text-white font-heading text-[14px] leading-6 tracking-[-0.28px] hover:opacity-90 transition-opacity"
           >
             <span>{cta1Text}</span>
 
-            <span className="flex h-[36px] w-[36px] items-center justify-center rounded-[4px] bg-white">
+            <span className="flex h-[36px] w-[37px] shrink-0 items-center justify-center rounded-[4px] bg-white">
               <Image
                 src="/defence.svg"
                 alt=""
@@ -321,11 +334,11 @@ export default function HeaderComponent(props) {
           <Link
             href={cta2Url || "#"}
             target={cta2Target || "_self"}
-            className="group inline-flex h-[48px] items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-5 text-black font-heading text-[14px] tracking-[-0.28px] hover:opacity-90 transition-opacity"
+            className="group inline-flex h-[48px] w-[126px] items-center justify-between rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-4 text-black font-heading text-[14px] leading-6 tracking-[-0.28px] hover:opacity-90 transition-opacity"
           >
             <span>{cta2Text}</span>
 
-            <span className="flex h-[36px] w-[36px] items-center justify-center rounded-[4px] bg-white">
+            <span className="flex h-[36px] w-[37px] shrink-0 items-center justify-center rounded-[4px] bg-white">
               <Image
                 src="/reseller.svg"
                 alt=""
@@ -339,7 +352,7 @@ export default function HeaderComponent(props) {
 
         {/* MOBILE MENU BUTTON */}
         <button
-          className={`lg:hidden ml-auto flex items-center justify-center w-10 h-10 rounded border ${mobileButtonClass}`}
+          className={`xl:hidden ml-auto flex items-center justify-center w-10 h-10 rounded border ${mobileButtonClass}`}
           aria-label="Open menu"
           onClick={() => setMobileOpen(true)}
         >
