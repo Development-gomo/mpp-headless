@@ -61,7 +61,7 @@ export default async function DynamicPage({ params }) {
       return (
         <>
           <BodyClass className={slug} />
-          <Header />
+          <Header variant="dark" />
           <main>
             <SingleCaseStudyTemplate
               caseStudy={caseStudy}
@@ -81,7 +81,7 @@ export default async function DynamicPage({ params }) {
     return (
       <>
         <BodyClass className={slug} />
-        <Header />
+        <Header variant="dark" />
         <main>
           <SinglePostTemplate
             post={post}

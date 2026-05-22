@@ -13,6 +13,7 @@ function getColumnClass(layoutType) {
 export default function HeaderComponent(props) {
   const {
     logoUrl,
+    logoDarkUrl,
     megaMenuRows = [],
     navLinks = [],
     headerTelephoneLink = "tel:+46300521930",
@@ -46,22 +47,27 @@ export default function HeaderComponent(props) {
   };
 
   const isDark = variant === "dark";
+  const activeLogoUrl = isDark ? logoDarkUrl || logoUrl : logoUrl;
+  const callIcon = isDark ? "/call-dark.svg" : "/call.svg";
+  const languageArrowIcon = isDark ? "/down-arrow-black.svg" : "/down-arrow.svg";
   const menuLinkClass = `inline-flex h-6 items-center gap-1 text-[14px] font-normal leading-[24px] tracking-[-0.28px] font-heading transition-colors ${
     isDark ? "text-black hover:text-[var(--color-accent)]" : "text-white hover:text-white/80"
   }`;
   const headerClass = isDark
     ? scrolled
-      ? "bg-white/90 text-black shadow-sm backdrop-blur-[7.5px]"
-      : "bg-white/80 text-black backdrop-blur-[7.5px]"
+      ? "bg-white text-black shadow-sm"
+      : "bg-white text-black"
     : scrolled
     ? "bg-black/25 text-white backdrop-blur-[7.5px]"
     : "bg-transparent text-white";
   const navShellClass = isDark
-    ? "bg-black/[0.04] border-black/10"
+    ? "bg-[#F3F4FB] border-[#DEDFE7]"
     : "bg-[#8A8A8A]/20 border-white/10";
-  const navInnerClass = isDark ? "bg-white/55" : "bg-white/25";
+  const navInnerClass = isDark
+    ? "bg-[#E8EAF3] backdrop-blur-[5px]"
+    : "bg-white/25 backdrop-blur-[15px]";
   const topPillClass = isDark
-    ? "border border-black/10 bg-black/[0.06] text-black"
+    ? "border border-white/10 bg-[#8A8A8A]/20 text-black"
     : "border border-white/10 bg-[#8A8A8A]/20 text-white";
   const mobileButtonClass = isDark
     ? "border-black/25 text-black hover:bg-black/5"
@@ -80,18 +86,22 @@ export default function HeaderComponent(props) {
         <Link
           href="/"
           className={`shrink-0 transition-all duration-300 xl:absolute xl:left-0 ${
-            scrolled ? "xl:top-[16px]" : "xl:top-[42px]"
+            scrolled ? "xl:top-[16px]" : isDark ? "xl:top-[48px]" : "xl:top-[42px]"
           }`}
         >
-          {logoUrl ? (
+          {activeLogoUrl ? (
             <Image
-              src={logoUrl}
+              src={activeLogoUrl}
               alt="Logo"
               width={168}
               height={56}
               priority
               className={`h-auto object-contain transition-all duration-300 ${
-                scrolled ? "w-[120px] xl:w-[144px]" : "w-[132px] xl:w-[168px]"
+                scrolled
+                  ? "w-[120px] xl:w-[144px]"
+                  : isDark
+                  ? "w-[133px]"
+                  : "w-[132px] xl:w-[168px]"
               }`}
             />
           ) : (
@@ -106,7 +116,7 @@ export default function HeaderComponent(props) {
           } ${navShellClass}`}
         >
           <div
-            className={`flex h-[42px] w-full items-center justify-between rounded-[4px] px-8 backdrop-blur-[15px] ${navInnerClass}`}
+            className={`flex h-[42px] w-full items-center justify-between rounded-[4px] px-8 ${navInnerClass}`}
           >
             {megaMenuRows.length > 0
             ? megaMenuRows.map((menuRow) => {
@@ -291,7 +301,9 @@ export default function HeaderComponent(props) {
         >
           {/* Top menu: hidden on scroll */}
           <div
-            className={`absolute right-0 top-[-36px] flex items-center gap-2 transition-all duration-300 ${
+            className={`absolute right-0 flex items-center gap-2 transition-all duration-300 ${
+              isDark ? "top-[-36px]" : "top-[-36px]"
+            } ${
               scrolled
                 ? "pointer-events-none opacity-0 -translate-y-2"
                 : "opacity-100 translate-y-0"
@@ -299,15 +311,15 @@ export default function HeaderComponent(props) {
           >
             <Link
               href={headerTelephoneLink || "tel:+46300521930"}
-              className="flex"
+              className="flex h-[28px] w-[28px] items-center justify-center"
               aria-label="Call"
             >
               <Image
-                src="/call.svg"
+                src={callIcon}
                 alt=""
-                width={14}
-                height={14}
-                className={`h-[28px] w-[28px] items-center justify-center rounded-[4px] backdrop-blur-[10px] ${topPillClass}`}
+                width={28}
+                height={28}
+                className="h-[28px] w-[28px] object-contain"
               />
             </Link>
 
@@ -317,7 +329,7 @@ export default function HeaderComponent(props) {
             >
               EN
               <Image
-                src="/down-arrow.svg"
+                src={languageArrowIcon}
                 alt=""
                 width={9}
                 height={5}

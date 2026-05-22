@@ -150,6 +150,14 @@ export default async function Header({ variant = "light" }) {
         optionsRoot?.logo?.url ||
         null;
 
+  const logoDarkUrl =
+    typeof headerOptions?.header_logo_dark === "string"
+      ? headerOptions.header_logo_dark
+      : headerOptions?.header_logo_dark?.url ||
+        optionsRoot?.header_logo_dark?.url ||
+        optionsRoot?.global?.header_logo_dark?.url ||
+        logoUrl;
+
   const navHtml =
     headerOptions?.nav ||
     headerOptions?.navigation ||
@@ -217,6 +225,7 @@ export default async function Header({ variant = "light" }) {
   return (
     <HeaderComponent
       logoUrl={logoUrl}
+      logoDarkUrl={logoDarkUrl}
       megaMenuRows={megaMenuRows}
       navLinks={navLinks}
       headerTelephoneLink={headerTelephoneLink.href}

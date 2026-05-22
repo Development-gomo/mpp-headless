@@ -24,7 +24,7 @@ export default async function CaseStudySinglePage({ params }) {
 
   return (
     <>
-      <Header />
+      <Header variant="dark" />
       <main>
         <SingleCaseStudyTemplate
           caseStudy={caseStudy}
