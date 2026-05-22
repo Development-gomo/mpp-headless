@@ -25,6 +25,15 @@ function getCategoryImage(cat) {
     ""
   );
 }
+
+function getCategoryLink(cat) {
+  if (cat?.slug) return `/product-category/${cat.slug}`;
+
+  const categoryPath = cat?.link?.match(/\/product-category\/([^/?#]+)\/?/i)?.[1];
+
+  return categoryPath ? `/product-category/${categoryPath}` : "#";
+}
+
 export default function ProductCategoriesSection({
   data,
   categoriesWithImages = [],
@@ -65,11 +74,7 @@ export default function ProductCategoriesSection({
         ...cat,
         ...matched,
         acf: matched?.acf || cat?.acf || {},
-        link:
-          matched?.link ||
-          cat?.link ||
-          cat?.url ||
-          `/product-category/${cat?.slug || ""}`,
+        link: getCategoryLink(matched || cat),
       };
     });
 
