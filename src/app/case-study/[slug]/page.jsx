@@ -4,12 +4,13 @@ import SingleCaseStudyTemplate from "@/components/sections/case-study/SingleCase
 import { resolveParams } from "@/lib/params";
 import { getCaseStudyBySlug, getCaseStudies } from "@/lib/api";
 import { buildMetadataFromYoast } from "@/lib/seo";
+import { DEFAULT_LANGUAGE } from "@/lib/i18n";
 import { notFound } from "next/navigation";
 
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  const cases = await getCaseStudies();
+  const cases = await getCaseStudies({ language: DEFAULT_LANGUAGE });
   return (Array.isArray(cases) ? cases : []).map((c) => ({ slug: c.slug }));
 }
 
@@ -17,14 +18,23 @@ export default async function CaseStudySinglePage({ params }) {
   const { slug } = resolveParams(await params);
   if (!slug) notFound();
 
-  const caseStudy = await getCaseStudyBySlug(slug);
+  const caseStudy = await getCaseStudyBySlug(slug, { language: DEFAULT_LANGUAGE });
   if (!caseStudy) notFound();
 
-  const caseStudies = await getCaseStudies();
+  const caseStudies = await getCaseStudies({ language: DEFAULT_LANGUAGE });
 
   return (
     <>
-      <Header variant="dark" />
+      <Header
+        variant="dark"
+        language={DEFAULT_LANGUAGE}
+        translationContext={{
+          type: "case-study",
+          id: caseStudy.id,
+          slug: caseStudy.slug,
+          path: `/case-study/${slug}`,
+        }}
+      />
       <main>
         <SingleCaseStudyTemplate
           caseStudy={caseStudy}
@@ -38,6 +48,6 @@ export default async function CaseStudySinglePage({ params }) {
 
 export async function generateMetadata({ params }) {
   const { slug } = resolveParams(await params);
-  const caseStudy = await getCaseStudyBySlug(slug);
+  const caseStudy = await getCaseStudyBySlug(slug, { language: DEFAULT_LANGUAGE });
   return buildMetadataFromYoast(caseStudy, { fallbackTitle: slug });
 }

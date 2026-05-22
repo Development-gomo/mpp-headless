@@ -27,7 +27,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="sv">
       <body className={` ${nunitoSans.variable} ${miranda.variable}`}>
         {children}
       </body>

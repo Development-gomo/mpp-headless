@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { DEFAULT_LANGUAGE, FALLBACK_LANGUAGES } from "@/lib/i18n";
 
 function getColumnClass(layoutType) {
   if (layoutType === "three_column") return "md:grid-cols-3";
@@ -24,11 +25,15 @@ export default function HeaderComponent(props) {
     cta2Url = "#",
     cta2Target = "_self",
     variant = "light",
+    language = DEFAULT_LANGUAGE,
+    languages = FALLBACK_LANGUAGES,
+    languageLinks = {},
   } = props;
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openSubmenus, setOpenSubmenus] = useState({});
   const [scrolled, setScrolled] = useState(false);
+  const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -47,6 +52,17 @@ export default function HeaderComponent(props) {
   };
 
   const isDark = variant === "dark";
+  const languageOptions = (Array.isArray(languages) && languages.length > 0
+    ? languages
+    : FALLBACK_LANGUAGES
+  ).filter((item) => item?.code);
+  const currentLanguage =
+    languageOptions.find((item) => item.code === language) || {
+      code: language,
+    };
+  const availableLanguageOptions = languageOptions.filter(
+    (item) => item.code !== language && languageLinks[item.code]
+  );
   const activeLogoUrl = isDark ? logoDarkUrl || logoUrl : logoUrl;
   const callIcon = isDark ? "/call-dark.svg" : "/call.svg";
   const languageArrowIcon = isDark ? "/down-arrow-black.svg" : "/down-arrow.svg";
@@ -323,19 +339,49 @@ export default function HeaderComponent(props) {
               />
             </Link>
 
-            <button
-              type="button"
-              className={`flex h-[28px] w-[45px] items-center justify-center gap-1 rounded-[4px] backdrop-blur-[10px] text-[14px] leading-6 tracking-[-0.28px] font-heading ${topPillClass}`}
-            >
-              EN
-              <Image
-                src={languageArrowIcon}
-                alt=""
-                width={9}
-                height={5}
-                className="h-auto w-[9px]"
-              />
-            </button>
+            <div className="relative">
+              <button
+                type="button"
+                className={`flex h-[28px] w-[45px] items-center justify-center gap-1 rounded-[4px] backdrop-blur-[10px] text-[14px] leading-6 tracking-[-0.28px] font-heading ${topPillClass} ${
+                  availableLanguageOptions.length === 0
+                    ? "cursor-default"
+                    : "cursor-pointer"
+                }`}
+                aria-label="Select language"
+                aria-expanded={languageMenuOpen}
+                onClick={() => {
+                  if (availableLanguageOptions.length > 0) {
+                    setLanguageMenuOpen((open) => !open);
+                  }
+                }}
+              >
+                {currentLanguage.code.toUpperCase()}
+                <Image
+                  src={languageArrowIcon}
+                  alt=""
+                  width={9}
+                  height={5}
+                  className={`h-auto w-[9px] transition-transform ${
+                    languageMenuOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {languageMenuOpen && availableLanguageOptions.length > 0 && (
+                <div className="absolute right-0 top-full mt-1 min-w-[45px] overflow-hidden rounded-[4px] border border-black/10 bg-white text-black shadow-[0_12px_28px_rgba(0,0,0,0.14)]">
+                  {availableLanguageOptions.map((item) => (
+                    <Link
+                      key={item.code}
+                      href={languageLinks[item.code]}
+                      className="block px-3 py-2 text-center font-heading text-[13px] leading-none hover:bg-[#F3F4FB]"
+                      onClick={() => setLanguageMenuOpen(false)}
+                    >
+                      {item.code.toUpperCase()}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* CTA 1 */}

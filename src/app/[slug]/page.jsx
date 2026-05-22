@@ -16,15 +16,16 @@ import {
   getBlogSettings,
 } from "@/lib/api";
 import { buildMetadataFromYoast } from "@/lib/seo";
+import { DEFAULT_LANGUAGE } from "@/lib/i18n";
 import { notFound } from "next/navigation";
 
 export const revalidate = 60;
 
 export async function generateStaticParams() {
   const [pages, posts, caseStudies] = await Promise.all([
-    getAllPages(),
-    getAllPosts(),
-    getCaseStudies(),
+    getAllPages({ language: DEFAULT_LANGUAGE }),
+    getAllPosts({ language: DEFAULT_LANGUAGE }),
+    getCaseStudies({ language: DEFAULT_LANGUAGE }),
   ]);
   const pageParams = (Array.isArray(pages) ? pages : [])
     .filter((p) => !["frontpage", "home"].includes(p.slug))
@@ -48,20 +49,31 @@ export async function generateStaticParams() {
 
 export default async function DynamicPage({ params }) {
   const { slug } = await params;
-  const page = await getPageBySlug(slug);
+  const page = await getPageBySlug(slug, { language: DEFAULT_LANGUAGE });
 
   if (!page) {
-    const post = await getPostBySlug(slug);
+    const post = await getPostBySlug(slug, { language: DEFAULT_LANGUAGE });
     if (!post) {
-      const caseStudy = await getCaseStudyBySlug(slug);
+      const caseStudy = await getCaseStudyBySlug(slug, {
+        language: DEFAULT_LANGUAGE,
+      });
       if (!caseStudy) notFound();
 
-      const caseStudies = await getCaseStudies();
+      const caseStudies = await getCaseStudies({ language: DEFAULT_LANGUAGE });
 
       return (
         <>
           <BodyClass className={slug} />
-          <Header variant="dark" />
+          <Header
+            variant="dark"
+            language={DEFAULT_LANGUAGE}
+            translationContext={{
+              type: "case-study",
+              id: caseStudy.id,
+              slug: caseStudy.slug,
+              path: `/${slug}`,
+            }}
+          />
           <main>
             <SingleCaseStudyTemplate
               caseStudy={caseStudy}
@@ -74,14 +86,23 @@ export default async function DynamicPage({ params }) {
     }
 
     const [latestPosts, blogSettings] = await Promise.all([
-      getLatestPosts(),
-      getBlogSettings(),
+      getLatestPosts({ language: DEFAULT_LANGUAGE }),
+      getBlogSettings({ language: DEFAULT_LANGUAGE }),
     ]);
 
     return (
       <>
         <BodyClass className={slug} />
-        <Header variant="dark" />
+        <Header
+          variant="dark"
+          language={DEFAULT_LANGUAGE}
+          translationContext={{
+            type: "post",
+            id: post.id,
+            slug: post.slug,
+            path: `/${slug}`,
+          }}
+        />
         <main>
           <SinglePostTemplate
             post={post}
@@ -95,19 +116,28 @@ export default async function DynamicPage({ params }) {
   }
 
   const [latestPosts, latestCaseStudies] = await Promise.all([
-    getLatestPosts(),
-    getLatestCaseStudies(),
+    getLatestPosts({ language: DEFAULT_LANGUAGE }),
+    getLatestCaseStudies({ language: DEFAULT_LANGUAGE }),
   ]);
 
   return (
     <>
       <BodyClass className={slug} />
-      <Header />
+      <Header
+        language={DEFAULT_LANGUAGE}
+        translationContext={{
+          type: "page",
+          id: page.id,
+          slug: page.slug,
+          path: `/${slug}`,
+        }}
+      />
       <main>
         <PageBuilder
           sections={page?.acf?.page_builder}
           posts={latestPosts}
           caseStudies={latestCaseStudies}
+          language={DEFAULT_LANGUAGE}
         />
       </main>
       <Footer />
@@ -117,12 +147,12 @@ export default async function DynamicPage({ params }) {
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const page = await getPageBySlug(slug);
+  const page = await getPageBySlug(slug, { language: DEFAULT_LANGUAGE });
   if (page) return buildMetadataFromYoast(page, { fallbackTitle: slug });
 
-  const post = await getPostBySlug(slug);
+  const post = await getPostBySlug(slug, { language: DEFAULT_LANGUAGE });
   if (post) return buildMetadataFromYoast(post, { fallbackTitle: slug });
 
-  const caseStudy = await getCaseStudyBySlug(slug);
+  const caseStudy = await getCaseStudyBySlug(slug, { language: DEFAULT_LANGUAGE });
   return buildMetadataFromYoast(caseStudy, { fallbackTitle: slug });
 }

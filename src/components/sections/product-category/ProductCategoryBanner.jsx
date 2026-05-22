@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
 
 function getImageUrl(image) {
   if (!image) return "";
@@ -30,8 +31,10 @@ function getButtonTarget(link) {
   return link?.target || undefined;
 }
 
-function getCategoryLink(category) {
-  return category?.slug ? `/product-category/${category.slug}` : "#";
+function getCategoryLink(category, language = DEFAULT_LANGUAGE) {
+  return category?.slug
+    ? localizePath(`/product-category/${category.slug}`, language)
+    : "#";
 }
 
 const MAIN_CATEGORY_ORDER = [
@@ -41,7 +44,11 @@ const MAIN_CATEGORY_ORDER = [
   "accessories",
 ];
 
-export default function ProductCategoryBanner({ category, categories = [] }) {
+export default function ProductCategoryBanner({
+  category,
+  categories = [],
+  language = DEFAULT_LANGUAGE,
+}) {
   if (!category) return null;
 
   const acf = category?.acf || {};
@@ -179,7 +186,7 @@ export default function ProductCategoryBanner({ category, categories = [] }) {
               return (
                 <Link
                   key={cat.term_id || cat.id}
-                  href={getCategoryLink(cat)}
+                  href={getCategoryLink(cat, language)}
                   className={`flex min-h-[72px] items-center justify-center border-r border-[#D9D9D9] px-6 text-center font-heading text-[20px] leading-[28px] tracking-[-0.4px] transition-colors last:border-r-0 ${
                     isActive
                       ? "bg-[var(--color-accent)] text-white shadow-[inset_0_-3px_0_var(--color-yellow)]"

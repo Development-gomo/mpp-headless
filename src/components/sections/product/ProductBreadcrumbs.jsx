@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
 import { getProductCategories, getRendered, stripHtml } from "./productUtils";
 
 function getCategoryId(category) {
@@ -69,7 +70,11 @@ function getMainProductCategory(productCategories, allCategories) {
   return deepestPath?.[0] || null;
 }
 
-export default function ProductBreadcrumbs({ product, productCategories = [] }) {
+export default function ProductBreadcrumbs({
+  product,
+  productCategories = [],
+  language = DEFAULT_LANGUAGE,
+}) {
   const title = stripHtml(getRendered(product?.title));
   const categories = getProductCategories(product);
   const primaryCategory = getMainProductCategory(categories, productCategories);
@@ -78,7 +83,10 @@ export default function ProductBreadcrumbs({ product, productCategories = [] }) 
     <nav aria-label="Breadcrumb" className="bg-white pt-[126px] md:pt-[136px]">
       <ol className="web-width flex flex-wrap items-center gap-2 px-6 pb-6 font-body text-[14px] leading-[22px] text-black/55">
         <li>
-          <Link href="/" className="transition-colors hover:text-black">
+          <Link
+            href={localizePath("/", language)}
+            className="transition-colors hover:text-black"
+          >
             Home
           </Link>
         </li>
@@ -87,7 +95,10 @@ export default function ProductBreadcrumbs({ product, productCategories = [] }) 
           <>
             <li>
               <Link
-                href={`/product-category/${primaryCategory.slug}`}
+                href={localizePath(
+                  `/product-category/${primaryCategory.slug}`,
+                  language
+                )}
                 className="transition-colors hover:text-black"
               >
                 {primaryCategory.name}

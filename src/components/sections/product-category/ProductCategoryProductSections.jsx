@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
 
 function getImageUrl(image) {
   if (!image) return "";
@@ -71,17 +72,18 @@ function getProductExcerpt(product) {
   );
 }
 
-function getProductLink(product) {
-  if (product?.slug) return `/product/${product.slug}`;
+function getProductLink(product, language = DEFAULT_LANGUAGE) {
+  if (product?.slug) return localizePath(`/product/${product.slug}`, language);
 
   const productPath = product?.link?.match(/\/product\/([^/?#]+)\/?/i)?.[1];
 
-  return productPath ? `/product/${productPath}` : "#";
+  return productPath ? localizePath(`/product/${productPath}`, language) : "#";
 }
 
 export default function ProductCategoryProductSections({
   currentCategory,
   childCategories = [],
+  language = DEFAULT_LANGUAGE,
 }) {
   if (!currentCategory || childCategories.length === 0) return null;
 
@@ -93,6 +95,7 @@ export default function ProductCategoryProductSections({
             key={childCategory.term_id || sectionIndex}
             currentCategory={currentCategory}
             childCategory={childCategory}
+            language={language}
           />
         ))}
       </div>
@@ -100,7 +103,7 @@ export default function ProductCategoryProductSections({
   );
 }
 
-function ProductSubcategoryBlock({ currentCategory, childCategory }) {
+function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
   const products = childCategory?.products || [];
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -111,7 +114,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory }) {
   const activeTitle = getProductTitle(activeProduct);
   const activeExcerpt = getProductExcerpt(activeProduct);
   const activeImage = getProductImage(activeProduct);
-  const activeLink = getProductLink(activeProduct);
+  const activeLink = getProductLink(activeProduct, language);
 
   const capacity =
     activeProduct?.acf?.capacity ||

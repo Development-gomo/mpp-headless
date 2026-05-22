@@ -11,11 +11,12 @@ import {
   getProductCategories,
   getProductCategoryBySlug,
 } from "@/lib/api";
+import { DEFAULT_LANGUAGE } from "@/lib/i18n";
 
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  const categories = await getProductCategories();
+  const categories = await getProductCategories({ language: DEFAULT_LANGUAGE });
 
   return categories
     .filter((cat) => cat.slug !== "uncategorized" && Number(cat.term_id) !== 15)
@@ -27,7 +28,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
 
-  const category = await getProductCategoryBySlug(slug);
+  const category = await getProductCategoryBySlug(slug, {
+    language: DEFAULT_LANGUAGE,
+  });
 
   return {
     title: category?.acf?.banner_title || category?.name || "Product Category",
@@ -38,8 +41,10 @@ export async function generateMetadata({ params }) {
 export default async function ProductCategoryPage({ params }) {
     const { slug } = await params;
 
-    const categories = await getProductCategories();
-    const category = await getProductCategoryBySlug(slug);
+    const categories = await getProductCategories({ language: DEFAULT_LANGUAGE });
+    const category = await getProductCategoryBySlug(slug, {
+      language: DEFAULT_LANGUAGE,
+    });
     
     
     if (!category) notFound();
@@ -50,7 +55,9 @@ export default async function ProductCategoryPage({ params }) {
 
     const childCategoriesWithProducts = await Promise.all(
         childCategories.map(async (childCat) => {
-            const products = await getProductsByCategory(childCat.term_id);
+            const products = await getProductsByCategory(childCat.term_id, {
+              language: DEFAULT_LANGUAGE,
+            });
 
             return {
             ...childCat,
@@ -65,17 +72,27 @@ export default async function ProductCategoryPage({ params }) {
 
   return (
     <>
-      <Header />
+      <Header
+        language={DEFAULT_LANGUAGE}
+        translationContext={{
+          type: "product_cat",
+          id: category.id || category.term_id,
+          slug: category.slug,
+          path: `/product-category/${slug}`,
+        }}
+      />
 
       <main>
         <ProductCategoryBanner
           category={category}
           categories={tabCategories}
+          language={DEFAULT_LANGUAGE}
         />
 
         <ProductCategoryProductSections
             currentCategory={category}
             childCategories={childCategoriesWithProducts}
+            language={DEFAULT_LANGUAGE}
         />
 
         <ProductCategorySeoSection category={category} />

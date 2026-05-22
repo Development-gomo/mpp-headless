@@ -18,7 +18,13 @@ const ServiceProcessSection = dynamic(() => import("../sections/content-sections
 const ServiceWhyChooseSection = dynamic(() => import("../sections/content-sections/service/ServiceWhyChooseSection"));
 const ServiceMaintenanceGuideSection = dynamic(() => import("../sections/content-sections/service/ServiceMaintenanceGuideSection"));
 
-export default function PageBuilder({ sections = [], categoriesWithImages = [], posts = [], caseStudies = [] }) {
+export default function PageBuilder({
+  sections = [],
+  categoriesWithImages = [],
+  posts = [],
+  caseStudies = [],
+  language,
+}) {
   if (!sections?.length) return null;
 
   return (
@@ -36,7 +42,14 @@ export default function PageBuilder({ sections = [], categoriesWithImages = [], 
           case "content_media_block":
             return <ContentMediaBlock key={i} data={block} />;
           case "home_product_categories":
-            return <ProductCategoriesSection key={i} data={block} categoriesWithImages={categoriesWithImages} />;
+            return (
+              <ProductCategoriesSection
+                key={i}
+                data={block}
+                categoriesWithImages={categoriesWithImages}
+                language={language}
+              />
+            );
           case "latest_blogs":
             return <LatestBlogsSection key={i} data={block} posts={posts} />;
           case "latest_case_studies":

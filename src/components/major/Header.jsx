@@ -1,7 +1,8 @@
-import { getThemeOptions } from "@/lib/api";
+import { getLanguageLinks, getThemeOptions, getWpmlLanguages } from "@/lib/api";
+import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
 import HeaderComponent from "./HeaderComponent";
 
-function extractLinksFromHtml(html) {
+function extractLinksFromHtml(html, language = DEFAULT_LANGUAGE) {
   if (!html) return [];
   const matches = Array.from(
     html.matchAll(/<a[^>]*href="([^"]*)"[^>]*>(.*?)<\/a>/gim)
@@ -9,13 +10,29 @@ function extractLinksFromHtml(html) {
 
   return matches
     .map((m) => ({
-      href: m[1] || "#",
+      href: normalizeUrl(m[1], language),
       label: m[2]?.replace(/<[^>]*>/g, "").trim() || "Link",
     }))
     .filter((item) => item.label);
 }
 
-function normalizeLink(link, fallbackLabel = "Link") {
+function normalizeUrl(url = "#", language = DEFAULT_LANGUAGE) {
+  if (!url || url === "#") return "#";
+  if (/^(mailto:|tel:)/i.test(url)) return url;
+
+  try {
+    const parsed = new URL(url);
+    const pathname = parsed.pathname
+      .replace(/^\/headless-mpp/, "")
+      .replace(/\/$/, "");
+
+    return localizePath(`${pathname || "/"}${parsed.search}${parsed.hash}`, language);
+  } catch {
+    return localizePath(url, language);
+  }
+}
+
+function normalizeLink(link, fallbackLabel = "Link", language = DEFAULT_LANGUAGE) {
   if (!link) {
     return {
       href: "#",
@@ -26,14 +43,14 @@ function normalizeLink(link, fallbackLabel = "Link") {
 
   if (typeof link === "string") {
     return {
-      href: link || "#",
+      href: normalizeUrl(link, language),
       label: fallbackLabel,
       target: "_self",
     };
   }
 
   return {
-    href: link.url || "#",
+    href: normalizeUrl(link.url, language),
     label: link.title || fallbackLabel,
     target: link.target || "_self",
   };
@@ -60,13 +77,13 @@ function resolveThemeOptions(data) {
   return pickFirstObject(candidates);
 }
 
-function normalizeMegaMenuRows(rawRows = []) {
+function normalizeMegaMenuRows(rawRows = [], language = DEFAULT_LANGUAGE) {
   if (!Array.isArray(rawRows)) return [];
 
   return rawRows
     .map((row, rowIndex) => {
       const menuTitle = row?.menu_title?.trim() || `Menu ${rowIndex + 1}`;
-      const titleLink = normalizeLink(row?.menu_title_link, menuTitle);
+      const titleLink = normalizeLink(row?.menu_title_link, menuTitle, language);
       const layoutType = row?.layout_type || "no_column";
 
       const sideImage =
@@ -81,7 +98,8 @@ function normalizeMegaMenuRows(rawRows = []) {
                   .map((item, linkIndex) => {
                     const normalized = normalizeLink(
                       item?.url,
-                      item?.label || `Submenu ${linkIndex + 1}`
+                      item?.label || `Submenu ${linkIndex + 1}`,
+                      language
                     );
 
                     return {
@@ -102,7 +120,8 @@ function normalizeMegaMenuRows(rawRows = []) {
 
             const cardButton = normalizeLink(
               column?.card?.button_link,
-              "Read more"
+              "Read more",
+              language
             );
 
             return {
@@ -131,8 +150,22 @@ function normalizeMegaMenuRows(rawRows = []) {
     .filter((row) => row.title);
 }
 
-export default async function Header({ variant = "light" }) {
-  const themeOptions = await getThemeOptions();
+export default async function Header({
+  variant = "light",
+  language = DEFAULT_LANGUAGE,
+  translationContext = {},
+}) {
+  const [themeOptions, languages] = await Promise.all([
+    getThemeOptions({ language }),
+    getWpmlLanguages(),
+  ]);
+  const languageLinks = await getLanguageLinks(
+    {
+      language,
+      ...translationContext,
+    },
+    languages
+  );
   const optionsRoot = resolveThemeOptions(themeOptions);
 
   const headerOptions = pickFirstObject([
@@ -168,10 +201,11 @@ export default async function Header({ variant = "light" }) {
     headerOptions?.mega_menu ||
       optionsRoot?.mega_menu ||
       optionsRoot?.global?.mega_menu ||
-      []
+      [],
+    language
   );
 
-  const navLinks = extractLinksFromHtml(navHtml);
+  const navLinks = extractLinksFromHtml(navHtml, language);
 
   /**
    * New ACF fields:
@@ -185,7 +219,8 @@ export default async function Header({ variant = "light" }) {
     headerOptions?.header_telephone_link ||
       optionsRoot?.header_telephone_link ||
       optionsRoot?.global?.header_telephone_link,
-    "Call"
+    "Call",
+    language
   );
 
   const cta1Link = normalizeLink(
@@ -195,7 +230,8 @@ export default async function Header({ variant = "light" }) {
     headerOptions?.cta1_text ||
       optionsRoot?.cta1_text ||
       optionsRoot?.global?.cta1_text ||
-      "Defence"
+    "Defence",
+    language
   );
 
   const cta2Link = normalizeLink(
@@ -205,7 +241,8 @@ export default async function Header({ variant = "light" }) {
     headerOptions?.cta2_text ||
       optionsRoot?.cta2_text ||
       optionsRoot?.global?.cta2_text ||
-      "Reseller"
+    "Reseller",
+    language
   );
 
   const cta1Text =
@@ -236,6 +273,9 @@ export default async function Header({ variant = "light" }) {
       cta2Url={cta2Link.href}
       cta2Target={cta2Link.target}
       variant={variant}
+      language={language}
+      languages={languages}
+      languageLinks={languageLinks}
     />
   );
 }

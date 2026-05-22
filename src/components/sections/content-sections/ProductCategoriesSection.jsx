@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
 
 function getCategoryImage(cat) {
   const image =
@@ -26,17 +27,20 @@ function getCategoryImage(cat) {
   );
 }
 
-function getCategoryLink(cat) {
-  if (cat?.slug) return `/product-category/${cat.slug}`;
+function getCategoryLink(cat, language = DEFAULT_LANGUAGE) {
+  if (cat?.slug) return localizePath(`/product-category/${cat.slug}`, language);
 
   const categoryPath = cat?.link?.match(/\/product-category\/([^/?#]+)\/?/i)?.[1];
 
-  return categoryPath ? `/product-category/${categoryPath}` : "#";
+  return categoryPath
+    ? localizePath(`/product-category/${categoryPath}`, language)
+    : "#";
 }
 
 export default function ProductCategoriesSection({
   data,
   categoriesWithImages = [],
+  language = DEFAULT_LANGUAGE,
 }) {
   if (!data) return null;
 
@@ -74,7 +78,7 @@ export default function ProductCategoriesSection({
         ...cat,
         ...matched,
         acf: matched?.acf || cat?.acf || {},
-        link: getCategoryLink(matched || cat),
+        link: getCategoryLink(matched || cat, language),
       };
     });
 
