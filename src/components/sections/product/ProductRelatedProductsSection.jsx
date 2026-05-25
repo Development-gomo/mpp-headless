@@ -62,6 +62,14 @@ function stripHtml(value = "") {
   return String(value).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 }
 
+function getRepeaterValues(rows, key) {
+  if (!Array.isArray(rows)) return [];
+
+  return rows
+    .map((row) => stripHtml(row?.[key] || ""))
+    .filter(Boolean);
+}
+
 function getProductTitle(product) {
   return stripHtml(product?.title?.rendered || product?.title || "");
 }
@@ -106,14 +114,22 @@ export default function ProductRelatedProductsSection({
   const activeExcerpt = getProductExcerpt(activeProduct);
   const activeImage = getProductImage(activeProduct);
   const activeLink = getProductLink(activeProduct, language);
+  const capacityOptions = getRepeaterValues(
+    activeProduct?.acf?.capacity_options,
+    "capacity_value"
+  );
+  const fuelCompatibility = getRepeaterValues(
+    activeProduct?.acf?.fuel_compatibility,
+    "compatibility"
+  );
   const capacity =
-    activeProduct?.acf?.capacity ||
-    activeProduct?.acf?.product_capacity ||
-    "";
+    capacityOptions.length > 0
+      ? capacityOptions.join(" | ")
+      : activeProduct?.acf?.capacity || activeProduct?.acf?.product_capacity || "";
   const fuelType =
-    activeProduct?.acf?.fuel_type ||
-    activeProduct?.acf?.product_fuel_type ||
-    "";
+    fuelCompatibility.length > 0
+      ? fuelCompatibility.join(" | ")
+      : activeProduct?.acf?.fuel_type || activeProduct?.acf?.product_fuel_type || "";
   const viewAllHref = relatedCategory?.slug
     ? localizePath(`/product-category/${relatedCategory.slug}`, language)
     : localizePath("/product-category/mobila-bransletankar", language);

@@ -72,6 +72,18 @@ function getProductExcerpt(product) {
   );
 }
 
+function stripHtml(value = "") {
+  return String(value).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+}
+
+function getRepeaterValues(rows, key) {
+  if (!Array.isArray(rows)) return [];
+
+  return rows
+    .map((row) => stripHtml(row?.[key] || ""))
+    .filter(Boolean);
+}
+
 function getProductLink(product, language = DEFAULT_LANGUAGE) {
   if (product?.slug) return localizePath(`/product/${product.slug}`, language);
 
@@ -116,15 +128,23 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
   const activeImage = getProductImage(activeProduct);
   const activeLink = getProductLink(activeProduct, language);
 
+  const capacityOptions = getRepeaterValues(
+    activeProduct?.acf?.capacity_options,
+    "capacity_value"
+  );
+  const fuelCompatibility = getRepeaterValues(
+    activeProduct?.acf?.fuel_compatibility,
+    "compatibility"
+  );
   const capacity =
-    activeProduct?.acf?.capacity ||
-    activeProduct?.acf?.product_capacity ||
-    "";
+    capacityOptions.length > 0
+      ? capacityOptions.join(" | ")
+      : activeProduct?.acf?.capacity || activeProduct?.acf?.product_capacity || "";
 
   const fuelType =
-    activeProduct?.acf?.fuel_type ||
-    activeProduct?.acf?.product_fuel_type ||
-    "";
+    fuelCompatibility.length > 0
+      ? fuelCompatibility.join(" | ")
+      : activeProduct?.acf?.fuel_type || activeProduct?.acf?.product_fuel_type || "";
 
   return (
     <div className="mb-20 last:mb-0">
