@@ -385,7 +385,7 @@ export default function SingleCaseStudyTemplate({
             )}
 
             {selectedRelatedProduct && selectedRelatedProduct !== false && (
-              <div className="mt-10">
+              <div className="mt-10 hidden lg:block">
                 <h2 className="mb-5 text-[20px] font-bold leading-[28px] text-black">
                   Related product
                 </h2>
@@ -395,7 +395,7 @@ export default function SingleCaseStudyTemplate({
           </aside>
 
           <article
-            className="max-w-[870px] text-[16px] leading-[26px] text-black [&_a]:text-[var(--color-accent)] [&_h2]:mb-5 [&_h2]:mt-10 [&_h2]:text-[34px] [&_h2]:font-bold [&_h2]:leading-[42px] [&_h3]:mb-4 [&_h3]:mt-8 [&_h3]:text-[26px] [&_h3]:font-bold [&_h3]:leading-[34px] [&_li]:mb-2 [&_p]:mb-5 [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6"
+            className="max-w-[870px] text-[16px] leading-[26px] text-black [&_a]:text-[var(--color-accent)] [&_blockquote]:relative [&_blockquote]:my-10 [&_blockquote]:overflow-hidden [&_blockquote]:rounded-[6px] [&_blockquote]:border-l-[6px] [&_blockquote]:border-[var(--color-accent)] [&_blockquote]:bg-[#EAF1FA] [&_blockquote]:py-8 [&_blockquote]:pl-7 [&_blockquote]:pr-20 [&_blockquote]:text-[16px] [&_blockquote]:italic [&_blockquote]:font-normal [&_blockquote]:leading-[28px] [&_blockquote]:text-[#071838] [&_blockquote]:shadow-[0_18px_45px_rgba(7,24,56,0.08)] [&_blockquote:before]:pointer-events-none [&_blockquote:before]:absolute [&_blockquote:before]:right-6 [&_blockquote:before]:top-5 [&_blockquote:before]:content-['\201C'] [&_blockquote:before]:text-[70px] [&_blockquote:before]:font-bold [&_blockquote:before]:leading-none [&_blockquote:before]:text-[rgba(0,112,158,0.14)] [&_blockquote_cite]:mt-5 [&_blockquote_cite]:block [&_blockquote_cite]:text-[14px] [&_blockquote_cite]:font-bold [&_blockquote_cite]:not-italic [&_blockquote_cite]:leading-[22px] [&_blockquote_cite]:text-[var(--color-accent)] [&_blockquote_p:last-child]:mb-0 [&_h2]:mb-5 [&_h2]:mt-10 [&_h2]:text-[34px] [&_h2]:font-bold [&_h2]:leading-[42px] [&_h3]:mb-4 [&_h3]:mt-8 [&_h3]:text-[26px] [&_h3]:font-bold [&_h3]:leading-[34px] [&_li]:mb-2 [&_p]:mb-5 [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6"
             dangerouslySetInnerHTML={{ __html: html }}
           />
         </div>
@@ -419,6 +419,14 @@ export default function SingleCaseStudyTemplate({
               <CopyLinkButton shareUrl={shareUrl} />
             </div>
           </div>
+          {selectedRelatedProduct && selectedRelatedProduct !== false && (
+            <div className="mt-8 lg:hidden">
+              <h2 className="mb-5 text-[20px] font-bold leading-[28px] text-black">
+                Related product
+              </h2>
+              <RelatedProductCard product={selectedRelatedProduct} />
+            </div>
+          )}
         </div>
       </section>
 
