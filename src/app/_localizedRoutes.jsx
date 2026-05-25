@@ -14,6 +14,7 @@ import {
   getAllPages,
   getAllPosts,
   getAllProducts,
+  getAuthorCards,
   getBlogSettings,
   getCaseStudies,
   getCaseStudyBySlug,
@@ -21,12 +22,14 @@ import {
   getLatestPosts,
   getPageBySlug,
   getPostBySlug,
+  getProductById,
   getProductBySlug,
   getProductCategories,
   getProductCategoriesWithImages,
   getProductCategoryBySlug,
   getProductsByCategory,
   getThemeOptions,
+  getTeams,
 } from "@/lib/api";
 import { getProductCategories as getProductTerms } from "@/components/sections/product/productUtils";
 import { resolveParams } from "@/lib/params";
@@ -100,11 +103,12 @@ export async function renderHomePage(language) {
   const page = await getPageBySlug("frontpage", { language });
   if (!page) notFound();
 
-  const [categoriesWithImages, latestPosts, latestCaseStudies] =
+  const [categoriesWithImages, latestPosts, latestCaseStudies, teams] =
     await Promise.all([
       getProductCategoriesWithImages({ language }),
       getLatestPosts({ language }),
       getLatestCaseStudies({ language }),
+      getTeams({ language }),
     ]);
 
   return (
@@ -120,6 +124,7 @@ export async function renderHomePage(language) {
           categoriesWithImages={categoriesWithImages}
           posts={latestPosts}
           caseStudies={latestCaseStudies}
+          teams={teams}
           language={language}
         />
       </main>
@@ -165,6 +170,14 @@ export async function renderDynamicPage(params, language) {
       if (!caseStudy) notFound();
 
       const caseStudies = await getCaseStudies({ language });
+      const relatedProductId =
+        caseStudy?.acf?.related_product?.ID ||
+        caseStudy?.acf?.related_product?.id ||
+        caseStudy?.acf?.related_product;
+      const relatedProduct =
+        relatedProductId && typeof relatedProductId !== "object"
+          ? await getProductById(relatedProductId, { language })
+          : caseStudy?.acf?.related_product;
 
       return (
         <>
@@ -183,6 +196,7 @@ export async function renderDynamicPage(params, language) {
             <SingleCaseStudyTemplate
               caseStudy={caseStudy}
               relatedCaseStudies={caseStudies}
+              relatedProduct={relatedProduct}
             />
           </main>
           <Footer />
@@ -190,9 +204,10 @@ export async function renderDynamicPage(params, language) {
       );
     }
 
-    const [latestPosts, blogSettings] = await Promise.all([
+    const [latestPosts, blogSettings, authorCards] = await Promise.all([
       getLatestPosts({ language }),
       getBlogSettings({ language }),
+      getAuthorCards({ language }),
     ]);
 
     return (
@@ -213,6 +228,7 @@ export async function renderDynamicPage(params, language) {
             post={post}
             relatedPosts={latestPosts}
             blogSettings={blogSettings}
+            authorCards={authorCards}
           />
         </main>
         <Footer />
@@ -220,9 +236,10 @@ export async function renderDynamicPage(params, language) {
     );
   }
 
-  const [latestPosts, latestCaseStudies] = await Promise.all([
+  const [latestPosts, latestCaseStudies, teams] = await Promise.all([
     getLatestPosts({ language }),
     getLatestCaseStudies({ language }),
+    getTeams({ language }),
   ]);
 
   return (
@@ -242,6 +259,7 @@ export async function renderDynamicPage(params, language) {
           sections={page?.acf?.page_builder}
           posts={latestPosts}
           caseStudies={latestCaseStudies}
+          teams={teams}
           language={language}
         />
       </main>
@@ -416,6 +434,14 @@ export async function renderCaseStudyPage(params, language) {
   if (!caseStudy) notFound();
 
   const caseStudies = await getCaseStudies({ language });
+  const relatedProductId =
+    caseStudy?.acf?.related_product?.ID ||
+    caseStudy?.acf?.related_product?.id ||
+    caseStudy?.acf?.related_product;
+  const relatedProduct =
+    relatedProductId && typeof relatedProductId !== "object"
+      ? await getProductById(relatedProductId, { language })
+      : caseStudy?.acf?.related_product;
 
   return (
     <>
@@ -433,6 +459,7 @@ export async function renderCaseStudyPage(params, language) {
         <SingleCaseStudyTemplate
           caseStudy={caseStudy}
           relatedCaseStudies={caseStudies}
+          relatedProduct={relatedProduct}
         />
       </main>
       <Footer />

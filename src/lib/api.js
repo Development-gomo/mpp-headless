@@ -73,7 +73,7 @@ function withParams(endpoint, params = {}) {
 function withLanguage(endpoint, language) {
   if (!language || language === DEFAULT_LANGUAGE) return endpoint;
 
-  return withParams(endpoint, { lang: language });
+  return withParams(endpoint, { wpml_language: language });
 }
 
 function normalizeWpmlLanguage(language) {
@@ -135,6 +135,7 @@ function getContentEndpoint(type) {
     post: "posts",
     product: "product",
     "case-study": "case-study",
+    "author-card": "author-card",
     product_cat: "product_cat",
     "product-category": "product_cat",
   };
@@ -340,6 +341,36 @@ export async function getCaseStudyBySlug(slug, { language } = {}) {
 export async function getCaseStudies({ language } = {}) {
   const data = await fetchWP(
     withParams(`/wp/v2/case-study`, {
+      per_page: 100,
+      _embed: "1",
+      acf_format: "standard",
+    }),
+    { language }
+  );
+
+  return Array.isArray(data) ? data : [];
+}
+
+// Teams
+
+export async function getTeams({ language } = {}) {
+  const data = await fetchWP(
+    withParams(`/wp/v2/team`, {
+      per_page: 100,
+      _embed: "1",
+      acf_format: "standard",
+    }),
+    { language }
+  );
+
+  return Array.isArray(data) ? data : [];
+}
+
+// Author cards
+
+export async function getAuthorCards({ language } = {}) {
+  const data = await fetchWP(
+    withParams(`/wp/v2/author-card`, {
       per_page: 100,
       _embed: "1",
       acf_format: "standard",
@@ -584,6 +615,10 @@ export async function getProductBySlug(slug, { language } = {}) {
     ...product,
     gallery_images: galleryImages,
   };
+}
+
+export async function getProductById(id, { language } = {}) {
+  return getEntryById("product", id, { language });
 }
 
 export async function getAllProducts({ language } = {}) {

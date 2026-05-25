@@ -14,6 +14,9 @@ import {
   getLatestPosts,
   getLatestCaseStudies,
   getBlogSettings,
+  getTeams,
+  getAuthorCards,
+  getProductById,
 } from "@/lib/api";
 import { buildMetadataFromYoast } from "@/lib/seo";
 import { DEFAULT_LANGUAGE } from "@/lib/i18n";
@@ -60,6 +63,16 @@ export default async function DynamicPage({ params }) {
       if (!caseStudy) notFound();
 
       const caseStudies = await getCaseStudies({ language: DEFAULT_LANGUAGE });
+      const relatedProductId =
+        caseStudy?.acf?.related_product?.ID ||
+        caseStudy?.acf?.related_product?.id ||
+        caseStudy?.acf?.related_product;
+      const relatedProduct =
+        relatedProductId && typeof relatedProductId !== "object"
+          ? await getProductById(relatedProductId, {
+              language: DEFAULT_LANGUAGE,
+            })
+          : caseStudy?.acf?.related_product;
 
       return (
         <>
@@ -78,6 +91,7 @@ export default async function DynamicPage({ params }) {
             <SingleCaseStudyTemplate
               caseStudy={caseStudy}
               relatedCaseStudies={caseStudies}
+              relatedProduct={relatedProduct}
             />
           </main>
           <Footer />
@@ -85,9 +99,10 @@ export default async function DynamicPage({ params }) {
       );
     }
 
-    const [latestPosts, blogSettings] = await Promise.all([
+    const [latestPosts, blogSettings, authorCards] = await Promise.all([
       getLatestPosts({ language: DEFAULT_LANGUAGE }),
       getBlogSettings({ language: DEFAULT_LANGUAGE }),
+      getAuthorCards({ language: DEFAULT_LANGUAGE }),
     ]);
 
     return (
@@ -108,6 +123,7 @@ export default async function DynamicPage({ params }) {
             post={post}
             relatedPosts={latestPosts}
             blogSettings={blogSettings}
+            authorCards={authorCards}
           />
         </main>
         <Footer />
@@ -115,9 +131,10 @@ export default async function DynamicPage({ params }) {
     );
   }
 
-  const [latestPosts, latestCaseStudies] = await Promise.all([
+  const [latestPosts, latestCaseStudies, teams] = await Promise.all([
     getLatestPosts({ language: DEFAULT_LANGUAGE }),
     getLatestCaseStudies({ language: DEFAULT_LANGUAGE }),
+    getTeams({ language: DEFAULT_LANGUAGE }),
   ]);
 
   return (
@@ -137,6 +154,7 @@ export default async function DynamicPage({ params }) {
           sections={page?.acf?.page_builder}
           posts={latestPosts}
           caseStudies={latestCaseStudies}
+          teams={teams}
           language={DEFAULT_LANGUAGE}
         />
       </main>

@@ -7,6 +7,7 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import AuthorCardSection from "./AuthorCardSection";
 import CopyLinkButton from "./CopyLinkButton";
 
 function stripHtml(value = "") {
@@ -235,6 +236,7 @@ export default function SinglePostTemplate({
   post,
   relatedPosts = [],
   blogSettings = {},
+  authorCards = [],
 }) {
   const postAcf = post?.acf || {};
   const title = post?.title?.rendered || "";
@@ -300,6 +302,11 @@ export default function SinglePostTemplate({
   const related = relatedPosts
     .filter((item) => item?.slug && item.slug !== post?.slug)
     .slice(0, 3);
+  const selectedAuthor =
+    postAcf.select_author ||
+    postAcf.select_author_card ||
+    postAcf.author_card ||
+    postAcf.author_section;
 
   return (
     <>
@@ -399,6 +406,11 @@ export default function SinglePostTemplate({
           />
         </div>
       </section>
+
+      <AuthorCardSection
+        selectedAuthor={selectedAuthor}
+        authorCards={authorCards}
+      />
 
       {showShareBox && (
       <section className="bg-white px-6 pb-16">
