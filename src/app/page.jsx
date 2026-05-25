@@ -2,7 +2,7 @@ import Header from "@/components/major/Header";
 import PageBuilder from "@/components/major/PageBuilder";
 import Footer from "@/components/major/Footer";
 import BodyClass from "@/components/BodyClass";
-import { getPageBySlug, getProductCategoriesWithImages, getLatestPosts, getLatestCaseStudies } from "@/lib/api";
+import { getPageBySlug, getProductCategoriesWithImages, getLatestPosts, getLatestCaseStudies, getTeams } from "@/lib/api";
 import { buildMetadataFromYoast } from "@/lib/seo";
 import { DEFAULT_LANGUAGE } from "@/lib/i18n";
 import { notFound } from "next/navigation";
@@ -28,13 +28,13 @@ export default async function HomePage() {
   const page = await getPage();
   if (!page) notFound();
 
-  const categoriesWithImages = await getProductCategoriesWithImages({
-    language: DEFAULT_LANGUAGE,
-  });
-  const latestPosts = await getLatestPosts({ language: DEFAULT_LANGUAGE });
-  const latestCaseStudies = await getLatestCaseStudies({
-    language: DEFAULT_LANGUAGE,
-  });
+  const [categoriesWithImages, latestPosts, latestCaseStudies, teams] =
+    await Promise.all([
+      getProductCategoriesWithImages({ language: DEFAULT_LANGUAGE }),
+      getLatestPosts({ language: DEFAULT_LANGUAGE }),
+      getLatestCaseStudies({ language: DEFAULT_LANGUAGE }),
+      getTeams({ language: DEFAULT_LANGUAGE }),
+    ]);
   return (
     <>
       <BodyClass className={page.slug} />
@@ -52,6 +52,7 @@ export default async function HomePage() {
           categoriesWithImages={categoriesWithImages}
           posts={latestPosts}
           caseStudies={latestCaseStudies}
+          teams={teams}
           language={DEFAULT_LANGUAGE}
         />
       </main>

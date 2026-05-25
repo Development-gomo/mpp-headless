@@ -2,7 +2,7 @@ import Header from "@/components/major/Header";
 import Footer from "@/components/major/Footer";
 import SingleCaseStudyTemplate from "@/components/sections/case-study/SingleCaseStudyTemplate";
 import { resolveParams } from "@/lib/params";
-import { getCaseStudyBySlug, getCaseStudies } from "@/lib/api";
+import { getCaseStudyBySlug, getCaseStudies, getProductById } from "@/lib/api";
 import { buildMetadataFromYoast } from "@/lib/seo";
 import { DEFAULT_LANGUAGE } from "@/lib/i18n";
 import { notFound } from "next/navigation";
@@ -22,6 +22,14 @@ export default async function CaseStudySinglePage({ params }) {
   if (!caseStudy) notFound();
 
   const caseStudies = await getCaseStudies({ language: DEFAULT_LANGUAGE });
+  const relatedProductId =
+    caseStudy?.acf?.related_product?.ID ||
+    caseStudy?.acf?.related_product?.id ||
+    caseStudy?.acf?.related_product;
+  const relatedProduct =
+    relatedProductId && typeof relatedProductId !== "object"
+      ? await getProductById(relatedProductId, { language: DEFAULT_LANGUAGE })
+      : caseStudy?.acf?.related_product;
 
   return (
     <>
@@ -39,6 +47,7 @@ export default async function CaseStudySinglePage({ params }) {
         <SingleCaseStudyTemplate
           caseStudy={caseStudy}
           relatedCaseStudies={caseStudies}
+          relatedProduct={relatedProduct}
         />
       </main>
       <Footer />

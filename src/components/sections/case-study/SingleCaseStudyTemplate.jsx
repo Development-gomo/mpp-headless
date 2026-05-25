@@ -64,6 +64,97 @@ function getAcfImageUrl(image) {
   );
 }
 
+function getProductTitle(product) {
+  return (
+    product?.title?.rendered ||
+    product?.title ||
+    product?.post_title ||
+    product?.name ||
+    ""
+  );
+}
+
+function getProductImage(product) {
+  return (
+    product?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ||
+    product?.featured_image ||
+    product?.featured_image_url ||
+    getAcfImageUrl(product?.acf?.product_image) ||
+    getAcfImageUrl(product?.acf?.featured_image) ||
+    getAcfImageUrl(product?.acf?.image) ||
+    product?.yoast_head_json?.og_image?.[0]?.url ||
+    ""
+  );
+}
+
+function getProductLink(product) {
+  if (product?.slug) return `/product/${product.slug}`;
+  if (product?.post_name) return `/product/${product.post_name}`;
+  return "#";
+}
+
+function RelatedProductCard({ product }) {
+  if (!product || product === false) return null;
+
+  const title = getProductTitle(product);
+  const image = getProductImage(product);
+  const description = cleanExcerpt(
+    product?.acf?.short_description ||
+      product?.acf?.product_short_description ||
+      product?.excerpt?.rendered ||
+      product?.description ||
+      ""
+  );
+
+  return (
+    <div className="overflow-hidden rounded-[10px] border border-black/10 bg-[var(--color-accent)] text-white">
+      {image && (
+        <Link href={getProductLink(product)} className="group block rounded-t-[10px] bg-[#F7F6F2] p-5">
+          <div className="relative mx-auto h-[150px] max-w-[210px] rounded-[10px]">
+            <Image
+              src={image}
+              alt={stripHtml(title) || "Related product"}
+              fill
+              sizes="300px"
+              className="object-contain transition-transform duration-500 group-hover:scale-105"
+            />
+          </div>
+        </Link>
+      )}
+
+      <div className="p-6">
+        {title && (
+          <h3
+            className="text-[24px] font-medium leading-[30px] tracking-[-0.48px] text-white [font-family:var(--font-heading)]"
+            dangerouslySetInnerHTML={{ __html: title }}
+          />
+        )}
+
+        {description && (
+          <div
+            className="mt-4 line-clamp-2 text-[14px] leading-[22px] text-white/85"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
+        )}
+
+        <Link
+          href={getProductLink(product)}
+          className="group mt-6 inline-flex w-fit items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 text-black [font-family:var(--font-heading)] text-[14px] tracking-[-0.28px]"
+        >
+          <span>View product</span>
+          <Image
+            src="/black-white-arrow.svg"
+            alt=""
+            width={36}
+            height={36}
+            className="h-auto w-[36px] object-contain transition-transform group-hover:translate-x-1"
+          />
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 function getReadingTime(content = "") {
   const words = stripHtml(content).split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.ceil(words / 220));
@@ -136,55 +227,62 @@ function RelatedCaseStudyCard({ item }) {
   const image = getImageUrl(item);
 
   return (
-    <Link
-      href={item?.slug ? `/${item.slug}` : "#"}
-      className="group flex h-full flex-col overflow-hidden rounded-[4px] bg-white"
-    >
-      <div className="flex min-h-[245px] flex-1 flex-col p-6 pb-5">
-        <div className="mb-6 flex items-center gap-3">
-          <span className="inline-flex h-[22px] items-center rounded-[2px] bg-[var(--color-accent)] px-[13px] text-[12px] font-normal tracking-[-0.24px] text-white [font-family:var(--font-heading)]">
-            Case study
-          </span>
-        </div>
-
-        <h3
-          className="mb-5 min-h-[84px] text-[28px] font-medium capitalize leading-[36px] tracking-[-0.56px] text-black [font-family:var(--font-heading)] line-clamp-3"
-          dangerouslySetInnerHTML={{ __html: title }}
-        />
-        {excerpt && (
-          <div
-            className="mt-auto text-[16px] font-normal leading-[24px] text-[#1A1A1A] [font-family:var(--font-nunito-sans)] line-clamp-2"
-            dangerouslySetInnerHTML={{ __html: excerpt }}
-          />
-        )}
-      </div>
-
-      <div className="relative h-[210px] overflow-hidden">
-        {image && (
+    <article className="flex min-h-full flex-col overflow-hidden rounded-[4px] bg-[var(--color-accent)] text-white">
+      <div className="relative min-h-[220px] bg-black/15 md:min-h-[245px]">
+        {image ? (
           <Image
             src={image}
             alt={stripHtml(title) || "Case study image"}
             fill
-            sizes="(min-width: 1024px) 33vw, 100vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+            className="object-cover"
+          />
+        ) : (
+          <div className="flex h-full min-h-[220px] items-center justify-center bg-white/10 px-6 text-center text-[14px] text-white/70 md:min-h-[245px]">
+            Case study image missing
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-1 flex-col p-6 md:p-7">
+        {title && (
+          <h3
+            className="mb-5 text-[28px] font-medium leading-[36px] tracking-[-0.56px] text-white [font-family:var(--font-heading)]"
+            dangerouslySetInnerHTML={{ __html: title }}
           />
         )}
 
-        <Image
-          src="/orange-black-arrow.svg"
-          alt=""
-          width={36}
-          height={36}
-          className="absolute bottom-5 right-5 h-auto w-[36px] object-contain transition-transform group-hover:translate-x-1"
-        />
+        {excerpt && (
+          <div
+            className="mb-8 line-clamp-4 text-[16px] font-normal leading-[24px] text-white [font-family:var(--font-nunito-sans)]"
+            dangerouslySetInnerHTML={{ __html: excerpt }}
+          />
+        )}
+
+        <div className="mt-auto">
+          <Link
+            href={item?.slug ? `/${item.slug}` : "#"}
+            className="group inline-flex w-fit items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 text-black [font-family:var(--font-heading)] text-[14px] tracking-[-0.28px]"
+          >
+            <span>Read client case</span>
+            <Image
+              src="/black-white-arrow.svg"
+              alt=""
+              width={40}
+              height={40}
+              className="h-auto w-[40px] object-contain transition-transform group-hover:translate-x-1"
+            />
+          </Link>
+        </div>
       </div>
-    </Link>
+    </article>
   );
 }
 
 export default function SingleCaseStudyTemplate({
   caseStudy,
   relatedCaseStudies = [],
+  relatedProduct,
 }) {
   const acf = caseStudy?.acf || {};
   const title = caseStudy?.title?.rendered || "";
@@ -208,7 +306,7 @@ export default function SingleCaseStudyTemplate({
   const related = relatedCaseStudies
     .filter((item) => item?.slug && item.slug !== caseStudy?.slug)
     .slice(0, 3);
-  const featureItems = [acf?.feature_1, acf?.feature_2].filter(Boolean);
+  const selectedRelatedProduct = relatedProduct || acf?.related_product;
 
   return (
     <>
@@ -270,10 +368,10 @@ export default function SingleCaseStudyTemplate({
               </div>
             )}
 
-            {(logo || featureItems.length > 0) && (
+            {logo && (
               <div className="mt-10 rounded-[4px] bg-[var(--color-accent)] p-7 text-white">
                 {logo && (
-                  <div className="mb-6 w-fit rounded-[3px] bg-white px-4 py-3">
+                  <div className="w-fit rounded-[3px] bg-white px-4 py-3">
                     <Image
                       src={logo}
                       alt=""
@@ -283,22 +381,15 @@ export default function SingleCaseStudyTemplate({
                     />
                   </div>
                 )}
-                <h3 className="text-[22px] font-bold leading-[30px] text-white">
-                  Case highlights
-                </h3>
-                {featureItems.length > 0 && (
-                  <ul className="mt-5 space-y-3">
-                    {featureItems.map((item) => (
-                      <li
-                        key={item}
-                        className="flex items-center gap-2 text-[14px] leading-[22px] text-white"
-                      >
-                        <span className="h-[8px] w-[8px] shrink-0 rounded-full bg-[var(--color-yellow)]" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                )}
+              </div>
+            )}
+
+            {selectedRelatedProduct && selectedRelatedProduct !== false && (
+              <div className="mt-10">
+                <h2 className="mb-5 text-[20px] font-bold leading-[28px] text-black">
+                  Related product
+                </h2>
+                <RelatedProductCard product={selectedRelatedProduct} />
               </div>
             )}
           </aside>
