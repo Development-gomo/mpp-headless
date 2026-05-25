@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Nunito_Sans } from "next/font/google";
 import localFont from "next/font/local";
+import QuoteCartProvider from "@/components/quote/QuoteCartProvider";
 
 const nunitoSans = Nunito_Sans({
   subsets: ["latin"],
@@ -29,7 +30,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="sv">
       <body className={` ${nunitoSans.variable} ${miranda.variable}`}>
-        {children}
+        <QuoteCartProvider>{children}</QuoteCartProvider>
       </body>
     </html>
   );

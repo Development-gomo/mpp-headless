@@ -9,7 +9,7 @@ export default function ProductGallerySection({ product }) {
   const productTitle = stripHtml(getRendered(product?.title));
 
   return (
-    <section id="testimonials" className="bg-white">
+    <section id="product-gallery" className="bg-white">
       <div className="web-width px-6 py-20 md:py-[120px]">
         <div className="mb-10 flex items-center gap-2">
           <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />

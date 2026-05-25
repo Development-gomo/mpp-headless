@@ -3,10 +3,10 @@ import ProductBreadcrumbs from "./ProductBreadcrumbs";
 import ProductSpecsSection from "./ProductSpecsSection";
 import ProductOverviewSection from "./ProductOverviewSection";
 import ProductFeaturesSection from "./ProductFeaturesSection";
-import ProductGallerySection from "./ProductGallerySection";
+import ProductTestimonialsSection from "./ProductTestimonialsSection";
 import ProductDownloadsSection from "./ProductDownloadsSection";
 import ProductFaqSection from "./ProductFaqSection";
-import ProductCtaSection from "./ProductCtaSection";
+import ProductRelatedProductsSection from "./ProductRelatedProductsSection";
 
 function ProductAnchorNav() {
   const links = [
@@ -18,7 +18,7 @@ function ProductAnchorNav() {
   ];
 
   return (
-    <nav className="sticky top-0 z-30 bg-[var(--color-accent)] text-white shadow-sm" aria-label="Product sections">
+    <nav className="sticky top-[72px] z-30 bg-[var(--color-accent)] text-white shadow-sm" aria-label="Product sections">
       <div className="web-width flex gap-8 overflow-x-auto px-6">
         {links.map((link, index) => (
           <a
@@ -39,6 +39,9 @@ function ProductAnchorNav() {
 export default function ProductPageTemplate({
   product,
   productCategories = [],
+  themeOptions = {},
+  relatedProducts = [],
+  relatedCategory = null,
   language,
 }) {
   return (
@@ -48,15 +51,24 @@ export default function ProductPageTemplate({
         productCategories={productCategories}
         language={language}
       />
-      <ProductHero product={product} />
+      <ProductHero product={product} language={language} />
       <ProductAnchorNav />
       <ProductSpecsSection product={product} />
       <ProductOverviewSection product={product} />
-      <ProductFeaturesSection product={product} />
-      <ProductGallerySection product={product} />
+      <ProductFeaturesSection product={product} language={language} />
+      <ProductTestimonialsSection
+        product={product}
+        themeOptions={themeOptions}
+        language={language}
+      />
       <ProductDownloadsSection product={product} />
+      <ProductRelatedProductsSection
+        currentProduct={product}
+        relatedCategory={relatedCategory}
+        products={relatedProducts}
+        language={language}
+      />
       <ProductFaqSection product={product} />
-      <ProductCtaSection product={product} />
     </>
   );
 }

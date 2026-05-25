@@ -30,7 +30,7 @@ export default function ProductDownloadsSection({ product }) {
               <span className="font-heading text-[24px] leading-[32px] tracking-[-0.48px] text-black">
                 {download.download_label || "Download"}
               </span>
-              <Image src="/black-arrow.svg" alt="" width={18} height={18} className="h-[18px] w-[18px] transition-transform group-hover:translate-x-1" />
+              <Image src="/download-ico.svg" alt="" width={40} height={40} className="h-[40px] w-[40px] transition-transform group-hover:translate-y-0.5" />
             </Link>
           ))}
         </div>
@@ -38,4 +38,3 @@ export default function ProductDownloadsSection({ product }) {
     </section>
   );
 }
-

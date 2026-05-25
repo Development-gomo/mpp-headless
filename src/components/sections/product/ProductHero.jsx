@@ -1,75 +1,251 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
+import { useQuoteCart } from "@/components/quote/QuoteCartProvider";
+import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
 import {
   getButtonHref,
   getButtonTarget,
+  getProductCategories,
   getProductGallery,
   getRendered,
   stripHtml,
 } from "./productUtils";
 
-export default function ProductHero({ product }) {
+const VISIBLE_THUMBNAILS = 5;
+
+function getRepeaterValues(rows, key) {
+  if (!Array.isArray(rows)) return [];
+  return rows.map((row) => stripHtml(row?.[key] || "")).filter(Boolean);
+}
+
+function getFileHref(file, fallback = "#") {
+  if (!file) return fallback;
+  if (typeof file === "string") return file || fallback;
+  return file.url || file.link || file.source_url || fallback;
+}
+
+function SpecTile({ icon, label, value }) {
+  if (!value) return null;
+
+  return (
+    <div className="inline-flex min-h-[45px] items-center gap-2 rounded-[4px] border border-[#98C8DA] bg-[#CFE8F1] px-2 py-1">
+      <span className="flex h-[31px] w-[31px] shrink-0 items-center justify-center rounded-[3px] border border-[#98C8DA] bg-[#E8F4F8]">
+        <Image src={icon} alt="" width={18} height={18} className="h-[18px] w-[18px] object-contain" />
+      </span>
+      <span>
+        <span className="block font-body text-[8px] leading-[10px] text-[#4B626A]">
+          {label}
+        </span>
+        <strong className="block font-body text-[14px] font-bold leading-[18px] text-black">
+          {value}
+        </strong>
+      </span>
+    </div>
+  );
+}
+
+export default function ProductHero({ product, language = DEFAULT_LANGUAGE }) {
+  const { addProduct } = useQuoteCart();
+  const router = useRouter();
   const acf = product?.acf || {};
   const title = getRendered(product?.title);
-  const eyebrow = acf.product_eyebrow || "Fuel tank";
-  const intro = getRendered(product?.excerpt);
-  const gallery = getProductGallery(product);
-  const categories = Array.isArray(product?.categories) ? product.categories : [];
-  const capacity = acf.capacity || acf.product_capacity || acf.product_specs?.find?.((item) => /capacity/i.test(item?.spec_label || ""))?.spec_value || "150 Liters";
-  const productCode = product?.sku || acf.product_code || acf.article_number || "103768";
-  const categoryLabel = categories[0]?.name || "Mobile fuel tanks";
-  const primaryText = acf.product_primary_cta_text || "Find a dealer";
-  const primaryHref = getButtonHref(acf.product_primary_cta_link, "#");
-  const primaryTarget = getButtonTarget(acf.product_primary_cta_link);
-  const secondaryText = acf.product_secondary_cta_text || "Download datasheet";
-  const secondaryHref = getButtonHref(acf.product_secondary_cta_link, "#downloads");
-  const secondaryTarget = getButtonTarget(acf.product_secondary_cta_link);
   const productTitle = stripHtml(title) || "Product";
-  const bullets = [
-    "Safe for transport and mobile refuelling",
-    "Compact footprint for pickup beds",
-    "Available with diesel and petrol configurations",
-  ];
+  const textBelowTitle = acf.text_under_title;
+  const eyebrow = acf.text_over_title;
+  const intro = getRendered(product?.excerpt);
+  const gallery = useMemo(() => getProductGallery(product), [product]);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [thumbnailStart, setThumbnailStart] = useState(0);
+
+  const categories = getProductCategories(product);
+  const categoryLabel = categories[0]?.name || "Mobile fuel tanks";
+  const capacities = getRepeaterValues(acf.capacity_options, "capacity_value");
+  const fallbackCapacity =
+    acf.capacity ||
+    acf.product_capacity ||
+    acf.product_specs?.find?.((item) => /capacity/i.test(item?.spec_label || ""))
+      ?.spec_value;
+  const capacityOptions = capacities.length > 0
+    ? capacities
+    : fallbackCapacity
+    ? [stripHtml(fallbackCapacity)]
+    : [];
+  const [selectedCapacity, setSelectedCapacity] = useState(
+    capacityOptions[0] || ""
+  );
+  const fuelCompatibility = getRepeaterValues(
+    acf.fuel_compatibility,
+    "compatibility"
+  );
+  const applicationAreas = getRepeaterValues(acf.application_areas, "area");
+  const keyFeatures = getRepeaterValues(acf.key_features, "feature");
+  const primaryText = acf.product_primary_cta_text || "Request a quote";
+  const secondaryText =
+    acf.product_secondary_cta_text || "Download Product Sheet";
+  const secondaryHref = getFileHref(
+    acf.product_sheet,
+    getButtonHref(acf.product_secondary_cta_link, "#downloads")
+  );
+  const secondaryTarget =
+    getButtonTarget(acf.product_secondary_cta_link) ||
+    (secondaryHref !== "#" ? "_blank" : undefined);
+  const activeImage = gallery[activeImageIndex];
+  const maxThumbnailStart = Math.max(gallery.length - VISIBLE_THUMBNAILS, 0);
+  const visibleThumbnails = gallery.slice(
+    thumbnailStart,
+    thumbnailStart + VISIBLE_THUMBNAILS
+  );
+
+  const selectImage = (index) => {
+    setActiveImageIndex(index);
+
+    if (index < thumbnailStart) {
+      setThumbnailStart(index);
+    } else if (index >= thumbnailStart + VISIBLE_THUMBNAILS) {
+      setThumbnailStart(Math.min(index - VISIBLE_THUMBNAILS + 1, maxThumbnailStart));
+    }
+  };
+
+  const showPreviousImage = () => {
+    if (gallery.length < 2) return;
+    const nextIndex =
+      activeImageIndex === 0 ? gallery.length - 1 : activeImageIndex - 1;
+    selectImage(nextIndex);
+  };
+
+  const showNextImage = () => {
+    if (gallery.length < 2) return;
+    selectImage((activeImageIndex + 1) % gallery.length);
+  };
+
+  const showPreviousThumbnails = () => {
+    const nextStart =
+      thumbnailStart === 0 ? maxThumbnailStart : thumbnailStart - 1;
+    setThumbnailStart(nextStart);
+  };
+
+  const showNextThumbnails = () => {
+    const nextStart =
+      thumbnailStart >= maxThumbnailStart ? 0 : thumbnailStart + 1;
+    setThumbnailStart(nextStart);
+  };
+
+  const handleRequestQuote = () => {
+    addProduct({
+      productId: product?.id,
+      slug: product?.slug,
+      name: productTitle,
+      sku: product?.sku || acf.article_number || acf.product_article_number,
+      capacity: selectedCapacity,
+      image: activeImage || gallery[0],
+    });
+    router.push(localizePath("/rfq", language));
+  };
 
   return (
     <section className="bg-white text-black">
       <div className="web-width px-6 pb-20 pt-2 md:pb-[120px]">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[600px_1fr] xl:gap-12">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,610px)_minmax(0,1fr)] xl:gap-5">
           <div>
-            <div className="relative min-h-[300px] overflow-hidden rounded-[8px] border border-[#DDD8CE] bg-white md:min-h-[390px]">
-              {gallery[0] ? (
+            <div className="relative flex min-h-[300px] items-center justify-center overflow-hidden rounded-[8px] border border-[#DDD8CE] bg-white md:min-h-[392px]">
+              {activeImage ? (
                 <Image
-                  src={gallery[0]}
+                  key={activeImage}
+                  src={activeImage}
                   alt={productTitle}
                   fill
                   priority
-                  sizes="(min-width: 1024px) 600px, 100vw"
-                  className="object-contain p-8"
+                  sizes="(min-width: 1024px) 610px, 100vw"
+                  className="product-gallery-main-image object-contain p-10 md:p-12"
                 />
               ) : (
-                <div className="flex min-h-[300px] items-center justify-center font-body text-[14px] text-black/50 md:min-h-[390px]">
+                <div className="flex min-h-[300px] items-center justify-center font-body text-[14px] text-black/50 md:min-h-[392px]">
                   Product image missing
                 </div>
               )}
+
+              {gallery.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={showPreviousImage}
+                    className="absolute left-4 top-1/2 z-10 flex h-[40px] w-[40px] -translate-y-1/2 items-center justify-center rounded-[4px] bg-[var(--color-accent)] text-white transition-opacity hover:opacity-90"
+                    aria-label="Previous product image"
+                  >
+                    <span className="text-[28px] leading-none">‹</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={showNextImage}
+                    className="absolute right-4 top-1/2 z-10 flex h-[40px] w-[40px] -translate-y-1/2 items-center justify-center rounded-[4px] bg-[var(--color-accent)] text-white transition-opacity hover:opacity-90"
+                    aria-label="Next product image"
+                  >
+                    <span className="text-[28px] leading-none">›</span>
+                  </button>
+                </>
+              )}
             </div>
 
-            {gallery.length > 1 && (
-              <div className="mt-4 grid grid-cols-3 gap-4 md:flex">
-                {gallery.slice(0, 3).map((image, index) => (
-                  <div
-                    key={`${image}-${index}`}
-                    className={`relative aspect-square w-full overflow-hidden rounded-[8px] border bg-white md:w-[108px] ${
-                      index === 0 ? "border-[var(--color-yellow)]" : "border-[#DDD8CE]"
-                    }`}
+            {gallery.length > 0 && (
+              <div className="mt-4 flex items-center gap-3">
+                {gallery.length > VISIBLE_THUMBNAILS && (
+                  <button
+                    type="button"
+                    onClick={showPreviousThumbnails}
+                    className="flex h-[44px] w-[36px] shrink-0 items-center justify-center rounded-[4px] border border-[#DDD8CE] bg-white font-heading text-[22px] leading-none text-black transition-colors hover:border-[var(--color-yellow)]"
+                    aria-label="Show previous gallery thumbnails"
                   >
-                    <Image src={image} alt={`${productTitle} view ${index + 1}`} fill sizes="108px" className="object-contain p-2" />
-                  </div>
-                ))}
+                    &lt;
+                  </button>
+                )}
+
+                <div className="flex min-w-0 flex-wrap gap-4">
+                  {visibleThumbnails.map((image, visibleIndex) => {
+                    const imageIndex = thumbnailStart + visibleIndex;
+
+                    return (
+                      <button
+                        type="button"
+                        key={`${image}-${imageIndex}`}
+                        onClick={() => selectImage(imageIndex)}
+                        className={`relative h-[98px] w-[98px] overflow-hidden rounded-[8px] border bg-white transition-colors ${
+                          imageIndex === activeImageIndex
+                            ? "border-[var(--color-yellow)]"
+                            : "border-[#DDD8CE] hover:border-[var(--color-yellow)]/70"
+                        }`}
+                        aria-label={`Show product image ${imageIndex + 1}`}
+                      >
+                        <Image
+                          src={image}
+                          alt={`${productTitle} view ${imageIndex + 1}`}
+                          fill
+                          sizes="98px"
+                          className="object-contain p-2"
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {gallery.length > VISIBLE_THUMBNAILS && (
+                  <button
+                    type="button"
+                    onClick={showNextThumbnails}
+                    className="flex h-[44px] w-[36px] shrink-0 items-center justify-center rounded-[4px] border border-[#DDD8CE] bg-white font-heading text-[22px] leading-none text-black transition-colors hover:border-[var(--color-yellow)]"
+                    aria-label="Show next gallery thumbnails"
+                  >
+                    &gt;
+                  </button>
+                )}
               </div>
             )}
           </div>
 
-          <div className="rounded-[8px] bg-[rgba(0,112,158,0.1)] p-6 md:p-8">
+          <div className="rounded-[8px] bg-[#E5F2F7] p-6 md:p-8">
             {eyebrow && (
               <div className="mb-4 flex items-center gap-2">
                 <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
@@ -79,49 +255,131 @@ export default function ProductHero({ product }) {
               </div>
             )}
 
-            <p className="mb-3 font-body text-[14px] leading-[22px] text-[#8C8984]">{categoryLabel}</p>
+            {!eyebrow && categoryLabel && (
+              <p className="mb-3 font-body text-[14px] uppercase leading-[22px] text-[#1A1A1A]">
+                {categoryLabel}
+              </p>
+            )}
+
             <h1
-              className="max-w-[600px] font-heading text-[40px] font-normal leading-[48px] tracking-[-0.8px] text-black md:text-[56px] md:leading-[64px]"
+              className="max-w-[620px] font-heading text-[42px] font-normal leading-[48px] tracking-[-0.84px] text-black md:text-[52px] md:leading-[58px]"
               dangerouslySetInnerHTML={{ __html: title }}
             />
-            <p className="mt-2 font-body text-[20px] font-semibold leading-[28px] text-[var(--color-accent)]">
-              {stripHtml(String(productCode))} {stripHtml(String(capacity)) ? `| ${stripHtml(String(capacity))}` : ""}
-            </p>
 
-            <div className="mt-8">
-              <p className="mb-3 font-heading text-[20px] leading-[28px] tracking-[-0.4px]">Capacity:</p>
-              <div className="flex h-[56px] items-center justify-between rounded-[4px] bg-[var(--color-accent)] px-4 font-body text-[16px] font-bold text-white">
-                <span dangerouslySetInnerHTML={{ __html: capacity }} />
-                <Image src="/down-arrow.svg" alt="" width={14} height={8} className="brightness-0 invert" />
+            {textBelowTitle && (
+              <div
+                className="mt-5 border-b border-black/15 pb-5 font-body text-[15px] leading-[23px] text-[#1A1A1A]"
+                dangerouslySetInnerHTML={{ __html: textBelowTitle }}
+              />
+            )}
+
+            {capacityOptions.length > 0 && (
+              <div className="mt-4">
+                <label
+                  htmlFor="product-capacity"
+                  className="mb-2 block font-heading text-[18px] leading-[24px] tracking-[-0.36px] text-black"
+                >
+                  Capacity:
+                </label>
+                <select
+                  id="product-capacity"
+                  value={selectedCapacity}
+                  onChange={(event) => setSelectedCapacity(event.target.value)}
+                  className="h-[56px] w-full appearance-none rounded-[4px] border-0 bg-[var(--color-accent)] bg-[url('/down-arrow.svg')] bg-[length:13px_8px] bg-[right_18px_center] bg-no-repeat px-4 pr-12 font-body text-[16px] font-bold text-white outline-none"
+                >
+                  {capacityOptions.map((option) => (
+                    <option key={option} value={option} className="text-black">
+                      {option}
+                    </option>
+                  ))}
+                </select>
               </div>
+            )}
+
+            <div className="mt-7 flex flex-wrap gap-6">
+              <SpecTile icon="/volume-ico.svg" label="Volume" value={acf.volume} />
+              <SpecTile icon="/dimention-ico.svg" label="Dimensions" value={acf.dimention || acf.dimension} />
+              <SpecTile icon="/weight-ico.svg" label="Net Weight" value={acf.net_weight} />
             </div>
+
+            {(fuelCompatibility.length > 0 || applicationAreas.length > 0) && (
+              <div className="mt-6 border-y border-black/15 py-5 font-body text-[15px] leading-[24px] text-black">
+                {fuelCompatibility.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <strong className="mr-2 font-semibold">Fuel compatibility:</strong>
+                    {fuelCompatibility.map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-full bg-[var(--color-yellow)] px-4 py-1 text-[13px] leading-[18px]"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {applicationAreas.length > 0 && (
+                  <div className="mt-4 grid gap-2 sm:grid-cols-[140px_1fr]">
+                    <strong className="font-semibold">Application areas:</strong>
+                    <div className="flex flex-wrap gap-x-4 gap-y-1">
+                      {applicationAreas.map((item) => (
+                        <span
+                          key={item}
+                          className="before:mr-2 before:text-[var(--color-yellow)] before:content-['•']"
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
             {intro && (
               <div
-                className="mt-8 border-t border-black/15 pt-6 font-body text-[16px] leading-[24px] text-[#1A1A1A]"
+                className="mt-5 border-b border-black/15 pb-5 font-body text-[15px] leading-[23px] text-[#1A1A1A]"
                 dangerouslySetInnerHTML={{ __html: intro }}
               />
             )}
 
-            <div className="mt-6 grid gap-3 md:grid-cols-3">
-              {bullets.map((bullet) => (
-                <div key={bullet} className="flex gap-3 font-body text-[14px] leading-[20px] text-[#1A1A1A]">
-                  <span className="mt-1 h-[10px] w-[10px] shrink-0 rounded-full bg-[var(--color-yellow)]" />
-                  <span>{bullet}</span>
+            {keyFeatures.length > 0 && (
+              <div className="mt-5">
+                <h2 className="font-heading text-[18px] leading-[24px] tracking-[-0.36px] text-black">
+                  Key features:
+                </h2>
+                <div className="mt-4 grid gap-x-8 gap-y-3 md:grid-cols-2">
+                  {keyFeatures.map((feature) => (
+                    <div
+                      key={feature}
+                      className="flex items-start gap-3 font-body text-[14px] leading-[20px] text-[#1A1A1A]"
+                    >
+                      <span className="mt-[2px] flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)] text-[11px] font-bold leading-none text-white">
+                        ✓
+                      </span>
+                      <span>{feature}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
 
-            <div className="mt-8 flex flex-wrap gap-4">
+            <div className="mt-6 flex flex-wrap gap-4">
               {primaryText && (
-                <Link
-                  href={primaryHref}
-                  target={primaryTarget}
-                  className="group inline-flex h-[48px] items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+                <button
+                  type="button"
+                  onClick={handleRequestQuote}
+                  className="group inline-flex h-[48px] items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
                 >
                   <span>{primaryText}</span>
-                  <Image src="/black-white-arrow.svg" alt="" width={36} height={36} className="h-[36px] w-[36px] transition-transform group-hover:translate-x-1" />
-                </Link>
+                  <Image
+                    src="/black-white-arrow.svg"
+                    alt=""
+                    width={36}
+                    height={36}
+                    className="h-[36px] w-[36px] transition-transform group-hover:translate-x-1"
+                  />
+                </button>
               )}
 
               {secondaryText && (
@@ -131,7 +389,13 @@ export default function ProductHero({ product }) {
                   className="group inline-flex h-[48px] items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
                 >
                   <span>{secondaryText}</span>
-                  <Image src="/black-white-arrow.svg" alt="" width={36} height={36} className="h-[36px] w-[36px] transition-transform group-hover:translate-x-1" />
+                  <Image
+                    src="/download-ico.svg"
+                    alt=""
+                    width={36}
+                    height={36}
+                    className="h-[36px] w-[36px] transition-transform group-hover:translate-y-0.5"
+                  />
                 </Link>
               )}
             </div>

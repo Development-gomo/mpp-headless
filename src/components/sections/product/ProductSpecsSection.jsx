@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { getImageUrl } from "./productUtils";
+import Link from "next/link";
+import { getButtonHref, getButtonTarget, getImageUrl } from "./productUtils";
 
 function normalizeSpecs(product) {
   const acf = product?.acf || {};
@@ -15,44 +16,72 @@ function normalizeSpecs(product) {
 }
 
 export default function ProductSpecsSection({ product }) {
+  const acf = product?.acf || {};
   const specs = normalizeSpecs(product);
   if (specs.length === 0) return null;
+  const productSheetHref = getButtonHref(acf.product_sheet, "#");
+  const productSheetTarget =
+    getButtonTarget(acf.product_sheet) ||
+    (productSheetHref !== "#" ? "_blank" : undefined);
 
   return (
     <section id="technical-data" className="bg-white">
       <div className="web-width px-6 py-20 md:py-[120px]">
-        <div className="mb-12">
-          <div className="mb-6 flex items-center gap-2">
-            <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
-            <p className="font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-[#1A1A1A]">
-              Technical data
-            </p>
+        <div className="mb-14 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <div className="mb-8 flex items-center gap-2">
+              <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
+              <p className="font-body text-[13px] font-medium uppercase leading-[22px] tracking-[0.52px] text-[#1A1A1A]">
+                Technical data
+              </p>
+            </div>
+            <h2 className="max-w-[620px] font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[54px] [&_span]:text-[#007DA5]">
+              Explore the <span>product specifications</span>
+            </h2>
           </div>
-          <h2 className="max-w-[620px] font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[56px]">
-            Explore the <span>product specifications</span>
-          </h2>
+
+          {productSheetHref !== "#" && (
+            <Link
+              href={productSheetHref}
+              target={productSheetTarget}
+              className="group inline-flex h-[48px] w-fit items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+            >
+              <span>Download Product Sheet</span>
+              <Image
+                src="/download-ico.svg"
+                alt=""
+                width={36}
+                height={36}
+                className="h-[36px] w-[36px] transition-transform group-hover:translate-y-0.5"
+              />
+            </Link>
+          )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 border border-[#DEDEDE] bg-white p-2 md:grid-cols-2 lg:grid-cols-4">
           {specs.map((spec, index) => (
             <div
               key={`${spec.spec_label}-${index}`}
-              className="border border-[#DEDEDE] bg-white p-2"
+              className="border-[5px] border-white bg-[#F3F4FB] px-5 py-6"
             >
-              <div className="min-h-[114px] bg-[#F3F4FB] p-5">
-                <div className="mb-1 flex items-center gap-2 font-body text-[12px] leading-[22px] text-black">
-                  {getImageUrl(spec.spec_icon) ? (
-                    <Image src={getImageUrl(spec.spec_icon)} alt="" width={14} height={14} className="h-[14px] w-[14px] object-contain" />
-                  ) : (
-                    <span className="h-[4px] w-[4px] rounded-full bg-[var(--color-yellow)]" />
-                  )}
-                  {spec.spec_label}
-                </div>
-                <div
-                  className="font-body text-[20px] font-semibold leading-[28px] text-[var(--color-accent)]"
-                  dangerouslySetInnerHTML={{ __html: spec.spec_value }}
-                />
+              <div className="mb-3 flex items-center gap-2 font-body text-[11px] leading-[18px] text-black">
+                {getImageUrl(spec.spec_icon) ? (
+                  <Image
+                    src={getImageUrl(spec.spec_icon)}
+                    alt=""
+                    width={10}
+                    height={10}
+                    className="h-[10px] w-[10px] object-contain"
+                  />
+                ) : (
+                  <span className="h-[4px] w-[4px] shrink-0 rounded-full bg-[var(--color-yellow)]" />
+                )}
+                {spec.spec_label}
               </div>
+              <div
+                className="font-body text-[20px] font-semibold leading-[28px] text-[#007DA5]"
+                dangerouslySetInnerHTML={{ __html: spec.spec_value }}
+              />
             </div>
           ))}
         </div>

@@ -26,9 +26,70 @@ import {
   getProductCategoriesWithImages,
   getProductCategoryBySlug,
   getProductsByCategory,
+  getThemeOptions,
 } from "@/lib/api";
+import { getProductCategories as getProductTerms } from "@/components/sections/product/productUtils";
 import { resolveParams } from "@/lib/params";
 import { buildMetadataFromYoast } from "@/lib/seo";
+
+function getCategoryId(category) {
+  return category?.term_id || category?.id;
+}
+
+function getCategoryParentId(category) {
+  return category?.parent || category?.parent_id || 0;
+}
+
+function getCategoryDepth(category, categoryMap) {
+  let depth = 0;
+  let currentCategory = category;
+  const visitedIds = new Set();
+
+  while (Number(getCategoryParentId(currentCategory)) > 0) {
+    const parentId = String(getCategoryParentId(currentCategory));
+    if (visitedIds.has(parentId)) break;
+    visitedIds.add(parentId);
+
+    const parentCategory = categoryMap.get(parentId);
+    if (!parentCategory) break;
+
+    depth += 1;
+    currentCategory = parentCategory;
+  }
+
+  return depth;
+}
+
+function getDeepestProductCategory(product, allCategories = []) {
+  const productTerms = getProductTerms(product).filter(
+    (category) => category?.slug && category.slug !== "uncategorized"
+  );
+  const categoryMap = new Map();
+  const slugMap = new Map();
+
+  [...productTerms, ...allCategories].forEach((category) => {
+    const id = getCategoryId(category);
+    if (id) categoryMap.set(String(id), category);
+    if (category?.slug) slugMap.set(category.slug, category);
+  });
+
+  const resolvedTerms = productTerms
+    .map((category) => {
+      const id = getCategoryId(category);
+      return (
+        (id && categoryMap.get(String(id))) ||
+        (category?.slug && slugMap.get(category.slug)) ||
+        category
+      );
+    })
+    .filter(Boolean);
+
+  return (
+    resolvedTerms.sort(
+      (a, b) => getCategoryDepth(b, categoryMap) - getCategoryDepth(a, categoryMap)
+    )[0] || null
+  );
+}
 
 export async function generateHomeMetadata(language) {
   const page = await getPageBySlug("frontpage", { language });
@@ -221,7 +282,14 @@ export async function renderProductPage(params, language) {
   const product = await getProductBySlug(slug, { language });
   if (!product) notFound();
 
-  const productCategories = await getProductCategories({ language });
+  const [productCategories, themeOptions] = await Promise.all([
+    getProductCategories({ language }),
+    getThemeOptions({ language }),
+  ]);
+  const relatedCategory = getDeepestProductCategory(product, productCategories);
+  const relatedProducts = relatedCategory
+    ? await getProductsByCategory(getCategoryId(relatedCategory), { language })
+    : [];
 
   return (
     <>
@@ -239,6 +307,9 @@ export async function renderProductPage(params, language) {
         <ProductPageTemplate
           product={product}
           productCategories={productCategories}
+          themeOptions={themeOptions}
+          relatedCategory={relatedCategory}
+          relatedProducts={relatedProducts}
           language={language}
         />
       </main>

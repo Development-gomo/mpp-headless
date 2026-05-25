@@ -358,6 +358,35 @@ export async function getMediaById(id) {
   return fetchWP(`/wp/v2/media/${id}`);
 }
 
+async function getMediaByParent(parentId, { language } = {}) {
+  if (!parentId) return [];
+
+  const media = await fetchWP(
+    withParams(`/wp/v2/media`, {
+      parent: parentId,
+      per_page: 100,
+      _fields: "id,source_url,media_type,mime_type,media_details,alt_text",
+    }),
+    { language, logErrors: false }
+  );
+
+  return Array.isArray(media) ? media : [];
+}
+
+async function getWooStoreProductBySlug(slug, { language } = {}) {
+  if (!slug) return null;
+
+  const products = await fetchWP(
+    withParams(`/wc/store/v1/products`, {
+      slug,
+      per_page: 1,
+    }),
+    { language, logErrors: false }
+  );
+
+  return Array.isArray(products) ? products[0] || null : null;
+}
+
 // ─── Menu ───────────────────────────────────────────────────────────────────
 
 export async function getMenu(location = "primary") {
@@ -543,7 +572,18 @@ export async function getProductsByCategory(categoryId, { language } = {}) {
 }
 
 export async function getProductBySlug(slug, { language } = {}) {
-  return getSingleEntry("product", slug, { language });
+  const product = await getSingleEntry("product", slug, { language });
+  if (!product?.id) return product;
+
+  const wooProduct = await getWooStoreProductBySlug(slug, { language });
+  const galleryImages = Array.isArray(wooProduct?.images)
+    ? wooProduct.images
+    : [];
+
+  return {
+    ...product,
+    gallery_images: galleryImages,
+  };
 }
 
 export async function getAllProducts({ language } = {}) {

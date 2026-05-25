@@ -3,7 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { DEFAULT_LANGUAGE, FALLBACK_LANGUAGES } from "@/lib/i18n";
+import { DEFAULT_LANGUAGE, FALLBACK_LANGUAGES, localizePath } from "@/lib/i18n";
+import { useQuoteCart } from "@/components/quote/QuoteCartProvider";
 
 function getColumnClass(layoutType) {
   if (layoutType === "three_column") return "md:grid-cols-3";
@@ -30,6 +31,7 @@ export default function HeaderComponent(props) {
     languageLinks = {},
   } = props;
 
+  const { count: quoteCount } = useQuoteCart();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openSubmenus, setOpenSubmenus] = useState({});
   const [scrolled, setScrolled] = useState(false);
@@ -64,6 +66,7 @@ export default function HeaderComponent(props) {
     (item) => item.code !== language && languageLinks[item.code]
   );
   const activeLogoUrl = isDark ? logoDarkUrl || logoUrl : logoUrl;
+  const quoteHref = localizePath("/rfq", language);
   const callIcon = isDark ? "/call-dark.svg" : "/call.svg";
   const languageArrowIcon = isDark ? "/down-arrow-black.svg" : "/down-arrow.svg";
   const menuLinkClass = `inline-flex h-6 items-center gap-1 text-[14px] font-normal leading-[24px] tracking-[-0.28px] font-heading transition-colors ${
@@ -326,6 +329,13 @@ export default function HeaderComponent(props) {
             }`}
           >
             <Link
+              href={quoteHref}
+              className={`flex h-[28px] items-center justify-center rounded-[4px] px-3 backdrop-blur-[10px] text-[14px] leading-6 tracking-[-0.28px] font-heading ${topPillClass}`}
+            >
+              RFQ{quoteCount > 0 ? ` (${quoteCount})` : ""}
+            </Link>
+
+            <Link
               href={headerTelephoneLink || "tel:+46300521930"}
               className="flex h-[28px] w-[28px] items-center justify-center"
               aria-label="Call"
@@ -547,6 +557,19 @@ export default function HeaderComponent(props) {
                 </ul>
 
                 <div className="mt-8 flex flex-col gap-3">
+                  <Link
+                    href={quoteHref}
+                    className="inline-flex items-center justify-between rounded-[4px] bg-[#E5F2F7] py-3 px-5 text-slate-900 font-heading text-[14px]"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <span>RFQ</span>
+                    {quoteCount > 0 && (
+                      <span className="rounded-full bg-[var(--color-yellow)] px-2 py-0.5 text-[12px] leading-none text-black">
+                        {quoteCount}
+                      </span>
+                    )}
+                  </Link>
+
                   {/* Mobile CTA 1 */}
                   <Link
                     href={cta1Url || "#"}
