@@ -12,6 +12,201 @@ function getColumnClass(layoutType) {
   return "md:grid-cols-1";
 }
 
+const desktopMegaMenuClass =
+  "pointer-events-none absolute left-[-316px] top-full w-[min(1180px,calc(100vw-3rem))] pt-3 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100";
+
+function getDefaultThreeLevelState(menuRow) {
+  const firstCategory = menuRow?.categoryColumns?.[0] || null;
+  const firstChild = firstCategory?.children?.[0] || null;
+
+  return {
+    categoryKey: firstCategory?.key || "",
+    childKey: firstChild?.key || "",
+  };
+}
+
+function ArrowUpRightIcon({ className = "" }) {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 14 14"
+      fill="none"
+      className={className}
+      aria-hidden="true"
+    >
+      <path
+        d="M4 3H11V10"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3 11L11 3"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function ThreeLevelCategoryMenu({ menuRow }) {
+  const [activeState, setActiveState] = useState(() =>
+    getDefaultThreeLevelState(menuRow)
+  );
+
+  const activeCategory =
+    menuRow.categoryColumns.find(
+      (category) => category.key === activeState.categoryKey
+    ) ||
+    menuRow.categoryColumns[0] ||
+    null;
+
+  const activeChild =
+    activeCategory?.children?.find((child) => child.key === activeState.childKey) ||
+    activeCategory?.children?.[0] ||
+    null;
+
+  const setActiveCategory = (category) => {
+    setActiveState({
+      categoryKey: category.key,
+      childKey: category.children?.[0]?.key || "",
+    });
+  };
+
+  const setActiveChild = (child) => {
+    setActiveState((current) => ({
+      ...current,
+      childKey: child.key,
+    }));
+  };
+
+  return (
+    <div className="grid min-h-[316px] grid-cols-[260px_220px_1fr] bg-white text-black">
+      <div className="flex flex-col justify-between bg-[#F0F0F4] px-8 py-7">
+        <ul className="space-y-0">
+          {menuRow.categoryColumns.map((category) => {
+            const isActive = activeCategory?.key === category.key;
+
+            return (
+              <li key={category.key} className="border-b border-black/10">
+                <Link
+                  href={category.href}
+                  className={`flex items-center justify-between gap-4 py-3 font-heading text-[16px] leading-[22px] transition-colors ${
+                    isActive
+                      ? "text-[var(--color-accent)]"
+                      : "text-black hover:text-[var(--color-accent)]"
+                  }`}
+                  onMouseEnter={() => setActiveCategory(category)}
+                  onFocus={() => setActiveCategory(category)}
+                >
+                  <span>{category.label}</span>
+                  {isActive && (
+                    <ArrowUpRightIcon className="shrink-0 text-[var(--color-yellow)]" />
+                  )}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+
+        <Link
+          href={menuRow.titleLink.href || "#"}
+          target={menuRow.titleLink.target}
+          className="group mt-8 inline-flex h-[40px] w-fit items-center gap-4 rounded-[4px] bg-[var(--mpp-gradient)] py-[4px] pr-[4px] pl-5 font-heading text-[13px] leading-none text-white transition-opacity hover:opacity-90"
+        >
+          <span>View all Products</span>
+          <span className="flex h-[32px] w-[32px] items-center justify-center rounded-[3px] bg-white text-black">
+            <ArrowUpRightIcon />
+          </span>
+        </Link>
+      </div>
+
+      <div className="flex flex-col justify-between border-r border-black/12 bg-white px-6 py-7">
+        <ul>
+          {activeCategory?.children?.length > 0 ? (
+            activeCategory.children.map((child) => {
+              const isActive = activeChild?.key === child.key;
+
+              return (
+                <li
+                  key={child.key}
+                  onMouseEnter={() => setActiveChild(child)}
+                >
+                  <Link
+                    href={child.href}
+                    className={`flex items-center justify-between gap-4 py-3 font-heading text-[16px] leading-[22px] transition-colors ${
+                      isActive
+                        ? "font-semibold text-black"
+                        : "text-black/35 hover:text-black"
+                    }`}
+                    onMouseEnter={() => setActiveChild(child)}
+                    onFocus={() => setActiveChild(child)}
+                  >
+                    <span>{child.label}</span>
+                    {isActive && (
+                      <ArrowUpRightIcon className="shrink-0 text-[var(--color-yellow)]" />
+                    )}
+                  </Link>
+                </li>
+              );
+            })
+          ) : (
+            <li className="py-3 text-[15px] text-black/45">No subcategories</li>
+          )}
+        </ul>
+
+        {activeCategory?.href && activeCategory.href !== "#" && (
+          <Link
+            href={activeCategory.href}
+            className="group mt-8 inline-flex h-[40px] w-fit items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[4px] pr-[4px] pl-5 font-heading text-[13px] leading-none text-black transition-opacity hover:opacity-90"
+          >
+            <span>Find your right tank</span>
+            <span className="flex h-[32px] w-[32px] items-center justify-center rounded-[3px] bg-white text-black">
+              <ArrowUpRightIcon />
+            </span>
+          </Link>
+        )}
+      </div>
+
+      <div className="bg-white px-6 py-7">
+        {activeChild?.products?.length > 0 ? (
+          <div className="grid h-full grid-cols-2 gap-4">
+            {activeChild.products.slice(0, 4).map((product) => (
+              <Link
+                key={product.key}
+                href={product.href}
+                className="group relative flex min-h-[122px] overflow-hidden rounded-[2px] bg-[#F0F0F2] p-4 transition-shadow hover:shadow-[0_16px_34px_rgba(0,0,0,0.12)]"
+              >
+                <span className="relative z-10 max-w-[52%] font-heading text-[16px] font-semibold leading-[22px] text-black">
+                  {product.label}
+                </span>
+
+                {product.image && (
+                  <Image
+                    src={product.image}
+                    alt={product.label}
+                    width={190}
+                    height={110}
+                    className="absolute bottom-2 right-2 max-h-[92px] w-[54%] object-contain transition-transform group-hover:scale-105"
+                    sizes="190px"
+                  />
+                )}
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="flex h-full items-center justify-center rounded-[2px] bg-[#F0F0F2] text-[15px] text-black/45">
+            No products found
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function HeaderComponent(props) {
   const {
     logoUrl,
@@ -153,7 +348,7 @@ export default function HeaderComponent(props) {
                 }
 
                 return (
-                  <div key={menuRow.key} className="relative group py-8 -my-8">
+                  <div key={menuRow.key} className="group py-8 -my-8">
                     <Link
                       href={menuRow.titleLink.href}
                       target={menuRow.titleLink.target}
@@ -176,7 +371,14 @@ export default function HeaderComponent(props) {
                       </svg>
                     </Link>
 
-                    <div className="pointer-events-none absolute left-1/2 top-full w-[min(1180px,calc(100vw-3rem))] -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
+                    {menuRow.layoutType === "three_level_categories" ? (
+                      <div className={desktopMegaMenuClass}>
+                        <div className="overflow-hidden rounded-[4px] border border-slate-200/80 bg-white text-slate-900 shadow-[0_30px_70px_-25px_rgba(8,15,40,0.55)]">
+                          <ThreeLevelCategoryMenu menuRow={menuRow} />
+                        </div>
+                      </div>
+                    ) : (
+                    <div className={desktopMegaMenuClass}>
                       <div className="overflow-hidden rounded-xl border border-slate-200/80 bg-white text-slate-900 shadow-[0_30px_70px_-25px_rgba(8,15,40,0.55)]">
                         <div
                           className={`grid ${
@@ -297,6 +499,7 @@ export default function HeaderComponent(props) {
                         </div>
                       </div>
                     </div>
+                    )}
                   </div>
                 );
               })
@@ -510,22 +713,59 @@ export default function HeaderComponent(props) {
                               </button>
 
                               {openSubmenus[menuRow.key] && (
-                                <ul className="pl-3 pb-2">
-                                  {menuRow.columns
-                                    .flatMap((column) => column.links)
-                                    .map((link) => (
-                                      <li key={`mobile-${link.key}`}>
+                                menuRow.layoutType === "three_level_categories" ? (
+                                  <ul className="pl-3 pb-2">
+                                    {menuRow.categoryColumns.map((category) => (
+                                      <li
+                                        key={`mobile-${category.key}`}
+                                        className="py-1"
+                                      >
                                         <Link
-                                          href={link.href}
-                                          target={link.target}
-                                          className="block py-1 text-[15px] text-slate-700 hover:text-slate-900"
+                                          href={category.href}
+                                          className="block py-1 text-[15px] font-semibold text-slate-800 hover:text-slate-950"
                                           onClick={() => setMobileOpen(false)}
                                         >
-                                          {link.label}
+                                          {category.label}
                                         </Link>
+
+                                        {category.children?.length > 0 && (
+                                          <ul className="pl-3">
+                                            {category.children.map((child) => (
+                                              <li key={`mobile-${child.key}`}>
+                                                <Link
+                                                  href={child.href}
+                                                  className="block py-1 text-[14px] text-slate-600 hover:text-slate-900"
+                                                  onClick={() =>
+                                                    setMobileOpen(false)
+                                                  }
+                                                >
+                                                  {child.label}
+                                                </Link>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        )}
                                       </li>
                                     ))}
-                                </ul>
+                                  </ul>
+                                ) : (
+                                  <ul className="pl-3 pb-2">
+                                    {menuRow.columns
+                                      .flatMap((column) => column.links)
+                                      .map((link) => (
+                                        <li key={`mobile-${link.key}`}>
+                                          <Link
+                                            href={link.href}
+                                            target={link.target}
+                                            className="block py-1 text-[15px] text-slate-700 hover:text-slate-900"
+                                            onClick={() => setMobileOpen(false)}
+                                          >
+                                            {link.label}
+                                          </Link>
+                                        </li>
+                                      ))}
+                                  </ul>
+                                )
                               )}
                             </>
                           ) : (

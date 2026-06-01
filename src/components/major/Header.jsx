@@ -1,4 +1,10 @@
-import { getLanguageLinks, getThemeOptions, getWpmlLanguages } from "@/lib/api";
+import {
+  getLanguageLinks,
+  getProductCategories,
+  getProductsByCategory,
+  getThemeOptions,
+  getWpmlLanguages,
+} from "@/lib/api";
 import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
 import HeaderComponent from "./HeaderComponent";
 
@@ -56,6 +62,71 @@ function normalizeLink(link, fallbackLabel = "Link", language = DEFAULT_LANGUAGE
   };
 }
 
+function getEntityId(entity) {
+  if (!entity) return null;
+  if (typeof entity === "number" || typeof entity === "string") return entity;
+
+  return entity.term_id || entity.id || entity.ID || null;
+}
+
+function getEntityName(entity, fallback = "Category") {
+  if (typeof entity === "string") return entity;
+
+  const renderedTitle = entity?.title?.rendered || entity?.name || entity?.title;
+  return renderedTitle?.replace(/<[^>]*>/g, "").trim() || fallback;
+}
+
+function getCategoryHref(category, language = DEFAULT_LANGUAGE) {
+  if (category?.slug) return localizePath(`/product-category/${category.slug}`, language);
+  if (category?.link) return normalizeUrl(category.link, language);
+
+  return "#";
+}
+
+function getProductHref(product, language = DEFAULT_LANGUAGE) {
+  if (product?.slug) return localizePath(`/product/${product.slug}`, language);
+  if (product?.link) return normalizeUrl(product.link, language);
+
+  return "#";
+}
+
+function getProductImage(product) {
+  const embeddedMedia = product?._embedded?.["wp:featuredmedia"]?.[0];
+  const yoastImage = product?.yoast_head_json?.og_image?.[0]?.url;
+  const acfImage =
+    product?.acf?.product_image ||
+    product?.acf?.image ||
+    product?.acf?.featured_image ||
+    product?.acf?.product_featured_image;
+
+  if (typeof acfImage === "string") return acfImage;
+
+  return (
+    acfImage?.url ||
+    embeddedMedia?.source_url ||
+    yoastImage ||
+    product?.featured_media_url ||
+    product?.featured_image ||
+    product?.thumbnail_url ||
+    product?.image ||
+    product?.thumbnail ||
+    product?.images?.[0]?.src ||
+    product?.images?.[0]?.url ||
+    null
+  );
+}
+
+function extractSubmenuCategories(submenuLinks = []) {
+  if (!Array.isArray(submenuLinks)) return [];
+
+  return submenuLinks
+    .flatMap((item) => {
+      const category = item?.category;
+      return Array.isArray(category) ? category : [category];
+    })
+    .filter((category) => getEntityId(category));
+}
+
 function pickFirstObject(candidates = []) {
   return (
     candidates.find(
@@ -77,11 +148,72 @@ function resolveThemeOptions(data) {
   return pickFirstObject(candidates);
 }
 
-function normalizeMegaMenuRows(rawRows = [], language = DEFAULT_LANGUAGE) {
+async function buildThreeLevelCategoriesMenu(row, rowIndex, language) {
+  const selectedCategories = extractSubmenuCategories(row?.submenu_links);
+  if (selectedCategories.length === 0) return [];
+
+  const allCategories = await getProductCategories({ language });
+  const categoryMap = new Map();
+
+  allCategories.forEach((category) => {
+    const id = getEntityId(category);
+    if (id) categoryMap.set(String(id), category);
+  });
+
+  return Promise.all(
+    selectedCategories.map(async (selectedCategory, categoryIndex) => {
+      const categoryId = getEntityId(selectedCategory);
+      const category = categoryMap.get(String(categoryId)) || selectedCategory;
+      if (!category) return null;
+
+      const children = allCategories
+        .filter((child) => Number(child?.parent || child?.parent_id || 0) === Number(categoryId))
+        .map((child) => ({
+          ...child,
+          products: [],
+        }));
+
+      const childrenWithProducts = await Promise.all(
+        children.map(async (child, childIndex) => {
+          const childId = getEntityId(child);
+          const products = childId
+            ? await getProductsByCategory(childId, { language })
+            : [];
+
+          return {
+            key: `${rowIndex}-category-${categoryId}-child-${childId || childIndex}`,
+            id: childId,
+            label: getEntityName(child, `Category ${childIndex + 1}`),
+            href: getCategoryHref(child, language),
+            products: products.map((product, productIndex) => ({
+              key: `${rowIndex}-category-${categoryId}-child-${childId || childIndex}-product-${
+                product?.id || productIndex
+              }`,
+              id: product?.id || null,
+              label: getEntityName(product, `Product ${productIndex + 1}`),
+              href: getProductHref(product, language),
+              image: getProductImage(product),
+            })),
+          };
+        })
+      );
+
+      return {
+        key: `${rowIndex}-category-${categoryId}`,
+        id: getEntityId(category),
+        label: getEntityName(category, `Category ${categoryIndex + 1}`),
+        href: getCategoryHref(category, language),
+        children: childrenWithProducts,
+      };
+    })
+  ).then((items) => items.filter(Boolean));
+}
+
+async function normalizeMegaMenuRows(rawRows = [], language = DEFAULT_LANGUAGE) {
   if (!Array.isArray(rawRows)) return [];
 
-  return rawRows
-    .map((row, rowIndex) => {
+  const rows = await Promise.all(
+    rawRows.map(async (row, rowIndex) => {
       const menuTitle = row?.menu_title?.trim() || `Menu ${rowIndex + 1}`;
       const titleLink = normalizeLink(row?.menu_title_link, menuTitle, language);
       const layoutType = row?.layout_type || "no_column";
@@ -138,6 +270,11 @@ function normalizeMegaMenuRows(rawRows = [], language = DEFAULT_LANGUAGE) {
           })
         : [];
 
+      const categoryColumns =
+        layoutType === "three_level_categories"
+          ? await buildThreeLevelCategoriesMenu(row, rowIndex, language)
+          : [];
+
       return {
         key: `${menuTitle}-${rowIndex}`,
         title: menuTitle,
@@ -145,9 +282,12 @@ function normalizeMegaMenuRows(rawRows = [], language = DEFAULT_LANGUAGE) {
         layoutType,
         sideImage,
         columns,
+        categoryColumns,
       };
     })
-    .filter((row) => row.title);
+  );
+
+  return rows.filter((row) => row.title);
 }
 
 export default async function Header({
@@ -197,7 +337,7 @@ export default async function Header({
     optionsRoot?.nav ||
     null;
 
-  const megaMenuRows = normalizeMegaMenuRows(
+  const megaMenuRows = await normalizeMegaMenuRows(
     headerOptions?.mega_menu ||
       optionsRoot?.mega_menu ||
       optionsRoot?.global?.mega_menu ||
