@@ -1,51 +1,54 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import {
   getButtonHref,
   getButtonTarget,
   getProductGallery,
+  getProductVariations,
+  stripHtml,
 } from "./productUtils";
 
-const STATIC_TANK_ROWS = [
-  {
-    article: "PTA15-L",
-    name: "Pickup Tank Aluminum 150L",
-    dimensions: "103 X 32 X 65",
-    volume: "145",
-    weight: "41",
-    current: true,
-  },
-  {
-    article: "PTA25-L",
-    name: "Pickup Tank Aluminum 250L",
-    dimensions: "103 X 53 X 65",
-    volume: "250",
-    weight: "51",
-  },
-  {
-    article: "PTA32-L",
-    name: "Pickup Tank Aluminum 320L",
-    dimensions: "103 X 66 X 65",
-    volume: "312",
-    weight: "57",
-  },
-  {
-    article: "PTA36-L",
-    name: "Pickup Tank Aluminum 360L",
-    dimensions: "103 X 73 X 65",
-    volume: "355",
-    weight: "60",
-  },
-  {
-    article: "PTA40-H",
-    name: "Pickup Tank Aluminum 400L",
-    dimensions: "103 X 73 X 75",
-    volume: "408",
-    weight: "67",
-  },
-];
+function getOverviewRows(product, variations) {
+  const acf = product?.acf || {};
+  const variationRows = Array.isArray(variations)
+    ? variations
+    : getProductVariations(product);
 
-export default function ProductOverviewSection({ product }) {
+  if (variationRows.length > 0) {
+    return variationRows.map((variation, index) => ({
+      index,
+      article: stripHtml(variation?.variation_sku || ""),
+      name: stripHtml(variation?.variation_title || ""),
+      dimensions: stripHtml(variation?.dimensions || ""),
+      volume: stripHtml(variation?.volume || ""),
+      weight: stripHtml(variation?.net_weight || ""),
+    }));
+  }
+
+  return [
+    {
+      index: 0,
+      article: stripHtml(
+        product?.sku || acf.article_number || acf.product_article_number || ""
+      ),
+      name: stripHtml(product?.title?.rendered || product?.title || ""),
+      dimensions: stripHtml(acf.dimention || acf.dimension || ""),
+      volume: stripHtml(acf.volume || ""),
+      weight: stripHtml(acf.net_weight || ""),
+    },
+  ].filter((row) =>
+    [row.article, row.name, row.dimensions, row.volume, row.weight].some(Boolean)
+  );
+}
+
+export default function ProductOverviewSection({
+  product,
+  variations,
+  selectedVariationIndex = 0,
+  onVariationChange,
+}) {
   const acf = product?.acf || {};
   const title = acf.tank_section_title || "See which tank <span>fits your needs</span>";
   const description =
@@ -56,8 +59,10 @@ export default function ProductOverviewSection({ product }) {
   const primaryText = acf.product_primary_cta_text || "Request a quote";
   const primaryHref = getButtonHref(acf.product_primary_cta_link, "#");
   const primaryTarget = getButtonTarget(acf.product_primary_cta_link);
+  const rows = getOverviewRows(product, variations);
 
   if (!title && !description) return null;
+  if (rows.length === 0) return null;
 
   return (
     <section id="find-your-tank" className="bg-white">
@@ -124,13 +129,22 @@ export default function ProductOverviewSection({ product }) {
             </div>
 
             <div className="mt-2 space-y-2">
-              {STATIC_TANK_ROWS.map((row, index) => {
-                const isCurrent = row.current;
+              {rows.map((row) => {
+                const isCurrent = row.index === selectedVariationIndex;
 
                 return (
                   <div
-                    key={row.article}
-                    className={`grid min-h-[94px] grid-cols-[1.7fr_0.6fr_0.6fr_0.6fr] overflow-hidden rounded-[6px] font-body ${
+                    key={`${row.article || row.name}-${row.index}`}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => onVariationChange?.(row.index)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        onVariationChange?.(row.index);
+                      }
+                    }}
+                    className={`grid min-h-[94px] cursor-pointer grid-cols-[1.7fr_0.6fr_0.6fr_0.6fr] overflow-hidden rounded-[6px] font-body ${
                       isCurrent
                         ? "bg-[var(--color-accent)] text-white"
                         : "bg-[#E5F2F7] text-black"

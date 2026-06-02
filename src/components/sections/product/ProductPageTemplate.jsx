@@ -1,7 +1,5 @@
-import ProductHero from "./ProductHero";
 import ProductBreadcrumbs from "./ProductBreadcrumbs";
-import ProductSpecsSection from "./ProductSpecsSection";
-import ProductOverviewSection from "./ProductOverviewSection";
+import ProductVariationSections from "./ProductVariationSections";
 import ProductFeaturesSection from "./ProductFeaturesSection";
 import ProductTestimonialsSection from "./ProductTestimonialsSection";
 import ProductDownloadsSection from "./ProductDownloadsSection";
@@ -51,10 +49,9 @@ export default function ProductPageTemplate({
         productCategories={productCategories}
         language={language}
       />
-      <ProductHero product={product} language={language} />
-      <ProductAnchorNav />
-      <ProductSpecsSection product={product} />
-      <ProductOverviewSection product={product} />
+      <ProductVariationSections product={product} language={language}>
+        <ProductAnchorNav />
+      </ProductVariationSections>
       <ProductFeaturesSection product={product} language={language} />
       <ProductTestimonialsSection
         product={product}

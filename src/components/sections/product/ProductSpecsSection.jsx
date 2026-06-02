@@ -1,23 +1,47 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getButtonHref, getButtonTarget, getImageUrl } from "./productUtils";
+import {
+  getButtonHref,
+  getButtonTarget,
+  getImageUrl,
+  getVariationCapacity,
+} from "./productUtils";
 
-function normalizeSpecs(product) {
+function normalizeSpecs(product, selectedVariation) {
   const acf = product?.acf || {};
+  const variationSpecs = Array.isArray(selectedVariation?.product_specs)
+    ? selectedVariation.product_specs
+    : [];
   const specs = Array.isArray(acf.product_specs) ? acf.product_specs : [];
   const fallbackSpecs = [
-    { spec_label: "Capacity", spec_value: acf.capacity || acf.product_capacity, spec_icon: "/capacity-icon.svg" },
+    {
+      spec_label: "Capacity",
+      spec_value:
+        getVariationCapacity(selectedVariation) ||
+        acf.capacity ||
+        acf.product_capacity,
+      spec_icon: "/capacity-icon.svg",
+    },
     { spec_label: "Fuel type", spec_value: acf.fuel_type || acf.product_fuel_type, spec_icon: "/fuel-type-icon.svg" },
     { spec_label: "Material", spec_value: acf.product_material },
-    { spec_label: "Dimensions", spec_value: acf.product_dimensions },
+    {
+      spec_label: "Dimensions",
+      spec_value:
+        selectedVariation?.dimensions ||
+        acf.product_dimensions ||
+        acf.dimention ||
+        acf.dimension,
+    },
   ].filter((item) => item.spec_value);
+
+  if (variationSpecs.length > 0) return variationSpecs;
 
   return specs.length > 0 ? specs : fallbackSpecs;
 }
 
-export default function ProductSpecsSection({ product }) {
+export default function ProductSpecsSection({ product, selectedVariation = null }) {
   const acf = product?.acf || {};
-  const specs = normalizeSpecs(product);
+  const specs = normalizeSpecs(product, selectedVariation);
   if (specs.length === 0) return null;
   const productSheetHref = getButtonHref(acf.product_sheet, "#");
   const productSheetTarget =

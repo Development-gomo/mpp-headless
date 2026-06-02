@@ -2,6 +2,31 @@ export function stripHtml(value = "") {
   return String(value).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 }
 
+export function getRepeaterValues(rows, key) {
+  if (!Array.isArray(rows)) return [];
+  return rows.map((row) => stripHtml(row?.[key] || "")).filter(Boolean);
+}
+
+export function getProductVariations(product) {
+  const variations = product?.acf?.product_variations;
+  if (!Array.isArray(variations)) return [];
+
+  return variations.filter(
+    (variation) => variation && typeof variation === "object" && !Array.isArray(variation)
+  );
+}
+
+export function getVariationCapacity(variation) {
+  return stripHtml(variation?.variation_capacity || variation?.capacity || "");
+}
+
+export function getVariationTextValues(value, key) {
+  if (Array.isArray(value)) return getRepeaterValues(value, key);
+
+  const textValue = stripHtml(value || "");
+  return textValue ? [textValue] : [];
+}
+
 export function getRendered(value) {
   if (!value) return "";
   if (typeof value === "string") return value;

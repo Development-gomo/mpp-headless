@@ -9,18 +9,17 @@ import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
 import {
   getButtonHref,
   getButtonTarget,
+  getProductVariations,
   getProductCategories,
   getProductGallery,
+  getRepeaterValues,
   getRendered,
+  getVariationCapacity,
+  getVariationTextValues,
   stripHtml,
 } from "./productUtils";
 
 const VISIBLE_THUMBNAILS = 5;
-
-function getRepeaterValues(rows, key) {
-  if (!Array.isArray(rows)) return [];
-  return rows.map((row) => stripHtml(row?.[key] || "")).filter(Boolean);
-}
 
 function getFileHref(file, fallback = "#") {
   if (!file) return fallback;
@@ -28,13 +27,21 @@ function getFileHref(file, fallback = "#") {
   return file.url || file.link || file.source_url || fallback;
 }
 
+function appendUnit(value, unit) {
+  const cleanValue = stripHtml(value || "");
+  if (!cleanValue) return "";
+  if (new RegExp(`\\b${unit}\\b`, "i").test(cleanValue)) return cleanValue;
+
+  return `${cleanValue} ${unit}`;
+}
+
 function SpecTile({ icon, label, value }) {
   if (!value) return null;
 
   return (
     <div className="inline-flex min-h-[45px] items-center gap-2 rounded-[4px] border border-[#98C8DA] bg-[#CFE8F1] px-2 py-1">
-      <span className="flex h-[31px] w-[31px] shrink-0 items-center justify-center rounded-[3px] border border-[#98C8DA] bg-[#E8F4F8]">
-        <Image src={icon} alt="" width={18} height={18} className="h-[18px] w-[18px] object-contain" />
+      <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center">
+        <Image src={icon} alt="" width={30} height={30} className="h-[30px] w-[30px] object-contain" />
       </span>
       <span>
         <span className="block font-body text-[8px] leading-[10px] text-[#4B626A]">
@@ -48,11 +55,24 @@ function SpecTile({ icon, label, value }) {
   );
 }
 
-export default function ProductHero({ product, language = DEFAULT_LANGUAGE }) {
+export default function ProductHero({
+  product,
+  language = DEFAULT_LANGUAGE,
+  variations,
+  selectedVariation,
+  selectedVariationIndex = 0,
+  onVariationChange,
+}) {
   const { addProduct } = useQuoteCart();
   const router = useRouter();
   const acf = product?.acf || {};
-  const title = getRendered(product?.title);
+  const variationOptions = Array.isArray(variations)
+    ? variations
+    : getProductVariations(product);
+  const activeVariation =
+    selectedVariation || variationOptions[selectedVariationIndex] || null;
+  const title = activeVariation?.variation_title || getRendered(product?.title);
+  const variationSku = stripHtml(activeVariation?.variation_sku || "");
   const productTitle = stripHtml(title) || "Product";
   const textBelowTitle = acf.text_under_title;
   const eyebrow = acf.text_over_title;
@@ -63,26 +83,51 @@ export default function ProductHero({ product, language = DEFAULT_LANGUAGE }) {
 
   const categories = getProductCategories(product);
   const categoryLabel = categories[0]?.name || "Mobile fuel tanks";
-  const capacities = getRepeaterValues(acf.capacity_options, "capacity_value");
+  const variationCapacityOptions = variationOptions
+    .map((variation, index) => ({
+      label: getVariationCapacity(variation),
+      value: String(index),
+    }))
+    .filter((option) => option.label);
+  const legacyCapacities = getRepeaterValues(
+    acf.capacity_options,
+    "capacity_value"
+  );
   const fallbackCapacity =
     acf.capacity ||
     acf.product_capacity ||
     acf.product_specs?.find?.((item) => /capacity/i.test(item?.spec_label || ""))
       ?.spec_value;
-  const capacityOptions = capacities.length > 0
-    ? capacities
-    : fallbackCapacity
-    ? [stripHtml(fallbackCapacity)]
-    : [];
-  const [selectedCapacity, setSelectedCapacity] = useState(
-    capacityOptions[0] || ""
+  const capacityOptions =
+    variationCapacityOptions.length > 0
+      ? variationCapacityOptions
+      : legacyCapacities.length > 0
+      ? legacyCapacities.map((capacity) => ({
+          label: capacity,
+          value: capacity,
+        }))
+      : fallbackCapacity
+      ? [{ label: stripHtml(fallbackCapacity), value: stripHtml(fallbackCapacity) }]
+      : [];
+  const [localSelectedCapacity, setLocalSelectedCapacity] = useState(
+    capacityOptions[0]?.value || ""
   );
-  const fuelCompatibility = getRepeaterValues(
-    acf.fuel_compatibility,
-    "compatibility"
-  );
-  const applicationAreas = getRepeaterValues(acf.application_areas, "area");
+  const selectedCapacity = activeVariation
+    ? getVariationCapacity(activeVariation)
+    : localSelectedCapacity;
+  const fuelCompatibility = activeVariation
+    ? getVariationTextValues(activeVariation.fuel_compatibility, "compatibility")
+    : getRepeaterValues(acf.fuel_compatibility, "compatibility");
+  const applicationAreas = activeVariation
+    ? getVariationTextValues(activeVariation.application_areas, "area")
+    : getRepeaterValues(acf.application_areas, "area");
   const keyFeatures = getRepeaterValues(acf.key_features, "feature");
+  const volume = activeVariation?.volume || acf.volume;
+  const dimensions =
+    activeVariation?.dimensions || acf.dimention || acf.dimension;
+  const netWeight = activeVariation?.net_weight || acf.net_weight;
+  const displayVolume = appendUnit(volume, "L");
+  const displayNetWeight = appendUnit(netWeight, "Kg");
   const primaryText = acf.product_primary_cta_text || "Request a quote";
   const secondaryText =
     acf.product_secondary_cta_text || "Download Product Sheet";
@@ -139,11 +184,24 @@ export default function ProductHero({ product, language = DEFAULT_LANGUAGE }) {
       productId: product?.id,
       slug: product?.slug,
       name: productTitle,
-      sku: product?.sku || acf.article_number || acf.product_article_number,
+      sku:
+        variationSku ||
+        product?.sku ||
+        acf.article_number ||
+        acf.product_article_number,
       capacity: selectedCapacity,
       image: activeImage || gallery[0],
     });
     router.push(localizePath("/rfq", language));
+  };
+
+  const handleCapacityChange = (event) => {
+    if (variationCapacityOptions.length > 0) {
+      onVariationChange?.(Number(event.target.value));
+      return;
+    }
+
+    setLocalSelectedCapacity(event.target.value);
   };
 
   return (
@@ -266,6 +324,12 @@ export default function ProductHero({ product, language = DEFAULT_LANGUAGE }) {
               dangerouslySetInnerHTML={{ __html: title }}
             />
 
+            {variationSku && (
+              <div className="max-w-[620px] font-heading text-[42px] font-normal leading-[48px] tracking-[-0.84px] text-black md:text-[52px] md:leading-[58px]">
+                {variationSku}
+              </div>
+            )}
+
             {textBelowTitle && (
               <div
                 className="mt-5 border-b border-black/15 pb-5 font-body text-[15px] leading-[23px] text-[#1A1A1A]"
@@ -283,13 +347,21 @@ export default function ProductHero({ product, language = DEFAULT_LANGUAGE }) {
                 </label>
                 <select
                   id="product-capacity"
-                  value={selectedCapacity}
-                  onChange={(event) => setSelectedCapacity(event.target.value)}
+                  value={
+                    variationCapacityOptions.length > 0
+                      ? String(selectedVariationIndex)
+                      : selectedCapacity
+                  }
+                  onChange={handleCapacityChange}
                   className="h-[56px] w-full appearance-none rounded-[4px] border-0 bg-[var(--color-accent)] bg-[url('/down-arrow.svg')] bg-[length:13px_8px] bg-[right_18px_center] bg-no-repeat px-4 pr-12 font-body text-[16px] font-bold text-white outline-none"
                 >
                   {capacityOptions.map((option) => (
-                    <option key={option} value={option} className="text-black">
-                      {option}
+                    <option
+                      key={option.value}
+                      value={option.value}
+                      className="text-black"
+                    >
+                      {appendUnit(option.label, "Liters")}
                     </option>
                   ))}
                 </select>
@@ -297,9 +369,9 @@ export default function ProductHero({ product, language = DEFAULT_LANGUAGE }) {
             )}
 
             <div className="mt-7 flex flex-wrap gap-6">
-              <SpecTile icon="/volume-ico.svg" label="Volume" value={acf.volume} />
-              <SpecTile icon="/dimention-ico.svg" label="Dimensions" value={acf.dimention || acf.dimension} />
-              <SpecTile icon="/weight-ico.svg" label="Net Weight" value={acf.net_weight} />
+              <SpecTile icon="/volume-ico.svg" label="Volume" value={displayVolume} />
+              <SpecTile icon="/dimention-ico.svg" label="Dimensions" value={dimensions} />
+              <SpecTile icon="/weight-ico.svg" label="Net Weight" value={displayNetWeight} />
             </div>
 
             {(fuelCompatibility.length > 0 || applicationAreas.length > 0) && (
