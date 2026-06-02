@@ -44,7 +44,7 @@ export default function HomeServicesSection({ data }) {
 
             {hero_title && (
               <h2
-                className="text-black text-[52px] leading-[1.05] font-normal tracking-[-1px] mb-6"
+                className="font-heading mb-6 text-[36px] font-normal leading-[44px] tracking-[-0.72px] text-black md:text-[48px] md:leading-[56px] md:tracking-[-0.96px]"
                 dangerouslySetInnerHTML={{ __html: hero_title }}
               />
             )}

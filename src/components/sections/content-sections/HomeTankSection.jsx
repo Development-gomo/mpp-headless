@@ -92,7 +92,7 @@ export default function HomeTankSection({ data }) {
 
           {hero_title && (
             <h1
-              className="max-w-[620px] font-heading text-[42px] font-normal leading-[48px] tracking-[-0.84px] text-white md:text-[56px] md:leading-[64px]"
+              className="font-heading max-w-[620px] text-[40px] font-normal leading-[48px] tracking-[-0.8px] text-white md:text-[56px] md:leading-[64px] md:tracking-[-1.12px] lg:text-[64px] lg:leading-[72px] lg:tracking-[-1.28px]"
               dangerouslySetInnerHTML={{ __html: hero_title }}
             />
           )}

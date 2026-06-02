@@ -431,22 +431,26 @@ export async function getMenu(location = "primary") {
 
 // ─── Theme options ──────────────────────────────────────────────────────────
 
-export async function getThemeOptions({ language } = {}) {
+export const getThemeOptions = cache(async function getThemeOptions({ language } = {}) {
   const endpoints = [
-    `/headless/v1/theme-options`,
-    `/wp/v2/acf/options?acf_format=standard`,
-    `/acf/v3/options/options`,
+    { endpoint: `/headless/v1/theme-options`, timeoutMs: 5000 },
+    { endpoint: `/wp/v2/acf/options?acf_format=standard`, timeoutMs: 3000 },
+    { endpoint: `/acf/v3/options/options`, timeoutMs: 3000 },
   ];
 
-  for (const endpoint of endpoints) {
+  for (const { endpoint, timeoutMs } of endpoints) {
     try {
-      const data = await fetchWP(endpoint, { language });
+      const data = await fetchWP(endpoint, {
+        language,
+        timeoutMs,
+        logErrors: false,
+      });
       if (data && !data.code) return data;
     } catch {}
   }
 
   return {};
-}
+});
 
 function pickFirstObject(candidates = []) {
   return (
@@ -480,22 +484,26 @@ function resolveBlogSettingsData(data) {
   ]);
 }
 
-export async function getBlogSettings({ language } = {}) {
+export const getBlogSettings = cache(async function getBlogSettings({ language } = {}) {
   const endpoints = [
-    `/headless/v1/blog-settings`,
-    `/headless/v1/blog-setting`,
-    `/headless/v1/theme-options`,
-    `/wp/v2/acf/options/blog-setting?acf_format=standard`,
-    `/wp/v2/acf/options/blog-settings?acf_format=standard`,
-    `/wp/v2/acf/options?acf_format=standard`,
-    `/acf/v3/options/blog-setting`,
-    `/acf/v3/options/blog-settings`,
-    `/acf/v3/options/options`,
+    { endpoint: `/headless/v1/blog-settings`, timeoutMs: 3000 },
+    { endpoint: `/headless/v1/blog-setting`, timeoutMs: 3000 },
+    { endpoint: `/headless/v1/theme-options`, timeoutMs: 5000 },
+    { endpoint: `/wp/v2/acf/options/blog-setting?acf_format=standard`, timeoutMs: 3000 },
+    { endpoint: `/wp/v2/acf/options/blog-settings?acf_format=standard`, timeoutMs: 3000 },
+    { endpoint: `/wp/v2/acf/options?acf_format=standard`, timeoutMs: 3000 },
+    { endpoint: `/acf/v3/options/blog-setting`, timeoutMs: 3000 },
+    { endpoint: `/acf/v3/options/blog-settings`, timeoutMs: 3000 },
+    { endpoint: `/acf/v3/options/options`, timeoutMs: 3000 },
   ];
 
-  for (const endpoint of endpoints) {
+  for (const { endpoint, timeoutMs } of endpoints) {
     try {
-      const data = await fetchWP(endpoint, { language });
+      const data = await fetchWP(endpoint, {
+        language,
+        timeoutMs,
+        logErrors: false,
+      });
       const options = resolveBlogSettingsData(data);
       if (options && !options.code && Object.keys(options).length > 0) {
         return options;
@@ -504,7 +512,7 @@ export async function getBlogSettings({ language } = {}) {
   }
 
   return {};
-}
+});
 
 // ─── Product categories ─────────────────────────────────────────────────────
 

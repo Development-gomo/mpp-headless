@@ -84,7 +84,7 @@ function ThreeLevelCategoryMenu({ menuRow }) {
   };
 
   return (
-    <div className="grid min-h-[316px] grid-cols-[260px_220px_1fr] bg-white text-black">
+    <div className="grid min-h-[316px] grid-cols-[300px_minmax(0,1fr)] bg-white text-black">
       <div className="flex flex-col justify-between bg-[#F0F0F4] px-8 py-7">
         <ul className="space-y-0">
           {menuRow.categoryColumns.map((category) => {
@@ -115,7 +115,7 @@ function ThreeLevelCategoryMenu({ menuRow }) {
         <Link
           href={menuRow.titleLink.href || "#"}
           target={menuRow.titleLink.target}
-          className="group mt-8 inline-flex h-[40px] w-fit items-center gap-4 rounded-[4px] bg-[var(--mpp-gradient)] py-[4px] pr-[4px] pl-5 font-heading text-[13px] leading-none text-white transition-opacity hover:opacity-90"
+          className="inline-flex w-fit justify-end items-center gap-4 py-[6px] pr-[6px] pl-6 rounded-[4px] bg-[image:var(--mpp-gradient)] text-white font-heading text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"
         >
           <span>View all Products</span>
           <span className="flex h-[32px] w-[32px] items-center justify-center rounded-[3px] bg-white text-black">
@@ -124,84 +124,86 @@ function ThreeLevelCategoryMenu({ menuRow }) {
         </Link>
       </div>
 
-      <div className="flex flex-col justify-between border-r border-black/12 bg-white px-6 py-7">
-        <ul>
-          {activeCategory?.children?.length > 0 ? (
-            activeCategory.children.map((child) => {
-              const isActive = activeChild?.key === child.key;
+      <div className="grid min-w-0 grid-cols-[280px_minmax(0,1fr)] bg-white">
+        <div className="flex flex-col justify-between border-r border-black/12 px-6 py-7">
+          <ul>
+            {activeCategory?.children?.length > 0 ? (
+              activeCategory.children.map((child) => {
+                const isActive = activeChild?.key === child.key;
 
-              return (
-                <li
-                  key={child.key}
-                  onMouseEnter={() => setActiveChild(child)}
-                >
-                  <Link
-                    href={child.href}
-                    className={`flex items-center justify-between gap-4 py-3 font-heading text-[16px] leading-[22px] transition-colors ${
-                      isActive
-                        ? "font-semibold text-black"
-                        : "text-black/35 hover:text-black"
-                    }`}
+                return (
+                  <li
+                    key={child.key}
                     onMouseEnter={() => setActiveChild(child)}
-                    onFocus={() => setActiveChild(child)}
                   >
-                    <span>{child.label}</span>
-                    {isActive && (
-                      <ArrowUpRightIcon className="shrink-0 text-[var(--color-yellow)]" />
-                    )}
-                  </Link>
-                </li>
-              );
-            })
-          ) : (
-            <li className="py-3 text-[15px] text-black/45">No subcategories</li>
+                    <Link
+                      href={child.href}
+                      className={`flex items-center justify-between gap-4 py-3 font-heading text-[16px] leading-[22px] transition-colors ${
+                        isActive
+                          ? "font-semibold text-black"
+                          : "text-black/35 hover:text-black"
+                      }`}
+                      onMouseEnter={() => setActiveChild(child)}
+                      onFocus={() => setActiveChild(child)}
+                    >
+                      <span>{child.label}</span>
+                      {isActive && (
+                        <ArrowUpRightIcon className="shrink-0 text-[var(--color-yellow)]" />
+                      )}
+                    </Link>
+                  </li>
+                );
+              })
+            ) : (
+              <li className="py-3 text-[15px] text-black/45">No subcategories</li>
+            )}
+          </ul>
+
+          {activeCategory?.href && activeCategory.href !== "#" && (
+            <Link
+              href={activeCategory.href}
+              className="group inline-flex h-[44px] items-center justify-between gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
+            >
+              <span className="whitespace-nowrap">Find your right tank</span>
+              <span className="flex h-[32px] w-[32px] shrink-0 items-center justify-center rounded-[3px] bg-white text-black">
+                <ArrowUpRightIcon />
+              </span>
+            </Link>
           )}
-        </ul>
+        </div>
 
-        {activeCategory?.href && activeCategory.href !== "#" && (
-          <Link
-            href={activeCategory.href}
-            className="group mt-8 inline-flex h-[40px] w-fit items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[4px] pr-[4px] pl-5 font-heading text-[13px] leading-none text-black transition-opacity hover:opacity-90"
-          >
-            <span>Find your right tank</span>
-            <span className="flex h-[32px] w-[32px] items-center justify-center rounded-[3px] bg-white text-black">
-              <ArrowUpRightIcon />
-            </span>
-          </Link>
-        )}
-      </div>
+        <div className="min-w-0 px-5 py-7">
+          {activeChild?.products?.length > 0 ? (
+            <div className="grid h-full grid-cols-2 gap-3">
+              {activeChild.products.slice(0, 4).map((product) => (
+                <Link
+                  key={product.key}
+                  href={product.href}
+                  className="group relative flex min-h-[122px] overflow-hidden rounded-[2px] bg-[#F0F0F2] p-4 transition-shadow hover:shadow-[0_16px_34px_rgba(0,0,0,0.12)]"
+                >
+                  <span className="relative z-10 max-w-[52%] font-heading text-[16px] font-semibold leading-[22px] text-black">
+                    {product.label}
+                  </span>
 
-      <div className="bg-white px-6 py-7">
-        {activeChild?.products?.length > 0 ? (
-          <div className="grid h-full grid-cols-2 gap-4">
-            {activeChild.products.slice(0, 4).map((product) => (
-              <Link
-                key={product.key}
-                href={product.href}
-                className="group relative flex min-h-[122px] overflow-hidden rounded-[2px] bg-[#F0F0F2] p-4 transition-shadow hover:shadow-[0_16px_34px_rgba(0,0,0,0.12)]"
-              >
-                <span className="relative z-10 max-w-[52%] font-heading text-[16px] font-semibold leading-[22px] text-black">
-                  {product.label}
-                </span>
-
-                {product.image && (
-                  <Image
-                    src={product.image}
-                    alt={product.label}
-                    width={190}
-                    height={110}
-                    className="absolute bottom-2 right-2 max-h-[92px] w-[54%] object-contain transition-transform group-hover:scale-105"
-                    sizes="190px"
-                  />
-                )}
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <div className="flex h-full items-center justify-center rounded-[2px] bg-[#F0F0F2] text-[15px] text-black/45">
-            No products found
-          </div>
-        )}
+                  {product.image && (
+                    <Image
+                      src={product.image}
+                      alt={product.label}
+                      width={190}
+                      height={110}
+                      className="absolute bottom-2 right-2 max-h-[92px] w-[54%] object-contain transition-transform group-hover:scale-105"
+                      sizes="190px"
+                    />
+                  )}
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="flex h-full items-center justify-center rounded-[2px] bg-[#F0F0F2] text-[15px] text-black/45">
+              No products found
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

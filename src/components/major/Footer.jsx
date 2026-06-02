@@ -198,7 +198,7 @@ export default async function Footer() {
               {footer.productLinks.map((item) => (
                 <li key={`${item.label}-${item.url}`} className="border-b border-white/10">
                   <Link href={item.url} target={item.target} className="group flex items-center justify-between gap-6 py-3">
-                    <span className="font-heading text-[30px] leading-[42px] tracking-[-0.6px] text-white md:text-[32px] md:leading-[48px]">
+                    <span className="font-heading text-[28px] leading-[42px] tracking-[-0.6px] text-white md:text-[26px] md:leading-[48px]">
                       {item.label}
                     </span>
                     <Image src="/orange-arrow.svg" alt="" width={15} height={15} className="h-[15px] w-[15px] transition-transform group-hover:translate-x-1" />

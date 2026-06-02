@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useQuoteCart } from "./QuoteCartProvider";
@@ -16,12 +17,15 @@ function ProductImage({ src, alt }) {
   if (!src) return <div className="h-full w-full rounded-[6px] bg-white" />;
 
   return (
-    <img
-      src={src}
-      alt={alt}
-      className="h-full w-full rounded-[6px] bg-white object-contain p-2"
-      loading="lazy"
-    />
+    <div className="relative h-full w-full rounded-[6px] bg-white">
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes="90px"
+        className="object-contain p-2"
+      />
+    </div>
   );
 }
 

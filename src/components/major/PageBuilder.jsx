@@ -14,6 +14,7 @@ const TeamSection = dynamic(() => import("../sections/content-sections/TeamSecti
 const InnerCaseStudy = dynamic(() => import("../sections/case-study/InnerCaseStudy"));
 const HomeServicesSection = dynamic(() => import("../sections/content-sections/HomeServicesSection")); 
 const HomeTankSection = dynamic(() => import("../sections/content-sections/HomeTankSection"));
+const HomeExpertAdviceSection = dynamic(() => import("../sections/content-sections/HomeExpertAdviceSection"));
 const ServiceOverviewSection = dynamic(() => import("../sections/content-sections/service/ServiceOverviewSection"));
 const ServiceProcessSection = dynamic(() => import("../sections/content-sections/service/ServiceProcessSection"));
 const ServiceWhyChooseSection = dynamic(() => import("../sections/content-sections/service/ServiceWhyChooseSection"));
@@ -64,6 +65,8 @@ export default function PageBuilder({
             return <HomeServicesSection key={i} data={block} />;
           case "homepage_tank_section":
             return <HomeTankSection key={i} data={block} />;
+          case "home_expert_advice_section":
+            return <HomeExpertAdviceSection key={i} data={block} />;
           case "service_overview_section":
             return <ServiceOverviewSection key={i} data={block} />;
           case "service_process_section":

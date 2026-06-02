@@ -104,7 +104,7 @@ export default function ProductCategoriesSection({
 
             {hero_title && (
               <h2
-                className="max-w-[560px] text-black text-[42px] leading-[48px] md:text-[52px] md:leading-[60px] font-normal tracking-[-1.04px] font-heading"
+                className="font-heading max-w-[560px] text-[36px] font-normal leading-[44px] tracking-[-0.72px] text-black md:text-[48px] md:leading-[56px] md:tracking-[-0.96px]"
                 dangerouslySetInnerHTML={{ __html: hero_title }}
               />
             )}
