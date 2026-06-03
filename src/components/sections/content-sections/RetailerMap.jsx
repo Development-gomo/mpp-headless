@@ -124,6 +124,16 @@ function escapeJsString(value = "") {
   return String(value).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
 }
 
+function getPhoneHref(phone = "") {
+  const cleaned = String(phone).replace(/[^\d+]/g, "");
+  return cleaned ? `tel:${cleaned}` : "";
+}
+
+function getEmailHref(email = "") {
+  const cleaned = String(email).trim();
+  return cleaned ? `mailto:${cleaned}` : "";
+}
+
 function toRad(deg) {
   return (deg * Math.PI) / 180;
 }
@@ -233,6 +243,8 @@ function buildInfoWindowContent(store) {
   const dist =
     store.distance != null ? `${store.distance.toFixed(2)} Miles` : "";
   const website = store.website ? escapeHtml(store.website) : "";
+  const phoneHref = getPhoneHref(store.phone);
+  const emailHref = getEmailHref(store.email);
 
   return `
     <div style="font-family:system-ui,sans-serif;max-width:280px;padding:8px 4px 4px">
@@ -258,21 +270,25 @@ function buildInfoWindowContent(store) {
       }
       ${
         store.phone
-          ? `<p style="color:#00709E;font-size:12px;margin:4px 0">${escapeHtml(
+          ? `<p style="font-size:12px;margin:4px 0"><span style="display:inline-block;width:16px;color:#445641;font-weight:700">T</span><a href="${escapeHtml(
+              phoneHref
+            )}" style="color:#00709E;text-decoration:none">${escapeHtml(
               store.phone
-            )}</p>`
+            )}</a></p>`
           : ""
       }
       ${
         store.email
-          ? `<p style="color:#444;font-size:12px;margin:3px 0">${escapeHtml(
+          ? `<p style="font-size:12px;margin:3px 0"><span style="display:inline-block;width:16px;color:#445641;font-weight:700">@</span><a href="${escapeHtml(
+              emailHref
+            )}" style="color:#00709E;text-decoration:none">${escapeHtml(
               store.email
-            )}</p>`
+            )}</a></p>`
           : ""
       }
       ${
         store.workingHours
-          ? `<p style="color:#444;font-size:12px;margin:4px 0">${escapeHtml(
+          ? `<p style="color:#444;font-size:12px;margin:4px 0"><span style="display:inline-block;width:16px;color:#445641;font-weight:700">H</span>${escapeHtml(
               store.workingHours
             )}</p>`
           : ""
@@ -537,6 +553,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
         const leg = result.routes[0].legs[0];
         setDirectionSummary({
           from: leg.start_address,
+          to: leg.end_address,
           distance: leg.distance.text,
           duration: leg.duration.text,
         });
@@ -544,7 +561,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
           leg.steps.map((step, index) => ({
             id: `${index}-${step.distance.text}`,
             index: index + 1,
-            html: step.html_instructions,
+            html: step.instructions || step.html_instructions || "",
             distance: step.distance.text,
           }))
         );
@@ -623,27 +640,46 @@ export default function RetailerMap({ stores: rawStores = [] }) {
         )}
 
         {directionSummary ? (
-          <div className="flex-1 overflow-y-auto bg-white p-5">
-            <p className="mb-1 text-sm text-gray-500">{directionSummary.from}</p>
-            <p className="mb-4 text-sm font-medium text-gray-800">
-              {directionSummary.distance} - Approximately{" "}
-              {directionSummary.duration}
-            </p>
-            <ol className="space-y-0">
+          <div className="flex-1 overflow-y-auto bg-white">
+            <div className="border-b border-black/10 bg-[#F7F7F4] p-5">
+              <p className="mb-2 text-[12px] font-medium uppercase tracking-[0.56px] text-[var(--color-accent)]">
+                Route
+              </p>
+              <p className="text-[14px] leading-[20px] text-[#5A5D66]">
+                {directionSummary.from}
+              </p>
+              {directionSummary.to && (
+                <p className="mt-1 text-[14px] leading-[20px] text-[#5A5D66]">
+                  to {directionSummary.to}
+                </p>
+              )}
+              <p className="mt-4 text-[20px] font-medium leading-[26px] tracking-[-0.4px] text-black [font-family:var(--font-heading)]">
+                {directionSummary.distance} - Approximately{" "}
+                {directionSummary.duration}
+              </p>
+              <button
+                onClick={handleReset}
+                className="mt-4 inline-flex items-center gap-2 rounded-[4px] border border-black/15 bg-white px-4 py-2 text-[13px] font-medium text-[#1A1A1A] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] [font-family:var(--font-heading)]"
+              >
+                Back to retailers
+              </button>
+            </div>
+
+            <ol className="divide-y divide-black/10">
               {directionSteps.map((step) => (
                 <li
                   key={step.id}
-                  className="flex items-start justify-between gap-3 border-b border-gray-100 py-2 text-sm"
+                  className="grid grid-cols-[28px_1fr_auto] items-start gap-3 px-5 py-4 text-[14px] leading-[20px]"
                 >
-                  <div className="flex gap-2">
-                    <span className="shrink-0 font-medium text-gray-400">
-                      {step.index}.
-                    </span>
-                    <span
-                      className="text-gray-700"
-                      dangerouslySetInnerHTML={{ __html: step.html }}
-                    />
-                  </div>
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#445641] text-[12px] font-semibold text-white">
+                    {step.index}
+                  </span>
+                  <span
+                    className="min-w-0 text-[#1A1A1A] [&_b]:font-semibold"
+                    dangerouslySetInnerHTML={{
+                      __html: step.html || "Continue on the route",
+                    }}
+                  />
                   <span className="shrink-0 font-semibold text-[var(--color-accent)]">
                     {step.distance}
                   </span>
