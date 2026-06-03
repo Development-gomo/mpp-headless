@@ -351,6 +351,53 @@ export async function getCaseStudies({ language } = {}) {
   return Array.isArray(data) ? data : [];
 }
 
+// Stores — requires context=edit + Basic Auth because the ACF field group has show_in_rest: 0
+export async function getStores({ language } = {}) {
+  const user = process.env.WP_API_USER;
+  const pass = process.env.WP_API_PASS;
+
+  if (!user || !pass) {
+    console.warn("[getStores] credentials missing - returning []");
+    return [];
+  }
+
+  let token;
+  try {
+    token = Buffer.from(`${user}:${pass}`).toString("base64");
+  } catch (e) {
+    console.error("[getStores] Buffer.from failed:", e.message);
+    return [];
+  }
+
+  const wpBaseUrl = getWPBaseUrl();
+  const endpoint = withParams("/wp/v2/store", {
+    per_page: 100,
+    acf_format: "standard",
+    context: "edit",
+    ...(language && language !== DEFAULT_LANGUAGE ? { wpml_language: language } : {}),
+  });
+  const url = `${wpBaseUrl}/wp-json${endpoint}`;
+
+  try {
+    const res = await fetch(url, {
+      headers: { Authorization: `Basic ${token}` },
+      next: { revalidate: 10 },
+    });
+
+    if (!res.ok) {
+      const body = await res.text();
+      console.warn("[getStores] error body:", body.slice(0, 300));
+      return [];
+    }
+
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch (err) {
+    console.error("[getStores] fetch threw:", err.name, err.message);
+    return [];
+  }
+}
+
 // Teams
 
 export async function getTeams({ language } = {}) {

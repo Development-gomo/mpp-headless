@@ -19,6 +19,7 @@ const ServiceOverviewSection = dynamic(() => import("../sections/content-section
 const ServiceProcessSection = dynamic(() => import("../sections/content-sections/service/ServiceProcessSection"));
 const ServiceWhyChooseSection = dynamic(() => import("../sections/content-sections/service/ServiceWhyChooseSection"));
 const ServiceMaintenanceGuideSection = dynamic(() => import("../sections/content-sections/service/ServiceMaintenanceGuideSection"));
+const FindRetailerSection = dynamic(() => import("../sections/content-sections/FindRetailerSection"));
 
 export default function PageBuilder({
   sections = [],
@@ -26,6 +27,7 @@ export default function PageBuilder({
   posts = [],
   caseStudies = [],
   teams = [],
+  stores = [],
   language,
 }) {
   if (!sections?.length) return null;
@@ -75,6 +77,8 @@ export default function PageBuilder({
             return <ServiceWhyChooseSection key={i} data={block} />;
           case "service_maintenance_guide_section":
             return <ServiceMaintenanceGuideSection key={i} data={block} />;
+          case "find_retailer_section":
+            return <FindRetailerSection key={i} data={block} stores={stores} />;
 
           default:
             return null;

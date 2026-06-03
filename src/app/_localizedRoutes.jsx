@@ -30,6 +30,7 @@ import {
   getProductsByCategory,
   getThemeOptions,
   getTeams,
+  getStores,
 } from "@/lib/api";
 import { getProductCategories as getProductTerms } from "@/components/sections/product/productUtils";
 import { resolveParams } from "@/lib/params";
@@ -37,6 +38,12 @@ import { buildMetadataFromYoast } from "@/lib/seo";
 
 function getCategoryId(category) {
   return category?.term_id || category?.id;
+}
+
+function hasPageBuilderSection(page, layoutName) {
+  return Array.isArray(page?.acf?.page_builder)
+    ? page.acf.page_builder.some((section) => section?.acf_fc_layout === layoutName)
+    : false;
 }
 
 function getCategoryParentId(category) {
@@ -103,12 +110,14 @@ export async function renderHomePage(language) {
   const page = await getPageBySlug("frontpage", { language });
   if (!page) notFound();
 
-  const [categoriesWithImages, latestPosts, latestCaseStudies, teams] =
+  const shouldLoadStores = hasPageBuilderSection(page, "find_retailer_section");
+  const [categoriesWithImages, latestPosts, latestCaseStudies, teams, stores] =
     await Promise.all([
       getProductCategoriesWithImages({ language }),
       getLatestPosts({ language }),
       getLatestCaseStudies({ language }),
       getTeams({ language }),
+      shouldLoadStores ? getStores({ language }) : [],
     ]);
 
   return (
@@ -125,6 +134,7 @@ export async function renderHomePage(language) {
           posts={latestPosts}
           caseStudies={latestCaseStudies}
           teams={teams}
+          stores={stores}
           language={language}
         />
       </main>
@@ -236,10 +246,12 @@ export async function renderDynamicPage(params, language) {
     );
   }
 
-  const [latestPosts, latestCaseStudies, teams] = await Promise.all([
+  const shouldLoadStores = hasPageBuilderSection(page, "find_retailer_section");
+  const [latestPosts, latestCaseStudies, teams, stores] = await Promise.all([
     getLatestPosts({ language }),
     getLatestCaseStudies({ language }),
     getTeams({ language }),
+    shouldLoadStores ? getStores({ language }) : [],
   ]);
 
   return (
@@ -260,6 +272,7 @@ export async function renderDynamicPage(params, language) {
           posts={latestPosts}
           caseStudies={latestCaseStudies}
           teams={teams}
+          stores={stores}
           language={language}
         />
       </main>
