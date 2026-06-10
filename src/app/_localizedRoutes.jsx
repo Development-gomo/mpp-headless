@@ -111,13 +111,15 @@ export async function renderHomePage(language) {
   if (!page) notFound();
 
   const shouldLoadStores = hasPageBuilderSection(page, "find_retailer_section");
-  const [categoriesWithImages, latestPosts, latestCaseStudies, teams, stores] =
+  const shouldLoadPartners = hasPageBuilderSection(page, "partner_logo");
+  const [categoriesWithImages, latestPosts, latestCaseStudies, teams, stores, themeOptions] =
     await Promise.all([
       getProductCategoriesWithImages({ language }),
       getLatestPosts({ language }),
       getLatestCaseStudies({ language }),
       getTeams({ language }),
       shouldLoadStores ? getStores({ language }) : [],
+      shouldLoadPartners ? getThemeOptions({ language }) : {},
     ]);
 
   return (
@@ -135,6 +137,7 @@ export async function renderHomePage(language) {
           caseStudies={latestCaseStudies}
           teams={teams}
           stores={stores}
+          themeOptions={themeOptions}
           language={language}
         />
       </main>
@@ -247,11 +250,13 @@ export async function renderDynamicPage(params, language) {
   }
 
   const shouldLoadStores = hasPageBuilderSection(page, "find_retailer_section");
-  const [latestPosts, latestCaseStudies, teams, stores] = await Promise.all([
+  const shouldLoadPartners = hasPageBuilderSection(page, "partner_logo");
+  const [latestPosts, latestCaseStudies, teams, stores, themeOptions] = await Promise.all([
     getLatestPosts({ language }),
     getLatestCaseStudies({ language }),
     getTeams({ language }),
     shouldLoadStores ? getStores({ language }) : [],
+    shouldLoadPartners ? getThemeOptions({ language }) : {},
   ]);
 
   return (
@@ -273,6 +278,7 @@ export async function renderDynamicPage(params, language) {
           caseStudies={latestCaseStudies}
           teams={teams}
           stores={stores}
+          themeOptions={themeOptions}
           language={language}
         />
       </main>

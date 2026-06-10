@@ -17,6 +17,7 @@ import {
   getTeams,
   getAuthorCards,
   getProductById,
+  getThemeOptions,
 } from "@/lib/api";
 import { buildMetadataFromYoast } from "@/lib/seo";
 import { DEFAULT_LANGUAGE } from "@/lib/i18n";
@@ -131,10 +132,14 @@ export default async function DynamicPage({ params }) {
     );
   }
 
-  const [latestPosts, latestCaseStudies, teams] = await Promise.all([
+  const hasPartners = page?.acf?.page_builder?.some(
+    (section) => section?.acf_fc_layout === "partner_logo"
+  );
+  const [latestPosts, latestCaseStudies, teams, themeOptions] = await Promise.all([
     getLatestPosts({ language: DEFAULT_LANGUAGE }),
     getLatestCaseStudies({ language: DEFAULT_LANGUAGE }),
     getTeams({ language: DEFAULT_LANGUAGE }),
+    hasPartners ? getThemeOptions({ language: DEFAULT_LANGUAGE }) : {},
   ]);
 
   return (
@@ -155,6 +160,7 @@ export default async function DynamicPage({ params }) {
           posts={latestPosts}
           caseStudies={latestCaseStudies}
           teams={teams}
+          themeOptions={themeOptions}
           language={DEFAULT_LANGUAGE}
         />
       </main>

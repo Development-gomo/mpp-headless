@@ -209,8 +209,8 @@ export default function TeamSection({ data, teams = [] }) {
   return (
     <section
       id={custom_id || undefined}
-      className={`relative bg-[#F1F1F3] ${custom_class || ""}`}
-      style={background_color ? { backgroundColor: background_color } : {}}
+      className={`relative ${custom_class || ""}`}
+      style={background_color ? { backgroundColor: background_color } : undefined}
     >
       <div className="web-width px-6 py-20 md:py-[110px]">
         <div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-20">

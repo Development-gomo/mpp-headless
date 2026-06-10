@@ -2,7 +2,7 @@ import Header from "@/components/major/Header";
 import PageBuilder from "@/components/major/PageBuilder";
 import Footer from "@/components/major/Footer";
 import BodyClass from "@/components/BodyClass";
-import { getPageBySlug, getProductCategoriesWithImages, getLatestPosts, getLatestCaseStudies, getTeams } from "@/lib/api";
+import { getPageBySlug, getProductCategoriesWithImages, getLatestPosts, getLatestCaseStudies, getTeams, getThemeOptions } from "@/lib/api";
 import { buildMetadataFromYoast } from "@/lib/seo";
 import { DEFAULT_LANGUAGE } from "@/lib/i18n";
 import { notFound } from "next/navigation";
@@ -28,12 +28,16 @@ export default async function HomePage() {
   const page = await getPage();
   if (!page) notFound();
 
-  const [categoriesWithImages, latestPosts, latestCaseStudies, teams] =
+  const hasPartners = page?.acf?.page_builder?.some(
+    (section) => section?.acf_fc_layout === "partner_logo"
+  );
+  const [categoriesWithImages, latestPosts, latestCaseStudies, teams, themeOptions] =
     await Promise.all([
       getProductCategoriesWithImages({ language: DEFAULT_LANGUAGE }),
       getLatestPosts({ language: DEFAULT_LANGUAGE }),
       getLatestCaseStudies({ language: DEFAULT_LANGUAGE }),
       getTeams({ language: DEFAULT_LANGUAGE }),
+      hasPartners ? getThemeOptions({ language: DEFAULT_LANGUAGE }) : {},
     ]);
   return (
     <>
@@ -53,6 +57,7 @@ export default async function HomePage() {
           posts={latestPosts}
           caseStudies={latestCaseStudies}
           teams={teams}
+          themeOptions={themeOptions}
           language={DEFAULT_LANGUAGE}
         />
       </main>

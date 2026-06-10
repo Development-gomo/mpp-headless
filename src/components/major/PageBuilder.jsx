@@ -11,6 +11,8 @@ const ProductCategoriesSection = dynamic(() => import("../sections/content-secti
 const LatestBlogsSection = dynamic(() => import("../sections/content-sections/LatestBlogsSection"));
 const LatestCaseStudiesSection = dynamic(() => import("../sections/content-sections/LatestCaseStudiesSection"));
 const TeamSection = dynamic(() => import("../sections/content-sections/TeamSection"));
+const HistorySection = dynamic(() => import("../sections/content-sections/HistorySection"));
+const PartnerReviewSection = dynamic(() => import("../sections/content-sections/PartnerReviewSection"));
 const InnerCaseStudy = dynamic(() => import("../sections/case-study/InnerCaseStudy"));
 const HomeServicesSection = dynamic(() => import("../sections/content-sections/HomeServicesSection")); 
 const HomeTankSection = dynamic(() => import("../sections/content-sections/HomeTankSection"));
@@ -20,6 +22,7 @@ const ServiceProcessSection = dynamic(() => import("../sections/content-sections
 const ServiceWhyChooseSection = dynamic(() => import("../sections/content-sections/service/ServiceWhyChooseSection"));
 const ServiceMaintenanceGuideSection = dynamic(() => import("../sections/content-sections/service/ServiceMaintenanceGuideSection"));
 const FindRetailerSection = dynamic(() => import("../sections/content-sections/FindRetailerSection"));
+const FullWidthContentSection = dynamic(() => import("../sections/content-sections/FullWidthContentSection"));
 
 export default function PageBuilder({
   sections = [],
@@ -28,6 +31,7 @@ export default function PageBuilder({
   caseStudies = [],
   teams = [],
   stores = [],
+  themeOptions = {},
   language,
 }) {
   if (!sections?.length) return null;
@@ -61,6 +65,10 @@ export default function PageBuilder({
             return <LatestCaseStudiesSection key={i} data={block} caseStudies={caseStudies} />;
           case "team_section":
             return <TeamSection key={i} data={block} teams={teams} />;
+          case "history_section":
+            return <HistorySection key={i} data={block} />;
+          case "partner_logo":
+            return <PartnerReviewSection key={i} data={block} themeOptions={themeOptions} />;
           case "inner_case_studies":
             return <InnerCaseStudy key={i} data={block} caseStudies={caseStudies} />;
           case "home_services_section":
@@ -79,6 +87,10 @@ export default function PageBuilder({
             return <ServiceMaintenanceGuideSection key={i} data={block} />;
           case "find_retailer_section":
             return <FindRetailerSection key={i} data={block} stores={stores} />;
+          // Keep the misspelled live ACF layout slug until it is corrected in WordPress.
+          case "full_with_content_section":
+          case "full_width_content_section":
+            return <FullWidthContentSection key={i} data={block} />;
 
           default:
             return null;
