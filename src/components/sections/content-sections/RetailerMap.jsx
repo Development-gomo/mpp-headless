@@ -619,12 +619,12 @@ export default function RetailerMap({ stores: rawStores = [] }) {
               onKeyDown={(event) => {
                 if (event.key === "Enter") handleSearchLocation();
               }}
-              className="h-12 min-w-0 flex-1 rounded-[4px] border border-black/15 bg-white px-4 text-[15px] text-[#1A1A1A] outline-none transition-colors placeholder:text-[#6f7280] focus:border-[var(--color-accent)]"
+              className="h-12 min-w-0 flex-1 rounded-sm border border-black/15 bg-white px-4 text-[15px] text-[#1A1A1A] outline-none transition-colors placeholder:text-[#6f7280] focus:border-[var(--color-accent)]"
             />
             <button
               aria-label="Search"
               onClick={handleSearchLocation}
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[4px] bg-[image:var(--mpp-gradient)] text-white transition-opacity hover:opacity-90"
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-sm bg-[image:var(--mpp-gradient)] text-white transition-opacity hover:opacity-90"
             >
               <FiSearch className="h-5 w-5" />
             </button>
@@ -659,7 +659,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
               </p>
               <button
                 onClick={handleReset}
-                className="mt-4 inline-flex items-center gap-2 rounded-[4px] border border-black/15 bg-white px-4 py-2 text-[13px] font-medium text-[#1A1A1A] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] [font-family:var(--font-heading)]"
+                className="mt-4 inline-flex items-center gap-2 rounded-sm border border-black/15 bg-white px-4 py-2 text-[13px] font-medium text-[#1A1A1A] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] [font-family:var(--font-heading)]"
               >
                 Back to retailers
               </button>
@@ -700,7 +700,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
                     <h4 className="text-[20px] font-medium leading-[26px] tracking-[-0.4px] text-black [font-family:var(--font-heading)]">
                     {store.name || "Store"}
                     </h4>
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[4px] bg-[#445641] text-white">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm bg-[#445641] text-white">
                       <FiMapPin className="h-4 w-4" />
                     </span>
                   </div>
@@ -740,7 +740,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
                         setDirectionsModal(store);
                         setFromAddress("");
                       }}
-                      className="inline-flex items-center gap-2 rounded-[4px] bg-[#445641] px-4 py-2 text-[13px] font-medium text-white transition-opacity hover:opacity-90 [font-family:var(--font-heading)]"
+                      className="inline-flex items-center gap-2 rounded-sm bg-[#445641] px-4 py-2 text-[13px] font-medium text-white transition-opacity hover:opacity-90 [font-family:var(--font-heading)]"
                     >
                       <FiNavigation className="h-3.5 w-3.5" />
                       Directions
@@ -752,7 +752,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(event) => event.stopPropagation()}
-                        className="inline-flex items-center gap-2 rounded-[4px] border border-black/15 bg-white px-4 py-2 text-[13px] font-medium text-[#1A1A1A] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] [font-family:var(--font-heading)]"
+                        className="inline-flex items-center gap-2 rounded-sm border border-black/15 bg-white px-4 py-2 text-[13px] font-medium text-[#1A1A1A] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] [font-family:var(--font-heading)]"
                       >
                         <FiExternalLink className="h-3.5 w-3.5" />
                         Homepage
@@ -786,7 +786,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
 
         <button
           onClick={handleReset}
-          className="absolute right-4 top-4 z-20 inline-flex items-center gap-2 rounded-[4px] border border-black/10 bg-white px-4 py-3 text-[13px] font-medium text-[#1A1A1A] shadow-[0_10px_30px_rgba(0,0,0,0.12)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] [font-family:var(--font-heading)]"
+          className="absolute right-4 top-4 z-20 inline-flex items-center gap-2 rounded-sm border border-black/10 bg-white px-4 py-3 text-[13px] font-medium text-[#1A1A1A] shadow-[0_10px_30px_rgba(0,0,0,0.12)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] [font-family:var(--font-heading)]"
         >
           <FiArrowUpRight className="h-4 w-4" />
           Reset Map

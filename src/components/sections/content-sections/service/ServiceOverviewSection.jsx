@@ -48,7 +48,7 @@ export default function ServiceOverviewSection({ data }) {
               <div className="mb-6 flex items-center gap-2">
                 <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
 
-                <p className="font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-[#1A1A1A]">
+                <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A]">
                   {text_above_title}
                 </p>
               </div>
@@ -63,7 +63,7 @@ export default function ServiceOverviewSection({ data }) {
 
             {hero_description && (
               <div
-                className="mt-8 max-w-[620px] font-body text-[16px] font-normal leading-[24px] text-[#1A1A1A]"
+                className="mt-8 max-w-[620px] font-body text-[16px] font-normal leading-6 text-[#1A1A1A]"
                 dangerouslySetInnerHTML={{ __html: hero_description }}
               />
             )}
@@ -78,7 +78,7 @@ export default function ServiceOverviewSection({ data }) {
               <div className="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
                 {overview_pointers.map((item, index) => (
                   <div key={index} className="flex items-center gap-4">
-                    <span className="flex h-[28px] w-[28px] shrink-0 items-center justify-center rounded-[2px] bg-[var(--color-yellow)]">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[2px] bg-[var(--color-yellow)]">
                       <Image
                         src="/energy-orange-white-ico.svg"
                         alt=""
@@ -88,7 +88,7 @@ export default function ServiceOverviewSection({ data }) {
                       />
                     </span>
 
-                    <p className="font-body text-[16px] font-normal leading-[24px] text-[#1A1A1A]">
+                    <p className="font-body text-[16px] font-normal leading-6 text-[#1A1A1A]">
                       {item?.list_title || item?.overview_pointer || item?.text}
                     </p>
                   </div>
@@ -105,8 +105,8 @@ export default function ServiceOverviewSection({ data }) {
                     target={btn.button_target || undefined}
                     className={
                       index === 0
-                        ? "group inline-flex items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
-                        : "group inline-flex items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
+                        ? "group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+                        : "group inline-flex items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
                     }
                   >
                     <span>{btn.button_label}</span>
@@ -126,7 +126,7 @@ export default function ServiceOverviewSection({ data }) {
 
           {/* RIGHT IMAGE */}
           {heroImg && (
-            <div className="relative h-[320px] overflow-hidden rounded-[4px] md:h-[460px] lg:h-[520px]">
+            <div className="relative h-[320px] overflow-hidden rounded-sm md:h-[460px] lg:h-[520px]">
               <Image
                 src={heroImg}
                 alt={hero_title || "Service overview image"}

@@ -94,16 +94,16 @@ export default function HeroBannerWithFeatures({ data }) {
           features?.length > 0 ? "md:pb-48" : "md:pb-24"
         }`}
       >
-        <div className="max-w-4xl flex flex-col gap-6 md:gap-8">
+        <div className="max-w-4xl flex flex-col gap-6 md:gap-8 lg:mb-24">
           {hero_title && (
-            <h1 className="text-[42px] leading-[1.05] tracking-[-1px] sm:text-[56px] lg:text-[84px] font-normal font-heading text-white max-w-[900px]">
+            <h1 className="text-[42px] leading-[1.05] tracking-[-1px] sm:text-[56px] lg:text-[80px] lg:mt-24 font-normal font-heading text-white max-w-225">
               {hero_title}
             </h1>
           )}
 
           {hero_description && (
             <div
-              className="text-white text-[16px] leading-[24px] md:text-[18px] md:leading-[30px] max-w-[620px] font-body"
+              className="text-white text-[16px] leading-6 md:text-[18px] md:leading-7.5 max-w-155 font-body"
               dangerouslySetInnerHTML={{ __html: hero_description }}
             />
           )}
@@ -117,8 +117,8 @@ export default function HeroBannerWithFeatures({ data }) {
                   target={typeof btn.button_link === "object" ? btn.button_link?.target : undefined}
                   className={
                     i === 0
-                      ? "inline-flex w-fit justify-end items-center gap-4 py-[6px] pr-[6px] pl-6 rounded-[4px] bg-[image:var(--mpp-gradient)] text-white font-heading text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"
-                      : "inline-flex w-fit justify-end items-center gap-4 py-[6px] pr-[6px] pl-6 rounded-[4px] bg-[#445641] text-white font-heading text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"
+                      ? "inline-flex w-fit justify-end items-center gap-4 py-1.5 pr-1.5 pl-6 rounded-sm bg-[image:var(--mpp-gradient)] text-white font-heading text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"
+                      : "inline-flex w-fit justify-end items-center gap-4 py-1.5 pr-1.5 pl-6 rounded-sm bg-[#445641] text-white font-heading text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"
                   }
                 >
                   <span>{btn.button_label}</span>
@@ -128,7 +128,7 @@ export default function HeroBannerWithFeatures({ data }) {
                     alt=""
                     width={36}
                     height={36}
-                    className="w-[36px] h-auto object-contain transition-transform group-hover:translate-x-1"
+                    className="w-9 h-auto object-contain transition-transform group-hover:translate-x-1"
                   />
                 </Link>
               ))}
@@ -152,7 +152,7 @@ export default function HeroBannerWithFeatures({ data }) {
                       type="button"
                       key={index}
                       onClick={() => setActiveFeature(index)}
-                      className={`group relative text-left flex items-start gap-4 py-6 min-h-[128px] lg:flex-col lg:gap-3 lg:px-0
+                      className={`group relative text-left flex items-start gap-4 py-6 min-h-32 lg:flex-col lg:gap-3 lg:px-0
                         ${index !== features.length - 1 ? "border-b border-white/10 lg:border-b-0" : ""}
                       `}
                     >
@@ -179,7 +179,7 @@ export default function HeroBannerWithFeatures({ data }) {
                             alt=""
                             height={28}
                             width={28}
-                            className="mt-1 h-[28px] w-[28px] object-contain"
+                            className="mt-1 h-7 w-7 object-contain"
                           />
                         ) : (
                           <span className="mt-1 text-[28px] leading-none text-[var(--color-yellow)]">
@@ -189,7 +189,7 @@ export default function HeroBannerWithFeatures({ data }) {
 
                         {feature.feature_text && (
                           <div
-                            className="text-white text-[16px] leading-[24px] font-normal max-w-[220px] font-body"
+                            className="text-white text-[16px] leading-6 font-normal max-w-[220px] font-body"
                             dangerouslySetInnerHTML={{
                               __html: feature.feature_text,
                             }}

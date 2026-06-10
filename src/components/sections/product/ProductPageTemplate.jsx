@@ -22,7 +22,7 @@ function ProductAnchorNav() {
           <a
             key={link.href}
             href={link.href}
-            className={`relative shrink-0 py-7 font-body text-[16px] leading-[24px] transition-colors hover:text-white/80 md:text-[20px] ${
+            className={`relative shrink-0 py-7 font-body text-[16px] leading-6 transition-colors hover:text-white/80 md:text-[20px] ${
               index === 0 ? "after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-[var(--color-yellow)]" : ""
             }`}
           >

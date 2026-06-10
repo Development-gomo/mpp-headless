@@ -103,9 +103,9 @@ export default function AuthorCardSection({
   return (
     <section className="bg-white px-6 pb-8">
       <div className="web-width">
-        <article className="ml-auto grid max-w-[870px] gap-6 rounded-[4px] bg-[#00709e] p-5 md:grid-cols-[140px_1fr] md:p-6">
+        <article className="ml-auto grid max-w-[870px] gap-6 rounded-sm bg-[#00709e] p-5 md:grid-cols-[140px_1fr] md:p-6">
           {image && (
-            <div className="relative h-[140px] w-[140px] overflow-hidden rounded-[4px] bg-white">
+            <div className="relative h-[140px] w-[140px] overflow-hidden rounded-sm bg-white">
               <Image
                 src={image}
                 alt={stripHtml(title) || "Author"}
@@ -132,7 +132,7 @@ export default function AuthorCardSection({
 
             {description && (
               <div
-                className="mt-4 text-[15px] font-normal leading-[24px] text-white/90 [font-family:var(--font-nunito-sans)]"
+                className="mt-4 text-[15px] font-normal leading-6 text-white/90 [font-family:var(--font-nunito-sans)]"
                 dangerouslySetInnerHTML={{ __html: description }}
               />
             )}

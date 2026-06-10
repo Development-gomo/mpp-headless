@@ -88,7 +88,7 @@ export default function ServiceWhyChooseSection({ data }) {
             <div className="mb-6 flex items-center gap-2">
               <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
 
-              <p className="font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-white">
+              <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-white">
                 {text_above_title}
               </p>
             </div>
@@ -103,7 +103,7 @@ export default function ServiceWhyChooseSection({ data }) {
 
           {hero_description && (
             <div
-              className="mt-6 max-w-[540px] font-body text-[16px] font-normal leading-[24px] text-white"
+              className="mt-6 max-w-[540px] font-body text-[16px] font-normal leading-6 text-white"
               dangerouslySetInnerHTML={{ __html: hero_description }}
             />
           )}
@@ -117,8 +117,8 @@ export default function ServiceWhyChooseSection({ data }) {
                   target={btn.button_target || undefined}
                   className={
                     index === 0
-                      ? "group inline-flex items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
-                      : "group inline-flex items-center gap-4 rounded-[4px] bg-white/10 py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+                      ? "group inline-flex items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
+                      : "group inline-flex items-center gap-4 rounded-sm bg-white/10 py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
                   }
                 >
                   <span>{btn.button_label}</span>
@@ -170,7 +170,7 @@ export default function ServiceWhyChooseSection({ data }) {
 
                   {item?.pointer_description && (
                     <div
-                      className="font-body text-[16px] font-normal leading-[24px] text-white"
+                      className="font-body text-[16px] font-normal leading-6 text-white"
                       dangerouslySetInnerHTML={{
                         __html: item.pointer_description,
                       }}

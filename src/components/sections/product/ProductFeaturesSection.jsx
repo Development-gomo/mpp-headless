@@ -165,7 +165,7 @@ export default function ProductFeaturesSection({ product, language = DEFAULT_LAN
               key={filter}
               type="button"
               onClick={() => setActiveFilter(filter)}
-              className={`h-[40px] min-w-[66px] rounded-[4px] border px-5 font-body text-[13px] leading-[18px] transition-colors ${
+              className={`h-[40px] min-w-[66px] rounded-sm border px-5 font-body text-[13px] leading-[18px] transition-colors ${
                 activeFilter === filter
                   ? "border-[var(--color-yellow)] bg-[var(--color-yellow)] text-black"
                   : "border-[var(--color-yellow)] bg-white text-black hover:bg-[var(--color-yellow)]/10"

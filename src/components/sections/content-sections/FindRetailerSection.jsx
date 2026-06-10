@@ -53,7 +53,7 @@ export default function FindRetailerSection({ data = {}, stores = [] }) {
           {text_above_title && (
             <div className="mb-4 flex items-center gap-2">
               <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
-              <p className="text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-[#1A1A1A] [font-family:var(--font-body)]">
+              <p className="text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A] [font-family:var(--font-body)]">
                 {text_above_title}
               </p>
             </div>
@@ -68,7 +68,7 @@ export default function FindRetailerSection({ data = {}, stores = [] }) {
 
           {hero_description && (
             <div
-              className="mt-4 max-w-155 text-[16px] font-normal leading-[24px] text-[#1A1A1A] [font-family:var(--font-body)]"
+              className="mt-4 max-w-155 text-[16px] font-normal leading-6 text-[#1A1A1A] [font-family:var(--font-body)]"
               dangerouslySetInnerHTML={{ __html: hero_description }}
             />
           )}

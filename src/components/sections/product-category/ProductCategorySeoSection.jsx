@@ -52,7 +52,7 @@ export default function ProductCategorySeoSection({ category }) {
               <div className="mb-6 flex items-center gap-2">
                 <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
 
-                <p className="font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-white">
+                <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-white">
                   {aboveTitle}
                 </p>
               </div>
@@ -67,7 +67,7 @@ export default function ProductCategorySeoSection({ category }) {
 
             {content && (
               <div
-                className="mt-8 max-w-[620px] font-body text-[16px] font-normal leading-[24px] text-white"
+                className="mt-8 max-w-[620px] font-body text-[16px] font-normal leading-6 text-white"
                 dangerouslySetInnerHTML={{ __html: content }}
               />
             )}
@@ -85,7 +85,7 @@ export default function ProductCategorySeoSection({ category }) {
 
               return (
                 <div key={index} className="border-t border-white/20 pt-6">
-                  <span className="mb-6 block font-body text-[14px] leading-[24px] text-white">
+                  <span className="mb-6 block font-body text-[14px] leading-6 text-white">
                     [{number}]
                   </span>
 
@@ -97,7 +97,7 @@ export default function ProductCategorySeoSection({ category }) {
 
                   {feature?.feature_text && (
                     <div
-                      className="max-w-[360px] font-body text-[16px] font-normal leading-[24px] text-white"
+                      className="max-w-[360px] font-body text-[16px] font-normal leading-6 text-white"
                       dangerouslySetInnerHTML={{
                         __html: feature.feature_text,
                       }}

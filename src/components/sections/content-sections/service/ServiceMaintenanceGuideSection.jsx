@@ -76,7 +76,7 @@ export default function ServiceMaintenanceGuideSection({ data }) {
           {text_above_title && (
             <div className="mb-6 flex items-center gap-2">
               <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
-              <p className="font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-[#1A1A1A]">
+              <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A]">
                 {text_above_title}
               </p>
             </div>
@@ -91,7 +91,7 @@ export default function ServiceMaintenanceGuideSection({ data }) {
 
           {hero_description && (
             <div
-              className="mt-6 font-body text-[16px] font-normal leading-[24px] text-[#1A1A1A]"
+              className="mt-6 font-body text-[16px] font-normal leading-6 text-[#1A1A1A]"
               dangerouslySetInnerHTML={{ __html: hero_description }}
             />
           )}
@@ -139,7 +139,7 @@ export default function ServiceMaintenanceGuideSection({ data }) {
                         )}
 
                         {item?.pointer_below_title && (
-                            <p className="font-body text-[16px] font-normal leading-[24px] text-black">
+                            <p className="font-body text-[16px] font-normal leading-6 text-black">
                             {item.pointer_below_title}
                             </p>
                         )}
@@ -153,7 +153,7 @@ export default function ServiceMaintenanceGuideSection({ data }) {
 
         {/* Section note */}
         {maintenance_section_note && (
-          <p className="mt-6 font-body text-[16px] font-normal leading-[24px] text-black">
+          <p className="mt-6 font-body text-[16px] font-normal leading-6 text-black">
             {maintenance_section_note}
           </p>
         )}

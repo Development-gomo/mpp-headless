@@ -152,7 +152,7 @@ export default function ProductRelatedProductsSection({
 
           <Link
             href={viewAllHref}
-            className="group inline-flex h-[48px] w-fit items-center gap-4 rounded-[4px] bg-[var(--color-accent)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+            className="group inline-flex h-[48px] w-fit items-center gap-4 rounded-sm bg-[var(--color-accent)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
           >
             <span>View all products</span>
             <Image
@@ -160,7 +160,7 @@ export default function ProductRelatedProductsSection({
               alt=""
               width={36}
               height={36}
-              className="h-[36px] w-[36px] transition-transform group-hover:translate-x-1"
+              className="h-[36px] w-9 transition-transform group-hover:translate-x-1"
             />
           </Link>
         </div>
@@ -184,7 +184,7 @@ export default function ProductRelatedProductsSection({
 
               {activeExcerpt && (
                 <div
-                  className="mb-8 max-w-[420px] font-body text-[16px] leading-[24px] text-[#1A1A1A]"
+                  className="mb-8 max-w-[420px] font-body text-[16px] leading-6 text-[#1A1A1A]"
                   dangerouslySetInnerHTML={{ __html: activeExcerpt }}
                 />
               )}
@@ -232,7 +232,7 @@ export default function ProductRelatedProductsSection({
               <div className="flex flex-wrap gap-4">
                 <Link
                   href="#"
-                  className="group inline-flex items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+                  className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
                 >
                   <span>Find a dealer</span>
                   <Image
@@ -246,7 +246,7 @@ export default function ProductRelatedProductsSection({
 
                 <Link
                   href={activeLink}
-                  className="group inline-flex items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
+                  className="group inline-flex items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
                 >
                   <span>View product</span>
                   <Image
@@ -268,7 +268,7 @@ export default function ProductRelatedProductsSection({
                         prev === 0 ? usableProducts.length - 1 : prev - 1
                       )
                     }
-                    className="flex h-[44px] w-[44px] items-center justify-center rounded-[4px] bg-white transition-opacity hover:opacity-80"
+                    className="flex h-[44px] w-[44px] items-center justify-center rounded-sm bg-white transition-opacity hover:opacity-80"
                     aria-label="Previous product"
                   >
                     <Image
@@ -287,7 +287,7 @@ export default function ProductRelatedProductsSection({
                         prev === usableProducts.length - 1 ? 0 : prev + 1
                       )
                     }
-                    className="flex h-[44px] w-[44px] items-center justify-center rounded-[4px] bg-white transition-opacity hover:opacity-80"
+                    className="flex h-[44px] w-[44px] items-center justify-center rounded-sm bg-white transition-opacity hover:opacity-80"
                     aria-label="Next product"
                   >
                     <Image
@@ -304,7 +304,7 @@ export default function ProductRelatedProductsSection({
 
             <div>
               {usableProducts.length > 1 && (
-                <div className="mb-10 flex flex-wrap justify-start gap-0 rounded-[4px] bg-[#D9DBE7] p-1 lg:ml-auto lg:w-fit">
+                <div className="mb-10 flex flex-wrap justify-start gap-0 rounded-sm bg-[#D9DBE7] p-1 lg:ml-auto lg:w-fit">
                   {usableProducts.map((product, index) => {
                     const isActive = activeIndex === index;
 

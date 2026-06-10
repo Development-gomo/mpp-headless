@@ -39,7 +39,7 @@ function SpecTile({ icon, label, value }) {
   if (!value) return null;
 
   return (
-    <div className="inline-flex min-h-[45px] items-center gap-2 rounded-[4px] border border-[#98C8DA] bg-[#CFE8F1] px-2 py-1">
+    <div className="inline-flex min-h-[45px] items-center gap-2 rounded-sm border border-[#98C8DA] bg-[#CFE8F1] px-2 py-1">
       <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center">
         <Image src={icon} alt="" width={30} height={30} className="h-[30px] w-[30px] object-contain" />
       </span>
@@ -231,7 +231,7 @@ export default function ProductHero({
                   <button
                     type="button"
                     onClick={showPreviousImage}
-                    className="absolute left-4 top-1/2 z-10 flex h-[40px] w-[40px] -translate-y-1/2 items-center justify-center rounded-[4px] bg-[var(--color-accent)] text-white transition-opacity hover:opacity-90"
+                    className="absolute left-4 top-1/2 z-10 flex h-[40px] w-[40px] -translate-y-1/2 items-center justify-center rounded-sm bg-[var(--color-accent)] text-white transition-opacity hover:opacity-90"
                     aria-label="Previous product image"
                   >
                     <span className="text-[28px] leading-none">‹</span>
@@ -239,7 +239,7 @@ export default function ProductHero({
                   <button
                     type="button"
                     onClick={showNextImage}
-                    className="absolute right-4 top-1/2 z-10 flex h-[40px] w-[40px] -translate-y-1/2 items-center justify-center rounded-[4px] bg-[var(--color-accent)] text-white transition-opacity hover:opacity-90"
+                    className="absolute right-4 top-1/2 z-10 flex h-[40px] w-[40px] -translate-y-1/2 items-center justify-center rounded-sm bg-[var(--color-accent)] text-white transition-opacity hover:opacity-90"
                     aria-label="Next product image"
                   >
                     <span className="text-[28px] leading-none">›</span>
@@ -254,7 +254,7 @@ export default function ProductHero({
                   <button
                     type="button"
                     onClick={showPreviousThumbnails}
-                    className="flex h-[44px] w-[36px] shrink-0 items-center justify-center rounded-[4px] border border-[#DDD8CE] bg-white font-heading text-[22px] leading-none text-black transition-colors hover:border-[var(--color-yellow)]"
+                    className="flex h-[44px] w-9 shrink-0 items-center justify-center rounded-sm border border-[#DDD8CE] bg-white font-heading text-[22px] leading-none text-black transition-colors hover:border-[var(--color-yellow)]"
                     aria-label="Show previous gallery thumbnails"
                   >
                     &lt;
@@ -293,7 +293,7 @@ export default function ProductHero({
                   <button
                     type="button"
                     onClick={showNextThumbnails}
-                    className="flex h-[44px] w-[36px] shrink-0 items-center justify-center rounded-[4px] border border-[#DDD8CE] bg-white font-heading text-[22px] leading-none text-black transition-colors hover:border-[var(--color-yellow)]"
+                    className="flex h-[44px] w-9 shrink-0 items-center justify-center rounded-sm border border-[#DDD8CE] bg-white font-heading text-[22px] leading-none text-black transition-colors hover:border-[var(--color-yellow)]"
                     aria-label="Show next gallery thumbnails"
                   >
                     &gt;
@@ -307,7 +307,7 @@ export default function ProductHero({
             {eyebrow && (
               <div className="mb-4 flex items-center gap-2">
                 <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
-                <p className="font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-[#1A1A1A]">
+                <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A]">
                   {eyebrow}
                 </p>
               </div>
@@ -341,7 +341,7 @@ export default function ProductHero({
               <div className="mt-4">
                 <label
                   htmlFor="product-capacity"
-                  className="mb-2 block font-heading text-[18px] leading-[24px] tracking-[-0.36px] text-black"
+                  className="mb-2 block font-heading text-[18px] leading-6 tracking-[-0.36px] text-black"
                 >
                   Capacity:
                 </label>
@@ -353,7 +353,7 @@ export default function ProductHero({
                       : selectedCapacity
                   }
                   onChange={handleCapacityChange}
-                  className="h-[56px] w-full appearance-none rounded-[4px] border-0 bg-[var(--color-accent)] bg-[url('/down-arrow.svg')] bg-[length:13px_8px] bg-[right_18px_center] bg-no-repeat px-4 pr-12 font-body text-[16px] font-bold text-white outline-none"
+                  className="h-[56px] w-full appearance-none rounded-sm border-0 bg-[var(--color-accent)] bg-[url('/down-arrow.svg')] bg-[length:13px_8px] bg-[right_18px_center] bg-no-repeat px-4 pr-12 font-body text-[16px] font-bold text-white outline-none"
                 >
                   {capacityOptions.map((option) => (
                     <option
@@ -375,7 +375,7 @@ export default function ProductHero({
             </div>
 
             {(fuelCompatibility.length > 0 || applicationAreas.length > 0) && (
-              <div className="mt-6 border-y border-black/15 py-5 font-body text-[15px] leading-[24px] text-black">
+              <div className="mt-6 border-y border-black/15 py-5 font-body text-[15px] leading-6 text-black">
                 {fuelCompatibility.length > 0 && (
                   <div className="flex flex-wrap items-center gap-2">
                     <strong className="mr-2 font-semibold">Fuel compatibility:</strong>
@@ -417,7 +417,7 @@ export default function ProductHero({
 
             {keyFeatures.length > 0 && (
               <div className="mt-5">
-                <h2 className="font-heading text-[18px] leading-[24px] tracking-[-0.36px] text-black">
+                <h2 className="font-heading text-[18px] leading-6 tracking-[-0.36px] text-black">
                   Key features:
                 </h2>
                 <div className="mt-4 grid gap-x-8 gap-y-3 md:grid-cols-2">
@@ -441,7 +441,7 @@ export default function ProductHero({
                 <button
                   type="button"
                   onClick={handleRequestQuote}
-                  className="group inline-flex h-[48px] items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
+                  className="group inline-flex h-[48px] items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
                 >
                   <span>{primaryText}</span>
                   <Image
@@ -449,7 +449,7 @@ export default function ProductHero({
                     alt=""
                     width={36}
                     height={36}
-                    className="h-[36px] w-[36px] transition-transform group-hover:translate-x-1"
+                    className="h-[36px] w-9 transition-transform group-hover:translate-x-1"
                   />
                 </button>
               )}
@@ -458,7 +458,7 @@ export default function ProductHero({
                 <Link
                   href={secondaryHref}
                   target={secondaryTarget}
-                  className="group inline-flex h-[48px] items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
+                  className="group inline-flex h-[48px] items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
                 >
                   <span>{secondaryText}</span>
                   <Image
@@ -466,7 +466,7 @@ export default function ProductHero({
                     alt=""
                     width={36}
                     height={36}
-                    className="h-[36px] w-[36px] transition-transform group-hover:translate-y-0.5"
+                    className="h-[36px] w-9 transition-transform group-hover:translate-y-0.5"
                   />
                 </Link>
               )}

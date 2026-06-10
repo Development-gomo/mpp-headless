@@ -36,7 +36,7 @@ export default function HomeServicesSection({ data }) {
             {text_above_title && (
               <div className="flex items-center gap-2 mb-5">
                 <span className="w-[2px] h-[10px] bg-[var(--color-yellow)]" />
-                <p className="text-[#1A1A1A] text-[14px] leading-[24px] font-medium tracking-[0.56px] uppercase font-body">
+                <p className="text-[#1A1A1A] text-[14px] leading-6 font-medium tracking-[0.56px] uppercase font-body">
                   {text_above_title}
                 </p>
               </div>
@@ -51,7 +51,7 @@ export default function HomeServicesSection({ data }) {
 
             {hero_description && (
               <div
-                className="text-[#1A1A1A] text-[16px] leading-[24px] font-body mb-6"
+                className="text-[#1A1A1A] text-[16px] leading-6 font-body mb-6"
                 dangerouslySetInnerHTML={{ __html: hero_description }}
               />
             )}
@@ -62,7 +62,7 @@ export default function HomeServicesSection({ data }) {
                   <Link
                     key={i}
                     href={btn.button_link || "#"}
-                    className="group inline-flex items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 text-white font-heading text-[14px] tracking-[-0.28px] hover:opacity-90 transition-opacity"
+                    className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 text-white font-heading text-[14px] tracking-[-0.28px] hover:opacity-90 transition-opacity"
                   >
                     <span>{btn.button_label}</span>
 
@@ -71,7 +71,7 @@ export default function HomeServicesSection({ data }) {
                       alt=""
                       width={36}
                       height={36}
-                      className="w-[36px] h-auto object-contain transition-transform group-hover:translate-x-1"
+                      className="w-9 h-auto object-contain transition-transform group-hover:translate-x-1"
                     />
                   </Link>
                 ))}
@@ -104,7 +104,7 @@ export default function HomeServicesSection({ data }) {
 
                       {isActive && service.service_description && (
                         <div
-                          className="mt-5 max-w-[520px] text-[#1A1A1A] text-[16px] leading-[24px] font-body"
+                          className="mt-5 max-w-[520px] text-[#1A1A1A] text-[16px] leading-6 font-body"
                           dangerouslySetInnerHTML={{
                             __html: service.service_description,
                           }}
@@ -122,7 +122,7 @@ export default function HomeServicesSection({ data }) {
                             alt=""
                             width={36}
                             height={36}
-                            className="w-[36px] h-auto object-contain transition-transform hover:translate-x-1"
+                            className="w-9 h-auto object-contain transition-transform hover:translate-x-1"
                           />
                         </Link>
                       )}

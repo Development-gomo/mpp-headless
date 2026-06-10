@@ -78,7 +78,7 @@ export default function HeroWithImage({ data }) {
             <span className="w-[2px] h-[16px] bg-[var(--color-yellow)]"></span>
 
             {/* Text */}
-            <p className="text-white text-[14px] font-medium leading-[24px] tracking-[0.56px] uppercase [font-family:var(--font-nunito-sans)]">
+            <p className="text-white text-[14px] font-medium leading-6 tracking-[0.56px] uppercase [font-family:var(--font-nunito-sans)]">
               {text_above_title}
             </p>
           </div>
@@ -101,7 +101,7 @@ export default function HeroWithImage({ data }) {
                   href={btn.button_link || "#"}
                   className={
                     i === 0
-                      ? "inline-flex justify-end items-center gap-4 py-[6px] pr-[6px] pl-6 rounded-[4px] bg-[var(--color-yellow)] text-black font-[var(--font-heading)] text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"
+                      ? "inline-flex justify-end items-center gap-4 py-1.5 pr-1.5 pl-6 rounded-sm bg-[var(--color-yellow)] text-black font-[var(--font-heading)] text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"
                       : "inline-flex items-center gap-2 rounded-sm border border-white px-6 py-4 text-white font-medium hover:bg-white/10 transition-colors"
                   }
                 >

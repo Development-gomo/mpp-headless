@@ -96,7 +96,7 @@ export default function ProductCategoriesSection({
               <div className="mb-6 flex items-center gap-2">
                 <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
 
-                <p className="text-[#1A1A1A] text-[14px] leading-[24px] font-medium tracking-[0.56px] uppercase font-body">
+                <p className="text-[#1A1A1A] text-[14px] leading-6 font-medium tracking-[0.56px] uppercase font-body">
                   {text_above_title}
                 </p>
               </div>
@@ -113,7 +113,7 @@ export default function ProductCategoriesSection({
           <div className="flex flex-col items-start lg:pt-[54px]">
             {hero_description && (
               <div
-                className="max-w-[628px] text-[#1A1A1A] text-[16px] leading-[24px] font-normal font-body"
+                className="max-w-[628px] text-[#1A1A1A] text-[16px] leading-6 font-normal font-body"
                 dangerouslySetInnerHTML={{ __html: hero_description }}
               />
             )}
@@ -127,8 +127,8 @@ export default function ProductCategoriesSection({
                     target={btn.button_target || undefined}
                     className={
                       i === 0
-                        ? "group inline-flex items-center gap-4 rounded-[4px] bg-[#445641] py-[6px] pr-[6px] pl-6 text-white font-heading text-[14px] font-normal tracking-[-0.28px] hover:opacity-90 transition-opacity"
-                        : "group inline-flex items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 text-white font-heading text-[14px] font-normal tracking-[-0.28px] hover:opacity-90 transition-opacity"
+                        ? "group inline-flex items-center gap-4 rounded-sm bg-[#445641] py-1.5 pr-1.5 pl-6 text-white font-heading text-[14px] font-normal tracking-[-0.28px] hover:opacity-90 transition-opacity"
+                        : "group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 text-white font-heading text-[14px] font-normal tracking-[-0.28px] hover:opacity-90 transition-opacity"
                     }
                   >
                     <span>{btn.button_label}</span>
@@ -200,13 +200,13 @@ export default function ProductCategoriesSection({
 
                       <div className="absolute inset-0 bg-black/10" />
 
-                      <div className="absolute inset-x-2 bottom-2 z-10 rounded-[4px] bg-[rgba(58,58,58,0.45)] px-6 py-7 backdrop-blur-[6px] md:inset-x-2 md:bottom-2">
+                      <div className="absolute inset-x-2 bottom-2 z-10 rounded-sm bg-[rgba(58,58,58,0.45)] px-6 py-7 backdrop-blur-[6px] md:inset-x-2 md:bottom-2">
                         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                           <h3 className="text-white text-[24px] leading-[32px] font-medium tracking-[-0.48px] font-heading">
                             {title}
                           </h3>
 
-                          <span className="inline-flex w-fit items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 text-white font-heading text-[14px] font-normal tracking-[-0.28px]">
+                          <span className="inline-flex w-fit items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 text-white font-heading text-[14px] font-normal tracking-[-0.28px]">
                             <span>View products</span>
 
                             <Image

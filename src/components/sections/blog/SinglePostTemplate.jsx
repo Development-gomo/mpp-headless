@@ -144,7 +144,7 @@ function RelatedPostCard({ post }) {
   return (
     <Link
       href={getPostUrl(post)}
-      className="group flex h-full flex-col overflow-hidden rounded-[4px] bg-white"
+      className="group flex h-full flex-col overflow-hidden rounded-sm bg-white"
     >
       <div className="flex min-h-[245px] flex-1 flex-col p-6 pb-5">
         <div className="mb-6 flex items-center gap-3">
@@ -152,7 +152,7 @@ function RelatedPostCard({ post }) {
             {category}
           </span>
           {date && (
-            <span className="text-[#1A1A1A] text-[12px] leading-[24px] font-normal [font-family:var(--font-nunito-sans)]">
+            <span className="text-[#1A1A1A] text-[12px] leading-6 font-normal [font-family:var(--font-nunito-sans)]">
               {date}
             </span>
           )}
@@ -164,7 +164,7 @@ function RelatedPostCard({ post }) {
         />
         {excerpt && (
           <div
-            className="mt-auto text-[16px] leading-[24px] text-[#1A1A1A] font-normal [font-family:var(--font-nunito-sans)] line-clamp-2"
+            className="mt-auto text-[16px] leading-6 text-[#1A1A1A] font-normal [font-family:var(--font-nunito-sans)] line-clamp-2"
             dangerouslySetInnerHTML={{ __html: excerpt }}
           />
         )}
@@ -186,7 +186,7 @@ function RelatedPostCard({ post }) {
           alt=""
           width={36}
           height={36}
-          className="absolute right-5 bottom-5 h-auto w-[36px] object-contain transition-transform group-hover:translate-x-1"
+          className="absolute right-5 bottom-5 h-auto w-9 object-contain transition-transform group-hover:translate-x-1"
         />
       </div>
     </Link>
@@ -322,7 +322,7 @@ export default function SinglePostTemplate({
           />
           {excerpt && (
             <div
-              className="mt-7 max-w-[1200px] text-[16px] leading-[24px] text-[#1A1A1A]"
+              className="mt-7 max-w-[1200px] text-[16px] leading-6 text-[#1A1A1A]"
               dangerouslySetInnerHTML={{ __html: excerpt }}
             />
           )}
@@ -370,7 +370,7 @@ export default function SinglePostTemplate({
 
             {showSidebarCta && (
             <div
-              className="mt-10 hidden rounded-[4px] p-7 lg:block"
+              className="mt-10 hidden rounded-sm p-7 lg:block"
               style={{ backgroundColor: ctaBackgroundColor }}
             >
               <h3 className="text-[22px] font-bold leading-[30px] text-white">
@@ -385,7 +385,7 @@ export default function SinglePostTemplate({
               <Link
                 href={getLinkUrl(ctaButtonLink, "/contact")}
                 target={getLinkTarget(ctaButtonLink)}
-                className="mt-6 inline-flex items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
+                className="mt-6 inline-flex items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
               >
                 <span>{ctaButtonText}</span>
                 <Image
@@ -393,7 +393,7 @@ export default function SinglePostTemplate({
                   alt=""
                   width={36}
                   height={36}
-                  className="h-auto w-[36px]"
+                  className="h-auto w-9"
                 />
               </Link>
             </div>
@@ -416,7 +416,7 @@ export default function SinglePostTemplate({
       <section className="bg-white px-6 pb-16">
         <div className="web-width">
           {showShareBox && (
-            <div className="ml-auto flex max-w-[870px] flex-col gap-4 rounded-[4px] bg-[#EAF1FA] px-6 py-5 md:flex-row md:items-center md:justify-between">
+            <div className="ml-auto flex max-w-[870px] flex-col gap-4 rounded-sm bg-[#EAF1FA] px-6 py-5 md:flex-row md:items-center md:justify-between">
               <p className="text-[14px] font-bold leading-[22px] text-black">
                 {shareBoxText}
               </p>
@@ -435,7 +435,7 @@ export default function SinglePostTemplate({
           )}
           {showSidebarCta && (
             <div
-              className="mt-8 rounded-[4px] p-7 lg:hidden"
+              className="mt-8 rounded-sm p-7 lg:hidden"
               style={{ backgroundColor: ctaBackgroundColor }}
             >
               <h3 className="text-[22px] font-bold leading-[30px] text-white">
@@ -450,7 +450,7 @@ export default function SinglePostTemplate({
               <Link
                 href={getLinkUrl(ctaButtonLink, "/contact")}
                 target={getLinkTarget(ctaButtonLink)}
-                className="mt-6 inline-flex items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
+                className="mt-6 inline-flex items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
               >
                 <span>{ctaButtonText}</span>
                 <Image
@@ -458,7 +458,7 @@ export default function SinglePostTemplate({
                   alt=""
                   width={36}
                   height={36}
-                  className="h-auto w-[36px]"
+                  className="h-auto w-9"
                 />
               </Link>
             </div>

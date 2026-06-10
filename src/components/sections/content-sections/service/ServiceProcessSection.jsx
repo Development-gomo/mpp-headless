@@ -31,7 +31,7 @@ export default function ServiceProcessSection({ data }) {
               <div className="mb-6 flex items-center gap-2">
                 <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
 
-                <p className="font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-[#1A1A1A]">
+                <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A]">
                   {text_above_title}
                 </p>
               </div>
@@ -46,7 +46,7 @@ export default function ServiceProcessSection({ data }) {
 
             {hero_description && (
               <div
-                className="mt-6 max-w-[620px] font-body text-[16px] font-normal leading-[24px] text-[#1A1A1A]"
+                className="mt-6 max-w-[620px] font-body text-[16px] font-normal leading-6 text-[#1A1A1A]"
                 dangerouslySetInnerHTML={{ __html: hero_description }}
               />
             )}
@@ -61,8 +61,8 @@ export default function ServiceProcessSection({ data }) {
                   target={btn.button_target || undefined}
                   className={
                     index === 0
-                      ? "group inline-flex items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
-                      : "group inline-flex items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
+                      ? "group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+                      : "group inline-flex items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
                   }
                 >
                   <span>{btn.button_label}</span>
@@ -109,7 +109,7 @@ export default function ServiceProcessSection({ data }) {
             return (
                 <article
                 key={index}
-                className="process-card relative min-h-[260px] rounded-[4px] bg-[var(--color-accent)] px-6 py-7 text-white opacity-0"
+                className="process-card relative min-h-[260px] rounded-sm bg-[var(--color-accent)] px-6 py-7 text-white opacity-0"
                 style={{
                     animationDelay: `${index * 140}ms`,
                 }}
@@ -127,7 +127,7 @@ export default function ServiceProcessSection({ data }) {
                 )}
 
                 {item?.process_description && (
-                    <p className="font-body text-[16px] font-normal leading-[24px] text-white">
+                    <p className="font-body text-[16px] font-normal leading-6 text-white">
                     {item.process_description}
                     </p>
                 )}

@@ -77,6 +77,10 @@ em {
   animation: marquee 28s linear infinite;
 }
 
+.frontpage #product-cat-section .web-width {
+    padding-top: 0 !important;
+}
+
 @keyframes processFadeUp {
   from {
     opacity: 0;

@@ -84,7 +84,7 @@ export default function HomeTankSection({ data }) {
             <div className="mb-6 flex items-center gap-3">
               <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
 
-              <p className="font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-white">
+              <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-white">
                 {text_above_title}
               </p>
             </div>
@@ -99,7 +99,7 @@ export default function HomeTankSection({ data }) {
 
           {hero_description && (
             <div
-              className="mt-6 max-w-[520px] font-body text-[16px] font-normal leading-[24px] text-white"
+              className="mt-6 max-w-[520px] font-body text-[16px] font-normal leading-6 text-white"
               dangerouslySetInnerHTML={{ __html: hero_description }}
             />
           )}
@@ -113,8 +113,8 @@ export default function HomeTankSection({ data }) {
                   target={btn.button_target || undefined}
                   className={
                     i === 0
-                      ? "group inline-flex items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
-                      : "group inline-flex items-center gap-4 rounded-[4px] bg-[#445641] py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+                      ? "group inline-flex items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
+                      : "group inline-flex items-center gap-4 rounded-sm bg-[#445641] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
                   }
                 >
                   <span>{btn.button_label}</span>

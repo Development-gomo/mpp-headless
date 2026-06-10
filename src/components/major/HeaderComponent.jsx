@@ -115,7 +115,7 @@ function ThreeLevelCategoryMenu({ menuRow }) {
         <Link
           href={menuRow.titleLink.href || "#"}
           target={menuRow.titleLink.target}
-          className="inline-flex w-fit justify-end items-center gap-4 py-[6px] pr-[6px] pl-6 rounded-[4px] bg-[image:var(--mpp-gradient)] text-white font-heading text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"
+          className="inline-flex w-fit justify-end items-center gap-4 py-1.5 pr-1.5 pl-6 rounded-sm bg-[image:var(--mpp-gradient)] text-white font-heading text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"
         >
           <span>View all Products</span>
           <span className="flex h-[32px] w-[32px] items-center justify-center rounded-[3px] bg-white text-black">
@@ -162,7 +162,7 @@ function ThreeLevelCategoryMenu({ menuRow }) {
           {activeCategory?.href && activeCategory.href !== "#" && (
             <Link
               href={activeCategory.href}
-              className="group inline-flex h-[44px] items-center justify-between gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
+              className="group inline-flex h-[44px] items-center justify-between gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
             >
               <span className="whitespace-nowrap">Find your right tank</span>
               <span className="flex h-[32px] w-[32px] shrink-0 items-center justify-center rounded-[3px] bg-white text-black">
@@ -266,7 +266,7 @@ export default function HeaderComponent(props) {
   const quoteHref = localizePath("/rfq", language);
   const callIcon = isDark ? "/call-dark.svg" : "/call.svg";
   const languageArrowIcon = isDark ? "/down-arrow-black.svg" : "/down-arrow.svg";
-  const menuLinkClass = `inline-flex h-6 items-center gap-1 text-[14px] font-normal leading-[24px] tracking-[-0.28px] font-heading transition-colors ${
+  const menuLinkClass = `inline-flex h-6 items-center gap-1 text-[14px] font-normal leading-6 tracking-[-0.28px] font-heading transition-colors ${
     isDark ? "text-black hover:text-[var(--color-accent)]" : "text-white hover:text-white/80"
   }`;
   const headerClass = isDark
@@ -327,12 +327,12 @@ export default function HeaderComponent(props) {
 
         {/* DESKTOP NAV */}
         <nav
-          className={`hidden h-[50px] w-[647px] items-center rounded-[4px] border p-1 backdrop-blur-[10px] transition-all duration-300 xl:absolute xl:left-[316px] xl:flex ${
+          className={`hidden h-[50px] w-[647px] items-center rounded-sm border p-1 backdrop-blur-[10px] transition-all duration-300 xl:absolute xl:left-[316px] xl:flex ${
             scrolled ? "xl:top-[11px]" : "xl:top-[47px]"
           } ${navShellClass}`}
         >
           <div
-            className={`flex h-[42px] w-full items-center justify-between rounded-[4px] px-8 ${navInnerClass}`}
+            className={`flex h-[42px] w-full items-center justify-between rounded-sm px-8 ${navInnerClass}`}
           >
             {megaMenuRows.length > 0
             ? megaMenuRows.map((menuRow) => {
@@ -375,7 +375,7 @@ export default function HeaderComponent(props) {
 
                     {menuRow.layoutType === "three_level_categories" ? (
                       <div className={desktopMegaMenuClass}>
-                        <div className="overflow-hidden rounded-[4px] border border-slate-200/80 bg-white text-slate-900 shadow-[0_30px_70px_-25px_rgba(8,15,40,0.55)]">
+                        <div className="overflow-hidden rounded-sm border border-slate-200/80 bg-white text-slate-900 shadow-[0_30px_70px_-25px_rgba(8,15,40,0.55)]">
                           <ThreeLevelCategoryMenu menuRow={menuRow} />
                         </div>
                       </div>
@@ -535,14 +535,14 @@ export default function HeaderComponent(props) {
           >
             <Link
               href={quoteHref}
-              className={`flex h-[28px] items-center justify-center rounded-[4px] px-3 backdrop-blur-[10px] text-[14px] leading-6 tracking-[-0.28px] font-heading ${topPillClass}`}
+              className={`flex h-[28px] items-center justify-center rounded-sm px-3 backdrop-blur-[10px] text-[14px] leading-6 tracking-[-0.28px] font-heading ${topPillClass}`}
             >
               RFQ{quoteCount > 0 ? ` (${quoteCount})` : ""}
             </Link>
 
             <Link
               href={headerTelephoneLink || "tel:+46300521930"}
-              className="flex h-[28px] w-[28px] items-center justify-center"
+              className="flex h-7 w-7 items-center justify-center"
               aria-label="Call"
             >
               <Image
@@ -550,14 +550,14 @@ export default function HeaderComponent(props) {
                 alt=""
                 width={28}
                 height={28}
-                className="h-[28px] w-[28px] object-contain"
+                className="h-7 w-7 object-contain"
               />
             </Link>
 
             <div className="relative">
               <button
                 type="button"
-                className={`flex h-[28px] w-[45px] items-center justify-center gap-1 rounded-[4px] backdrop-blur-[10px] text-[14px] leading-6 tracking-[-0.28px] font-heading ${topPillClass} ${
+                className={`flex h-[28px] w-[45px] items-center justify-center gap-1 rounded-sm backdrop-blur-[10px] text-[14px] leading-6 tracking-[-0.28px] font-heading ${topPillClass} ${
                   availableLanguageOptions.length === 0
                     ? "cursor-default"
                     : "cursor-pointer"
@@ -583,7 +583,7 @@ export default function HeaderComponent(props) {
               </button>
 
               {languageMenuOpen && availableLanguageOptions.length > 0 && (
-                <div className="absolute right-0 top-full mt-1 min-w-[45px] overflow-hidden rounded-[4px] border border-black/10 bg-white text-black shadow-[0_12px_28px_rgba(0,0,0,0.14)]">
+                <div className="absolute right-0 top-full mt-1 min-w-[45px] overflow-hidden rounded-sm border border-black/10 bg-white text-black shadow-[0_12px_28px_rgba(0,0,0,0.14)]">
                   {availableLanguageOptions.map((item) => (
                     <Link
                       key={item.code}
@@ -603,17 +603,17 @@ export default function HeaderComponent(props) {
           <Link
             href={cta1Url || "#"}
             target={cta1Target || "_self"}
-            className="inline-flex h-[48px] w-[127px] items-center justify-between rounded-[4px] bg-[#445641] py-[6px] pr-[6px] pl-4 text-white font-heading text-[14px] leading-6 tracking-[-0.28px] hover:opacity-90 transition-opacity"
+            className="inline-flex h-[48px] w-[127px] items-center justify-between rounded-sm bg-[#445641] py-1.5 pr-1.5 pl-4 text-white font-heading text-[14px] leading-6 tracking-[-0.28px] hover:opacity-90 transition-opacity"
           >
             <span>{cta1Text}</span>
 
-            <span className="flex h-[36px] w-[37px] shrink-0 items-center justify-center rounded-[4px] bg-white">
+            <span className="flex h-[36px] w-[37px] shrink-0 items-center justify-center rounded-sm bg-white">
               <Image
                 src="/defence.svg"
                 alt=""
                 width={36}
                 height={36}
-                className="h-auto w-[36px] object-contain"
+                className="h-auto w-9 object-contain"
               />
             </span>
           </Link>
@@ -622,17 +622,17 @@ export default function HeaderComponent(props) {
           <Link
             href={cta2Url || "#"}
             target={cta2Target || "_self"}
-            className="group inline-flex h-[48px] w-[126px] items-center justify-between rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-4 text-black font-heading text-[14px] leading-6 tracking-[-0.28px] hover:opacity-90 transition-opacity"
+            className="group inline-flex h-[48px] w-[126px] items-center justify-between rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-4 text-black font-heading text-[14px] leading-6 tracking-[-0.28px] hover:opacity-90 transition-opacity"
           >
             <span>{cta2Text}</span>
 
-            <span className="flex h-[36px] w-[37px] shrink-0 items-center justify-center rounded-[4px] bg-white">
+            <span className="flex h-[36px] w-[37px] shrink-0 items-center justify-center rounded-sm bg-white">
               <Image
                 src="/reseller.svg"
                 alt=""
                 width={36}
                 height={36}
-                className="h-auto w-[36px] object-contain transition-transform"
+                className="h-auto w-9 object-contain transition-transform"
               />
             </span>
           </Link>
@@ -801,7 +801,7 @@ export default function HeaderComponent(props) {
                 <div className="mt-8 flex flex-col gap-3">
                   <Link
                     href={quoteHref}
-                    className="inline-flex items-center justify-between rounded-[4px] bg-[#E5F2F7] py-3 px-5 text-slate-900 font-heading text-[14px]"
+                    className="inline-flex items-center justify-between rounded-sm bg-[#E5F2F7] py-3 px-5 text-slate-900 font-heading text-[14px]"
                     onClick={() => setMobileOpen(false)}
                   >
                     <span>RFQ</span>
@@ -816,12 +816,12 @@ export default function HeaderComponent(props) {
                   <Link
                     href={cta1Url || "#"}
                     target={cta1Target || "_self"}
-                    className="inline-flex items-center justify-between rounded-[4px] bg-[#445641] py-[6px] pr-[6px] pl-5 text-white font-heading text-[14px]"
+                    className="inline-flex items-center justify-between rounded-sm bg-[#445641] py-1.5 pr-1.5 pl-5 text-white font-heading text-[14px]"
                     onClick={() => setMobileOpen(false)}
                   >
                     <span>{cta1Text}</span>
 
-                    <span className="flex h-[36px] w-[37px] items-center justify-center rounded-[4px] bg-white">
+                    <span className="flex h-[36px] w-[37px] items-center justify-center rounded-sm bg-white">
                       <Image
                         src="/defence.svg"
                         alt=""
@@ -836,12 +836,12 @@ export default function HeaderComponent(props) {
                   <Link
                     href={cta2Url || "#"}
                     target={cta2Target || "_self"}
-                    className="inline-flex items-center justify-between rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-5 text-black font-heading text-[14px]"
+                    className="inline-flex items-center justify-between rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-5 text-black font-heading text-[14px]"
                     onClick={() => setMobileOpen(false)}
                   >
                     <span>{cta2Text}</span>
 
-                    <span className="flex h-[36px] w-[37px] items-center justify-center rounded-[4px] bg-white">
+                    <span className="flex h-[36px] w-[37px] items-center justify-center rounded-sm bg-white">
                       <Image
                         src="/reseller.svg"
                         alt=""
@@ -855,7 +855,7 @@ export default function HeaderComponent(props) {
                   {/* Mobile Phone */}
                   <Link
                     href={headerTelephoneLink || "tel:+46300521930"}
-                    className="inline-flex items-center justify-between rounded-[4px] bg-slate-100 py-3 px-5 text-slate-900 font-heading text-[14px]"
+                    className="inline-flex items-center justify-between rounded-sm bg-slate-100 py-3 px-5 text-slate-900 font-heading text-[14px]"
                     onClick={() => setMobileOpen(false)}
                   >
                     <span>Call us</span>

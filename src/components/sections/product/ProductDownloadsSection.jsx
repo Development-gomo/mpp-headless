@@ -14,7 +14,7 @@ export default function ProductDownloadsSection({ product }) {
       <div className="web-width px-6 py-20 md:py-[120px]">
         <div className="mb-10 flex items-center gap-2">
           <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
-          <p className="font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-[#1A1A1A]">
+          <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A]">
             Downloads
           </p>
         </div>

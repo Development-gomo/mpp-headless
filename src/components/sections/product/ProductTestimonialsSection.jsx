@@ -123,7 +123,7 @@ export default function ProductTestimonialsSection({
 
           <Link
             href={ctaHref}
-            className="group inline-flex h-[48px] w-fit items-center gap-4 rounded-[4px] bg-[var(--color-accent)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+            className="group inline-flex h-[48px] w-fit items-center gap-4 rounded-sm bg-[var(--color-accent)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
           >
             <span>{ctaText}</span>
             <Image
@@ -131,7 +131,7 @@ export default function ProductTestimonialsSection({
               alt=""
               width={36}
               height={36}
-              className="h-[36px] w-[36px] transition-transform group-hover:translate-x-1"
+              className="h-[36px] w-9 transition-transform group-hover:translate-x-1"
             />
           </Link>
         </div>

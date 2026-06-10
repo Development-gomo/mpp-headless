@@ -218,7 +218,7 @@ export default function TeamSection({ data, teams = [] }) {
             {text_above_title && (
               <div className="mb-6 flex items-center gap-2">
                 <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
-                <p className="text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-[#1A1A1A] font-body">
+                <p className="text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A] font-body">
                   {text_above_title}
                 </p>
               </div>
@@ -235,7 +235,7 @@ export default function TeamSection({ data, teams = [] }) {
           <div className="flex flex-col items-start lg:pt-[54px]">
             {hero_description && (
               <div
-                className="max-w-[628px] text-[16px] font-normal leading-[24px] text-[#1A1A1A] font-body"
+                className="max-w-[628px] text-[16px] font-normal leading-6 text-[#1A1A1A] font-body"
                 dangerouslySetInnerHTML={{ __html: hero_description }}
               />
             )}
@@ -254,7 +254,7 @@ export default function TeamSection({ data, teams = [] }) {
                     key={i}
                     href={getButtonHref(btn)}
                     target={btn.button_target || btn.button_link?.target || undefined}
-                    className="group inline-flex items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90 font-heading"
+                    className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90 font-heading"
                   >
                     <span>{label}</span>
                     <Image
@@ -278,7 +278,7 @@ export default function TeamSection({ data, teams = [] }) {
               <select
                 value={activeDepartment}
                 onChange={(event) => setActiveDepartment(event.target.value)}
-                className="h-[52px] w-full appearance-none rounded-[4px] border border-black/15 bg-white px-5 pr-12 text-[15px] font-medium leading-[24px] text-[#1A1A1A] outline-none transition-colors focus:border-[var(--color-accent)] [font-family:var(--font-nunito-sans)]"
+                className="h-[52px] w-full appearance-none rounded-sm border border-black/15 bg-white px-5 pr-12 text-[15px] font-medium leading-6 text-[#1A1A1A] outline-none transition-colors focus:border-[var(--color-accent)] [font-family:var(--font-nunito-sans)]"
               >
                 <option value="all">All departments</option>
                 {departmentOptions.map((department) => (
@@ -303,7 +303,7 @@ export default function TeamSection({ data, teams = [] }) {
         )}
 
         {filteredTeams.length === 0 && (
-          <div className="rounded-[4px] bg-white px-6 py-10 text-[16px] leading-[24px] text-[#1A1A1A] [font-family:var(--font-nunito-sans)]">
+          <div className="rounded-sm bg-white px-6 py-10 text-[16px] leading-6 text-[#1A1A1A] [font-family:var(--font-nunito-sans)]">
             No team members found for this department.
           </div>
         )}

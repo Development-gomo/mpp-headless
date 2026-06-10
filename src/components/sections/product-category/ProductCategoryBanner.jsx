@@ -130,7 +130,7 @@ export default function ProductCategoryBanner({
                 <Link
                   href={ctaLink}
                   target={ctaTarget}
-                  className="group mt-8 inline-flex items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 text-white font-heading text-[14px] font-normal tracking-[-0.28px] hover:opacity-90 transition-opacity"
+                  className="group mt-8 inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 text-white font-heading text-[14px] font-normal tracking-[-0.28px] hover:opacity-90 transition-opacity"
                 >
                   <span>{ctaText}</span>
 
@@ -148,7 +148,7 @@ export default function ProductCategoryBanner({
                 <button
                   type="button"
                   onClick={scrollToProducts}
-                  className="group mt-8 inline-flex items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 text-white font-heading text-[14px] font-normal tracking-[-0.28px] transition-opacity hover:opacity-90"
+                  className="group mt-8 inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 text-white font-heading text-[14px] font-normal tracking-[-0.28px] transition-opacity hover:opacity-90"
                 >
                   <span>{ctaText}</span>
 

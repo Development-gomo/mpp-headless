@@ -126,7 +126,7 @@ export default function QuoteCartPageContent() {
             </div>
 
             {errors.items && (
-              <p className="mb-4 rounded-[4px] bg-red-50 px-4 py-3 font-body text-[14px] text-red-700">
+              <p className="mb-4 rounded-sm bg-red-50 px-4 py-3 font-body text-[14px] text-red-700">
                 {errors.items}
               </p>
             )}
@@ -152,7 +152,7 @@ export default function QuoteCartPageContent() {
                   </p>
                   <Link
                     href="/product/pickuptank"
-                    className="mt-5 inline-flex h-[44px] items-center justify-center rounded-[4px] bg-[var(--color-yellow)] px-5 font-heading text-[14px] text-black"
+                    className="mt-5 inline-flex h-[44px] items-center justify-center rounded-sm bg-[var(--color-yellow)] px-5 font-heading text-[14px] text-black"
                   >
                     Explore products
                   </Link>
@@ -209,7 +209,7 @@ export default function QuoteCartPageContent() {
                                 Number(event.target.value)
                               )
                             }
-                            className="h-9 w-20 rounded-[4px] border border-black/15 px-3 font-body text-[14px] outline-none focus:border-[#007DA5]"
+                            className="h-9 w-20 rounded-sm border border-black/15 px-3 font-body text-[14px] outline-none focus:border-[#007DA5]"
                           />
                         </div>
                       </div>
@@ -226,7 +226,7 @@ export default function QuoteCartPageContent() {
                               key={accessory.key}
                               className="grid grid-cols-[58px_1fr_auto] items-center gap-3 rounded-[6px] bg-white p-2"
                             >
-                              <div className="h-[58px] overflow-hidden rounded-[4px] border border-black/10">
+                              <div className="h-[58px] overflow-hidden rounded-sm border border-black/10">
                                 <ProductImage
                                   src={accessory.image}
                                   alt={accessory.name}
@@ -254,14 +254,14 @@ export default function QuoteCartPageContent() {
                                       Number(event.target.value)
                                     )
                                   }
-                                  className="h-8 w-16 rounded-[4px] border border-black/15 px-2 font-body text-[13px] outline-none focus:border-[#007DA5]"
+                                  className="h-8 w-16 rounded-sm border border-black/15 px-2 font-body text-[13px] outline-none focus:border-[#007DA5]"
                                 />
                                 <button
                                   type="button"
                                   onClick={() =>
                                     removeAccessory(item.key, accessory.key)
                                   }
-                                  className="h-8 w-8 rounded-[4px] border border-black/15 font-body text-[16px] leading-none hover:bg-black/5"
+                                  className="h-8 w-8 rounded-sm border border-black/15 font-body text-[16px] leading-none hover:bg-black/5"
                                   aria-label={`Remove ${accessory.name}`}
                                 >
                                   x
@@ -308,7 +308,7 @@ export default function QuoteCartPageContent() {
                         [field.key]: event.target.value,
                       }))
                     }
-                    className="h-11 w-full rounded-[4px] border border-transparent bg-white px-3 font-body text-[15px] outline-none focus:border-[#007DA5]"
+                    className="h-11 w-full rounded-sm border border-transparent bg-white px-3 font-body text-[15px] outline-none focus:border-[#007DA5]"
                   />
                   {errors[field.key] && (
                     <span className="mt-1 block font-body text-[12px] text-red-700">
@@ -331,12 +331,12 @@ export default function QuoteCartPageContent() {
                     }))
                   }
                   rows={5}
-                  className="w-full resize-none rounded-[4px] border border-transparent bg-white px-3 py-3 font-body text-[15px] outline-none focus:border-[#007DA5]"
+                  className="w-full resize-none rounded-sm border border-transparent bg-white px-3 py-3 font-body text-[15px] outline-none focus:border-[#007DA5]"
                 />
               </label>
 
               {errors.submit && (
-                <p className="rounded-[4px] bg-red-50 px-4 py-3 font-body text-[14px] text-red-700">
+                <p className="rounded-sm bg-red-50 px-4 py-3 font-body text-[14px] text-red-700">
                   {errors.submit}
                 </p>
               )}
@@ -344,7 +344,7 @@ export default function QuoteCartPageContent() {
               <button
                 type="submit"
                 disabled={status === "submitting"}
-                className="inline-flex h-[48px] items-center justify-center rounded-[4px] bg-[var(--color-yellow)] px-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-60"
+                className="inline-flex h-[48px] items-center justify-center rounded-sm bg-[var(--color-yellow)] px-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-60"
               >
                 {status === "submitting" ? "Submitting..." : "Submit quote request"}
               </button>

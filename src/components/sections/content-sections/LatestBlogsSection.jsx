@@ -31,7 +31,7 @@ export default function LatestBlogsSection({
             {text_above_title && (
               <div className="flex items-center gap-2 mb-5">
                 <span className="w-[2px] h-[10px] bg-[var(--color-yellow)]" />
-                <p className="text-[#1A1A1A] text-[14px] leading-[24px] font-medium tracking-[0.56px] uppercase font-body">
+                <p className="text-[#1A1A1A] text-[14px] leading-6 font-medium tracking-[0.56px] uppercase font-body">
                     {text_above_title}
                 </p>
               </div>
@@ -60,8 +60,8 @@ export default function LatestBlogsSection({
                   href={btn.button_link || "#"}
                   className={
                     i === 0
-                      ? "inline-flex justify-end items-center gap-4 py-[6px] pr-[6px] pl-6 rounded-[4px] bg-[image:var(--mpp-gradient)] text-white font-heading text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"
-                      : "inline-flex justify-end items-center gap-4 py-[6px] pr-[6px] pl-6 rounded-[4px] border border-white text-white font-heading text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:bg-white/10 transition-colors group"
+                      ? "inline-flex justify-end items-center gap-4 py-1.5 pr-1.5 pl-6 rounded-sm bg-[image:var(--mpp-gradient)] text-white font-heading text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"
+                      : "inline-flex justify-end items-center gap-4 py-1.5 pr-1.5 pl-6 rounded-sm border border-white text-white font-heading text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:bg-white/10 transition-colors group"
                   }
                 >
                   <span>{btn.button_label}</span>
@@ -71,7 +71,7 @@ export default function LatestBlogsSection({
                     alt=""
                     width={36}
                     height={36}
-                    className="w-[36px] h-auto object-contain transition-transform group-hover:translate-x-1"
+                    className="w-9 h-auto object-contain transition-transform group-hover:translate-x-1"
                   />
                 </Link>
               ))}
@@ -106,7 +106,7 @@ export default function LatestBlogsSection({
                 <Link
                     key={post?.id || index}
                     href={link}
-                    className="group flex h-full flex-col overflow-hidden rounded-[4px] bg-white"
+                    className="group flex h-full flex-col overflow-hidden rounded-sm bg-white"
                     >
                     <div className="flex min-h-[245px] flex-1 flex-col p-6 pb-5">
                         <div className="mb-6 flex items-center gap-3">
@@ -115,7 +115,7 @@ export default function LatestBlogsSection({
                         </span>
 
                         {date && (
-                            <span className="text-[#1A1A1A] text-[12px] leading-[24px] font-normal [font-family:var(--font-nunito-sans)]">
+                            <span className="text-[#1A1A1A] text-[12px] leading-6 font-normal [font-family:var(--font-nunito-sans)]">
                             {date}
                             </span>
                         )}
@@ -130,7 +130,7 @@ export default function LatestBlogsSection({
 
                         {excerpt && (
                         <div
-                        className="mt-auto text-[16px] leading-[24px] text-[#1A1A1A] font-normal [font-family:var(--font-nunito-sans)] line-clamp-2"
+                        className="mt-auto text-[16px] leading-6 text-[#1A1A1A] font-normal [font-family:var(--font-nunito-sans)] line-clamp-2"
                         dangerouslySetInnerHTML={{ __html: excerpt }}
                         />
                         )}
@@ -152,7 +152,7 @@ export default function LatestBlogsSection({
                         alt=""
                         width={36}
                         height={36}
-                        className="absolute right-5 bottom-5 h-auto w-[36px] object-contain transition-transform group-hover:translate-x-1"
+                        className="absolute right-5 bottom-5 h-auto w-9 object-contain transition-transform group-hover:translate-x-1"
                         />
                     </div>
                 </Link>

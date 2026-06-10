@@ -45,7 +45,7 @@ export default function ProductCategoryFaqSection({ category }) {
               <div className="mb-6 flex items-center gap-2">
                 <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
 
-                <p className="font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-[#1A1A1A]">
+                <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A]">
                   {aboveTitle}
                 </p>
               </div>
@@ -69,7 +69,7 @@ export default function ProductCategoryFaqSection({ category }) {
               <Link
                 href={ctaLink}
                 target={ctaTarget}
-                className="group mt-8 inline-flex items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+                className="group mt-8 inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
               >
                 <span>{ctaText}</span>
 
@@ -119,7 +119,7 @@ export default function ProductCategoryFaqSection({ category }) {
 
                       {isActive && faq?.faq_content && (
                         <div
-                          className="max-w-[720px] pb-6 font-body text-[16px] font-normal leading-[24px] text-[#1A1A1A]"
+                          className="max-w-[720px] pb-6 font-body text-[16px] font-normal leading-6 text-[#1A1A1A]"
                           dangerouslySetInnerHTML={{
                             __html: faq.faq_content,
                           }}

@@ -51,7 +51,7 @@ export default function CopyLinkButton({ shareUrl }) {
       </button>
 
       {copied && (
-        <span className="absolute right-0 top-[calc(100%+8px)] z-10 whitespace-nowrap rounded-[4px] bg-black px-3 py-1 text-[12px] leading-[18px] text-white shadow-sm">
+        <span className="absolute right-0 top-[calc(100%+8px)] z-10 whitespace-nowrap rounded-sm bg-black px-3 py-1 text-[12px] leading-[18px] text-white shadow-sm">
           Link copied
         </span>
       )}

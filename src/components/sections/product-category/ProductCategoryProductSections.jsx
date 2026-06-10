@@ -154,7 +154,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
           <div className="mb-6 flex items-center gap-2">
             <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
 
-            <p className="font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-[#1A1A1A]">
+            <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A]">
               {currentCategory.name}
             </p>
           </div>
@@ -167,7 +167,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
         {childCategory?.description && (
           <div className="flex items-start lg:pt-[54px]">
             <div
-              className="max-w-[628px] font-body text-[16px] font-normal leading-[24px] text-[#1A1A1A]"
+              className="max-w-[628px] font-body text-[16px] font-normal leading-6 text-[#1A1A1A]"
               dangerouslySetInnerHTML={{ __html: childCategory.description }}
             />
           </div>
@@ -196,7 +196,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
 
             {activeExcerpt && (
               <div
-                className="mb-8 max-w-[420px] font-body text-[16px] font-normal leading-[24px] text-[#1A1A1A]"
+                className="mb-8 max-w-[420px] font-body text-[16px] font-normal leading-6 text-[#1A1A1A]"
                 dangerouslySetInnerHTML={{ __html: activeExcerpt }}
               />
             )}
@@ -246,7 +246,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
             <div className="flex flex-wrap gap-4">
               <Link
                 href="#"
-                className="group inline-flex items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+                className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
               >
                 <span>Find a dealer</span>
 
@@ -261,7 +261,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
 
               <Link
                 href={activeLink}
-                className="group inline-flex items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
+                className="group inline-flex items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
               >
                 <span>View product</span>
 
@@ -285,7 +285,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                       prev === 0 ? products.length - 1 : prev - 1
                     )
                   }
-                  className="flex h-[44px] w-[44px] items-center justify-center rounded-[4px] bg-white text-black transition-opacity hover:opacity-80"
+                  className="flex h-[44px] w-[44px] items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
                   aria-label="Previous product"
                 >
                   <Image
@@ -304,7 +304,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                       prev === products.length - 1 ? 0 : prev + 1
                     )
                   }
-                  className="flex h-[44px] w-[44px] items-center justify-center rounded-[4px] bg-white text-black transition-opacity hover:opacity-80"
+                  className="flex h-[44px] w-[44px] items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
                   aria-label="Next product"
                 >
                   <Image
@@ -322,7 +322,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
           {/* Right product tabs + image */}
           <div>
             {products.length > 1 && (
-              <div className="mb-10 flex flex-wrap justify-start gap-0 rounded-[4px] bg-[#D9DBE7] p-1 lg:ml-auto lg:w-fit">
+              <div className="mb-10 flex flex-wrap justify-start gap-0 rounded-sm bg-[#D9DBE7] p-1 lg:ml-auto lg:w-fit">
                 {products.map((product, index) => {
                   const isActive = activeIndex === index;
 

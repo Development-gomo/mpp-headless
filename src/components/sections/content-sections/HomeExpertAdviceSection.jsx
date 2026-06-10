@@ -37,7 +37,7 @@ export default function HomeExpertAdviceSection({ data }) {
           {text_above_title && (
             <div className="mb-6 flex items-center gap-3">
               <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
-              <p className="font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-[#1A1A1A]">
+              <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A]">
                 {text_above_title}
               </p>
             </div>
@@ -52,7 +52,7 @@ export default function HomeExpertAdviceSection({ data }) {
 
           {hero_description && (
             <div
-              className="mt-6 max-w-[650px] font-body text-[16px] leading-[24px] text-[#1A1A1A]"
+              className="mt-6 max-w-[650px] font-body text-[16px] leading-6 text-[#1A1A1A]"
               dangerouslySetInnerHTML={{ __html: hero_description }}
             />
           )}
@@ -89,7 +89,7 @@ export default function HomeExpertAdviceSection({ data }) {
 
                     {card.card_description && (
                       <p
-                        className={`max-w-[590px] font-body text-[16px] font-normal leading-[24px] ${
+                        className={`max-w-[590px] font-body text-[16px] font-normal leading-6 ${
                           darkCard ? "text-white" : "text-[#1A1A1A]"
                         }`}
                       >
@@ -100,7 +100,7 @@ export default function HomeExpertAdviceSection({ data }) {
                     {card.card_cta_text && (
                       <Link
                         href={card.card_cta_link || "#"}
-                        className={`group mt-auto inline-flex h-[52px] items-center gap-4 rounded-[4px] py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] transition-opacity hover:opacity-90 ${
+                        className={`group mt-auto inline-flex h-[52px] items-center gap-4 rounded-sm py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] transition-opacity hover:opacity-90 ${
                           darkCard
                             ? "bg-[var(--color-yellow)] text-black"
                             : "bg-[image:var(--mpp-gradient)] text-white"

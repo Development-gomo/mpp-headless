@@ -56,7 +56,7 @@ function CaseStudyCard({ item, buttonText = "Read client case" }) {
     "";
 
   return (
-    <article className="flex min-h-full flex-col overflow-hidden rounded-[4px] bg-[var(--color-accent)] text-white">
+    <article className="flex min-h-full flex-col overflow-hidden rounded-sm bg-[var(--color-accent)] text-white">
       <div className="relative min-h-[220px] bg-black/15 md:min-h-[245px]">
         {image ? (
           <Image
@@ -83,7 +83,7 @@ function CaseStudyCard({ item, buttonText = "Read client case" }) {
 
         {excerpt && (
           <div
-            className="mb-8 line-clamp-4 font-body text-[16px] font-normal leading-[24px] text-white"
+            className="mb-8 line-clamp-4 font-body text-[16px] font-normal leading-6 text-white"
             dangerouslySetInnerHTML={{ __html: excerpt }}
           />
         )}
@@ -91,7 +91,7 @@ function CaseStudyCard({ item, buttonText = "Read client case" }) {
         <div className="mt-auto">
           <Link
             href={link}
-            className="group inline-flex w-fit items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 text-black font-heading text-[14px] tracking-[-0.28px]"
+            className="group inline-flex w-fit items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 text-black font-heading text-[14px] tracking-[-0.28px]"
           >
             <span>{buttonText}</span>
 
@@ -142,7 +142,7 @@ export default function InnerCaseStudy({ data, caseStudies = [] }) {
             {text_above_title && (
               <div className="mb-6 flex items-center gap-2">
                 <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
-                <p className="font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-[#1A1A1A]">
+                <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A]">
                   {text_above_title}
                 </p>
               </div>
@@ -157,7 +157,7 @@ export default function InnerCaseStudy({ data, caseStudies = [] }) {
 
             {hero_description && (
               <div
-                className="mt-5 max-w-xl font-body text-[16px] leading-[24px] text-[#1A1A1A]"
+                className="mt-5 max-w-xl font-body text-[16px] leading-6 text-[#1A1A1A]"
                 dangerouslySetInnerHTML={{ __html: hero_description }}
               />
             )}
@@ -170,7 +170,7 @@ export default function InnerCaseStudy({ data, caseStudies = [] }) {
                   key={index}
                   href={getButtonHref(btn.button_link)}
                   target={getButtonTarget(btn.button_link)}
-                  className="group inline-flex items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+                  className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
                 >
                   <span>{btn.button_label || "View all cases"}</span>
 
@@ -239,7 +239,7 @@ export default function InnerCaseStudy({ data, caseStudies = [] }) {
                 <button
                   ref={prevRef}
                   type="button"
-                  className="flex h-[44px] w-[44px] items-center justify-center rounded-[4px] bg-white text-black transition-opacity hover:opacity-80"
+                  className="flex h-[44px] w-[44px] items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
                   aria-label="Previous case study"
                 >
                   <Image
@@ -254,7 +254,7 @@ export default function InnerCaseStudy({ data, caseStudies = [] }) {
                 <button
                   ref={nextRef}
                   type="button"
-                  className="flex h-[44px] w-[44px] items-center justify-center rounded-[4px] bg-white text-black transition-opacity hover:opacity-80"
+                  className="flex h-[44px] w-[44px] items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
                   aria-label="Next case study"
                 >
                   <Image

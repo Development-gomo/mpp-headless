@@ -52,7 +52,7 @@ export default function ProductFaqSection({ product }) {
               <Link
                 href={ctaHref}
                 target={ctaTarget}
-                className="group mt-7 inline-flex h-[40px] items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[4px] pr-[4px] pl-5 font-heading text-[13px] font-normal tracking-[-0.26px] text-white transition-opacity hover:opacity-90"
+                className="group mt-7 inline-flex h-[40px] items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-[4px] pr-[4px] pl-5 font-heading text-[13px] font-normal tracking-[-0.26px] text-white transition-opacity hover:opacity-90"
               >
                 <span>{ctaText}</span>
                 <Image

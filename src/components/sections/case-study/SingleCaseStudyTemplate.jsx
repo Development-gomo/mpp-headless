@@ -139,7 +139,7 @@ function RelatedProductCard({ product }) {
 
         <Link
           href={getProductLink(product)}
-          className="group mt-6 inline-flex w-fit items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 text-black [font-family:var(--font-heading)] text-[14px] tracking-[-0.28px]"
+          className="group mt-6 inline-flex w-fit items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 text-black [font-family:var(--font-heading)] text-[14px] tracking-[-0.28px]"
         >
           <span>View product</span>
           <Image
@@ -147,7 +147,7 @@ function RelatedProductCard({ product }) {
             alt=""
             width={36}
             height={36}
-            className="h-auto w-[36px] object-contain transition-transform group-hover:translate-x-1"
+            className="h-auto w-9 object-contain transition-transform group-hover:translate-x-1"
           />
         </Link>
       </div>
@@ -227,7 +227,7 @@ function RelatedCaseStudyCard({ item }) {
   const image = getImageUrl(item);
 
   return (
-    <article className="flex min-h-full flex-col overflow-hidden rounded-[4px] bg-[var(--color-accent)] text-white">
+    <article className="flex min-h-full flex-col overflow-hidden rounded-sm bg-[var(--color-accent)] text-white">
       <div className="relative min-h-[220px] bg-black/15 md:min-h-[245px]">
         {image ? (
           <Image
@@ -254,7 +254,7 @@ function RelatedCaseStudyCard({ item }) {
 
         {excerpt && (
           <div
-            className="mb-8 line-clamp-4 text-[16px] font-normal leading-[24px] text-white [font-family:var(--font-nunito-sans)]"
+            className="mb-8 line-clamp-4 text-[16px] font-normal leading-6 text-white [font-family:var(--font-nunito-sans)]"
             dangerouslySetInnerHTML={{ __html: excerpt }}
           />
         )}
@@ -262,7 +262,7 @@ function RelatedCaseStudyCard({ item }) {
         <div className="mt-auto">
           <Link
             href={item?.slug ? `/${item.slug}` : "#"}
-            className="group inline-flex w-fit items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 text-black [font-family:var(--font-heading)] text-[14px] tracking-[-0.28px]"
+            className="group inline-flex w-fit items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 text-black [font-family:var(--font-heading)] text-[14px] tracking-[-0.28px]"
           >
             <span>Read client case</span>
             <Image
@@ -322,7 +322,7 @@ export default function SingleCaseStudyTemplate({
           />
           {intro && (
             <div
-              className="mt-7 max-w-[1200px] text-[16px] leading-[24px] text-[#1A1A1A]"
+              className="mt-7 max-w-[1200px] text-[16px] leading-6 text-[#1A1A1A]"
               dangerouslySetInnerHTML={{ __html: intro }}
             />
           )}
@@ -369,7 +369,7 @@ export default function SingleCaseStudyTemplate({
             )}
 
             {logo && (
-              <div className="mt-10 rounded-[4px] bg-[var(--color-accent)] p-7 text-white">
+              <div className="mt-10 rounded-sm bg-[var(--color-accent)] p-7 text-white">
                 {logo && (
                   <div className="w-fit rounded-[3px] bg-white px-4 py-3">
                     <Image
@@ -403,7 +403,7 @@ export default function SingleCaseStudyTemplate({
 
       <section className="bg-white px-6 pb-16">
         <div className="web-width">
-          <div className="ml-auto flex max-w-[870px] flex-col gap-4 rounded-[4px] bg-[#EAF1FA] px-6 py-5 md:flex-row md:items-center md:justify-between">
+          <div className="ml-auto flex max-w-[870px] flex-col gap-4 rounded-sm bg-[#EAF1FA] px-6 py-5 md:flex-row md:items-center md:justify-between">
             <p className="text-[14px] font-bold leading-[22px] text-black">
               Like what you see? Share this case study
             </p>

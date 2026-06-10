@@ -94,7 +94,7 @@ export default function ProductOverviewSection({
               <Link
                 href={primaryHref}
                 target={primaryTarget}
-                className="group mt-8 inline-flex h-[48px] items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+                className="group mt-8 inline-flex h-[48px] items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
               >
                 <span>{primaryText}</span>
                 <Image
@@ -102,7 +102,7 @@ export default function ProductOverviewSection({
                   alt=""
                   width={36}
                   height={36}
-                  className="h-[36px] w-[36px] transition-transform group-hover:translate-x-1"
+                  className="h-[36px] w-9 transition-transform group-hover:translate-x-1"
                 />
               </Link>
             )}
@@ -151,7 +151,7 @@ export default function ProductOverviewSection({
                     }`}
                   >
                     <div className="flex items-center gap-5 px-2 py-2">
-                      <div className="relative h-[76px] w-[108px] shrink-0 overflow-hidden rounded-[4px] bg-white">
+                      <div className="relative h-[76px] w-[108px] shrink-0 overflow-hidden rounded-sm bg-white">
                         {rowImage && (
                           <Image
                             src={rowImage}

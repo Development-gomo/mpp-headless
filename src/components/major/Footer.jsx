@@ -174,7 +174,7 @@ export default async function Footer() {
             <Link
               href={footer.cta.buttonLink.url}
               target={footer.cta.buttonLink.target}
-              className="group relative z-10 mt-8 inline-flex h-[52px] items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90 md:absolute md:right-12 md:top-1/2 md:mt-0 md:-translate-y-1/2"
+              className="group relative z-10 mt-8 inline-flex h-[52px] items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90 md:absolute md:right-12 md:top-1/2 md:mt-0 md:-translate-y-1/2"
             >
               <span>{footer.cta.buttonText}</span>
               <Image src="/black-white-arrow.svg" alt="" width={40} height={40} className="h-[40px] w-[40px] transition-transform group-hover:translate-x-1" />
@@ -254,7 +254,7 @@ export default async function Footer() {
       </div>
 
       <div className="bg-[#303736] py-3">
-        <div className="web-width flex flex-col gap-3 px-6 font-body text-[14px] leading-[24px] tracking-[-0.28px] text-white md:flex-row md:items-center md:justify-between">
+        <div className="web-width flex flex-col gap-3 px-6 font-body text-[14px] leading-6 tracking-[-0.28px] text-white md:flex-row md:items-center md:justify-between">
           <p>{footer.copyright}</p>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
             {footer.legalLinks.map((item, index) => (
@@ -293,7 +293,7 @@ function FooterHeading({ children }) {
   return (
     <div className="flex items-center gap-2">
       <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
-      <p className="font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-white">
+      <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-white">
         {children}
       </p>
     </div>

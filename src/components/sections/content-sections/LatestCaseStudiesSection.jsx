@@ -28,7 +28,7 @@ export default function LatestCaseStudiesSection({ data, caseStudies = [] }) {
             {text_above_title && (
               <div className="mb-5 flex items-center gap-2">
                 <span className="h-[10px] w-[2px] bg-[var(--color-yellow)]" />
-                <p className="text-[#1A1A1A] text-[14px] leading-[24px] font-medium tracking-[0.56px] uppercase font-body">
+                <p className="text-[#1A1A1A] text-[14px] leading-6 font-medium tracking-[0.56px] uppercase font-body">
                   {text_above_title}
                 </p>
               </div>
@@ -55,7 +55,7 @@ export default function LatestCaseStudiesSection({ data, caseStudies = [] }) {
                 <Link
                   key={i}
                   href={btn.button_link || "#"}
-                  className="group inline-flex items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 text-white font-heading text-[14px] font-normal tracking-[-0.28px] hover:opacity-90 transition-opacity"
+                  className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 text-white font-heading text-[14px] font-normal tracking-[-0.28px] hover:opacity-90 transition-opacity"
                 >
                   <span>{btn.button_label || "View all cases"}</span>
 
@@ -64,7 +64,7 @@ export default function LatestCaseStudiesSection({ data, caseStudies = [] }) {
                     alt=""
                     width={36}
                     height={36}
-                    className="h-auto w-[36px] object-contain transition-transform group-hover:translate-x-1"
+                    className="h-auto w-9 object-contain transition-transform group-hover:translate-x-1"
                   />
                 </Link>
               ))}
@@ -96,7 +96,7 @@ export default function LatestCaseStudiesSection({ data, caseStudies = [] }) {
               return (
                 <div
                   key={item?.id || index}
-                  className="grid overflow-hidden rounded-[4px] bg-[var(--color-accent)] p-6 md:grid-cols-[1fr_220px] gap-6"
+                  className="grid overflow-hidden rounded-sm bg-[var(--color-accent)] p-6 md:grid-cols-[1fr_220px] gap-6"
                 >
                   <div className="flex flex-col justify-between">
                     <div>
@@ -109,7 +109,7 @@ export default function LatestCaseStudiesSection({ data, caseStudies = [] }) {
 
                       <div className="flex flex-col gap-3">
                         {feature1 && (
-                          <span className="inline-flex items-center gap-2 rounded-[4px] bg-white/10 px-3 py-[6px] text-white text-[12px] font-normal tracking-[-0.24px] font-heading w-fit">
+                          <span className="inline-flex items-center gap-2 rounded-sm bg-white/10 px-3 py-[6px] text-white text-[12px] font-normal tracking-[-0.24px] font-heading w-fit">
                             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/25">
                               ✓
                             </span>
@@ -118,7 +118,7 @@ export default function LatestCaseStudiesSection({ data, caseStudies = [] }) {
                         )}
 
                         {feature2 && (
-                          <span className="inline-flex items-center gap-2 rounded-[4px] bg-white/10 px-3 py-[6px] text-white text-[12px] font-normal tracking-[-0.24px] font-heading w-fit">
+                          <span className="inline-flex items-center gap-2 rounded-sm bg-white/10 px-3 py-[6px] text-white text-[12px] font-normal tracking-[-0.24px] font-heading w-fit">
                             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/25">
                               ✓
                             </span>
@@ -130,7 +130,7 @@ export default function LatestCaseStudiesSection({ data, caseStudies = [] }) {
 
                     <Link
                       href={link}
-                      className="group mt-8 inline-flex w-fit items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 text-black font-heading text-[14px] tracking-[-0.28px]"
+                      className="group mt-8 inline-flex w-fit items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 text-black font-heading text-[14px] tracking-[-0.28px]"
                     >
                       <span>Read full case</span>
 
@@ -144,7 +144,7 @@ export default function LatestCaseStudiesSection({ data, caseStudies = [] }) {
                     </Link>
                   </div>
 
-                  <div className="relative min-h-[260px] overflow-hidden rounded-[4px]">
+                  <div className="relative min-h-[260px] overflow-hidden rounded-sm">
                     {image && (
                       <Image
                         src={image}

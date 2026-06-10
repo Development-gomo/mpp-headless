@@ -19,7 +19,7 @@ export default function ProductCtaSection({ product }) {
           <div className="relative z-10 max-w-[720px]">
             <div className="mb-5 flex items-center gap-2">
               <span className="h-[12px] w-[2px] bg-[var(--color-yellow)]" />
-              <p className="font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-white">
+              <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-white">
                 Get started
               </p>
             </div>
@@ -29,7 +29,7 @@ export default function ProductCtaSection({ product }) {
             />
             {text && (
               <div
-                className="mt-5 max-w-[520px] font-body text-[16px] leading-[24px] text-white/85"
+                className="mt-5 max-w-[520px] font-body text-[16px] leading-6 text-white/85"
                 dangerouslySetInnerHTML={{ __html: text }}
               />
             )}
@@ -39,7 +39,7 @@ export default function ProductCtaSection({ product }) {
             <Link
               href={buttonHref}
               target={buttonTarget}
-              className="group relative z-10 mt-8 inline-flex items-center gap-4 rounded-[4px] bg-[var(--color-yellow)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90 md:absolute md:right-12 md:top-1/2 md:mt-0 md:-translate-y-1/2"
+              className="group relative z-10 mt-8 inline-flex items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90 md:absolute md:right-12 md:top-1/2 md:mt-0 md:-translate-y-1/2"
             >
               <span>{buttonText}</span>
               <Image src="/black-white-arrow.svg" alt="" width={40} height={40} className="h-auto w-[40px] transition-transform group-hover:translate-x-1" />
