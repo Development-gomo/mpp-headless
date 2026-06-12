@@ -723,7 +723,18 @@ export async function getLatestCaseStudies({ language } = {}) {
 
 // ✅ schema endpoint you already exposed
 export async function getCf7FormSchema(formId, language) {
-  return await fetchWP(`/headless/v1/cf7-form/${formId}?lang=${language}`);
+  const params = new URLSearchParams();
+  if (language) params.set("lang", language);
+
+  const query = params.toString();
+  const res = await fetch(`/api/cf7-form/${formId}${query ? `?${query}` : ""}`);
+  const json = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    throw new Error(json?.message || "Failed to load contact form.");
+  }
+
+  return json;
 }
 
 // ✅ recommended: submit via your proxy endpoint (stable)
