@@ -718,3 +718,62 @@ export async function getLatestCaseStudies({ language } = {}) {
 
   return Array.isArray(data) ? data : [];
 }
+
+
+
+// ✅ schema endpoint you already exposed
+export async function getCf7FormSchema(formId, language) {
+  return await fetchWP(`/headless/v1/cf7-form/${formId}?lang=${language}`);
+}
+
+// ✅ recommended: submit via your proxy endpoint (stable)
+export async function submitCf7FormProxy(formId, payload) {
+  const res = await fetch(`/api/cf7-submit/${formId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) throw json;
+  return json;
+}
+
+export async function submitCf7Direct(formId, schemaHidden, values) {
+  const wpBaseUrl = getWPBaseUrl();
+  const fd = new FormData();
+  Object.entries({ ...(schemaHidden || {}), ...(values || {}) }).forEach(
+    ([k, v]) => {
+      if (v === undefined || v === null) return;
+      if (Array.isArray(v)) v.forEach((vv) => fd.append(k, String(vv)));
+      else fd.append(k, String(v));
+    }
+  );
+
+  const res = await fetch(
+    `${wpBaseUrl}/wp-json/contact-form-7/v1/contact-forms/${formId}/feedback`,
+    {
+      method: "POST",
+      body: fd,
+    }
+  );
+
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw {
+      ...json,
+      message: json?.message || "CF7 direct submit failed",
+      cf7: json,
+    };
+  }
+
+  if (json?.status && json.status !== "mail_sent") {
+    throw {
+      ...json,
+      message: json?.message || "CF7 validation failed",
+      cf7: json,
+    };
+  }
+
+  return json;
+}

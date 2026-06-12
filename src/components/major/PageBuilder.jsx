@@ -23,6 +23,7 @@ const ServiceWhyChooseSection = dynamic(() => import("../sections/content-sectio
 const ServiceMaintenanceGuideSection = dynamic(() => import("../sections/content-sections/service/ServiceMaintenanceGuideSection"));
 const FindRetailerSection = dynamic(() => import("../sections/content-sections/FindRetailerSection"));
 const FullWidthContentSection = dynamic(() => import("../sections/content-sections/FullWidthContentSection"));
+const ContactFormSection = dynamic(() => import("../sections/content-sections/ContactFormSection"));
 
 export default function PageBuilder({
   sections = [],
@@ -91,7 +92,8 @@ export default function PageBuilder({
           case "full_with_content_section":
           case "full_width_content_section":
             return <FullWidthContentSection key={i} data={block} />;
-
+          case "contact_section":
+            return <ContactFormSection key={i} data={block} language={language} />;
           default:
             return null;
         }
