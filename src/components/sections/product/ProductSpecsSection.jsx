@@ -44,6 +44,7 @@ export default function ProductSpecsSection({ product, selectedVariation = null 
   const specs = normalizeSpecs(product, selectedVariation);
   if (specs.length === 0) return null;
   const productSheetHref = getButtonHref(acf.product_sheet, "#");
+  const title = acf.specification_section_title || "Explore the <span>product specifications</span>";
   const productSheetTarget =
     getButtonTarget(acf.product_sheet) ||
     (productSheetHref !== "#" ? "_blank" : undefined);
@@ -60,7 +61,7 @@ export default function ProductSpecsSection({ product, selectedVariation = null 
               </p>
             </div>
             <h2 className="max-w-[620px] font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[54px] [&_span]:text-[#007DA5]">
-              Explore the <span>product specifications</span>
+              {title}
             </h2>
           </div>
 
