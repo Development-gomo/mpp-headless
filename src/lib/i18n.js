@@ -32,6 +32,12 @@ export function getLanguagePrefix(language) {
   return isDefaultLanguage(language) ? "" : `/${language}`;
 }
 
+export function getIndustryRouteSegment(language = DEFAULT_LANGUAGE) {
+  if (language === ENGLISH_LANGUAGE) return "industries";
+  if (language === GERMAN_LANGUAGE) return "anwendungsbereiche";
+  return "anvandningsomraden";
+}
+
 export function stripLanguagePrefix(path = "/") {
   const matchedLanguage = TRANSLATED_LANGUAGES.find(
     (language) => path === `/${language}` || path.startsWith(`/${language}/`)

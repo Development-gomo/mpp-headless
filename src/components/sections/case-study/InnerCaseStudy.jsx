@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
 
 function stripHtml(value = "") {
   return String(value).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
@@ -45,9 +46,15 @@ function getCaseStudyLayout(data) {
   return String(layout).toLowerCase() === "slider" ? "slider" : "grid";
 }
 
-function CaseStudyCard({ item, buttonText = "Read client case" }) {
+function CaseStudyCard({
+  item,
+  buttonText = "Read client case",
+  language = DEFAULT_LANGUAGE,
+}) {
   const title = item?.title?.rendered || item?.title || "";
-  const link = item?.slug ? `/${item.slug}` : getButtonHref(item?.link);
+  const link = item?.slug
+    ? localizePath(`/${item.slug}`, language)
+    : getButtonHref(item?.link);
   const image = getImageUrl(item);
   const excerpt =
     item?.excerpt?.rendered ||
@@ -109,7 +116,11 @@ function CaseStudyCard({ item, buttonText = "Read client case" }) {
   );
 }
 
-export default function InnerCaseStudy({ data, caseStudies = [] }) {
+export default function InnerCaseStudy({
+  data,
+  caseStudies = [],
+  language = DEFAULT_LANGUAGE,
+}) {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
@@ -194,6 +205,7 @@ export default function InnerCaseStudy({ data, caseStudies = [] }) {
                 key={item?.id || index}
                 item={item}
                 buttonText={readMoreButtonText}
+                language={language}
               />
             ))}
           </div>
@@ -229,6 +241,7 @@ export default function InnerCaseStudy({ data, caseStudies = [] }) {
                   <CaseStudyCard
                     item={item}
                     buttonText={readMoreButtonText}
+                    language={language}
                   />
                 </SwiperSlide>
               ))}

@@ -18,6 +18,8 @@ import {
   getBlogSettings,
   getCaseStudies,
   getCaseStudyBySlug,
+  getIndustries,
+  getIndustryBySlug,
   getLatestCaseStudies,
   getLatestPosts,
   getPageBySlug,
@@ -35,6 +37,7 @@ import {
 import { getProductCategories as getProductTerms } from "@/components/sections/product/productUtils";
 import { resolveParams } from "@/lib/params";
 import { buildMetadataFromYoast } from "@/lib/seo";
+import { getIndustryRouteSegment } from "@/lib/i18n";
 
 function getCategoryId(category) {
   return category?.term_id || category?.id;
@@ -479,6 +482,68 @@ export async function renderCaseStudyPage(params, language) {
           caseStudy={caseStudy}
           relatedCaseStudies={caseStudies}
           relatedProduct={relatedProduct}
+        />
+      </main>
+      <Footer />
+    </>
+  );
+}
+
+export async function generateIndustryStaticParams(language) {
+  const industries = await getIndustries({ language });
+  return industries.map((industry) => ({ slug: industry.slug }));
+}
+
+export async function generateIndustryMetadata(params, language) {
+  const { slug } = resolveParams(await params);
+  const industry = await getIndustryBySlug(slug, { language });
+  return buildMetadataFromYoast(industry, { fallbackTitle: slug });
+}
+
+export async function renderIndustryPage(params, language) {
+  const { slug } = resolveParams(await params);
+  if (!slug) notFound();
+
+  const industry = await getIndustryBySlug(slug, { language });
+  if (!industry) notFound();
+
+  const shouldLoadStores = hasPageBuilderSection(
+    industry,
+    "find_retailer_section"
+  );
+  const shouldLoadPartners = hasPageBuilderSection(industry, "partner_logo");
+  const [latestPosts, latestCaseStudies, teams, stores, themeOptions] =
+    await Promise.all([
+      getLatestPosts({ language }),
+      getLatestCaseStudies({ language }),
+      getTeams({ language }),
+      shouldLoadStores ? getStores({ language }) : [],
+      shouldLoadPartners ? getThemeOptions({ language }) : {},
+    ]);
+
+  return (
+    <>
+      <BodyClass className={slug} />
+      <Header
+        language={language}
+        translationContext={{
+          type: "industry",
+          id: industry.id,
+          slug: industry.slug,
+          path: `/${language === "sv" ? "" : `${language}/`}${getIndustryRouteSegment(
+            language
+          )}/${slug}`,
+        }}
+      />
+      <main>
+        <PageBuilder
+          sections={industry?.acf?.page_builder}
+          posts={latestPosts}
+          caseStudies={latestCaseStudies}
+          teams={teams}
+          stores={stores}
+          themeOptions={themeOptions}
+          language={language}
         />
       </main>
       <Footer />

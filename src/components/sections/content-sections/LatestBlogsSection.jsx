@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
 
 export default function LatestBlogsSection({
   data,
   posts = [],
+  language = DEFAULT_LANGUAGE,
 }) {
   if (!data) return null;
 
@@ -84,7 +86,7 @@ export default function LatestBlogsSection({
             {latestPosts.map((post, index) => {
               const title = post?.title?.rendered || post?.title || "";
               const excerpt = post?.excerpt?.rendered || post?.excerpt || "";
-              const link = post?.slug ? `/${post.slug}` : "#";
+              const link = post?.slug ? localizePath(`/${post.slug}`, language) : "#";
 
               const image =
                 post?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ||

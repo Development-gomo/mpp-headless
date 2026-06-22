@@ -24,6 +24,7 @@ const ServiceMaintenanceGuideSection = dynamic(() => import("../sections/content
 const FindRetailerSection = dynamic(() => import("../sections/content-sections/FindRetailerSection"));
 const FullWidthContentSection = dynamic(() => import("../sections/content-sections/FullWidthContentSection"));
 const ContactFormSection = dynamic(() => import("../sections/content-sections/ContactFormSection"));
+const ProductSection = dynamic(() => import("../sections/content-sections/ProductSection"));
 
 export default function PageBuilder({
   sections = [],
@@ -61,9 +62,23 @@ export default function PageBuilder({
               />
             );
           case "latest_blogs":
-            return <LatestBlogsSection key={i} data={block} posts={posts} />;
+            return (
+              <LatestBlogsSection
+                key={i}
+                data={block}
+                posts={posts}
+                language={language}
+              />
+            );
           case "latest_case_studies":
-            return <LatestCaseStudiesSection key={i} data={block} caseStudies={caseStudies} />;
+            return (
+              <LatestCaseStudiesSection
+                key={i}
+                data={block}
+                caseStudies={caseStudies}
+                language={language}
+              />
+            );
           case "team_section":
             return <TeamSection key={i} data={block} teams={teams} />;
           case "history_section":
@@ -71,7 +86,14 @@ export default function PageBuilder({
           case "partner_logo":
             return <PartnerReviewSection key={i} data={block} themeOptions={themeOptions} />;
           case "inner_case_studies":
-            return <InnerCaseStudy key={i} data={block} caseStudies={caseStudies} />;
+            return (
+              <InnerCaseStudy
+                key={i}
+                data={block}
+                caseStudies={caseStudies}
+                language={language}
+              />
+            );
           case "home_services_section":
             return <HomeServicesSection key={i} data={block} />;
           case "homepage_tank_section":
@@ -94,6 +116,8 @@ export default function PageBuilder({
             return <FullWidthContentSection key={i} data={block} />;
           case "contact_section":
             return <ContactFormSection key={i} data={block} language={language} />;
+          case "product_section":
+            return <ProductSection key={i} data={block} language={language} />;
           default:
             return null;
         }

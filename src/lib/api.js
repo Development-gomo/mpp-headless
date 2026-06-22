@@ -3,6 +3,7 @@ import { getWPBaseUrl } from "@/config";
 import {
   DEFAULT_LANGUAGE,
   FALLBACK_LANGUAGES,
+  getIndustryRouteSegment,
   localizePath,
 } from "@/lib/i18n";
 
@@ -135,6 +136,7 @@ function getContentEndpoint(type) {
     post: "posts",
     product: "product",
     "case-study": "case-study",
+    industry: "industry",
     "author-card": "author-card",
     product_cat: "product_cat",
     "product-category": "product_cat",
@@ -152,6 +154,10 @@ function normalizeWordPressPath(url = "#", language = DEFAULT_LANGUAGE) {
       .replace(/^\/headless-mpp/, "")
       .replace(/^\/produkt-kategori(?=\/|$)/, "/product-category")
       .replace(/^\/produkt(?=\/|$)/, "/product")
+      .replace(
+        /^\/industry(?=\/|$)/,
+        `/${getIndustryRouteSegment(language)}`
+      )
       .replace(/\/$/, "");
 
     return localizePath(`${pathname || "/"}${parsed.search}${parsed.hash}`, language);
@@ -341,6 +347,24 @@ export async function getCaseStudyBySlug(slug, { language } = {}) {
 export async function getCaseStudies({ language } = {}) {
   const data = await fetchWP(
     withParams(`/wp/v2/case-study`, {
+      per_page: 100,
+      _embed: "1",
+      acf_format: "standard",
+    }),
+    { language }
+  );
+
+  return Array.isArray(data) ? data : [];
+}
+
+// Industries
+export async function getIndustryBySlug(slug, { language } = {}) {
+  return getSingleEntry("industry", slug, { language });
+}
+
+export async function getIndustries({ language } = {}) {
+  const data = await fetchWP(
+    withParams(`/wp/v2/industry`, {
       per_page: 100,
       _embed: "1",
       acf_format: "standard",
@@ -701,7 +725,10 @@ export async function getLatestPosts({ language } = {}) {
     { language }
   );
 
-  return Array.isArray(data) ? data : [];
+  if (Array.isArray(data) && data.length > 0) return data;
+
+  const posts = await getAllPosts({ language });
+  return Array.isArray(posts) ? posts.slice(0, 3) : [];
 }
 
 // ─── Latest case studies ────────────────────────────────────────────────────
@@ -709,14 +736,17 @@ export async function getLatestPosts({ language } = {}) {
 export async function getLatestCaseStudies({ language } = {}) {
   const data = await fetchWP(
     withParams(`/wp/v2/case-study`, {
-      per_page: 2,
+      per_page: 6,
       _embed: "1",
       acf_format: "standard",
     }),
     { language }
   );
 
-  return Array.isArray(data) ? data : [];
+  if (Array.isArray(data) && data.length > 0) return data;
+
+  const caseStudies = await getCaseStudies({ language });
+  return caseStudies.slice(0, 6);
 }
 
 
