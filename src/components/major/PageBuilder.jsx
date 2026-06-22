@@ -25,6 +25,7 @@ const FindRetailerSection = dynamic(() => import("../sections/content-sections/F
 const FullWidthContentSection = dynamic(() => import("../sections/content-sections/FullWidthContentSection"));
 const ContactFormSection = dynamic(() => import("../sections/content-sections/ContactFormSection"));
 const ProductSection = dynamic(() => import("../sections/content-sections/ProductSection"));
+const CatalogSection = dynamic(() => import("../sections/catalog/CatalogSection"));
 
 export default function PageBuilder({
   sections = [],
@@ -118,6 +119,9 @@ export default function PageBuilder({
             return <ContactFormSection key={i} data={block} language={language} />;
           case "product_section":
             return <ProductSection key={i} data={block} language={language} />;
+          case "catalog":
+          case "catalog_section":
+            return <CatalogSection key={i} data={block} />;
           default:
             return null;
         }
