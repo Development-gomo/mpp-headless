@@ -2,11 +2,19 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
+
+const CASES_PER_PAGE = 6;
+
+const DEFAULT_LOAD_MORE_LABELS = {
+  sv: "Ladda fler",
+  en: "Load more",
+  de: "Mehr laden",
+};
 
 function stripHtml(value = "") {
   return String(value).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
@@ -123,6 +131,7 @@ export default function InnerCaseStudy({
 }) {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
+  const [visibleCount, setVisibleCount] = useState(CASES_PER_PAGE);
 
   if (!data) return null;
 
@@ -135,11 +144,15 @@ export default function InnerCaseStudy({
     custom_class,
     custom_id,
     read_more_button_text,
+    load_more_button_text,
   } = data;
 
-  const items = caseStudies.slice(0, 6);
+  const items = caseStudies.slice(0, visibleCount);
+  const hasMore = visibleCount < caseStudies.length;
   const layout = getCaseStudyLayout(data);
   const readMoreButtonText = read_more_button_text || "Read client case";
+  const loadMoreButtonText =
+    load_more_button_text || DEFAULT_LOAD_MORE_LABELS[language] || "Load more";
 
   return (
     <section
@@ -280,6 +293,29 @@ export default function InnerCaseStudy({
                 </button>
               </div>
             )}
+          </div>
+        )}
+
+        {hasMore && (
+          <div className="mt-10 flex justify-center">
+            <button
+              type="button"
+              onClick={() =>
+                setVisibleCount((count) =>
+                  Math.min(count + CASES_PER_PAGE, caseStudies.length)
+                )
+              }
+              className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+            >
+              <span>{loadMoreButtonText}</span>
+              <Image
+                src="/black-white-arrow.svg"
+                alt=""
+                width={40}
+                height={40}
+                className="h-auto w-[40px] rotate-90 object-contain transition-transform group-hover:translate-y-1"
+              />
+            </button>
           </div>
         )}
       </div>

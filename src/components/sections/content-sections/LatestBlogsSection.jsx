@@ -1,12 +1,31 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
+
+const POSTS_PER_PAGE = 6;
+
+const DEFAULT_READ_MORE_LABELS = {
+  sv: "Läs mer",
+  en: "Read more",
+  de: "Mehr erfahren",
+};
+
+const DEFAULT_LOAD_MORE_LABELS = {
+  sv: "Ladda fler",
+  en: "Load more",
+  de: "Mehr laden",
+};
 
 export default function LatestBlogsSection({
   data,
   posts = [],
   language = DEFAULT_LANGUAGE,
 }) {
+  const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
+
   if (!data) return null;
 
   const {
@@ -17,9 +36,16 @@ export default function LatestBlogsSection({
     background_color,
     custom_class,
     custom_id,
+    read_more_button_text,
+    load_more_button_text,
   } = data;
 
-  const latestPosts = posts.slice(0, 3);
+  const readMoreText =
+    read_more_button_text || DEFAULT_READ_MORE_LABELS[language] || "Read more";
+  const loadMoreText =
+    load_more_button_text || DEFAULT_LOAD_MORE_LABELS[language] || "Load more";
+  const visiblePosts = posts.slice(0, visibleCount);
+  const hasMore = visibleCount < posts.length;
 
   return (
     <section
@@ -81,9 +107,9 @@ export default function LatestBlogsSection({
           )}
         </div>
 
-        {latestPosts.length > 0 && (
+        {visiblePosts.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {latestPosts.map((post, index) => {
+            {visiblePosts.map((post, index) => {
               const title = post?.title?.rendered || post?.title || "";
               const excerpt = post?.excerpt?.rendered || post?.excerpt || "";
               const link = post?.slug ? localizePath(`/${post.slug}`, language) : "#";
@@ -132,10 +158,21 @@ export default function LatestBlogsSection({
 
                         {excerpt && (
                         <div
-                        className="mt-auto text-[16px] leading-6 text-[#1A1A1A] font-normal [font-family:var(--font-nunito-sans)] line-clamp-2"
+                        className="mb-6 text-[16px] leading-6 text-[#1A1A1A] font-normal [font-family:var(--font-nunito-sans)] line-clamp-2"
                         dangerouslySetInnerHTML={{ __html: excerpt }}
                         />
                         )}
+
+                        <span className="mt-auto inline-flex w-fit items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-black">
+                          <span>{readMoreText}</span>
+                          <Image
+                            src="/black-white-arrow.svg"
+                            alt=""
+                            width={36}
+                            height={36}
+                            className="h-auto w-9 object-contain transition-transform group-hover:translate-x-1"
+                          />
+                        </span>
                     </div>
 
                     <div className="relative h-[210px] overflow-hidden">
@@ -148,18 +185,33 @@ export default function LatestBlogsSection({
                             className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                         )}
-
-                        <Image
-                        src="/orange-black-arrow.svg"
-                        alt=""
-                        width={36}
-                        height={36}
-                        className="absolute right-5 bottom-5 h-auto w-9 object-contain transition-transform group-hover:translate-x-1"
-                        />
                     </div>
                 </Link>
               );
             })}
+          </div>
+        )}
+
+        {hasMore && (
+          <div className="mt-10 flex justify-center">
+            <button
+              type="button"
+              onClick={() =>
+                setVisibleCount((count) =>
+                  Math.min(count + POSTS_PER_PAGE, posts.length)
+                )
+              }
+              className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+            >
+              <span>{loadMoreText}</span>
+              <Image
+                src="/black-white-arrow.svg"
+                alt=""
+                width={40}
+                height={40}
+                className="h-auto w-10 rotate-90 object-contain transition-transform group-hover:translate-y-1"
+              />
+            </button>
           </div>
         )}
       </div>

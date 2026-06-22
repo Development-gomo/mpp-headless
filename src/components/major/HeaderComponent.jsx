@@ -263,6 +263,7 @@ export default function HeaderComponent(props) {
     (item) => item.code !== language && languageLinks[item.code]
   );
   const activeLogoUrl = isDark ? logoDarkUrl || logoUrl : logoUrl;
+  const homeHref = language === DEFAULT_LANGUAGE ? "/" : `/${language}`;
   const quoteHref = localizePath("/rfq", language);
   const callIcon = isDark ? "/call-dark.svg" : "/call.svg";
   const languageArrowIcon = isDark ? "/down-arrow-black.svg" : "/down-arrow.svg";
@@ -300,7 +301,8 @@ export default function HeaderComponent(props) {
       >
         {/* LOGO */}
         <Link
-          href="/"
+          href={homeHref}
+          aria-label={`${currentLanguage.native_name || currentLanguage.name || currentLanguage.code} home`}
           className={`shrink-0 transition-all duration-300 xl:absolute xl:left-0 ${
             scrolled ? "xl:top-[16px]" : isDark ? "xl:top-[48px]" : "xl:top-[42px]"
           }`}
@@ -585,14 +587,14 @@ export default function HeaderComponent(props) {
               {languageMenuOpen && availableLanguageOptions.length > 0 && (
                 <div className="absolute right-0 top-full mt-1 min-w-[45px] overflow-hidden rounded-sm border border-black/10 bg-white text-black shadow-[0_12px_28px_rgba(0,0,0,0.14)]">
                   {availableLanguageOptions.map((item) => (
-                    <Link
+                    <a
                       key={item.code}
                       href={languageLinks[item.code]}
                       className="block px-3 py-2 text-center font-heading text-[13px] leading-none hover:bg-[#F3F4FB]"
                       onClick={() => setLanguageMenuOpen(false)}
                     >
                       {item.code.toUpperCase()}
-                    </Link>
+                    </a>
                   ))}
                 </div>
               )}
@@ -603,9 +605,9 @@ export default function HeaderComponent(props) {
           <Link
             href={cta1Url || "#"}
             target={cta1Target || "_self"}
-            className="inline-flex h-[48px] w-[127px] items-center justify-between rounded-sm bg-[#445641] py-1.5 pr-1.5 pl-4 text-white font-heading text-[14px] leading-6 tracking-[-0.28px] hover:opacity-90 transition-opacity"
+            className="inline-flex h-[48px] w-auto min-w-[127px] shrink-0 items-center justify-between gap-3 rounded-sm bg-[#445641] py-1.5 pr-1.5 pl-4 text-white font-heading text-[14px] leading-6 tracking-[-0.28px] hover:opacity-90 transition-opacity"
           >
-            <span>{cta1Text}</span>
+            <span className="whitespace-nowrap">{cta1Text}</span>
 
             <span className="flex h-[36px] w-[37px] shrink-0 items-center justify-center rounded-sm bg-white">
               <Image
@@ -622,9 +624,9 @@ export default function HeaderComponent(props) {
           <Link
             href={cta2Url || "#"}
             target={cta2Target || "_self"}
-            className="group inline-flex h-[48px] w-[126px] items-center justify-between rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-4 text-black font-heading text-[14px] leading-6 tracking-[-0.28px] hover:opacity-90 transition-opacity"
+            className="group inline-flex h-[48px] w-auto min-w-[126px] shrink-0 items-center justify-between gap-3 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-4 text-black font-heading text-[14px] leading-6 tracking-[-0.28px] hover:opacity-90 transition-opacity"
           >
-            <span>{cta2Text}</span>
+            <span className="whitespace-nowrap">{cta2Text}</span>
 
             <span className="flex h-[36px] w-[37px] shrink-0 items-center justify-center rounded-sm bg-white">
               <Image

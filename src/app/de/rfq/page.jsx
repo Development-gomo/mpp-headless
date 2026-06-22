@@ -17,7 +17,7 @@ export default function RfqPage() {
       <main>
         <QuoteCartPageContent />
       </main>
-      <Footer />
+      <Footer language="de" />
     </>
   );
 }

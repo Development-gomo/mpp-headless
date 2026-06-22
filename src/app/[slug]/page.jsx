@@ -135,9 +135,19 @@ export default async function DynamicPage({ params }) {
   const hasPartners = page?.acf?.page_builder?.some(
     (section) => section?.acf_fc_layout === "partner_logo"
   );
+  const hasBlogListing = page?.acf?.page_builder?.some(
+    (section) => section?.acf_fc_layout === "latest_blogs"
+  );
+  const hasCaseStudyListing = page?.acf?.page_builder?.some(
+    (section) => section?.acf_fc_layout === "inner_case_studies"
+  );
   const [latestPosts, latestCaseStudies, teams, themeOptions] = await Promise.all([
-    getLatestPosts({ language: DEFAULT_LANGUAGE }),
-    getLatestCaseStudies({ language: DEFAULT_LANGUAGE }),
+    hasBlogListing
+      ? getAllPosts({ language: DEFAULT_LANGUAGE })
+      : getLatestPosts({ language: DEFAULT_LANGUAGE }),
+    hasCaseStudyListing
+      ? getCaseStudies({ language: DEFAULT_LANGUAGE })
+      : getLatestCaseStudies({ language: DEFAULT_LANGUAGE }),
     getTeams({ language: DEFAULT_LANGUAGE }),
     hasPartners ? getThemeOptions({ language: DEFAULT_LANGUAGE }) : {},
   ]);

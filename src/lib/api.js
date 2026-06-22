@@ -180,8 +180,10 @@ async function getTranslatedContent(type, id, slug, language) {
       endpoint: withParams(`/wp/v2/${endpoint}`, {
         ...baseParams,
         include: id,
+        lang: language,
+        wpml_language: language,
       }),
-      options: { language, logErrors: false },
+      options: { logErrors: false },
     },
     id && {
       endpoint: withParams(`/wp/v2/${endpoint}`, {
@@ -195,8 +197,10 @@ async function getTranslatedContent(type, id, slug, language) {
       endpoint: withParams(`/wp/v2/${endpoint}`, {
         ...baseParams,
         slug,
+        lang: language,
+        wpml_language: language,
       }),
-      options: { language, logErrors: false },
+      options: { logErrors: false },
     },
     slug && {
       endpoint: withParams(`/wp/v2/${endpoint}`, {
@@ -241,6 +245,10 @@ export const getLanguageLinks = cache(async function getLanguageLinks(
         links[targetLanguage] = currentPath;
         return;
       }
+
+      // Keep every active language available when a page has no translation.
+      links[targetLanguage] =
+        targetLanguage === DEFAULT_LANGUAGE ? "/" : `/${targetLanguage}`;
 
       const translated = await getTranslatedContent(
         context?.type,
@@ -511,7 +519,10 @@ export const getThemeOptions = cache(async function getThemeOptions({ language }
 
   for (const { endpoint, timeoutMs } of endpoints) {
     try {
-      const data = await fetchWP(endpoint, {
+      const localizedEndpoint = language
+        ? withParams(endpoint, { lang: language })
+        : endpoint;
+      const data = await fetchWP(localizedEndpoint, {
         language,
         timeoutMs,
         logErrors: false,

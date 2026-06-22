@@ -1,6 +1,34 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getThemeOptions } from "@/lib/api";
+import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
+
+const FOOTER_LABELS = {
+  sv: {
+    quickLinks: "Snabblänkar",
+    support: "Support",
+    contact: "Kontakt",
+    followUs: "Följ oss",
+    call: "Telefon:",
+    mail: "E-post:",
+  },
+  en: {
+    quickLinks: "Quick Links",
+    support: "Support",
+    contact: "Contact",
+    followUs: "Follow us",
+    call: "Call:",
+    mail: "Mail:",
+  },
+  de: {
+    quickLinks: "Schnelllinks",
+    support: "Support",
+    contact: "Kontakt",
+    followUs: "Folgen Sie uns",
+    call: "Telefon:",
+    mail: "E-Mail:",
+  },
+};
 
 const DEFAULT_FOOTER = {
   cta: {
@@ -67,23 +95,51 @@ function resolveThemeOptions(data) {
   ]);
 }
 
-function normalizeLink(link, fallback = "#") {
-  if (!link) return { url: fallback, target: "" };
-  if (typeof link === "string") return { url: link || fallback, target: "" };
+function normalizeUrl(url = "#", language = DEFAULT_LANGUAGE) {
+  if (!url || url === "#") return "#";
+  if (/^(mailto:|tel:)/i.test(url)) return url;
+
+  try {
+    const parsed = new URL(url);
+    const wpBaseUrl = process.env.WP_BASE || process.env.NEXT_PUBLIC_WP_BASE;
+
+    if (wpBaseUrl && parsed.origin !== new URL(wpBaseUrl).origin) {
+      return url;
+    }
+
+    const pathname = parsed.pathname
+      .replace(/^\/headless-mpp/, "")
+      .replace(/\/$/, "");
+
+    return localizePath(`${pathname || "/"}${parsed.search}${parsed.hash}`, language);
+  } catch {
+    return localizePath(url, language);
+  }
+}
+
+function normalizeLink(link, fallback = "#", language = DEFAULT_LANGUAGE) {
+  if (!link) return { url: normalizeUrl(fallback, language), target: "" };
+  if (typeof link === "string") {
+    return { url: normalizeUrl(link || fallback, language), target: "" };
+  }
 
   return {
-    url: link.url || fallback,
+    url: normalizeUrl(link.url || fallback, language),
     target: link.target || "",
     title: link.title || "",
   };
 }
 
-function normalizeList(items, fallback = []) {
-  if (!Array.isArray(items) || items.length === 0) return fallback;
+function normalizeList(items, fallback = [], language = DEFAULT_LANGUAGE) {
+  const source = Array.isArray(items) && items.length > 0 ? items : fallback;
 
-  return items
+  return source
     .map((item) => {
-      const link = normalizeLink(item.link || item.url || item.page_link, item.url || "#");
+      const link = normalizeLink(
+        item.link || item.url || item.page_link,
+        item.url || "#",
+        language
+      );
       return {
         label: item.label || item.title || link.title || "",
         url: link.url,
@@ -97,7 +153,7 @@ function stripHtml(value = "") {
   return String(value).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 }
 
-function resolveFooterData(optionsRoot) {
+function resolveFooterData(optionsRoot, language = DEFAULT_LANGUAGE) {
   const global = optionsRoot?.global || optionsRoot;
   const footer = pickFirstObject([global?.footer, optionsRoot?.footer]);
   const cta = pickFirstObject([footer?.footer_cta, footer?.cta, global?.footer_cta]);
@@ -109,7 +165,11 @@ function resolveFooterData(optionsRoot) {
         .map((item) => {
           const name = item.name || item.social_media_name || item.label || "";
           const key = name.toLowerCase();
-          const link = normalizeLink(item.link || item.social_media_link || item.url);
+          const link = normalizeLink(
+            item.link || item.social_media_link || item.url,
+            "#",
+            language
+          );
           const uploadedIcon = item.icon?.url || item.logo?.url || item.icon || item.logo;
 
           return {
@@ -127,19 +187,26 @@ function resolveFooterData(optionsRoot) {
       eyebrow: cta.cta_eyebrow || cta.eyebrow || DEFAULT_FOOTER.cta.eyebrow,
       heading: cta.cta_heading || cta.heading || DEFAULT_FOOTER.cta.heading,
       buttonText: cta.cta_button_text || cta.button_text || DEFAULT_FOOTER.cta.buttonText,
-      buttonLink: normalizeLink(cta.cta_button_link || cta.button_link, DEFAULT_FOOTER.cta.buttonLink.url),
+      buttonLink: normalizeLink(
+        cta.cta_button_link || cta.button_link,
+        DEFAULT_FOOTER.cta.buttonLink.url,
+        language
+      ),
     },
     productLinks: normalizeList(
       footer?.product_links || global?.product_links || global?.footer_product_links,
-      DEFAULT_FOOTER.productLinks
+      DEFAULT_FOOTER.productLinks,
+      language
     ),
     quickLinks: normalizeList(
       footer?.quick_links || global?.quick_links || global?.quick_links_group?.quick_links,
-      DEFAULT_FOOTER.quickLinks
+      DEFAULT_FOOTER.quickLinks,
+      language
     ),
     supportLinks: normalizeList(
       footer?.support_links || global?.support_links || global?.support_links_group?.support_links || global?.resources?.resource_links,
-      DEFAULT_FOOTER.supportLinks
+      DEFAULT_FOOTER.supportLinks,
+      language
     ),
     contact: {
       address: stripHtml(contact.address) || DEFAULT_FOOTER.contact.address,
@@ -148,16 +215,21 @@ function resolveFooterData(optionsRoot) {
       email: contact.email || DEFAULT_FOOTER.contact.email,
     },
     socialLinks: socialLinks.length > 0 ? socialLinks : DEFAULT_FOOTER.socialLinks,
-    legalLinks: normalizeList(footer?.legal_links || global?.legal_links, DEFAULT_FOOTER.legalLinks),
+    legalLinks: normalizeList(
+      footer?.legal_links || global?.legal_links,
+      DEFAULT_FOOTER.legalLinks,
+      language
+    ),
     copyright:
       stripHtml(footer?.copyright_text || global?.copyrights_left || global?.copyright_text) ||
       DEFAULT_FOOTER.copyright,
   };
 }
 
-export default async function Footer() {
-  const themeOptions = await getThemeOptions();
-  const footer = resolveFooterData(resolveThemeOptions(themeOptions));
+export default async function Footer({ language = DEFAULT_LANGUAGE }) {
+  const themeOptions = await getThemeOptions({ language });
+  const footer = resolveFooterData(resolveThemeOptions(themeOptions), language);
+  const labels = FOOTER_LABELS[language] || FOOTER_LABELS.en;
 
   return (
     <footer className="bg-[#18201F] text-white">
@@ -210,23 +282,23 @@ export default async function Footer() {
             <Image src="/mpp_logo.svg" alt="MPP" width={193} height={65} className="mt-7 h-auto w-[150px] md:w-[193px]" />
           </div>
 
-          <FooterLinkColumn title="Quick Links" links={footer.quickLinks} />
-          <FooterLinkColumn title="Support" links={footer.supportLinks} />
+          <FooterLinkColumn title={labels.quickLinks} links={footer.quickLinks} />
+          <FooterLinkColumn title={labels.support} links={footer.supportLinks} />
 
           <div>
-            <FooterHeading>Contact</FooterHeading>
+            <FooterHeading>{labels.contact}</FooterHeading>
             <div className="mt-5 space-y-4 font-body text-[14px] leading-[22px] tracking-[-0.28px] text-white">
               <Link href={footer.contact.mapUrl} target="_blank" className="block transition-opacity hover:opacity-70">
                 {footer.contact.address}
               </Link>
               <p>
-                <strong className="font-bold">Call:</strong>{" "}
+                <strong className="font-bold">{labels.call}</strong>{" "}
                 <Link href={`tel:${footer.contact.phone.replace(/[^\d+]/g, "")}`} className="hover:opacity-70">
                   {footer.contact.phone}
                 </Link>
               </p>
               <p>
-                <strong className="font-bold">Mail:</strong>{" "}
+                <strong className="font-bold">{labels.mail}</strong>{" "}
                 <Link href={`mailto:${footer.contact.email}`} className="hover:opacity-70">
                   {footer.contact.email}
                 </Link>
@@ -235,7 +307,7 @@ export default async function Footer() {
           </div>
 
           <div>
-            <FooterHeading>Follow us</FooterHeading>
+            <FooterHeading>{labels.followUs}</FooterHeading>
             <div className="mt-5 flex gap-[6px]">
               {footer.socialLinks.map((item) => (
                 <Link

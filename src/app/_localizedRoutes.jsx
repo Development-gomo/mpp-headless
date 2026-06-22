@@ -144,7 +144,7 @@ export async function renderHomePage(language) {
           language={language}
         />
       </main>
-      <Footer />
+      <Footer language={language} />
     </>
   );
 }
@@ -215,7 +215,7 @@ export async function renderDynamicPage(params, language) {
               relatedProduct={relatedProduct}
             />
           </main>
-          <Footer />
+          <Footer language={language} />
         </>
       );
     }
@@ -247,16 +247,25 @@ export async function renderDynamicPage(params, language) {
             authorCards={authorCards}
           />
         </main>
-        <Footer />
+        <Footer language={language} />
       </>
     );
   }
 
   const shouldLoadStores = hasPageBuilderSection(page, "find_retailer_section");
   const shouldLoadPartners = hasPageBuilderSection(page, "partner_logo");
+  const shouldLoadAllPosts = hasPageBuilderSection(page, "latest_blogs");
+  const shouldLoadAllCaseStudies = hasPageBuilderSection(
+    page,
+    "inner_case_studies"
+  );
   const [latestPosts, latestCaseStudies, teams, stores, themeOptions] = await Promise.all([
-    getLatestPosts({ language }),
-    getLatestCaseStudies({ language }),
+    shouldLoadAllPosts
+      ? getAllPosts({ language })
+      : getLatestPosts({ language }),
+    shouldLoadAllCaseStudies
+      ? getCaseStudies({ language })
+      : getLatestCaseStudies({ language }),
     getTeams({ language }),
     shouldLoadStores ? getStores({ language }) : [],
     shouldLoadPartners ? getThemeOptions({ language }) : {},
@@ -285,7 +294,7 @@ export async function renderDynamicPage(params, language) {
           language={language}
         />
       </main>
-      <Footer />
+      <Footer language={language} />
     </>
   );
 }
@@ -353,7 +362,7 @@ export async function renderProductPage(params, language) {
           language={language}
         />
       </main>
-      <Footer />
+      <Footer language={language} />
     </>
   );
 }
@@ -432,7 +441,7 @@ export async function renderProductCategoryPage(params, language) {
         <ProductCategorySeoSection category={category} />
         <ProductCategoryFaqSection category={category} />
       </main>
-      <Footer />
+      <Footer language={language} />
     </>
   );
 }
@@ -484,7 +493,7 @@ export async function renderCaseStudyPage(params, language) {
           relatedProduct={relatedProduct}
         />
       </main>
-      <Footer />
+      <Footer language={language} />
     </>
   );
 }
@@ -546,7 +555,7 @@ export async function renderIndustryPage(params, language) {
           language={language}
         />
       </main>
-      <Footer />
+      <Footer language={language} />
     </>
   );
 }
