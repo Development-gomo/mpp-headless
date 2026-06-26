@@ -217,7 +217,7 @@ export default function LatestBlogsSection({
                 alt=""
                 width={40}
                 height={40}
-                className="h-auto w-10 rotate-90 object-contain transition-transform group-hover:translate-y-1"
+                className="h-auto w-10 rotate-90 object-contain transition-transform"
               />
             </button>
           </div>
