@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+const FEATURE_SLIDE_INTERVAL = 3500;
+
 function getImageUrl(image) {
   if (!image) return null;
   if (typeof image === "string") return image;
@@ -42,7 +44,7 @@ export default function HeroBannerWithFeatures({ data }) {
 
     const interval = setInterval(() => {
       setActiveFeature((prev) => (prev + 1) % features.length);
-    }, 3500);
+    }, FEATURE_SLIDE_INTERVAL);
 
     return () => clearInterval(interval);
   }, [features.length]);
@@ -156,21 +158,18 @@ export default function HeroBannerWithFeatures({ data }) {
                         ${index !== features.length - 1 ? "border-b border-white/10 lg:border-b-0" : ""}
                       `}
                     >
-                      {/* Active border:
-                          Mobile = left border
-                          Desktop = top border
-                      */}
                       <span
-                        className={`absolute bg-[var(--color-yellow)] transition-all duration-500 ease-out
-                          ${
-                            isActive
-                              ? "opacity-100"
-                              : "opacity-0 group-hover:opacity-60"
-                          }
-                          left-0 top-6 h-[calc(100%-48px)] w-[3px]
-                          lg:top-0 lg:h-[1.5px] lg:w-full
-                        `}
-                      />
+                        className="absolute left-0 top-6 h-[calc(100%-48px)] w-[3px] overflow-hidden bg-white/20 lg:top-0 lg:h-[1.5px] lg:w-full"
+                        aria-hidden="true"
+                      >
+                        <span
+                          key={isActive ? `feature-progress-${index}-${activeFeature}` : `feature-progress-${index}`}
+                          className={`hero-feature-progress block h-full w-full bg-[var(--color-yellow)] ${
+                            isActive ? "is-active" : ""
+                          }`}
+                          style={{ "--feature-progress-duration": `${FEATURE_SLIDE_INTERVAL}ms` }}
+                        />
+                      </span>
 
                       <div className="pl-5 lg:pl-0 flex items-start gap-4 lg:flex-col lg:gap-3">
                         {iconUrl ? (
