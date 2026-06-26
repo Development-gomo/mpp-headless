@@ -204,8 +204,9 @@ export default function HeroBannerWithFeatures({ data }) {
                       key={index}
                       onClick={() => handleFeatureClick(index)}
                       aria-current={isActive ? "true" : undefined}
-                      className={`group relative text-left flex items-start gap-4 py-6 min-h-32 lg:flex-col lg:gap-3 lg:px-0
+                      className={`group relative text-left flex items-start gap-4 py-6 min-h-32 transition-opacity duration-300 lg:flex-col lg:gap-3 lg:px-0
                         ${index !== features.length - 1 ? "border-b border-white/10 lg:border-b-0" : ""}
+                        ${isActive ? "opacity-100" : "opacity-[0.92]"}
                       `}
                     >
                       <div className="pl-5 lg:pl-0 flex items-start gap-4 lg:flex-col lg:gap-3">
