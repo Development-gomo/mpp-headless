@@ -102,7 +102,7 @@ export default function ProductOverviewSection({
                   alt=""
                   width={36}
                   height={36}
-                  className="h-[36px] w-9 transition-transform group-hover:translate-x-1"
+                  className="h-[36px] w-9 transition-transform"
                 />
               </Link>
             )}

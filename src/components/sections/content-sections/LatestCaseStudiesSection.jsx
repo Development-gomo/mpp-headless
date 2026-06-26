@@ -22,7 +22,7 @@ export default function LatestCaseStudiesSection({ data, caseStudies = [] }) {
       className={`relative bg-white ${custom_class || ""}`}
       style={background_color ? { backgroundColor: background_color } : {}}
     >
-      <div className="web-width px-6 py-20">
+      <div className="web-width px-6 md:px-0 py-20">
         <div className="mb-10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div className="max-w-[620px]">
             {text_above_title && (
@@ -64,7 +64,7 @@ export default function LatestCaseStudiesSection({ data, caseStudies = [] }) {
                     alt=""
                     width={36}
                     height={36}
-                    className="h-auto w-9 object-contain transition-transform group-hover:translate-x-1"
+                    className="h-auto w-9 object-contain transition-transform"
                   />
                 </Link>
               ))}
@@ -139,7 +139,7 @@ export default function LatestCaseStudiesSection({ data, caseStudies = [] }) {
                             alt=""
                             width={36}
                             height={36}
-                            className="object-contain transition-transform group-hover:translate-x-1"
+                            className="object-contain transition-transform"
                         />
                     </Link>
                   </div>

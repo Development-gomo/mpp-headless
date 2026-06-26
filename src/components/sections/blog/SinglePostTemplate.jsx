@@ -186,7 +186,7 @@ function RelatedPostCard({ post }) {
           alt=""
           width={36}
           height={36}
-          className="absolute right-5 bottom-5 h-auto w-9 object-contain transition-transform group-hover:translate-x-1"
+          className="absolute right-5 bottom-5 h-auto w-9 object-contain transition-transform"
         />
       </div>
     </Link>

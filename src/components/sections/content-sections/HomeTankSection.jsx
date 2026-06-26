@@ -77,7 +77,7 @@ export default function HomeTankSection({ data }) {
       />
 
       {/* Content */}
-      <div className="relative z-10 web-width grid w-full grid-cols-1 items-center gap-10 px-6 pb-[130px] pt-28 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12 lg:pb-[150px] lg:pt-32">
+      <div className="relative z-10 web-width grid w-full grid-cols-1 items-center gap-10 px-6 md:px-0 pb-[130px] pt-28 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12 lg:pb-[150px] lg:pt-32">
         {/* LEFT — Text */}
         <div className="flex max-w-[560px] flex-col items-start">
           {text_above_title && (
@@ -124,7 +124,7 @@ export default function HomeTankSection({ data }) {
                     alt=""
                     width={40}
                     height={40}
-                    className="h-auto w-[40px] object-contain transition-transform group-hover:translate-x-1"
+                    className="h-auto w-[40px] object-contain transition-transform"
                   />
                 </Link>
               ))}

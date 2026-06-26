@@ -32,7 +32,7 @@ export default function HomeExpertAdviceSection({ data }) {
       className={`relative bg-white ${custom_class || ""}`}
       style={background_color ? { backgroundColor: background_color } : {}}
     >
-      <div className="web-width px-6 py-20 md:py-[112px]">
+      <div className="web-width px-6 md:px-0 py-20 md:py-[112px]">
         <div className="mb-14 md:mb-[74px]">
           {text_above_title && (
             <div className="mb-6 flex items-center gap-3">
@@ -113,7 +113,7 @@ export default function HomeExpertAdviceSection({ data }) {
                           alt=""
                           width={41}
                           height={40}
-                          className="h-[40px] w-[41px] transition-transform group-hover:translate-x-1"
+                          className="h-[40px] w-[41px] transition-transform"
                         />
                       </Link>
                     )}

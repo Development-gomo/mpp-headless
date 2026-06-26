@@ -60,7 +60,7 @@ export default function ProductFaqSection({ product }) {
                   alt=""
                   width={32}
                   height={32}
-                  className="h-[32px] w-[32px] object-contain transition-transform group-hover:translate-x-1"
+                  className="h-[32px] w-[32px] object-contain transition-transform"
                 />
               </Link>
             )}

@@ -128,7 +128,7 @@ export default function ServiceWhyChooseSection({ data }) {
                     alt=""
                     width={40}
                     height={40}
-                    className="h-auto w-[40px] object-contain transition-transform group-hover:translate-x-1"
+                    className="h-auto w-[40px] object-contain transition-transform"
                   />
                 </Link>
               ))}

@@ -76,7 +76,7 @@ export default function FullWidthContentSection({ data }) {
 
       {hasMediaBackground && <div className="absolute inset-0 z-10 bg-black/40" />}
 
-      <div className="web-width relative z-20 px-6 py-20 md:py-[120px]">
+      <div className="web-width relative z-20 px-6 md:px-0 py-20 md:py-[120px]">
         {text_above_title && (
           <div className="mb-6 flex items-center gap-2">
             <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
@@ -120,7 +120,7 @@ export default function FullWidthContentSection({ data }) {
                     alt=""
                     width={40}
                     height={40}
-                    className="h-auto w-[40px] object-contain transition-transform group-hover:translate-x-1"
+                    className="h-auto w-[40px] object-contain transition-transform"
                   />
                 </Link>
               );

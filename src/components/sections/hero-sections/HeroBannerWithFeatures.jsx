@@ -85,12 +85,12 @@ export default function HeroBannerWithFeatures({ data }) {
       )}
 
       {(bgImg || background_video_url) && (
-        <div className="absolute inset-0 bg-black/45 -z-10" />
+        <div className="absolute inset-0 bg-black/30 -z-10" />
       )}
 
       {/* Main Content */}
       <div
-        className={`relative web-width px-6 pt-28 pb-16 md:pt-24 w-full ${
+        className={`relative web-width px-6 md:px-0 pt-28 pb-16 md:pt-24 w-full ${
           features?.length > 0 ? "md:pb-48" : "md:pb-24"
         }`}
       >
@@ -128,7 +128,7 @@ export default function HeroBannerWithFeatures({ data }) {
                     alt=""
                     width={36}
                     height={36}
-                    className="w-9 h-auto object-contain transition-transform group-hover:translate-x-1"
+                    className="w-9 h-auto object-contain transition-transform"
                   />
                 </Link>
               ))}
@@ -140,7 +140,7 @@ export default function HeroBannerWithFeatures({ data }) {
       {/* Features Bottom Bar */}
       {features?.length > 0 && (
         <div className="relative md:absolute md:bottom-0 md:left-0 md:right-0 z-10 w-full">
-          <div className="web-width px-6">
+          <div className="web-width">
             <div className="border-t border-white/20">
               <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-0">
                 {features.map((feature, index) => {

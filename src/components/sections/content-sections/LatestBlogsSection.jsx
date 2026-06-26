@@ -25,7 +25,7 @@ export default function LatestBlogsSection({
       className={`relative bg-[#F1F1F3] ${custom_class || ""}`}
       style={background_color ? { backgroundColor: background_color } : {}}
     >
-      <div className="web-width px-6 py-20">
+      <div className="web-width px-6 md:px-0 py-20">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between mb-10">
           <div className="max-w-[560px]">
             {text_above_title && (
@@ -71,7 +71,7 @@ export default function LatestBlogsSection({
                     alt=""
                     width={36}
                     height={36}
-                    className="w-9 h-auto object-contain transition-transform group-hover:translate-x-1"
+                    className="w-9 h-auto object-contain transition-transform"
                   />
                 </Link>
               ))}
@@ -152,7 +152,7 @@ export default function LatestBlogsSection({
                         alt=""
                         width={36}
                         height={36}
-                        className="absolute right-5 bottom-5 h-auto w-9 object-contain transition-transform group-hover:translate-x-1"
+                        className="absolute right-5 bottom-5 h-auto w-9 object-contain transition-transform"
                         />
                     </div>
                 </Link>

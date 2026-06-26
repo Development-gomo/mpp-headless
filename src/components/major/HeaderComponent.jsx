@@ -622,7 +622,7 @@ export default function HeaderComponent(props) {
           <Link
             href={cta2Url || "#"}
             target={cta2Target || "_self"}
-            className="group inline-flex h-[48px] w-[126px] items-center justify-between rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-4 text-black font-heading text-[14px] leading-6 tracking-[-0.28px] hover:opacity-90 transition-opacity"
+            className="group inline-flex h-[48px] w-[170px] items-center justify-between rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-4 text-black font-heading text-[14px] leading-6 tracking-[-0.28px] hover:opacity-90 transition-opacity"
           >
             <span>{cta2Text}</span>
 

@@ -88,7 +88,7 @@ export default function ProductCategoriesSection({
       className={`relative bg-white ${custom_class || ""}`}
       style={background_color ? { backgroundColor: background_color } : {}}
     >
-      <div className="web-width px-6 py-20 md:py-[120px]">
+      <div className="web-width px-6 md:px-0 py-20 md:py-[120px]">
         {/* Header */}
         <div className="mb-14 grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-20">
           <div>

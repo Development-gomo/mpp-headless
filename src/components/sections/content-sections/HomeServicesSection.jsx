@@ -29,7 +29,7 @@ export default function HomeServicesSection({ data }) {
       className={`relative bg-[#F1F1F3] ${custom_class || ""}`}
       style={background_color ? { backgroundColor: background_color } : {}}
     >
-      <div className="web-width px-6 py-20">
+      <div className="web-width px-6 md:px-0 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           {/* Left */}
           <div>
@@ -71,7 +71,7 @@ export default function HomeServicesSection({ data }) {
                       alt=""
                       width={36}
                       height={36}
-                      className="w-9 h-auto object-contain transition-transform group-hover:translate-x-1"
+                      className="w-9 h-auto object-contain transition-transform"
                     />
                   </Link>
                 ))}

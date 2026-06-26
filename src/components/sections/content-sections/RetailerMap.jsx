@@ -602,7 +602,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
 
   return (
     <>
-      <div className="web-width px-6 pb-20">
+      <div className="web-width px-6 md:px-0 pb-20">
       <div className="overflow-hidden rounded-[8px] border border-black/10 bg-white shadow-[0_18px_50px_rgba(0,0,0,0.08)]">
         <div className="flex min-h-[720px] flex-col lg:h-[680px] lg:min-h-0 lg:flex-row">
           <div className="flex max-h-[430px] shrink-0 flex-col overflow-hidden border-b border-black/10 bg-[#F7F7F4] lg:max-h-none lg:w-[390px] lg:border-b-0 lg:border-r">

@@ -212,7 +212,7 @@ export default function TeamSection({ data, teams = [] }) {
       className={`relative ${custom_class || ""}`}
       style={background_color ? { backgroundColor: background_color } : undefined}
     >
-      <div className="web-width px-6 py-20 md:py-[110px]">
+      <div className="web-width px-6 md:px-0 py-20 md:py-[110px]">
         <div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-20">
           <div>
             {text_above_title && (
@@ -262,7 +262,7 @@ export default function TeamSection({ data, teams = [] }) {
                       alt=""
                       width={40}
                       height={40}
-                      className="h-auto w-[40px] object-contain transition-transform group-hover:translate-x-1"
+                      className="h-auto w-[40px] object-contain transition-transform"
                     />
                   </Link>
                 );

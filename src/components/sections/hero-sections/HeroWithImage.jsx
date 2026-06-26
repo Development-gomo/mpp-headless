@@ -112,7 +112,7 @@ export default function HeroWithImage({ data }) {
                     alt=""
                     width={36}
                     height={36}
-                    className="object-contain transition-transform group-hover:translate-x-1"
+                    className="object-contain transition-transform"
                   />
 
                 </Link>

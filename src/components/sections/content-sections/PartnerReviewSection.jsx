@@ -75,7 +75,7 @@ export default function PartnerReviewSection({ data, themeOptions }) {
       className={`relative overflow-hidden ${custom_class || ""}`}
       style={background_color ? { backgroundColor: background_color } : undefined}
     >
-      <div className="web-width px-6 py-20 md:py-[120px]">
+      <div className="web-width px-6 md:px-0 py-20 md:py-[120px]">
         <div className="mb-12 grid gap-8 lg:mb-16 lg:grid-cols-[1fr_0.85fr] lg:items-end lg:gap-16">
           <div className="max-w-[720px]">
             {text_above_title && (
@@ -122,7 +122,7 @@ export default function PartnerReviewSection({ data, themeOptions }) {
                         alt=""
                         width={40}
                         height={40}
-                        className="h-auto w-10 object-contain transition-transform group-hover:translate-x-1"
+                        className="h-auto w-10 object-contain transition-transform"
                       />
                     </Link>
                   );

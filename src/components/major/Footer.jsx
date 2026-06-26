@@ -161,7 +161,7 @@ export default async function Footer() {
 
   return (
     <footer className="bg-[#18201F] text-white">
-      <div className="web-width px-6 pb-14 pt-12">
+      <div className="web-width px-6 md:px-0 pb-14 pt-14">
         <div className="relative mb-12 overflow-hidden rounded-[8px] bg-[#303736] px-8 py-10 md:px-12 md:py-12">
           <div className="relative z-10 max-w-[680px]">
             <FooterHeading>{footer.cta.eyebrow}</FooterHeading>
@@ -177,7 +177,7 @@ export default async function Footer() {
               className="group relative z-10 mt-8 inline-flex h-[52px] items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90 md:absolute md:right-12 md:top-1/2 md:mt-0 md:-translate-y-1/2"
             >
               <span>{footer.cta.buttonText}</span>
-              <Image src="/black-white-arrow.svg" alt="" width={40} height={40} className="h-[40px] w-[40px] transition-transform group-hover:translate-x-1" />
+              <Image src="/black-white-arrow.svg" alt="" width={40} height={40} className="h-[40px] w-[40px] transition-transform" />
             </Link>
           )}
 
@@ -201,7 +201,7 @@ export default async function Footer() {
                     <span className="font-heading text-[28px] leading-[42px] tracking-[-0.6px] text-white md:text-[26px] md:leading-[48px]">
                       {item.label}
                     </span>
-                    <Image src="/orange-arrow.svg" alt="" width={15} height={15} className="h-[15px] w-[15px] transition-transform group-hover:translate-x-1" />
+                    <Image src="/orange-arrow.svg" alt="" width={15} height={15} className="h-[15px] w-[15px] transition-transform" />
                   </Link>
                 </li>
               ))}
@@ -254,7 +254,7 @@ export default async function Footer() {
       </div>
 
       <div className="bg-[#303736] py-3">
-        <div className="web-width flex flex-col gap-3 px-6 font-body text-[14px] leading-6 tracking-[-0.28px] text-white md:flex-row md:items-center md:justify-between">
+        <div className="web-width flex flex-col gap-3 px-6 md:px-0 font-body text-[14px] leading-6 tracking-[-0.28px] text-white md:flex-row md:items-center md:justify-between">
           <p>{footer.copyright}</p>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
             {footer.legalLinks.map((item, index) => (
