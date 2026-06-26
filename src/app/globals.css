@@ -129,44 +129,7 @@ em {
   animation: productGalleryFade 260ms ease-out;
 }
 
-@keyframes heroFeatureProgressY {
-  from {
-    transform: scaleY(0);
-  }
-
-  to {
-    transform: scaleY(1);
-  }
-}
-
-@keyframes heroFeatureProgressX {
-  from {
-    transform: scaleX(0);
-  }
-
-  to {
-    transform: scaleX(1);
-  }
-}
-
-.hero-feature-progress {
-  opacity: 0;
-  transform: scaleY(0);
-  transform-origin: top;
-}
-
-.hero-feature-progress.is-active {
-  opacity: 1;
-  animation: heroFeatureProgressY var(--feature-progress-duration, 3500ms) linear forwards;
-}
-
-@media (min-width: 1024px) {
-  .hero-feature-progress {
-    transform: scaleX(0);
-    transform-origin: left;
-  }
-
-  .hero-feature-progress.is-active {
-    animation-name: heroFeatureProgressX;
-  }
+.hero-feature-cycle-progress {
+  transform: scaleX(0);
+  transform-origin: left;
 }

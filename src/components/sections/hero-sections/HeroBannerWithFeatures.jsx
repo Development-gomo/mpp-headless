@@ -3,7 +3,7 @@
 // Layout: homepage_banner_with_features
 // Fields: hero_title, hero_description, button_row, features, background_image, background_color, background_video_url, custom_class, custom_id
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -12,7 +12,6 @@ const FEATURE_SLIDE_INTERVAL = 3500;
 function getImageUrl(image) {
   if (!image) return null;
   if (typeof image === "string") return image;
-
   return (
     image.url ||
     image.source_url ||
@@ -24,6 +23,9 @@ function getImageUrl(image) {
 
 export default function HeroBannerWithFeatures({ data }) {
   const [activeFeature, setActiveFeature] = useState(0);
+  const cycleStartRef = useRef(0);
+  const latestFrameTimeRef = useRef(0);
+  const progressBarRef = useRef(null);
 
   const {
     hero_title,
@@ -33,6 +35,7 @@ export default function HeroBannerWithFeatures({ data }) {
     background_image,
     background_color,
     background_video_url,
+    banner_height,
     custom_class,
     custom_id,
   } = data || {};
@@ -42,246 +45,201 @@ export default function HeroBannerWithFeatures({ data }) {
   useEffect(() => {
     if (!features?.length) return;
 
-    const interval = setInterval(() => {
-      setActiveFeature((prev) => (prev + 1) % features.length);
-    }, FEATURE_SLIDE_INTERVAL);
+    const cycleDuration = features.length * FEATURE_SLIDE_INTERVAL;
+    let animationFrame;
 
-    return () => clearInterval(interval);
+    const updateSliderProgress = (timestamp) => {
+      latestFrameTimeRef.current = timestamp;
+
+      if (!cycleStartRef.current) {
+        cycleStartRef.current = timestamp;
+      }
+
+      const elapsed = (timestamp - cycleStartRef.current) % cycleDuration;
+      const progress = elapsed / cycleDuration;
+      const nextFeature = Math.floor(elapsed / FEATURE_SLIDE_INTERVAL);
+
+      if (progressBarRef.current) {
+        progressBarRef.current.style.transform = `scaleX(${progress})`;
+      }
+
+      setActiveFeature((currentFeature) =>
+        currentFeature === nextFeature ? currentFeature : nextFeature
+      );
+
+      animationFrame = requestAnimationFrame(updateSliderProgress);
+    };
+
+    animationFrame = requestAnimationFrame(updateSliderProgress);
+
+    return () => cancelAnimationFrame(animationFrame);
   }, [features.length]);
 
-  useEffect(() => {
-    if (features?.length && activeFeature >= features.length) {
-      setActiveFeature(0);
+  const handleFeatureClick = (index) => {
+    if (!features.length) return;
+
+    const now = latestFrameTimeRef.current || 0;
+    cycleStartRef.current = now - index * FEATURE_SLIDE_INTERVAL;
+
+    if (progressBarRef.current) {
+      progressBarRef.current.style.transform = `scaleX(${index / features.length})`;
     }
-  }, [features.length, activeFeature]);
+
+    setActiveFeature(index);
+  };
 
   if (!data) return null;
 
   return (
-    <>
-      <section
-        id={custom_id || undefined}
-        className={`relative min-h-[720px] lg:min-h-screen flex flex-col md:flex-row md:items-center overflow-hidden ${
-          custom_class ? ` ${custom_class}` : ""
-        }`}
-        style={
-          background_color && !bgImg && !background_video_url
-            ? { backgroundColor: background_color }
-            : {}
-        }
-      >
-        {background_video_url && (
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover -z-10"
-          >
-            <source src={background_video_url} />
-          </video>
-        )}
-
-        {bgImg && !background_video_url && (
-          <Image
-            src={bgImg}
-            alt=""
-            fill
-            sizes="100vw"
-            priority
-            className="object-cover -z-10"
-          />
-        )}
-
-        {(bgImg || background_video_url) && (
-          <div className="absolute inset-0 bg-black/30 -z-10" />
-        )}
-
-        {/* Main Content */}
-        <div
-          className={`relative web-width px-6 md:px-0 pt-28 pb-16 md:pt-24 w-full ${
-            features?.length > 0 ? "md:pb-48" : "md:pb-24"
-          }`}
+    <section
+      id={custom_id || undefined}
+      className={`relative min-h-[720px] lg:min-h-screen flex flex-col md:flex-row md:items-center overflow-hidden ${
+        custom_class ? ` ${custom_class}` : ""
+      }`}
+      style={
+        background_color && !bgImg && !background_video_url
+          ? { backgroundColor: background_color }
+          : {}
+      }
+    >
+      {background_video_url && (
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover -z-10"
         >
-          <div className="max-w-4xl flex flex-col gap-6 md:gap-8 lg:mb-24">
-            {hero_title && (
-              <h1 className="text-[42px] leading-[1.05] tracking-[-1px] sm:text-[56px] lg:text-[80px] lg:mt-24 font-normal font-heading text-white max-w-225">
-                {hero_title}
-              </h1>
-            )}
+          <source src={background_video_url} />
+        </video>
+      )}
 
-            {hero_description && (
-              <div
-                className="text-white text-[16px] leading-6 md:text-[18px] md:leading-7.5 max-w-155 font-body"
-                dangerouslySetInnerHTML={{ __html: hero_description }}
-              />
-            )}
+      {bgImg && !background_video_url && (
+        <Image
+          src={bgImg}
+          alt=""
+          fill
+          sizes="100vw"
+          priority
+          className="object-cover -z-10"
+        />
+      )}
 
-            {button_row?.length > 0 && (
-              <div className="flex flex-col sm:flex-row flex-wrap gap-4">
-                {button_row.map((btn, i) => (
-                  <Link
-                    key={i}
-                    href={
-                      typeof btn.button_link === "string"
-                        ? btn.button_link
-                        : btn.button_link?.url || "#"
-                    }
-                    target={
-                      typeof btn.button_link === "object"
-                        ? btn.button_link?.target
-                        : undefined
-                    }
-                    className={
-                      i === 0
-                        ? "inline-flex w-fit justify-end items-center gap-4 py-1.5 pr-1.5 pl-6 rounded-sm bg-[image:var(--mpp-gradient)] text-white font-heading text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"
-                        : "inline-flex w-fit justify-end items-center gap-4 py-1.5 pr-1.5 pl-6 rounded-sm bg-[#445641] text-white font-heading text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"
-                    }
-                  >
-                    <span>{btn.button_label}</span>
+      {(bgImg || background_video_url) && (
+        <div className="absolute inset-0 bg-black/30 -z-10" />
+      )}
 
-                    <Image
-                      src="/black-white-arrow.svg"
-                      alt=""
-                      width={36}
-                      height={36}
-                      className="w-9 h-auto object-contain transition-transform"
-                    />
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
+      {/* Main Content */}
+      <div
+        className={`relative web-width px-6 md:px-0 pt-28 pb-16 md:pt-24 w-full ${
+          features?.length > 0 ? "md:pb-48" : "md:pb-24"
+        }`}
+      >
+        <div className="max-w-4xl flex flex-col gap-6 md:gap-8 lg:mb-24">
+          {hero_title && (
+            <h1 className="text-[42px] leading-[1.05] tracking-[-1px] sm:text-[56px] lg:text-[80px] lg:mt-24 font-normal font-heading text-white max-w-225">
+              {hero_title}
+            </h1>
+          )}
+
+          {hero_description && (
+            <div
+              className="text-white text-[16px] leading-6 md:text-[18px] md:leading-7.5 max-w-155 font-body"
+              dangerouslySetInnerHTML={{ __html: hero_description }}
+            />
+          )}
+
+          {button_row?.length > 0 && (
+            <div className="flex flex-col sm:flex-row flex-wrap gap-4">
+              {button_row.map((btn, i) => (
+                <Link
+                  key={i}
+                  href={typeof btn.button_link === "string" ? btn.button_link : btn.button_link?.url || "#"}
+                  target={typeof btn.button_link === "object" ? btn.button_link?.target : undefined}
+                  className={
+                    i === 0
+                      ? "inline-flex w-fit justify-end items-center gap-4 py-1.5 pr-1.5 pl-6 rounded-sm bg-[image:var(--mpp-gradient)] text-white font-heading text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"
+                      : "inline-flex w-fit justify-end items-center gap-4 py-1.5 pr-1.5 pl-6 rounded-sm bg-[#445641] text-white font-heading text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"
+                  }
+                >
+                  <span>{btn.button_label}</span>
+
+                  <Image
+                    src="/black-white-arrow.svg"
+                    alt=""
+                    width={36}
+                    height={36}
+                    className="w-9 h-auto object-contain transition-transform"
+                  />
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
+      </div>
 
-        {/* Features Bottom Bar */}
-        {features?.length > 0 && (
-          <div className="relative md:absolute md:bottom-0 md:left-0 md:right-0 z-10 w-full">
-            <div className="web-width">
-              <div className="border-t border-white/20">
-                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-0">
-                  {features.map((feature, index) => {
-                    const iconUrl = getImageUrl(feature.feature_icon);
-                    const isActive = activeFeature === index;
-                    const isCompleted = index < activeFeature;
+      {/* Features Bottom Bar */}
+      {features?.length > 0 && (
+        <div className="relative md:absolute md:bottom-0 md:left-0 md:right-0 z-10 w-full">
+          <div className="web-width">
+            <div className="relative border-t border-white/20">
+              <span
+                className="absolute left-0 top-[-1px] z-10 h-[2px] w-full overflow-hidden bg-white/20"
+                aria-hidden="true"
+              >
+                <span
+                  ref={progressBarRef}
+                  className="hero-feature-cycle-progress block h-full w-full bg-[var(--color-yellow)]"
+                />
+              </span>
 
-                    return (
-                      <button
-                        type="button"
-                        key={index}
-                        onClick={() => setActiveFeature(index)}
-                        className={`group relative text-left flex items-start gap-4 py-6 min-h-32 lg:flex-col lg:gap-3 lg:px-0
-                          ${
-                            index !== features.length - 1
-                              ? "border-b border-white/10 lg:border-b-0"
-                              : ""
-                          }
-                        `}
-                      >
-                        <span
-                          className="absolute left-0 top-6 h-[calc(100%-48px)] w-[3px] overflow-hidden bg-white/20 lg:top-0 lg:h-[1.5px] lg:w-full"
-                          aria-hidden="true"
-                        >
-                          <span
-                            key={
-                              isActive
-                                ? `feature-progress-active-${index}-${activeFeature}`
-                                : `feature-progress-${index}`
-                            }
-                            className={`hero-feature-progress block h-full w-full bg-[var(--color-yellow)] ${
-                              isCompleted ? "is-completed" : ""
-                            } ${isActive ? "is-active" : ""}`}
-                            style={{
-                              "--feature-progress-duration": `${FEATURE_SLIDE_INTERVAL}ms`,
+              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-0">
+                {features.map((feature, index) => {
+                  const iconUrl = getImageUrl(feature.feature_icon);
+                  const isActive = activeFeature === index;
+
+                  return (
+                    <button
+                      type="button"
+                      key={index}
+                      onClick={() => handleFeatureClick(index)}
+                      aria-current={isActive ? "true" : undefined}
+                      className={`group relative text-left flex items-start gap-4 py-6 min-h-32 lg:flex-col lg:gap-3 lg:px-0
+                        ${index !== features.length - 1 ? "border-b border-white/10 lg:border-b-0" : ""}
+                      `}
+                    >
+                      <div className="pl-5 lg:pl-0 flex items-start gap-4 lg:flex-col lg:gap-3">
+                        {iconUrl ? (
+                          <Image
+                            src={iconUrl}
+                            alt=""
+                            height={28}
+                            width={28}
+                            className="mt-1 h-7 w-7 object-contain"
+                          />
+                        ) : (
+                          <span className="mt-1 text-[28px] leading-none text-[var(--color-yellow)]">
+                            {feature.feature_icon}
+                          </span>
+                        )}
+
+                        {feature.feature_text && (
+                          <div
+                            className="text-white text-[16px] leading-6 font-normal max-w-[220px] font-body"
+                            dangerouslySetInnerHTML={{
+                              __html: feature.feature_text,
                             }}
                           />
-                        </span>
-
-                        <div className="pl-5 lg:pl-0 flex items-start gap-4 lg:flex-col lg:gap-3">
-                          {iconUrl ? (
-                            <Image
-                              src={iconUrl}
-                              alt=""
-                              height={28}
-                              width={28}
-                              className="mt-1 h-7 w-7 object-contain"
-                            />
-                          ) : (
-                            <span className="mt-1 text-[28px] leading-none text-[var(--color-yellow)]">
-                              {feature.feature_icon}
-                            </span>
-                          )}
-
-                          {feature.feature_text && (
-                            <div
-                              className="text-white text-[16px] leading-6 font-normal max-w-[220px] font-body"
-                              dangerouslySetInnerHTML={{
-                                __html: feature.feature_text,
-                              }}
-                            />
-                          )}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
-        )}
-      </section>
-
-      <style jsx global>{`
-        .hero-feature-progress {
-          transform: scaleY(0);
-          transform-origin: top;
-        }
-
-        .hero-feature-progress.is-completed {
-          transform: scaleY(1);
-        }
-
-        .hero-feature-progress.is-active {
-          animation: heroFeatureProgressY var(--feature-progress-duration)
-            linear forwards;
-        }
-
-        @keyframes heroFeatureProgressY {
-          from {
-            transform: scaleY(0);
-          }
-
-          to {
-            transform: scaleY(1);
-          }
-        }
-
-        @media (min-width: 1024px) {
-          .hero-feature-progress {
-            transform: scaleX(0);
-            transform-origin: left;
-          }
-
-          .hero-feature-progress.is-completed {
-            transform: scaleX(1);
-          }
-
-          .hero-feature-progress.is-active {
-            animation: heroFeatureProgressX var(--feature-progress-duration)
-              linear forwards;
-          }
-
-          @keyframes heroFeatureProgressX {
-            from {
-              transform: scaleX(0);
-            }
-
-            to {
-              transform: scaleX(1);
-            }
-          }
-        }
-      `}</style>
-    </>
+        </div>
+      )}
+    </section>
   );
 }
