@@ -49,6 +49,14 @@ function hasPageBuilderSection(page, layoutName) {
     : false;
 }
 
+function hasAnyPageBuilderSection(page, layoutNames = []) {
+  return Array.isArray(page?.acf?.page_builder)
+    ? page.acf.page_builder.some((section) =>
+        layoutNames.includes(section?.acf_fc_layout)
+      )
+    : false;
+}
+
 function getCategoryParentId(category) {
   return category?.parent || category?.parent_id || 0;
 }
@@ -115,11 +123,25 @@ export async function renderHomePage(language) {
 
   const shouldLoadStores = hasPageBuilderSection(page, "find_retailer_section");
   const shouldLoadPartners = hasPageBuilderSection(page, "partner_logo");
-  const [categoriesWithImages, latestPosts, latestCaseStudies, teams, stores, themeOptions] =
+  const shouldLoadIndustries = hasAnyPageBuilderSection(page, [
+    "inner_industry",
+    "inner_industries",
+    "industry_listing",
+  ]);
+  const [
+    categoriesWithImages,
+    latestPosts,
+    latestCaseStudies,
+    industries,
+    teams,
+    stores,
+    themeOptions,
+  ] =
     await Promise.all([
       getProductCategoriesWithImages({ language }),
       getLatestPosts({ language }),
       getLatestCaseStudies({ language }),
+      shouldLoadIndustries ? getIndustries({ language }) : [],
       getTeams({ language }),
       shouldLoadStores ? getStores({ language }) : [],
       shouldLoadPartners ? getThemeOptions({ language }) : {},
@@ -138,6 +160,7 @@ export async function renderHomePage(language) {
           categoriesWithImages={categoriesWithImages}
           posts={latestPosts}
           caseStudies={latestCaseStudies}
+          industries={industries}
           teams={teams}
           stores={stores}
           themeOptions={themeOptions}
@@ -259,13 +282,19 @@ export async function renderDynamicPage(params, language) {
     page,
     "inner_case_studies"
   );
-  const [latestPosts, latestCaseStudies, teams, stores, themeOptions] = await Promise.all([
+  const shouldLoadIndustries = hasAnyPageBuilderSection(page, [
+    "inner_industry",
+    "inner_industries",
+    "industry_listing",
+  ]);
+  const [latestPosts, latestCaseStudies, industries, teams, stores, themeOptions] = await Promise.all([
     shouldLoadAllPosts
       ? getAllPosts({ language })
       : getLatestPosts({ language }),
     shouldLoadAllCaseStudies
       ? getCaseStudies({ language })
       : getLatestCaseStudies({ language }),
+    shouldLoadIndustries ? getIndustries({ language }) : [],
     getTeams({ language }),
     shouldLoadStores ? getStores({ language }) : [],
     shouldLoadPartners ? getThemeOptions({ language }) : {},
@@ -288,6 +317,7 @@ export async function renderDynamicPage(params, language) {
           sections={page?.acf?.page_builder}
           posts={latestPosts}
           caseStudies={latestCaseStudies}
+          industries={industries}
           teams={teams}
           stores={stores}
           themeOptions={themeOptions}
@@ -521,10 +551,16 @@ export async function renderIndustryPage(params, language) {
     "find_retailer_section"
   );
   const shouldLoadPartners = hasPageBuilderSection(industry, "partner_logo");
-  const [latestPosts, latestCaseStudies, teams, stores, themeOptions] =
+  const shouldLoadIndustries = hasAnyPageBuilderSection(industry, [
+    "inner_industry",
+    "inner_industries",
+    "industry_listing",
+  ]);
+  const [latestPosts, latestCaseStudies, industries, teams, stores, themeOptions] =
     await Promise.all([
       getLatestPosts({ language }),
       getLatestCaseStudies({ language }),
+      shouldLoadIndustries ? getIndustries({ language }) : [],
       getTeams({ language }),
       shouldLoadStores ? getStores({ language }) : [],
       shouldLoadPartners ? getThemeOptions({ language }) : {},
@@ -549,6 +585,7 @@ export async function renderIndustryPage(params, language) {
           sections={industry?.acf?.page_builder}
           posts={latestPosts}
           caseStudies={latestCaseStudies}
+          industries={industries}
           teams={teams}
           stores={stores}
           themeOptions={themeOptions}

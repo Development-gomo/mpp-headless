@@ -14,6 +14,7 @@ const TeamSection = dynamic(() => import("../sections/content-sections/TeamSecti
 const HistorySection = dynamic(() => import("../sections/content-sections/HistorySection"));
 const PartnerReviewSection = dynamic(() => import("../sections/content-sections/PartnerReviewSection"));
 const InnerCaseStudy = dynamic(() => import("../sections/case-study/InnerCaseStudy"));
+const InnerIndustry = dynamic(() => import("../sections/industry/InnerIndustry"));
 const HomeServicesSection = dynamic(() => import("../sections/content-sections/HomeServicesSection")); 
 const HomeTankSection = dynamic(() => import("../sections/content-sections/HomeTankSection"));
 const HomeExpertAdviceSection = dynamic(() => import("../sections/content-sections/HomeExpertAdviceSection"));
@@ -32,6 +33,7 @@ export default function PageBuilder({
   categoriesWithImages = [],
   posts = [],
   caseStudies = [],
+  industries = [],
   teams = [],
   stores = [],
   themeOptions = {},
@@ -92,6 +94,17 @@ export default function PageBuilder({
                 key={i}
                 data={block}
                 caseStudies={caseStudies}
+                language={language}
+              />
+            );
+          case "inner_industry":
+          case "inner_industries":
+          case "industry_listing":
+            return (
+              <InnerIndustry
+                key={i}
+                data={block}
+                industries={industries}
                 language={language}
               />
             );

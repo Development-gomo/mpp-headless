@@ -225,6 +225,66 @@ async function getTranslatedContent(type, id, slug, language) {
   return null;
 }
 
+async function getContentEntriesForLanguage(type, language) {
+  const endpoint = getContentEndpoint(type);
+  if (!endpoint) return [];
+
+  const data = await fetchWP(
+    withParams(`/wp/v2/${endpoint}`, {
+      _fields: "id,slug,link",
+      per_page: 100,
+    }),
+    { language, logErrors: false }
+  );
+
+  return Array.isArray(data) ? data : [];
+}
+
+async function getTranslatedContentByReciprocalLookup(
+  type,
+  currentId,
+  currentSlug,
+  currentLanguage,
+  targetLanguage
+) {
+  if (!type || (!currentId && !currentSlug) || !currentLanguage) return null;
+  if (currentLanguage === targetLanguage) return null;
+
+  const candidates = await getContentEntriesForLanguage(type, targetLanguage);
+  const batchSize = 8;
+
+  for (let index = 0; index < candidates.length; index += batchSize) {
+    const batch = candidates.slice(index, index + batchSize);
+    const matches = await Promise.all(
+      batch.map(async (candidate) => {
+        const translatedBack = await getTranslatedContent(
+          type,
+          candidate?.id,
+          candidate?.slug,
+          currentLanguage
+        );
+
+        if (
+          translatedBack &&
+          ((currentId && String(translatedBack.id) === String(currentId)) ||
+            (currentSlug && translatedBack.slug === currentSlug))
+        ) {
+          return candidate;
+        }
+
+        return null;
+      })
+    );
+    const match = matches.find(Boolean);
+
+    if (match) {
+      return match;
+    }
+  }
+
+  return null;
+}
+
 export const getLanguageLinks = cache(async function getLanguageLinks(
   context = {},
   languages = FALLBACK_LANGUAGES
@@ -257,9 +317,19 @@ export const getLanguageLinks = cache(async function getLanguageLinks(
         targetLanguage
       );
 
-      if (translated?.link) {
+      const resolvedTranslation =
+        translated ||
+        (await getTranslatedContentByReciprocalLookup(
+          context?.type,
+          context?.id,
+          context?.slug,
+          context?.language,
+          targetLanguage
+        ));
+
+      if (resolvedTranslation?.link) {
         links[targetLanguage] = normalizeWordPressPath(
-          translated.link,
+          resolvedTranslation.link,
           targetLanguage
         );
       }
