@@ -14,6 +14,7 @@ const TeamSection = dynamic(() => import("../sections/content-sections/TeamSecti
 const HistorySection = dynamic(() => import("../sections/content-sections/HistorySection"));
 const PartnerReviewSection = dynamic(() => import("../sections/content-sections/PartnerReviewSection"));
 const InnerCaseStudy = dynamic(() => import("../sections/case-study/InnerCaseStudy"));
+const InnerIndustry = dynamic(() => import("../sections/industry/InnerIndustry"));
 const HomeServicesSection = dynamic(() => import("../sections/content-sections/HomeServicesSection")); 
 const HomeTankSection = dynamic(() => import("../sections/content-sections/HomeTankSection"));
 const HomeExpertAdviceSection = dynamic(() => import("../sections/content-sections/HomeExpertAdviceSection"));
@@ -24,12 +25,15 @@ const ServiceMaintenanceGuideSection = dynamic(() => import("../sections/content
 const FindRetailerSection = dynamic(() => import("../sections/content-sections/FindRetailerSection"));
 const FullWidthContentSection = dynamic(() => import("../sections/content-sections/FullWidthContentSection"));
 const ContactFormSection = dynamic(() => import("../sections/content-sections/ContactFormSection"));
+const ProductSection = dynamic(() => import("../sections/content-sections/ProductSection"));
+const CatalogSection = dynamic(() => import("../sections/catalog/CatalogSection"));
 
 export default function PageBuilder({
   sections = [],
   categoriesWithImages = [],
   posts = [],
   caseStudies = [],
+  industries = [],
   teams = [],
   stores = [],
   themeOptions = {},
@@ -61,9 +65,23 @@ export default function PageBuilder({
               />
             );
           case "latest_blogs":
-            return <LatestBlogsSection key={i} data={block} posts={posts} />;
+            return (
+              <LatestBlogsSection
+                key={i}
+                data={block}
+                posts={posts}
+                language={language}
+              />
+            );
           case "latest_case_studies":
-            return <LatestCaseStudiesSection key={i} data={block} caseStudies={caseStudies} />;
+            return (
+              <LatestCaseStudiesSection
+                key={i}
+                data={block}
+                caseStudies={caseStudies}
+                language={language}
+              />
+            );
           case "team_section":
             return <TeamSection key={i} data={block} teams={teams} />;
           case "history_section":
@@ -71,7 +89,25 @@ export default function PageBuilder({
           case "partner_logo":
             return <PartnerReviewSection key={i} data={block} themeOptions={themeOptions} />;
           case "inner_case_studies":
-            return <InnerCaseStudy key={i} data={block} caseStudies={caseStudies} />;
+            return (
+              <InnerCaseStudy
+                key={i}
+                data={block}
+                caseStudies={caseStudies}
+                language={language}
+              />
+            );
+          case "inner_industry":
+          case "inner_industries":
+          case "industry_listing":
+            return (
+              <InnerIndustry
+                key={i}
+                data={block}
+                industries={industries}
+                language={language}
+              />
+            );
           case "home_services_section":
             return <HomeServicesSection key={i} data={block} />;
           case "homepage_tank_section":
@@ -94,6 +130,11 @@ export default function PageBuilder({
             return <FullWidthContentSection key={i} data={block} />;
           case "contact_section":
             return <ContactFormSection key={i} data={block} language={language} />;
+          case "product_section":
+            return <ProductSection key={i} data={block} language={language} />;
+          case "catalog":
+          case "catalog_section":
+            return <CatalogSection key={i} data={block} />;
           default:
             return null;
         }

@@ -135,6 +135,28 @@ function pickFirstObject(candidates = []) {
   );
 }
 
+function pickLocalizedMenu(options, language = DEFAULT_LANGUAGE) {
+  if (!options || typeof options !== "object") return null;
+
+  const languageNames = {
+    sv: "swedish",
+    en: "english",
+    de: "german",
+  };
+  const languageName = languageNames[language];
+  const candidates = [
+    options?.[`mega_menu_${language}`],
+    options?.[`${language}_mega_menu`],
+    languageName && options?.[`mega_menu_${languageName}`],
+    languageName && options?.[`${languageName}_mega_menu`],
+    options?.mega_menus?.[language],
+    options?.menus?.[language],
+    options?.mega_menu,
+  ];
+
+  return candidates.find(Array.isArray) || null;
+}
+
 function resolveThemeOptions(data) {
   const candidates = [
     data?.options?.acf,
@@ -338,9 +360,9 @@ export default async function Header({
     null;
 
   const megaMenuRows = await normalizeMegaMenuRows(
-    headerOptions?.mega_menu ||
-      optionsRoot?.mega_menu ||
-      optionsRoot?.global?.mega_menu ||
+    pickLocalizedMenu(headerOptions, language) ||
+      pickLocalizedMenu(optionsRoot, language) ||
+      pickLocalizedMenu(optionsRoot?.global, language) ||
       [],
     language
   );

@@ -3,6 +3,7 @@ import { getWPBaseUrl } from "@/config";
 import {
   DEFAULT_LANGUAGE,
   FALLBACK_LANGUAGES,
+  getIndustryRouteSegment,
   localizePath,
 } from "@/lib/i18n";
 
@@ -135,6 +136,7 @@ function getContentEndpoint(type) {
     post: "posts",
     product: "product",
     "case-study": "case-study",
+    industry: "industry",
     "author-card": "author-card",
     product_cat: "product_cat",
     "product-category": "product_cat",
@@ -152,6 +154,10 @@ function normalizeWordPressPath(url = "#", language = DEFAULT_LANGUAGE) {
       .replace(/^\/headless-mpp/, "")
       .replace(/^\/produkt-kategori(?=\/|$)/, "/product-category")
       .replace(/^\/produkt(?=\/|$)/, "/product")
+      .replace(
+        /^\/industry(?=\/|$)/,
+        `/${getIndustryRouteSegment(language)}`
+      )
       .replace(/\/$/, "");
 
     return localizePath(`${pathname || "/"}${parsed.search}${parsed.hash}`, language);
@@ -174,8 +180,10 @@ async function getTranslatedContent(type, id, slug, language) {
       endpoint: withParams(`/wp/v2/${endpoint}`, {
         ...baseParams,
         include: id,
+        lang: language,
+        wpml_language: language,
       }),
-      options: { language, logErrors: false },
+      options: { logErrors: false },
     },
     id && {
       endpoint: withParams(`/wp/v2/${endpoint}`, {
@@ -189,8 +197,10 @@ async function getTranslatedContent(type, id, slug, language) {
       endpoint: withParams(`/wp/v2/${endpoint}`, {
         ...baseParams,
         slug,
+        lang: language,
+        wpml_language: language,
       }),
-      options: { language, logErrors: false },
+      options: { logErrors: false },
     },
     slug && {
       endpoint: withParams(`/wp/v2/${endpoint}`, {
@@ -210,6 +220,66 @@ async function getTranslatedContent(type, id, slug, language) {
     if (id && String(item.id) === String(id)) continue;
 
     return item;
+  }
+
+  return null;
+}
+
+async function getContentEntriesForLanguage(type, language) {
+  const endpoint = getContentEndpoint(type);
+  if (!endpoint) return [];
+
+  const data = await fetchWP(
+    withParams(`/wp/v2/${endpoint}`, {
+      _fields: "id,slug,link",
+      per_page: 100,
+    }),
+    { language, logErrors: false }
+  );
+
+  return Array.isArray(data) ? data : [];
+}
+
+async function getTranslatedContentByReciprocalLookup(
+  type,
+  currentId,
+  currentSlug,
+  currentLanguage,
+  targetLanguage
+) {
+  if (!type || (!currentId && !currentSlug) || !currentLanguage) return null;
+  if (currentLanguage === targetLanguage) return null;
+
+  const candidates = await getContentEntriesForLanguage(type, targetLanguage);
+  const batchSize = 8;
+
+  for (let index = 0; index < candidates.length; index += batchSize) {
+    const batch = candidates.slice(index, index + batchSize);
+    const matches = await Promise.all(
+      batch.map(async (candidate) => {
+        const translatedBack = await getTranslatedContent(
+          type,
+          candidate?.id,
+          candidate?.slug,
+          currentLanguage
+        );
+
+        if (
+          translatedBack &&
+          ((currentId && String(translatedBack.id) === String(currentId)) ||
+            (currentSlug && translatedBack.slug === currentSlug))
+        ) {
+          return candidate;
+        }
+
+        return null;
+      })
+    );
+    const match = matches.find(Boolean);
+
+    if (match) {
+      return match;
+    }
   }
 
   return null;
@@ -236,6 +306,10 @@ export const getLanguageLinks = cache(async function getLanguageLinks(
         return;
       }
 
+      // Keep every active language available when a page has no translation.
+      links[targetLanguage] =
+        targetLanguage === DEFAULT_LANGUAGE ? "/" : `/${targetLanguage}`;
+
       const translated = await getTranslatedContent(
         context?.type,
         context?.id,
@@ -243,9 +317,19 @@ export const getLanguageLinks = cache(async function getLanguageLinks(
         targetLanguage
       );
 
-      if (translated?.link) {
+      const resolvedTranslation =
+        translated ||
+        (await getTranslatedContentByReciprocalLookup(
+          context?.type,
+          context?.id,
+          context?.slug,
+          context?.language,
+          targetLanguage
+        ));
+
+      if (resolvedTranslation?.link) {
         links[targetLanguage] = normalizeWordPressPath(
-          translated.link,
+          resolvedTranslation.link,
           targetLanguage
         );
       }
@@ -341,6 +425,24 @@ export async function getCaseStudyBySlug(slug, { language } = {}) {
 export async function getCaseStudies({ language } = {}) {
   const data = await fetchWP(
     withParams(`/wp/v2/case-study`, {
+      per_page: 100,
+      _embed: "1",
+      acf_format: "standard",
+    }),
+    { language }
+  );
+
+  return Array.isArray(data) ? data : [];
+}
+
+// Industries
+export async function getIndustryBySlug(slug, { language } = {}) {
+  return getSingleEntry("industry", slug, { language });
+}
+
+export async function getIndustries({ language } = {}) {
+  const data = await fetchWP(
+    withParams(`/wp/v2/industry`, {
       per_page: 100,
       _embed: "1",
       acf_format: "standard",
@@ -487,7 +589,10 @@ export const getThemeOptions = cache(async function getThemeOptions({ language }
 
   for (const { endpoint, timeoutMs } of endpoints) {
     try {
-      const data = await fetchWP(endpoint, {
+      const localizedEndpoint = language
+        ? withParams(endpoint, { lang: language })
+        : endpoint;
+      const data = await fetchWP(localizedEndpoint, {
         language,
         timeoutMs,
         logErrors: false,
@@ -701,7 +806,10 @@ export async function getLatestPosts({ language } = {}) {
     { language }
   );
 
-  return Array.isArray(data) ? data : [];
+  if (Array.isArray(data) && data.length > 0) return data;
+
+  const posts = await getAllPosts({ language });
+  return Array.isArray(posts) ? posts.slice(0, 3) : [];
 }
 
 // ─── Latest case studies ────────────────────────────────────────────────────
@@ -709,14 +817,17 @@ export async function getLatestPosts({ language } = {}) {
 export async function getLatestCaseStudies({ language } = {}) {
   const data = await fetchWP(
     withParams(`/wp/v2/case-study`, {
-      per_page: 2,
+      per_page: 6,
       _embed: "1",
       acf_format: "standard",
     }),
     { language }
   );
 
-  return Array.isArray(data) ? data : [];
+  if (Array.isArray(data) && data.length > 0) return data;
+
+  const caseStudies = await getCaseStudies({ language });
+  return caseStudies.slice(0, 6);
 }
 
 

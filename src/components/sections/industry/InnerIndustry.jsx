@@ -6,9 +6,13 @@ import { useRef, useState } from "react";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
+import {
+  DEFAULT_LANGUAGE,
+  getIndustryRouteSegment,
+  localizePath,
+} from "@/lib/i18n";
 
-const CASES_PER_PAGE = 6;
+const INDUSTRIES_PER_PAGE = 6;
 
 const DEFAULT_LOAD_MORE_LABELS = {
   sv: "Ladda fler",
@@ -20,13 +24,38 @@ function stripHtml(value = "") {
   return String(value).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 }
 
-function getImageUrl(item) {
+function getMediaUrl(media) {
+  if (!media) return "";
+  if (typeof media === "string") return media;
+
   return (
-    item?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ||
-    item?.featured_image ||
-    item?.acf?.image?.url ||
-    item?.acf?.case_study_image?.url ||
-    item?.image ||
+    media.source_url ||
+    media.url ||
+    media.src ||
+    media.media_details?.sizes?.large?.source_url ||
+    media.media_details?.sizes?.medium_large?.source_url ||
+    media.media_details?.sizes?.full?.source_url ||
+    media.sizes?.large ||
+    media.sizes?.medium_large ||
+    media.sizes?.full ||
+    ""
+  );
+}
+
+function getImageUrl(item) {
+  const featuredMedia = item?._embedded?.["wp:featuredmedia"]?.[0];
+  const yoastImage = item?.yoast_head_json?.og_image?.[0]?.url;
+
+  return (
+    getMediaUrl(featuredMedia) ||
+    getMediaUrl(item?.featured_image) ||
+    item?.featured_image_url ||
+    item?.featured_media_url ||
+    yoastImage ||
+    getMediaUrl(item?.acf?.image) ||
+    getMediaUrl(item?.acf?.industry_image) ||
+    getMediaUrl(item?.acf?.background_image) ||
+    getMediaUrl(item?.image) ||
     ""
   );
 }
@@ -42,11 +71,10 @@ function getButtonTarget(link) {
   return link.target || undefined;
 }
 
-function getCaseStudyLayout(data) {
+function getIndustryLayout(data) {
   const layout =
-    data?.case_studies_layout ||
-    data?.case_study_layout ||
-    data?.case_studies_display_type ||
+    data?.industry_layout ||
+    data?.industries_layout ||
     data?.display_type ||
     data?.layout_type ||
     "grid";
@@ -54,20 +82,21 @@ function getCaseStudyLayout(data) {
   return String(layout).toLowerCase() === "slider" ? "slider" : "grid";
 }
 
-function CaseStudyCard({
+function IndustryCard({
   item,
-  buttonText = "Read client case",
+  buttonText = "Read more",
   language = DEFAULT_LANGUAGE,
 }) {
   const title = item?.title?.rendered || item?.title || "";
   const link = item?.slug
-    ? localizePath(`/${item.slug}`, language)
+    ? localizePath(`/${getIndustryRouteSegment(language)}/${item.slug}`, language)
     : getButtonHref(item?.link);
   const image = getImageUrl(item);
   const excerpt =
     item?.excerpt?.rendered ||
-    item?.acf?.case_study_description ||
+    item?.acf?.industry_description ||
     item?.acf?.description ||
+    item?.acf?.hero_description ||
     "";
 
   return (
@@ -76,14 +105,14 @@ function CaseStudyCard({
         {image ? (
           <Image
             src={image}
-            alt={stripHtml(title) || "Case study image"}
+            alt={stripHtml(title) || "Industry image"}
             fill
             sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
             className="object-cover"
           />
         ) : (
           <div className="flex h-full min-h-[220px] items-center justify-center bg-white/10 px-6 text-center font-body text-[14px] text-white/70 md:min-h-[245px]">
-            Case study image missing
+            Industry image missing
           </div>
         )}
       </div>
@@ -106,7 +135,7 @@ function CaseStudyCard({
         <div className="mt-auto">
           <Link
             href={link}
-            className="group inline-flex w-fit items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 text-black font-heading text-[14px] tracking-[-0.28px]"
+            className="group inline-flex w-fit items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-black"
           >
             <span>{buttonText}</span>
 
@@ -115,7 +144,7 @@ function CaseStudyCard({
               alt=""
               width={40}
               height={40}
-              className="h-auto w-[40px] object-contain transition-transform"
+              className="h-auto w-[40px] object-contain transition-transform group-hover:translate-x-1"
             />
           </Link>
         </div>
@@ -124,14 +153,14 @@ function CaseStudyCard({
   );
 }
 
-export default function InnerCaseStudy({
+export default function InnerIndustry({
   data,
-  caseStudies = [],
+  industries = [],
   language = DEFAULT_LANGUAGE,
 }) {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
-  const [visibleCount, setVisibleCount] = useState(CASES_PER_PAGE);
+  const [visibleCount, setVisibleCount] = useState(INDUSTRIES_PER_PAGE);
 
   if (!data) return null;
 
@@ -140,6 +169,7 @@ export default function InnerCaseStudy({
     hero_title,
     hero_description,
     button_row = [],
+    background_image,
     background_color,
     custom_class,
     custom_id,
@@ -147,18 +177,22 @@ export default function InnerCaseStudy({
     load_more_button_text,
   } = data;
 
-  const items = caseStudies.slice(0, visibleCount);
-  const hasMore = visibleCount < caseStudies.length;
-  const layout = getCaseStudyLayout(data);
-  const readMoreButtonText = read_more_button_text || "Read client case";
+  const sectionStyle = {
+    ...(background_color ? { backgroundColor: background_color } : {}),
+    ...(background_image?.url ? { backgroundImage: `url(${background_image.url})` } : {}),
+  };
+  const items = industries.slice(0, visibleCount);
+  const hasMore = visibleCount < industries.length;
+  const layout = getIndustryLayout(data);
+  const readMoreButtonText = read_more_button_text || "Read more";
   const loadMoreButtonText =
     load_more_button_text || DEFAULT_LOAD_MORE_LABELS[language] || "Load more";
 
   return (
     <section
       id={custom_id || undefined}
-      className={`relative bg-[#F3F4FB] ${custom_class || ""}`}
-      style={background_color ? { backgroundColor: background_color } : undefined}
+      className={`relative bg-[#F3F4FB] bg-cover bg-center ${custom_class || ""}`}
+      style={Object.keys(sectionStyle).length ? sectionStyle : undefined}
     >
       <div className="web-width px-6 py-20 md:py-[120px]">
         <div className="mb-12 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
@@ -196,14 +230,14 @@ export default function InnerCaseStudy({
                   target={getButtonTarget(btn.button_link)}
                   className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
                 >
-                  <span>{btn.button_label || "View all cases"}</span>
+                  <span>{btn.button_label || "View all industries"}</span>
 
                   <Image
                     src="/black-white-arrow.svg"
                     alt=""
                     width={40}
                     height={40}
-                    className="h-auto w-[40px] object-contain transition-transform"
+                    className="h-auto w-[40px] object-contain transition-transform group-hover:translate-x-1"
                   />
                 </Link>
               ))}
@@ -214,7 +248,7 @@ export default function InnerCaseStudy({
         {items.length > 0 && layout === "grid" && (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
             {items.map((item, index) => (
-              <CaseStudyCard
+              <IndustryCard
                 key={item?.id || index}
                 item={item}
                 buttonText={readMoreButtonText}
@@ -251,7 +285,7 @@ export default function InnerCaseStudy({
             >
               {items.map((item, index) => (
                 <SwiperSlide key={item?.id || index} className="h-auto">
-                  <CaseStudyCard
+                  <IndustryCard
                     item={item}
                     buttonText={readMoreButtonText}
                     language={language}
@@ -266,7 +300,7 @@ export default function InnerCaseStudy({
                   ref={prevRef}
                   type="button"
                   className="flex h-[44px] w-[44px] items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
-                  aria-label="Previous case study"
+                  aria-label="Previous industry"
                 >
                   <Image
                     src="/slider-arrow.svg"
@@ -281,7 +315,7 @@ export default function InnerCaseStudy({
                   ref={nextRef}
                   type="button"
                   className="flex h-[44px] w-[44px] items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
-                  aria-label="Next case study"
+                  aria-label="Next industry"
                 >
                   <Image
                     src="/slider-arrow.svg"
@@ -302,7 +336,7 @@ export default function InnerCaseStudy({
               type="button"
               onClick={() =>
                 setVisibleCount((count) =>
-                  Math.min(count + CASES_PER_PAGE, caseStudies.length)
+                  Math.min(count + INDUSTRIES_PER_PAGE, industries.length)
                 )
               }
               className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"

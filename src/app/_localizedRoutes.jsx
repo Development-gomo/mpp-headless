@@ -18,6 +18,8 @@ import {
   getBlogSettings,
   getCaseStudies,
   getCaseStudyBySlug,
+  getIndustries,
+  getIndustryBySlug,
   getLatestCaseStudies,
   getLatestPosts,
   getPageBySlug,
@@ -35,6 +37,7 @@ import {
 import { getProductCategories as getProductTerms } from "@/components/sections/product/productUtils";
 import { resolveParams } from "@/lib/params";
 import { buildMetadataFromYoast } from "@/lib/seo";
+import { getIndustryRouteSegment } from "@/lib/i18n";
 
 function getCategoryId(category) {
   return category?.term_id || category?.id;
@@ -43,6 +46,14 @@ function getCategoryId(category) {
 function hasPageBuilderSection(page, layoutName) {
   return Array.isArray(page?.acf?.page_builder)
     ? page.acf.page_builder.some((section) => section?.acf_fc_layout === layoutName)
+    : false;
+}
+
+function hasAnyPageBuilderSection(page, layoutNames = []) {
+  return Array.isArray(page?.acf?.page_builder)
+    ? page.acf.page_builder.some((section) =>
+        layoutNames.includes(section?.acf_fc_layout)
+      )
     : false;
 }
 
@@ -112,11 +123,25 @@ export async function renderHomePage(language) {
 
   const shouldLoadStores = hasPageBuilderSection(page, "find_retailer_section");
   const shouldLoadPartners = hasPageBuilderSection(page, "partner_logo");
-  const [categoriesWithImages, latestPosts, latestCaseStudies, teams, stores, themeOptions] =
+  const shouldLoadIndustries = hasAnyPageBuilderSection(page, [
+    "inner_industry",
+    "inner_industries",
+    "industry_listing",
+  ]);
+  const [
+    categoriesWithImages,
+    latestPosts,
+    latestCaseStudies,
+    industries,
+    teams,
+    stores,
+    themeOptions,
+  ] =
     await Promise.all([
       getProductCategoriesWithImages({ language }),
       getLatestPosts({ language }),
       getLatestCaseStudies({ language }),
+      shouldLoadIndustries ? getIndustries({ language }) : [],
       getTeams({ language }),
       shouldLoadStores ? getStores({ language }) : [],
       shouldLoadPartners ? getThemeOptions({ language }) : {},
@@ -135,13 +160,14 @@ export async function renderHomePage(language) {
           categoriesWithImages={categoriesWithImages}
           posts={latestPosts}
           caseStudies={latestCaseStudies}
+          industries={industries}
           teams={teams}
           stores={stores}
           themeOptions={themeOptions}
           language={language}
         />
       </main>
-      <Footer />
+      <Footer language={language} />
     </>
   );
 }
@@ -212,7 +238,7 @@ export async function renderDynamicPage(params, language) {
               relatedProduct={relatedProduct}
             />
           </main>
-          <Footer />
+          <Footer language={language} />
         </>
       );
     }
@@ -244,16 +270,31 @@ export async function renderDynamicPage(params, language) {
             authorCards={authorCards}
           />
         </main>
-        <Footer />
+        <Footer language={language} />
       </>
     );
   }
 
   const shouldLoadStores = hasPageBuilderSection(page, "find_retailer_section");
   const shouldLoadPartners = hasPageBuilderSection(page, "partner_logo");
-  const [latestPosts, latestCaseStudies, teams, stores, themeOptions] = await Promise.all([
-    getLatestPosts({ language }),
-    getLatestCaseStudies({ language }),
+  const shouldLoadAllPosts = hasPageBuilderSection(page, "latest_blogs");
+  const shouldLoadAllCaseStudies = hasPageBuilderSection(
+    page,
+    "inner_case_studies"
+  );
+  const shouldLoadIndustries = hasAnyPageBuilderSection(page, [
+    "inner_industry",
+    "inner_industries",
+    "industry_listing",
+  ]);
+  const [latestPosts, latestCaseStudies, industries, teams, stores, themeOptions] = await Promise.all([
+    shouldLoadAllPosts
+      ? getAllPosts({ language })
+      : getLatestPosts({ language }),
+    shouldLoadAllCaseStudies
+      ? getCaseStudies({ language })
+      : getLatestCaseStudies({ language }),
+    shouldLoadIndustries ? getIndustries({ language }) : [],
     getTeams({ language }),
     shouldLoadStores ? getStores({ language }) : [],
     shouldLoadPartners ? getThemeOptions({ language }) : {},
@@ -276,13 +317,14 @@ export async function renderDynamicPage(params, language) {
           sections={page?.acf?.page_builder}
           posts={latestPosts}
           caseStudies={latestCaseStudies}
+          industries={industries}
           teams={teams}
           stores={stores}
           themeOptions={themeOptions}
           language={language}
         />
       </main>
-      <Footer />
+      <Footer language={language} />
     </>
   );
 }
@@ -350,7 +392,7 @@ export async function renderProductPage(params, language) {
           language={language}
         />
       </main>
-      <Footer />
+      <Footer language={language} />
     </>
   );
 }
@@ -429,7 +471,7 @@ export async function renderProductCategoryPage(params, language) {
         <ProductCategorySeoSection category={category} />
         <ProductCategoryFaqSection category={category} />
       </main>
-      <Footer />
+      <Footer language={language} />
     </>
   );
 }
@@ -481,7 +523,76 @@ export async function renderCaseStudyPage(params, language) {
           relatedProduct={relatedProduct}
         />
       </main>
-      <Footer />
+      <Footer language={language} />
+    </>
+  );
+}
+
+export async function generateIndustryStaticParams(language) {
+  const industries = await getIndustries({ language });
+  return industries.map((industry) => ({ slug: industry.slug }));
+}
+
+export async function generateIndustryMetadata(params, language) {
+  const { slug } = resolveParams(await params);
+  const industry = await getIndustryBySlug(slug, { language });
+  return buildMetadataFromYoast(industry, { fallbackTitle: slug });
+}
+
+export async function renderIndustryPage(params, language) {
+  const { slug } = resolveParams(await params);
+  if (!slug) notFound();
+
+  const industry = await getIndustryBySlug(slug, { language });
+  if (!industry) notFound();
+
+  const shouldLoadStores = hasPageBuilderSection(
+    industry,
+    "find_retailer_section"
+  );
+  const shouldLoadPartners = hasPageBuilderSection(industry, "partner_logo");
+  const shouldLoadIndustries = hasAnyPageBuilderSection(industry, [
+    "inner_industry",
+    "inner_industries",
+    "industry_listing",
+  ]);
+  const [latestPosts, latestCaseStudies, industries, teams, stores, themeOptions] =
+    await Promise.all([
+      getLatestPosts({ language }),
+      getLatestCaseStudies({ language }),
+      shouldLoadIndustries ? getIndustries({ language }) : [],
+      getTeams({ language }),
+      shouldLoadStores ? getStores({ language }) : [],
+      shouldLoadPartners ? getThemeOptions({ language }) : {},
+    ]);
+
+  return (
+    <>
+      <BodyClass className={slug} />
+      <Header
+        language={language}
+        translationContext={{
+          type: "industry",
+          id: industry.id,
+          slug: industry.slug,
+          path: `/${language === "sv" ? "" : `${language}/`}${getIndustryRouteSegment(
+            language
+          )}/${slug}`,
+        }}
+      />
+      <main>
+        <PageBuilder
+          sections={industry?.acf?.page_builder}
+          posts={latestPosts}
+          caseStudies={latestCaseStudies}
+          industries={industries}
+          teams={teams}
+          stores={stores}
+          themeOptions={themeOptions}
+          language={language}
+        />
+      </main>
+      <Footer language={language} />
     </>
   );
 }
