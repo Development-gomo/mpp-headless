@@ -29,10 +29,10 @@ export default function LatestCaseStudiesSection({
     >
       <div className="web-width px-6 md:px-0 py-20">
         <div className="mb-10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-[620px]">
+          <div className="max-w-155">
             {text_above_title && (
               <div className="mb-5 flex items-center gap-2">
-                <span className="h-[10px] w-[2px] bg-[var(--color-yellow)]" />
+                <span className="h-2.5 w-0.5 bg-[var(--color-yellow)]" />
                 <p className="text-[#1A1A1A] text-[14px] leading-6 font-medium tracking-[0.56px] uppercase font-body">
                   {text_above_title}
                 </p>
@@ -41,7 +41,7 @@ export default function LatestCaseStudiesSection({
 
             {hero_title && (
               <h2
-                className="font-heading text-[36px] font-normal leading-[44px] tracking-[-0.72px] text-black md:text-[48px] md:leading-[56px] md:tracking-[-0.96px]"
+                className="font-heading text-[36px] font-normal leading-11 tracking-[-0.72px] text-black md:text-[48px] md:leading-14 md:tracking-[-0.96px]"
                 dangerouslySetInnerHTML={{ __html: hero_title }}
               />
             )}
@@ -116,7 +116,7 @@ export default function LatestCaseStudiesSection({
 
                       <div className="flex flex-col gap-3">
                         {feature1 && (
-                          <span className="inline-flex items-center gap-2 rounded-sm bg-white/10 px-3 py-[6px] text-white text-[12px] font-normal tracking-[-0.24px] font-heading w-fit">
+                          <span className="inline-flex items-center gap-2 rounded-sm bg-white/10 px-3 py-1.5 text-white text-[12px] font-normal tracking-[-0.24px] font-heading w-fit">
                             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/25">
                               ✓
                             </span>
@@ -125,7 +125,7 @@ export default function LatestCaseStudiesSection({
                         )}
 
                         {feature2 && (
-                          <span className="inline-flex items-center gap-2 rounded-sm bg-white/10 px-3 py-[6px] text-white text-[12px] font-normal tracking-[-0.24px] font-heading w-fit">
+                          <span className="inline-flex items-center gap-2 rounded-sm bg-white/10 px-3 py-1.5 text-white text-[12px] font-normal tracking-[-0.24px] font-heading w-fit">
                             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/25">
                               ✓
                             </span>

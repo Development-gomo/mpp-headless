@@ -418,6 +418,45 @@ export async function getAllPosts({ language } = {}) {
 
 // ─── Case studies ───────────────────────────────────────────────────────────
 
+// WPML bug: _embed does not populate wp:featuredmedia for translated posts.
+// WP REST API also hides unattached media from list queries, so fetch by ID directly.
+async function resolveEmbeddedMedia(items) {
+  const itemsNeedingMedia = items.filter(
+    (item) =>
+      !item?._embedded?.["wp:featuredmedia"]?.[0]?.source_url &&
+      item?.featured_media > 0
+  );
+
+  if (itemsNeedingMedia.length === 0) return items;
+
+  const uniqueIds = [...new Set(itemsNeedingMedia.map((item) => item.featured_media))];
+
+  const mediaResults = await Promise.all(
+    uniqueIds.map((id) =>
+      fetchWP(`/wp/v2/media/${id}`, { logErrors: false }).then((m) =>
+        m?.source_url ? { id, source_url: m.source_url } : null
+      )
+    )
+  );
+
+  const mediaMap = new Map(
+    mediaResults.filter(Boolean).map((m) => [m.id, m])
+  );
+
+  return items.map((item) => {
+    if (item?._embedded?.["wp:featuredmedia"]?.[0]?.source_url) return item;
+    const media = mediaMap.get(item?.featured_media);
+    if (!media?.source_url) return item;
+    return {
+      ...item,
+      _embedded: {
+        ...item._embedded,
+        "wp:featuredmedia": [{ source_url: media.source_url }],
+      },
+    };
+  });
+}
+
 export async function getCaseStudyBySlug(slug, { language } = {}) {
   return getSingleEntry("case-study", slug, { language });
 }
@@ -432,7 +471,8 @@ export async function getCaseStudies({ language } = {}) {
     { language }
   );
 
-  return Array.isArray(data) ? data : [];
+  const items = Array.isArray(data) ? data : [];
+  return resolveEmbeddedMedia(items);
 }
 
 // Industries
@@ -824,7 +864,7 @@ export async function getLatestCaseStudies({ language } = {}) {
     { language }
   );
 
-  if (Array.isArray(data) && data.length > 0) return data;
+  if (Array.isArray(data) && data.length > 0) return resolveEmbeddedMedia(data);
 
   const caseStudies = await getCaseStudies({ language });
   return caseStudies.slice(0, 6);
