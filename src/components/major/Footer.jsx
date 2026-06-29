@@ -237,7 +237,7 @@ export default async function Footer({ language = DEFAULT_LANGUAGE }) {
         <div className="relative mb-12 overflow-hidden rounded-[8px] bg-[#303736] px-8 py-10 md:px-12 md:py-12">
           <div className="relative z-10 max-w-[680px]">
             <FooterHeading>{footer.cta.eyebrow}</FooterHeading>
-            <h2 className="mt-5 max-w-[680px] font-heading text-[36px] font-normal leading-[44px] tracking-[-0.72px] text-white md:text-[48px] md:leading-[56px]">
+            <h2 className="mt-5 max-w-[680px] font-heading text-[36px] font-normal leading-[44px] tracking-[-0.72px] text-white md:text-[44px] md:leading-[56px]">
               {footer.cta.heading}
             </h2>
           </div>
