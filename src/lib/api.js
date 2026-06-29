@@ -406,7 +406,7 @@ export async function getPostBySlug(slug, { language } = {}) {
 }
 
 export async function getAllPosts({ language } = {}) {
-  return fetchWP(
+  const data = await fetchWP(
     withParams(`/wp/v2/posts`, {
       per_page: 100,
       _embed: "1",
@@ -414,6 +414,8 @@ export async function getAllPosts({ language } = {}) {
     }),
     { language }
   );
+  const items = Array.isArray(data) ? data : [];
+  return resolveEmbeddedMedia(items);
 }
 
 // ─── Case studies ───────────────────────────────────────────────────────────
@@ -846,7 +848,7 @@ export async function getLatestPosts({ language } = {}) {
     { language }
   );
 
-  if (Array.isArray(data) && data.length > 0) return data;
+  if (Array.isArray(data) && data.length > 0) return resolveEmbeddedMedia(data);
 
   const posts = await getAllPosts({ language });
   return Array.isArray(posts) ? posts.slice(0, 3) : [];
