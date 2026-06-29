@@ -170,7 +170,7 @@ export default function LatestBlogsSection({
                             alt=""
                             width={36}
                             height={36}
-                            className="h-auto w-9 object-contain transition-transform group-hover:translate-x-1"
+                            className="h-auto w-9 object-contain transition-transform"
                           />
                         </span>
                     </div>
