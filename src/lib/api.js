@@ -135,6 +135,7 @@ function getContentEndpoint(type) {
     page: "pages",
     post: "posts",
     product: "product",
+    service: "service",
     "case-study": "case-study",
     industry: "industry",
     "author-card": "author-card",
@@ -148,21 +149,25 @@ function getContentEndpoint(type) {
 function normalizeWordPressPath(url = "#", language = DEFAULT_LANGUAGE) {
   if (!url || url === "#") return localizePath("/", language);
 
-  try {
-    const parsed = new URL(url);
-    const pathname = parsed.pathname
+  const normalizePathname = (pathname = "/") =>
+    pathname
       .replace(/^\/headless-mpp/, "")
+      .replace(/^\/([a-z]{2})\/service(?=\/|$)/, "/$1")
+      .replace(/^\/service(?=\/|$)/, "")
       .replace(/^\/produkt-kategori(?=\/|$)/, "/product-category")
       .replace(/^\/produkt(?=\/|$)/, "/product")
       .replace(
         /^\/industry(?=\/|$)/,
         `/${getIndustryRouteSegment(language)}`
-      )
-      .replace(/\/$/, "");
+      );
+
+  try {
+    const parsed = new URL(url);
+    const pathname = normalizePathname(parsed.pathname).replace(/\/$/, "");
 
     return localizePath(`${pathname || "/"}${parsed.search}${parsed.hash}`, language);
   } catch {
-    return localizePath(url, language);
+    return localizePath(normalizePathname(url), language);
   }
 }
 
@@ -416,6 +421,25 @@ export async function getAllPosts({ language } = {}) {
   );
   const items = Array.isArray(data) ? data : [];
   return resolveEmbeddedMedia(items);
+}
+
+// Services
+
+export async function getServiceBySlug(slug, { language } = {}) {
+  return getSingleEntry("service", slug, { language });
+}
+
+export async function getServices({ language } = {}) {
+  const data = await fetchWP(
+    withParams(`/wp/v2/service`, {
+      per_page: 100,
+      _embed: "1",
+      acf_format: "standard",
+    }),
+    { language }
+  );
+
+  return Array.isArray(data) ? data : [];
 }
 
 // ─── Case studies ───────────────────────────────────────────────────────────

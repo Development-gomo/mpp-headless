@@ -30,6 +30,8 @@ import {
   getProductCategoriesWithImages,
   getProductCategoryBySlug,
   getProductsByCategory,
+  getServiceBySlug,
+  getServices,
   getThemeOptions,
   getTeams,
   getStores,
@@ -55,6 +57,59 @@ function hasAnyPageBuilderSection(page, layoutNames = []) {
         layoutNames.includes(section?.acf_fc_layout)
       )
     : false;
+}
+
+async function getPageBuilderData(entry, language) {
+  const shouldLoadStores = hasPageBuilderSection(entry, "find_retailer_section");
+  const shouldLoadPartners = hasPageBuilderSection(entry, "partner_logo");
+  const shouldLoadProductCategories = hasPageBuilderSection(
+    entry,
+    "home_product_categories"
+  );
+  const shouldLoadAllPosts = hasPageBuilderSection(entry, "latest_blogs");
+  const shouldLoadAllCaseStudies = hasPageBuilderSection(
+    entry,
+    "inner_case_studies"
+  );
+  const shouldLoadIndustries = hasAnyPageBuilderSection(entry, [
+    "inner_industry",
+    "inner_industries",
+    "industry_listing",
+  ]);
+
+  const [
+    categoriesWithImages,
+    latestPosts,
+    latestCaseStudies,
+    industries,
+    teams,
+    stores,
+    themeOptions,
+  ] = await Promise.all([
+    shouldLoadProductCategories
+      ? getProductCategoriesWithImages({ language })
+      : [],
+    shouldLoadAllPosts
+      ? getAllPosts({ language })
+      : getLatestPosts({ language }),
+    shouldLoadAllCaseStudies
+      ? getCaseStudies({ language })
+      : getLatestCaseStudies({ language }),
+    shouldLoadIndustries ? getIndustries({ language }) : [],
+    getTeams({ language }),
+    shouldLoadStores ? getStores({ language }) : [],
+    shouldLoadPartners ? getThemeOptions({ language }) : {},
+  ]);
+
+  return {
+    categoriesWithImages,
+    latestPosts,
+    latestCaseStudies,
+    industries,
+    teams,
+    stores,
+    themeOptions,
+  };
 }
 
 function getCategoryParentId(category) {
@@ -173,10 +228,11 @@ export async function renderHomePage(language) {
 }
 
 export async function generateDynamicStaticParams(language) {
-  const [pages, posts, caseStudies] = await Promise.all([
+  const [pages, posts, caseStudies, services] = await Promise.all([
     getAllPages({ language }),
     getAllPosts({ language }),
     getCaseStudies({ language }),
+    getServices({ language }),
   ]);
   const pageParams = (Array.isArray(pages) ? pages : [])
     .filter((p) => !["frontpage", "home"].includes(p.slug))
@@ -194,8 +250,16 @@ export async function generateDynamicStaticParams(language) {
         !postSlugs.has(caseStudy.slug)
     )
     .map((caseStudy) => ({ slug: caseStudy.slug }));
+  const reservedSlugs = new Set([
+    ...pageSlugs,
+    ...postSlugs,
+    ...caseStudyParams.map((item) => item.slug),
+  ]);
+  const serviceParams = (Array.isArray(services) ? services : [])
+    .filter((service) => service?.slug && !reservedSlugs.has(service.slug))
+    .map((service) => ({ slug: service.slug }));
 
-  return [...pageParams, ...postParams, ...caseStudyParams];
+  return [...pageParams, ...postParams, ...caseStudyParams, ...serviceParams];
 }
 
 export async function renderDynamicPage(params, language) {
@@ -206,7 +270,12 @@ export async function renderDynamicPage(params, language) {
     const post = await getPostBySlug(slug, { language });
     if (!post) {
       const caseStudy = await getCaseStudyBySlug(slug, { language });
-      if (!caseStudy) notFound();
+      if (!caseStudy) {
+        const service = await getServiceBySlug(slug, { language });
+        if (!service) notFound();
+
+        return renderServicePage(Promise.resolve({ slug }), language);
+      }
 
       const caseStudies = await getCaseStudies({ language });
       const relatedProductId =
@@ -354,7 +423,10 @@ export async function generateDynamicMetadata(params, language) {
   if (post) return buildMetadataFromYoast(post, { fallbackTitle: slug });
 
   const caseStudy = await getCaseStudyBySlug(slug, { language });
-  return buildMetadataFromYoast(caseStudy, { fallbackTitle: slug });
+  if (caseStudy) return buildMetadataFromYoast(caseStudy, { fallbackTitle: slug });
+
+  const service = await getServiceBySlug(slug, { language });
+  return buildMetadataFromYoast(service, { fallbackTitle: slug });
 }
 
 export async function generateProductStaticParams(language) {
@@ -362,6 +434,66 @@ export async function generateProductStaticParams(language) {
   return (Array.isArray(products) ? products : []).map((product) => ({
     slug: product.slug,
   }));
+}
+
+export async function generateServiceStaticParams(language) {
+  const services = await getServices({ language });
+  return (Array.isArray(services) ? services : []).map((service) => ({
+    slug: service.slug,
+  }));
+}
+
+export async function generateServiceMetadata(params, language) {
+  const { slug } = resolveParams(await params);
+  const service = await getServiceBySlug(slug, { language });
+  return buildMetadataFromYoast(service, { fallbackTitle: slug });
+}
+
+export async function renderServicePage(params, language) {
+  const { slug } = resolveParams(await params);
+  if (!slug) notFound();
+
+  const service = await getServiceBySlug(slug, { language });
+  if (!service) notFound();
+
+  const {
+    categoriesWithImages,
+    latestPosts,
+    latestCaseStudies,
+    industries,
+    teams,
+    stores,
+    themeOptions,
+  } = await getPageBuilderData(service, language);
+
+  return (
+    <>
+      <BodyClass className={slug} />
+      <Header
+        language={language}
+        translationContext={{
+          type: "service",
+          id: service.id,
+          slug: service.slug,
+          path: `/${language === "sv" ? "" : `${language}/`}${slug}`,
+        }}
+      />
+      <main>
+        <PageBuilder
+          sections={service?.acf?.page_builder}
+          categoriesWithImages={categoriesWithImages}
+          posts={latestPosts}
+          caseStudies={latestCaseStudies}
+          industries={industries}
+          teams={teams}
+          stores={stores}
+          themeOptions={themeOptions}
+          language={language}
+        />
+      </main>
+      <Footer language={language} />
+    </>
+  );
 }
 
 export async function generateProductMetadata(params, language) {

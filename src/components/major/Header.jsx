@@ -26,15 +26,19 @@ function normalizeUrl(url = "#", language = DEFAULT_LANGUAGE) {
   if (!url || url === "#") return "#";
   if (/^(mailto:|tel:)/i.test(url)) return url;
 
+  const normalizePathname = (pathname = "/") =>
+    pathname
+      .replace(/^\/headless-mpp/, "")
+      .replace(/^\/([a-z]{2})\/service(?=\/|$)/, "/$1")
+      .replace(/^\/service(?=\/|$)/, "");
+
   try {
     const parsed = new URL(url);
-    const pathname = parsed.pathname
-      .replace(/^\/headless-mpp/, "")
-      .replace(/\/$/, "");
+    const pathname = normalizePathname(parsed.pathname).replace(/\/$/, "");
 
     return localizePath(`${pathname || "/"}${parsed.search}${parsed.hash}`, language);
   } catch {
-    return localizePath(url, language);
+    return localizePath(normalizePathname(url), language);
   }
 }
 

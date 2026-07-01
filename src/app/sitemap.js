@@ -9,6 +9,7 @@ const SITE_URL = process.env.SITE_URL || "";
 const CONTENT_TYPES = [
   { endpoint: "/wp/v2/pages",  path: (s) => `/${s}`,       priority: 0.8, changeFrequency: "monthly", skip: new Set(["frontpage"]) },
   { endpoint: "/wp/v2/posts",  path: (s) => `/${s}`,       priority: 0.6, changeFrequency: "weekly"  },
+  { endpoint: "/wp/v2/service", path: (s) => `/${s}`,      priority: 0.8, changeFrequency: "monthly" },
   {
     endpoint: "/wp/v2/industry",
     path: (s) => `/anvandningsomraden/${s}`,
