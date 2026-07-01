@@ -71,7 +71,7 @@ function ProductCard({ product, language }) {
   const href = slug ? localizePath(`/product/${slug}`, language) : "#";
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-[12px] border border-[var(--color-accent)] bg-[var(--color-accent)]">
+    <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-[var(--color-accent)] bg-[var(--color-accent)]">
       <div className="relative flex aspect-[1.38/1] items-center justify-center bg-[#F7F6F2] p-7">
         {image ? (
           <Image

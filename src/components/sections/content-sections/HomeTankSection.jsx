@@ -77,7 +77,7 @@ export default function HomeTankSection({ data }) {
       />
 
       {/* Content */}
-      <div className="relative z-10 web-width grid w-full grid-cols-1 items-center gap-10 px-6 md:px-0 pb-[130px] pt-28 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12 lg:pb-[150px] lg:pt-32">
+      <div className="relative z-10 web-width grid w-full grid-cols-1 items-center gap-0 px-6 md:px-0 pb-32.5 pt-28 lg:grid-cols-[0.9fr_1.1fr] lg:pb-37.5 lg:pt-32">
         {/* LEFT — Text */}
         <div className="flex max-w-[560px] flex-col items-start">
           {text_above_title && (
@@ -91,7 +91,7 @@ export default function HomeTankSection({ data }) {
           )}
 
           {hero_title && (
-            <h1
+            <p
               className="font-heading max-w-155 text-[40px] font-normal leading-[48px] tracking-[-0.8px] text-white md:text-[56px] md:leading-[64px] md:tracking-[-1.12px] lg:text-[64px] lg:leading-[72px] lg:tracking-[-1.28px]"
               dangerouslySetInnerHTML={{ __html: hero_title }}
             />
@@ -151,21 +151,21 @@ export default function HomeTankSection({ data }) {
       {/* Static Text Marquee */}
       {rotating_text?.length > 0 && (
         <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-[3] overflow-hidden py-6">
-            <div className="flex w-max animate-marquee items-center gap-8 whitespace-nowrap">
+          <div className="flex w-max animate-marquee items-center gap-8 whitespace-nowrap">
             {[...rotating_text, ...rotating_text, ...rotating_text].map(
-                (item, index) => (
+              (item, index) => (
                 <div key={index} className="flex items-center gap-8">
-                    <span className="font-heading text-[52px] leading-[48px] font-bold uppercase tracking-[2.8px] text-white/15 md:text-[80px] md:leading-[72px] md:tracking-[4.8px]">
+                  <span className="font-heading text-[52px] leading-[48px] font-bold uppercase tracking-[2.8px] text-white/15 md:text-[80px] md:leading-[72px] md:tracking-[4.8px]">
                     {item?.rotating_word}
-                    </span>
+                  </span>
 
-                    <span className="h-[8px] w-[8px] shrink-0 rounded-full bg-[var(--color-yellow)]" />
+                  <span className="h-2 w-2 shrink-0 rounded-full bg-[var(--color-yellow)]" />
                 </div>
-                )
+              ),
             )}
-            </div>
+          </div>
         </div>
-        )}
+      )}
     </section>
   );
 }
