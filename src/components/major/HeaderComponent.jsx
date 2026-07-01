@@ -605,7 +605,7 @@ export default function HeaderComponent(props) {
           <Link
             href={cta1Url || "#"}
             target={cta1Target || "_self"}
-            className="inline-flex h-[48px] w-auto min-w-[127px] shrink-0 items-center justify-between gap-3 rounded-sm bg-[#445641] py-1.5 pr-1.5 pl-4 text-white font-heading text-[14px] leading-6 tracking-[-0.28px] hover:opacity-90 transition-opacity"
+            className="inline-flex h-[48px] w-auto min-w-[127px] shrink-0 items-center justify-between gap-4 rounded-sm bg-[#445641] py-1.5 pr-1.5 pl-4 text-white font-heading text-[14px] leading-6 tracking-[-0.28px] hover:opacity-90 transition-opacity"
           >
             <span className="whitespace-nowrap">{cta1Text}</span>
 

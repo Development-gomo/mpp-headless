@@ -81,6 +81,11 @@ em {
     padding-top: 0 !important;
 }
 
+.frontpage #product-cat-section h2 span {
+    color: #445641;
+}
+
+
 @keyframes processFadeUp {
   from {
     opacity: 0;
