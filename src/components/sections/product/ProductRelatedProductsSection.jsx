@@ -140,12 +140,12 @@ export default function ProductRelatedProductsSection({
         <div className="mb-12 grid grid-cols-1 gap-8 md:grid-cols-[1fr_auto] md:items-end">
           <div>
             <div className="mb-7 flex items-center gap-2">
-              <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
-              <p className="font-body text-[13px] font-medium uppercase leading-[22px] tracking-[0.52px]">
+              <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
+              <p className="font-body text-[13px] font-medium uppercase leading-5.5 tracking-[0.52px]">
                 Related products
               </p>
             </div>
-            <h2 className="max-w-[580px] font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] md:text-[48px] md:leading-[56px]">
+            <h2 className="max-w-[580px] font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] md:text-[48px] md:leading-14">
               Discover related fuel storage <span>products</span>
             </h2>
           </div>
@@ -165,7 +165,7 @@ export default function ProductRelatedProductsSection({
           </Link>
         </div>
 
-        <div className="relative overflow-hidden rounded-[8px] bg-[linear-gradient(180deg,#F3F4FB_0%,#D0D3E3_100%)] px-6 py-8 md:px-12 md:py-12">
+        <div className="relative overflow-hidden rounded-lg bg-[linear-gradient(180deg,#F3F4FB_0%,#D0D3E3_100%)] px-6 py-8 md:px-12 md:py-12">
           <div
             className="pointer-events-none absolute inset-0 opacity-[0.08]"
             style={{
@@ -193,17 +193,17 @@ export default function ProductRelatedProductsSection({
                 <div className="mb-8 max-w-[420px] border-y border-black/15">
                   {capacity && (
                     <div className="grid grid-cols-[130px_1fr] gap-4 border-b border-black/15 py-3">
-                      <div className="flex items-center gap-2 font-body text-[14px] font-bold leading-[22px] text-[var(--color-accent)]">
+                      <div className="flex items-center gap-2 font-body text-[14px] font-bold leading-5.5 text-[var(--color-accent)]">
                         <Image
                           src="/capacity-icon.svg"
                           alt=""
                           width={16}
                           height={16}
-                          className="h-[16px] w-[16px] object-contain"
+                          className="h-4 w-[16px] object-contain"
                         />
                         Capacity
                       </div>
-                      <div className="font-body text-[14px] leading-[22px]">
+                      <div className="font-body text-[14px] leading-5.5">
                         {capacity}
                       </div>
                     </div>
@@ -211,17 +211,17 @@ export default function ProductRelatedProductsSection({
 
                   {fuelType && (
                     <div className="grid grid-cols-[130px_1fr] gap-4 py-3">
-                      <div className="flex items-center gap-2 font-body text-[14px] font-bold leading-[22px] text-[var(--color-accent)]">
+                      <div className="flex items-center gap-2 font-body text-[14px] font-bold leading-5.5 text-[var(--color-accent)]">
                         <Image
                           src="/fuel-type-icon.svg"
                           alt=""
                           width={16}
                           height={16}
-                          className="h-[16px] w-[16px] object-contain"
+                          className="h-4 w-[16px] object-contain"
                         />
                         Fuel type
                       </div>
-                      <div className="font-body text-[14px] leading-[22px]">
+                      <div className="font-body text-[14px] leading-5.5">
                         {fuelType}
                       </div>
                     </div>
@@ -268,7 +268,7 @@ export default function ProductRelatedProductsSection({
                         prev === 0 ? usableProducts.length - 1 : prev - 1
                       )
                     }
-                    className="flex h-[44px] w-[44px] items-center justify-center rounded-sm bg-white transition-opacity hover:opacity-80"
+                    className="flex h-11 w-[44px] items-center justify-center rounded-sm bg-white transition-opacity hover:opacity-80"
                     aria-label="Previous product"
                   >
                     <Image
@@ -287,7 +287,7 @@ export default function ProductRelatedProductsSection({
                         prev === usableProducts.length - 1 ? 0 : prev + 1
                       )
                     }
-                    className="flex h-[44px] w-[44px] items-center justify-center rounded-sm bg-white transition-opacity hover:opacity-80"
+                    className="flex h-11 w-[44px] items-center justify-center rounded-sm bg-white transition-opacity hover:opacity-80"
                     aria-label="Next product"
                   >
                     <Image
@@ -313,7 +313,7 @@ export default function ProductRelatedProductsSection({
                         key={product.id || index}
                         type="button"
                         onClick={() => setActiveIndex(index)}
-                        className={`min-h-[44px] rounded-[3px] px-6 font-heading text-[16px] tracking-[-0.32px] transition-colors ${
+                        className={`min-h-11 rounded-[3px] px-6 font-heading text-[16px] tracking-[-0.32px] transition-colors ${
                           isActive
                             ? "bg-white text-black shadow-sm"
                             : "text-black/80 hover:bg-white/40"
@@ -326,7 +326,7 @@ export default function ProductRelatedProductsSection({
                 </div>
               )}
 
-              <div className="relative flex min-h-[280px] items-center justify-center md:min-h-[360px]">
+              <div className="relative flex min-h-70 items-center justify-center md:min-h-[360px]">
                 {activeImage ? (
                   <Image
                     src={activeImage}
@@ -336,7 +336,7 @@ export default function ProductRelatedProductsSection({
                     className="h-auto w-full max-w-[720px] object-contain drop-shadow-[0_20px_25px_rgba(0,0,0,0.25)]"
                   />
                 ) : (
-                  <div className="flex min-h-[260px] w-full items-center justify-center rounded-[8px] border border-black/10 bg-white/30 font-body text-[14px] text-black/50">
+                  <div className="flex min-h-[260px] w-full items-center justify-center rounded-lg border border-black/10 bg-white/30 font-body text-[14px] text-black/50">
                     Product image missing
                   </div>
                 )}

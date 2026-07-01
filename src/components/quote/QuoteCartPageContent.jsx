@@ -14,10 +14,10 @@ const emptyForm = {
 };
 
 function ProductImage({ src, alt }) {
-  if (!src) return <div className="h-full w-full rounded-[6px] bg-white" />;
+  if (!src) return <div className="h-full w-full rounded-md bg-white" />;
 
   return (
-    <div className="relative h-full w-full rounded-[6px] bg-white">
+    <div className="relative h-full w-full rounded-md bg-white">
       <Image
         src={src}
         alt={alt}
@@ -94,21 +94,21 @@ export default function QuoteCartPageContent() {
   };
 
   return (
-    <section className="bg-white pb-20 pt-[120px] text-black md:pb-[120px] md:pt-[150px]">
+    <section className="bg-white pb-20 pt-30 text-black md:pb-30 md:pt-37.5">
       <div className="web-width px-6">
         <div className="mb-10">
           <div className="mb-4 flex items-center gap-2">
-            <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
-            <p className="font-body text-[13px] font-medium uppercase leading-[22px] tracking-[0.52px]">
+            <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
+            <p className="font-body text-[13px] font-medium uppercase leading-5.5 tracking-[0.52px]">
               RFQ
             </p>
           </div>
-          <h1 className="max-w-[620px] font-heading text-[48px] font-normal leading-[56px] tracking-[-0.96px] md:text-[64px] md:leading-[70px]">
+          <h1 className="max-w-155 font-heading text-[48px] font-normal leading-14 tracking-[-0.96px] md:text-[64px] md:leading-[70px]">
             Request a <span>quote</span>
           </h1>
         </div>
 
-        <div className="grid grid-cols-1 overflow-hidden rounded-[8px] border border-[#D7E4EA] lg:grid-cols-[1.15fr_0.85fr]">
+        <div className="grid grid-cols-1 overflow-hidden rounded-lg border border-[#D7E4EA] lg:grid-cols-[1.15fr_0.85fr]">
           <div className="border-b border-[#D7E4EA] bg-white p-5 md:p-8 lg:border-b-0 lg:border-r">
             <div className="mb-6 flex items-center justify-between gap-4">
               <h2 className="font-heading text-[30px] leading-[36px] tracking-[-0.6px]">
@@ -132,7 +132,7 @@ export default function QuoteCartPageContent() {
             )}
 
             {confirmation ? (
-              <div className="rounded-[8px] bg-[#E5F2F7] p-6">
+              <div className="rounded-lg bg-[#E5F2F7] p-6">
                 <h3 className="font-heading text-[28px] leading-[34px]">
                   Quote request sent
                 </h3>
@@ -145,14 +145,14 @@ export default function QuoteCartPageContent() {
                 </p>
               </div>
             ) : items.length === 0 ? (
-              <div className="flex min-h-[280px] items-center justify-center rounded-[8px] border border-dashed border-black/20 bg-[#F8FAFC] p-8 text-center">
+              <div className="flex min-h-70 items-center justify-center rounded-lg border border-dashed border-black/20 bg-[#F8FAFC] p-8 text-center">
                 <div>
                   <p className="mx-auto max-w-[420px] font-body text-[15px] leading-[23px] text-black/60">
                     Add a product or accessory to start your quote request.
                   </p>
                   <Link
                     href="/product/pickuptank"
-                    className="mt-5 inline-flex h-[44px] items-center justify-center rounded-sm bg-[var(--color-yellow)] px-5 font-heading text-[14px] text-black"
+                    className="mt-5 inline-flex h-11 items-center justify-center rounded-sm bg-[var(--color-yellow)] px-5 font-heading text-[14px] text-black"
                   >
                     Explore products
                   </Link>
@@ -163,10 +163,10 @@ export default function QuoteCartPageContent() {
                 {items.map((item) => (
                   <article
                     key={item.key}
-                    className="rounded-[8px] border border-[#D7E4EA] bg-[#F8FBFC] p-4"
+                    className="rounded-lg border border-[#D7E4EA] bg-[#F8FBFC] p-4"
                   >
                     <div className="grid grid-cols-[90px_1fr] gap-4">
-                      <div className="h-[90px] overflow-hidden rounded-[6px] border border-black/10 bg-white">
+                      <div className="h-[90px] overflow-hidden rounded-md border border-black/10 bg-white">
                         <ProductImage src={item.image} alt={item.name} />
                       </div>
                       <div className="min-w-0">
@@ -224,7 +224,7 @@ export default function QuoteCartPageContent() {
                           {item.accessories.map((accessory) => (
                             <div
                               key={accessory.key}
-                              className="grid grid-cols-[58px_1fr_auto] items-center gap-3 rounded-[6px] bg-white p-2"
+                              className="grid grid-cols-[58px_1fr_auto] items-center gap-3 rounded-md bg-white p-2"
                             >
                               <div className="h-[58px] overflow-hidden rounded-sm border border-black/10">
                                 <ProductImage
@@ -233,7 +233,7 @@ export default function QuoteCartPageContent() {
                                 />
                               </div>
                               <div className="min-w-0">
-                                <p className="font-heading text-[17px] leading-[22px]">
+                                <p className="font-heading text-[17px] leading-5.5">
                                   {accessory.name}
                                 </p>
                                 <p className="font-body text-[12px] leading-[18px] text-black/55">
@@ -282,7 +282,7 @@ export default function QuoteCartPageContent() {
             <h2 className="font-heading text-[30px] leading-[36px] tracking-[-0.6px]">
               Contact details
             </h2>
-            <p className="mt-2 font-body text-[14px] leading-[22px] text-[#1A1A1A]">
+            <p className="mt-2 font-body text-[14px] leading-5.5 text-[#1A1A1A]">
               Send us your selected products and contact details. We will review
               the request and get back to you.
             </p>

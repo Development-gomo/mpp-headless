@@ -79,7 +79,7 @@ export default function FullWidthContentSection({ data }) {
       <div className="web-width relative z-20 px-6 md:px-0 py-20 md:py-[120px]">
         {text_above_title && (
           <div className="mb-6 flex items-center gap-2">
-            <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
+            <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
             <p
               className={`font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] ${textColor}`}
             >

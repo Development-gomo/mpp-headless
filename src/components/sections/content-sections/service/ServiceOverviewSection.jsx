@@ -46,7 +46,7 @@ export default function ServiceOverviewSection({ data }) {
           <div>
             {text_above_title && (
               <div className="mb-6 flex items-center gap-2">
-                <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
+                <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
 
                 <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A]">
                   {text_above_title}
@@ -56,14 +56,14 @@ export default function ServiceOverviewSection({ data }) {
 
             {hero_title && (
               <h2
-                className="max-w-[620px] font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-black md:text-[52px] md:leading-[60px] md:tracking-[-1.04px]"
+                className="max-w-155 font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-black md:text-[52px] md:leading-[60px] md:tracking-[-1.04px]"
                 dangerouslySetInnerHTML={{ __html: hero_title }}
               />
             )}
 
             {hero_description && (
               <div
-                className="mt-8 max-w-[620px] font-body text-[16px] font-normal leading-6 text-[#1A1A1A]"
+                className="mt-8 max-w-155 font-body text-[16px] font-normal leading-6 text-[#1A1A1A]"
                 dangerouslySetInnerHTML={{ __html: hero_description }}
               />
             )}

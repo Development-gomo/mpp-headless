@@ -45,7 +45,7 @@ export default function CatalogSection({ data }) {
           <div>
             {text_above_title && (
               <div className="mb-7 flex items-center gap-2">
-                <span className="h-5 w-[2px] bg-[var(--color-yellow)]" />
+                <span className="h-5 w-0.5 bg-[var(--color-yellow)]" />
                 <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A]">
                   {text_above_title}
                 </p>

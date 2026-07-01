@@ -196,10 +196,10 @@ export default function InnerIndustry({
     >
       <div className="web-width px-6 py-20 md:py-[120px]">
         <div className="mb-12 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-[620px]">
+          <div className="max-w-155">
             {text_above_title && (
               <div className="mb-6 flex items-center gap-2">
-                <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
+                <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
                 <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A]">
                   {text_above_title}
                 </p>
@@ -299,7 +299,7 @@ export default function InnerIndustry({
                 <button
                   ref={prevRef}
                   type="button"
-                  className="flex h-[44px] w-[44px] items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
+                  className="flex h-11 w-[44px] items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
                   aria-label="Previous industry"
                 >
                   <Image
@@ -314,7 +314,7 @@ export default function InnerIndustry({
                 <button
                   ref={nextRef}
                   type="button"
-                  className="flex h-[44px] w-[44px] items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
+                  className="flex h-11 w-[44px] items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
                   aria-label="Next industry"
                 >
                   <Image

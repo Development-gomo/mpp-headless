@@ -14,17 +14,17 @@ export default function ProductCtaSection({ product }) {
 
   return (
     <section className="bg-white">
-      <div className="web-width px-6 pb-20 md:pb-[120px]">
-        <div className="relative overflow-hidden rounded-[8px] bg-[#18201F] px-8 py-10 text-white md:px-12 md:py-12">
+      <div className="web-width px-6 pb-20 md:pb-30">
+        <div className="relative overflow-hidden rounded-lg bg-[#18201F] px-8 py-10 text-white md:px-12 md:py-12">
           <div className="relative z-10 max-w-[720px]">
             <div className="mb-5 flex items-center gap-2">
-              <span className="h-[12px] w-[2px] bg-[var(--color-yellow)]" />
+              <span className="h-[12px] w-0.5 bg-[var(--color-yellow)]" />
               <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-white">
                 Get started
               </p>
             </div>
             <h2
-              className="font-heading text-[36px] leading-[44px] tracking-[-0.72px] text-white md:text-[48px] md:leading-[56px]"
+              className="font-heading text-[36px] leading-11 tracking-[-0.72px] text-white md:text-[48px] md:leading-14"
               dangerouslySetInnerHTML={{ __html: title }}
             />
             {text && (

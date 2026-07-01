@@ -104,7 +104,7 @@ export default function ProductCategoriesSection({
           <div>
             {text_above_title && (
               <div className="mb-6 flex items-center gap-2">
-                <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
+                <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
 
                 <p className="text-[#1A1A1A] text-[14px] leading-6 font-medium tracking-[0.56px] uppercase font-body">
                   {text_above_title}
@@ -114,7 +114,7 @@ export default function ProductCategoriesSection({
 
             {hero_title && (
               <h2
-                className="font-heading max-w-[560px] text-[36px] font-normal leading-[44px] tracking-[-0.72px] text-black md:text-[48px] md:leading-[56px] md:tracking-[-0.96px]"
+                className="font-heading max-w-[560px] text-[36px] font-normal leading-11 tracking-[-0.72px] text-black md:text-[48px] md:leading-14 md:tracking-[-0.96px]"
                 dangerouslySetInnerHTML={{ __html: hero_title }}
               />
             )}
@@ -161,7 +161,7 @@ export default function ProductCategoriesSection({
         {mergedCategories.length > 0 && (
           <>
             {mergedCategories.length === 1 ? (
-              <div className="relative h-[360px] overflow-hidden rounded-[8px] bg-black md:h-[526px]">
+              <div className="relative h-[360px] overflow-hidden rounded-lg bg-black md:h-[526px]">
                 {(() => {
                   const cat = mergedCategories[0];
                   const title = cat?.name || cat?.title;
@@ -196,7 +196,7 @@ export default function ProductCategoriesSection({
                     <Link
                       key={cat?.term_id || cat?.id || index}
                       href={cat?.link || "#"}
-                      className="group relative h-[360px] overflow-hidden rounded-[8px] bg-black md:h-[405px]"
+                      className="group relative h-[360px] overflow-hidden rounded-lg bg-black md:h-[405px]"
                     >
                       {image && (
                         <Image

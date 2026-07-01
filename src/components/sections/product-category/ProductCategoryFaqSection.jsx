@@ -43,7 +43,7 @@ export default function ProductCategoryFaqSection({ category }) {
           <div>
             {aboveTitle && (
               <div className="mb-6 flex items-center gap-2">
-                <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
+                <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
 
                 <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A]">
                   {aboveTitle}

@@ -29,7 +29,7 @@ export default function ServiceProcessSection({ data }) {
           <div className="max-w-[680px]">
             {text_above_title && (
               <div className="mb-6 flex items-center gap-2">
-                <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
+                <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
 
                 <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A]">
                   {text_above_title}
@@ -46,7 +46,7 @@ export default function ServiceProcessSection({ data }) {
 
             {hero_description && (
               <div
-                className="mt-6 max-w-[620px] font-body text-[16px] font-normal leading-6 text-[#1A1A1A]"
+                className="mt-6 max-w-155 font-body text-[16px] font-normal leading-6 text-[#1A1A1A]"
                 dangerouslySetInnerHTML={{ __html: hero_description }}
               />
             )}

@@ -75,7 +75,7 @@ export default function HeroWithImage({ data }) {
         <div className="flex flex-col gap-8">
           <div className="flex items-center gap-3">
             {/* Left border */}
-            <span className="w-[2px] h-[16px] bg-[var(--color-yellow)]"></span>
+            <span className="w-0.5 h-4 bg-[var(--color-yellow)]"></span>
 
             {/* Text */}
             <p className="text-white text-[14px] font-medium leading-6 tracking-[0.56px] uppercase [font-family:var(--font-nunito-sans)]">

@@ -33,7 +33,7 @@ export default function ContactFormSection({ data, language }) {
           <div>
             {text_above_title && (
               <div className="flex items-center gap-2 mb-5">
-                <span className="w-[2px] h-[10px] bg-[var(--color-yellow)]" />
+                <span className="w-0.5 h-[10px] bg-[var(--color-yellow)]" />
                 <p className="text-[#1A1A1A] text-[14px] leading-6 font-medium tracking-[0.56px] uppercase font-body">
                   {text_above_title}
                 </p>
@@ -42,7 +42,7 @@ export default function ContactFormSection({ data, language }) {
 
             {hero_title && (
               <h2
-                className="font-heading mb-6 text-[36px] font-normal leading-[44px] tracking-[-0.72px] text-black md:text-[48px] md:leading-[56px] md:tracking-[-0.96px]"
+                className="font-heading mb-6 text-[36px] font-normal leading-11 tracking-[-0.72px] text-black md:text-[48px] md:leading-14 md:tracking-[-0.96px]"
                 dangerouslySetInnerHTML={{ __html: hero_title }}
               />
             )}

@@ -52,13 +52,13 @@ const STATIC_ACCESSORIES = [
 function AccessoryCard({ accessory, image, onAdd }) {
   return (
     <article
-      className={`relative grid min-h-[114px] grid-cols-[120px_1fr] gap-4 overflow-hidden rounded-[8px] p-2 ${
+      className={`relative grid min-h-[114px] grid-cols-[120px_1fr] gap-4 overflow-hidden rounded-lg p-2 ${
         accessory.active
           ? "bg-[var(--color-accent)] text-white"
           : "bg-[#F3F4FB] text-black"
       }`}
     >
-      <div className="relative overflow-hidden rounded-[6px] bg-white">
+      <div className="relative overflow-hidden rounded-md bg-white">
         {image && (
           <Image
             src={image}
@@ -140,20 +140,20 @@ export default function ProductFeaturesSection({ product, language = DEFAULT_LAN
         <div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-[0.95fr_1fr] lg:items-start lg:gap-20">
           <div>
             <div className="mb-7 flex items-center gap-2">
-              <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
-              <p className="font-body text-[13px] font-medium uppercase leading-[22px] tracking-[0.52px] text-[#1A1A1A]">
+              <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
+              <p className="font-body text-[13px] font-medium uppercase leading-5.5 tracking-[0.52px] text-[#1A1A1A]">
                 Accessories
               </p>
             </div>
             <h2
-              className="max-w-[560px] font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[56px] [&_span]:text-[#007DA5]"
+              className="max-w-[560px] font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-black md:text-[48px] md:leading-14 [&_span]:text-[#007DA5]"
               dangerouslySetInnerHTML={{ __html: title }}
             />
           </div>
 
           {description && (
             <div
-              className="max-w-[600px] font-body text-[14px] leading-[22px] text-[#1A1A1A] lg:pt-[54px]"
+              className="max-w-[600px] font-body text-[14px] leading-5.5 text-[#1A1A1A] lg:pt-[54px]"
               dangerouslySetInnerHTML={{ __html: description }}
             />
           )}
@@ -165,7 +165,7 @@ export default function ProductFeaturesSection({ product, language = DEFAULT_LAN
               key={filter}
               type="button"
               onClick={() => setActiveFilter(filter)}
-              className={`h-[40px] min-w-[66px] rounded-sm border px-5 font-body text-[13px] leading-[18px] transition-colors ${
+              className={`h-10 min-w-[66px] rounded-sm border px-5 font-body text-[13px] leading-[18px] transition-colors ${
                 activeFilter === filter
                   ? "border-[var(--color-yellow)] bg-[var(--color-yellow)] text-black"
                   : "border-[var(--color-yellow)] bg-white text-black hover:bg-[var(--color-yellow)]/10"

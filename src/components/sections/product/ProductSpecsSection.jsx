@@ -55,12 +55,12 @@ export default function ProductSpecsSection({ product, selectedVariation = null 
         <div className="mb-14 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <div className="mb-8 flex items-center gap-2">
-              <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
-              <p className="font-body text-[13px] font-medium uppercase leading-[22px] tracking-[0.52px] text-[#1A1A1A]">
+              <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
+              <p className="font-body text-[13px] font-medium uppercase leading-5.5 tracking-[0.52px] text-[#1A1A1A]">
                 Technical data
               </p>
             </div>
-            <h2 className="max-w-[620px] font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[54px] [&_span]:text-[#007DA5]">
+            <h2 className="max-w-155 font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[54px] [&_span]:text-[#007DA5]">
               {title}
             </h2>
           </div>

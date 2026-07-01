@@ -30,8 +30,8 @@ export default function ProductFaqSection({ product }) {
           <div className="max-w-[430px]">
             {eyebrow && (
               <div className="mb-7 flex items-center gap-2">
-                <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
-                <p className="font-body text-[13px] font-medium uppercase leading-[22px] tracking-[0.52px] text-[#1A1A1A]">
+                <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
+                <p className="font-body text-[13px] font-medium uppercase leading-5.5 tracking-[0.52px] text-[#1A1A1A]">
                   {eyebrow}
               </p>
               </div>
@@ -52,7 +52,7 @@ export default function ProductFaqSection({ product }) {
               <Link
                 href={ctaHref}
                 target={ctaTarget}
-                className="group mt-7 inline-flex h-[40px] items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-[4px] pr-[4px] pl-5 font-heading text-[13px] font-normal tracking-[-0.26px] text-white transition-opacity hover:opacity-90"
+                className="group mt-7 inline-flex h-10 items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-[4px] pr-[4px] pl-5 font-heading text-[13px] font-normal tracking-[-0.26px] text-white transition-opacity hover:opacity-90"
               >
                 <span>{ctaText}</span>
                 <Image

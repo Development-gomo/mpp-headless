@@ -75,7 +75,7 @@ export default function ServiceMaintenanceGuideSection({ data }) {
         <div className="mb-16">
           {text_above_title && (
             <div className="mb-6 flex items-center gap-2">
-              <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
+              <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
               <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A]">
                 {text_above_title}
               </p>
@@ -109,7 +109,7 @@ export default function ServiceMaintenanceGuideSection({ data }) {
                     return (
                         <div
                         key={index}
-                        className="relative flex flex-col items-center text-center rounded-[8px] bg-[#D9EEF7] px-4 py-6 w-full sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[180px]"
+                        className="relative flex flex-col items-center text-center rounded-lg bg-[#D9EEF7] px-4 py-6 w-full sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[180px]"
                         >
                         {pointerImage && (
                             <div className="relative mb-4 h-[120px] w-full md:-mt-20">

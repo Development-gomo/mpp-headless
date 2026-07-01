@@ -82,7 +82,7 @@ export default function HomeTankSection({ data }) {
         <div className="flex max-w-[560px] flex-col items-start">
           {text_above_title && (
             <div className="mb-6 flex items-center gap-3">
-              <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
+              <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
 
               <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-white">
                 {text_above_title}
@@ -92,7 +92,7 @@ export default function HomeTankSection({ data }) {
 
           {hero_title && (
             <h1
-              className="font-heading max-w-[620px] text-[40px] font-normal leading-[48px] tracking-[-0.8px] text-white md:text-[56px] md:leading-[64px] md:tracking-[-1.12px] lg:text-[64px] lg:leading-[72px] lg:tracking-[-1.28px]"
+              className="font-heading max-w-155 text-[40px] font-normal leading-[48px] tracking-[-0.8px] text-white md:text-[56px] md:leading-[64px] md:tracking-[-1.12px] lg:text-[64px] lg:leading-[72px] lg:tracking-[-1.28px]"
               dangerouslySetInnerHTML={{ __html: hero_title }}
             />
           )}
@@ -142,7 +142,7 @@ export default function HomeTankSection({ data }) {
               height={600}
               priority
               sizes="(min-width: 1024px) 58vw, 100vw"
-              className="h-auto w-full max-w-[760px] object-contain"
+              className="h-auto w-full max-w-190 object-contain"
             />
           </div>
         )}

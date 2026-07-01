@@ -94,7 +94,7 @@ function ThreeLevelCategoryMenu({ menuRow }) {
               <li key={category.key} className="border-b border-black/10">
                 <Link
                   href={category.href}
-                  className={`flex items-center justify-between gap-4 py-3 font-heading text-[16px] leading-[22px] transition-colors ${
+                  className={`flex items-center justify-between gap-4 py-3 font-heading text-[16px] leading-5.5 transition-colors ${
                     isActive
                       ? "text-[var(--color-accent)]"
                       : "text-black hover:text-[var(--color-accent)]"
@@ -138,7 +138,7 @@ function ThreeLevelCategoryMenu({ menuRow }) {
                   >
                     <Link
                       href={child.href}
-                      className={`flex items-center justify-between gap-4 py-3 font-heading text-[16px] leading-[22px] transition-colors ${
+                      className={`flex items-center justify-between gap-4 py-3 font-heading text-[16px] leading-5.5 transition-colors ${
                         isActive
                           ? "font-semibold text-black"
                           : "text-black/35 hover:text-black"
@@ -162,7 +162,7 @@ function ThreeLevelCategoryMenu({ menuRow }) {
           {activeCategory?.href && activeCategory.href !== "#" && (
             <Link
               href={activeCategory.href}
-              className="group inline-flex h-[44px] items-center justify-between gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
+              className="group inline-flex h-11 items-center justify-between gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
             >
               <span className="whitespace-nowrap">Find your right tank</span>
               <span className="flex h-[32px] w-[32px] shrink-0 items-center justify-center rounded-[3px] bg-white text-black">
@@ -181,7 +181,7 @@ function ThreeLevelCategoryMenu({ menuRow }) {
                   href={product.href}
                   className="group relative flex min-h-[122px] overflow-hidden rounded-[2px] bg-[#F0F0F2] p-4 transition-shadow hover:shadow-[0_16px_34px_rgba(0,0,0,0.12)]"
                 >
-                  <span className="relative z-10 max-w-[52%] font-heading text-[16px] font-semibold leading-[22px] text-black">
+                  <span className="relative z-10 max-w-[52%] font-heading text-[16px] font-semibold leading-5.5 text-black">
                     {product.label}
                   </span>
 

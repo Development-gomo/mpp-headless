@@ -42,7 +42,7 @@ function TestimonialCard({ testimonial }) {
   const text = stripHtml(testimonial?.testimonial_text || "");
 
   return (
-    <article className="rounded-[8px] bg-white px-5 py-6">
+    <article className="rounded-lg bg-white px-5 py-6">
       <Image
         src="/testimonial-ico.svg"
         alt=""
@@ -111,12 +111,12 @@ export default function ProductTestimonialsSection({
         <div className="mb-10 grid grid-cols-1 gap-8 md:grid-cols-[1fr_auto] md:items-end">
           <div>
             <div className="mb-7 flex items-center gap-2">
-              <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
-              <p className="font-body text-[13px] font-medium uppercase leading-[22px] tracking-[0.52px] text-[#1A1A1A]">
+              <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
+              <p className="font-body text-[13px] font-medium uppercase leading-5.5 tracking-[0.52px] text-[#1A1A1A]">
                 Testimonials
               </p>
             </div>
-            <h2 className="font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] md:text-[48px] md:leading-[56px]">
+            <h2 className="font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] md:text-[48px] md:leading-14">
               What our <span>customers say</span>
             </h2>
           </div>

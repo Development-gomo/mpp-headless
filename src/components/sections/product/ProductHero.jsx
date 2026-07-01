@@ -206,10 +206,10 @@ export default function ProductHero({
 
   return (
     <section className="bg-white text-black">
-      <div className="web-width px-6 pb-20 pt-2 md:pb-[120px]">
+      <div className="web-width px-6 pb-20 pt-2 md:pb-30">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,610px)_minmax(0,1fr)] xl:gap-5">
           <div>
-            <div className="relative flex min-h-[300px] items-center justify-center overflow-hidden rounded-[8px] border border-[#DDD8CE] bg-white md:min-h-[392px]">
+            <div className="relative flex min-h-[300px] items-center justify-center overflow-hidden rounded-lg border border-[#DDD8CE] bg-white md:min-h-[392px]">
               {activeImage ? (
                 <Image
                   key={activeImage}
@@ -231,7 +231,7 @@ export default function ProductHero({
                   <button
                     type="button"
                     onClick={showPreviousImage}
-                    className="absolute left-4 top-1/2 z-10 flex h-[40px] w-[40px] -translate-y-1/2 items-center justify-center rounded-sm bg-[var(--color-accent)] text-white transition-opacity hover:opacity-90"
+                    className="absolute left-4 top-1/2 z-10 flex h-10 w-[40px] -translate-y-1/2 items-center justify-center rounded-sm bg-[var(--color-accent)] text-white transition-opacity hover:opacity-90"
                     aria-label="Previous product image"
                   >
                     <span className="text-[28px] leading-none">‹</span>
@@ -239,7 +239,7 @@ export default function ProductHero({
                   <button
                     type="button"
                     onClick={showNextImage}
-                    className="absolute right-4 top-1/2 z-10 flex h-[40px] w-[40px] -translate-y-1/2 items-center justify-center rounded-sm bg-[var(--color-accent)] text-white transition-opacity hover:opacity-90"
+                    className="absolute right-4 top-1/2 z-10 flex h-10 w-[40px] -translate-y-1/2 items-center justify-center rounded-sm bg-[var(--color-accent)] text-white transition-opacity hover:opacity-90"
                     aria-label="Next product image"
                   >
                     <span className="text-[28px] leading-none">›</span>
@@ -254,7 +254,7 @@ export default function ProductHero({
                   <button
                     type="button"
                     onClick={showPreviousThumbnails}
-                    className="flex h-[44px] w-9 shrink-0 items-center justify-center rounded-sm border border-[#DDD8CE] bg-white font-heading text-[22px] leading-none text-black transition-colors hover:border-[var(--color-yellow)]"
+                    className="flex h-11 w-9 shrink-0 items-center justify-center rounded-sm border border-[#DDD8CE] bg-white font-heading text-[22px] leading-none text-black transition-colors hover:border-[var(--color-yellow)]"
                     aria-label="Show previous gallery thumbnails"
                   >
                     &lt;
@@ -270,7 +270,7 @@ export default function ProductHero({
                         type="button"
                         key={`${image}-${imageIndex}`}
                         onClick={() => selectImage(imageIndex)}
-                        className={`relative h-[98px] w-[98px] overflow-hidden rounded-[8px] border bg-white transition-colors ${
+                        className={`relative h-[98px] w-[98px] overflow-hidden rounded-lg border bg-white transition-colors ${
                           imageIndex === activeImageIndex
                             ? "border-[var(--color-yellow)]"
                             : "border-[#DDD8CE] hover:border-[var(--color-yellow)]/70"
@@ -293,7 +293,7 @@ export default function ProductHero({
                   <button
                     type="button"
                     onClick={showNextThumbnails}
-                    className="flex h-[44px] w-9 shrink-0 items-center justify-center rounded-sm border border-[#DDD8CE] bg-white font-heading text-[22px] leading-none text-black transition-colors hover:border-[var(--color-yellow)]"
+                    className="flex h-11 w-9 shrink-0 items-center justify-center rounded-sm border border-[#DDD8CE] bg-white font-heading text-[22px] leading-none text-black transition-colors hover:border-[var(--color-yellow)]"
                     aria-label="Show next gallery thumbnails"
                   >
                     &gt;
@@ -303,10 +303,10 @@ export default function ProductHero({
             )}
           </div>
 
-          <div className="rounded-[8px] bg-[#E5F2F7] p-6 md:p-8">
+          <div className="rounded-lg bg-[#E5F2F7] p-6 md:p-8">
             {eyebrow && (
               <div className="mb-4 flex items-center gap-2">
-                <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
+                <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
                 <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A]">
                   {eyebrow}
                 </p>
@@ -314,18 +314,18 @@ export default function ProductHero({
             )}
 
             {!eyebrow && categoryLabel && (
-              <p className="mb-3 font-body text-[14px] uppercase leading-[22px] text-[#1A1A1A]">
+              <p className="mb-3 font-body text-[14px] uppercase leading-5.5 text-[#1A1A1A]">
                 {categoryLabel}
               </p>
             )}
 
             <h1
-              className="max-w-[620px] font-heading text-[42px] font-normal leading-[48px] tracking-[-0.84px] text-black md:text-[52px] md:leading-[58px]"
+              className="max-w-155 font-heading text-[42px] font-normal leading-[48px] tracking-[-0.84px] text-black md:text-[52px] md:leading-[58px]"
               dangerouslySetInnerHTML={{ __html: title }}
             />
 
             {variationSku && (
-              <div className="max-w-[620px] font-heading text-[42px] font-normal leading-[48px] tracking-[-0.84px] text-black md:text-[52px] md:leading-[58px]">
+              <div className="max-w-155 font-heading text-[42px] font-normal leading-[48px] tracking-[-0.84px] text-black md:text-[52px] md:leading-[58px]">
                 {variationSku}
               </div>
             )}

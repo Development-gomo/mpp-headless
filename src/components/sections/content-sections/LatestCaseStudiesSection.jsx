@@ -93,13 +93,11 @@ export default function LatestCaseStudiesSection({
                 "";
 
               const logo =
-                item?.acf?.logo?.url ||
-                item?.acf?.client_logo?.url ||
-                "";
+                item?.acf?.logo?.url || item?.acf?.client_logo?.url || "";
 
               const feature1 = item?.acf?.feature_1;
               const feature2 = item?.acf?.feature_2;
-                
+
               return (
                 <div
                   key={item?.id || index}
@@ -142,12 +140,12 @@ export default function LatestCaseStudiesSection({
                       <span>Read full case</span>
 
                       <Image
-                            src="/black-white-arrow.svg"
-                            alt=""
-                            width={36}
-                            height={36}
-                            className="object-contain transition-transform"
-                        />
+                        src="/black-white-arrow.svg"
+                        alt=""
+                        width={36}
+                        height={36}
+                        className="object-contain transition-transform"
+                      />
                     </Link>
                   </div>
 

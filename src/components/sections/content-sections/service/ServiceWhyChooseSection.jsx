@@ -86,7 +86,7 @@ export default function ServiceWhyChooseSection({ data }) {
         <div className="mb-16 max-w-[560px]">
           {text_above_title && (
             <div className="mb-6 flex items-center gap-2">
-              <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
+              <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
 
               <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-white">
                 {text_above_title}
@@ -145,7 +145,7 @@ export default function ServiceWhyChooseSection({ data }) {
               return (
                 <article
                   key={index}
-                  className="relative min-h-[320px] rounded-[8px] bg-white/15 p-6 text-white backdrop-blur-[3px] md:p-7"
+                  className="relative min-h-[320px] rounded-lg bg-white/15 p-6 text-white backdrop-blur-[3px] md:p-7"
                 >
                   {icon && (
                     <div className="mb-16 flex h-[48px] w-[48px] items-center justify-center rounded-[2px] bg-[var(--color-yellow)]">

@@ -111,8 +111,8 @@ function TeamCard({ member }) {
   const email = acf?.email || "";
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-[8px] border border-black/10 bg-white p-4 shadow-[0_8px_28px_rgba(7,24,56,0.04)] transition-transform duration-300 hover:-translate-y-1">
-      <div className="relative aspect-[1/1.05] overflow-hidden rounded-[8px] bg-[#EAF1FA]">
+    <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-black/10 bg-white p-4 shadow-[0_8px_28px_rgba(7,24,56,0.04)] transition-transform duration-300 hover:-translate-y-1">
+      <div className="relative aspect-[1/1.05] overflow-hidden rounded-lg bg-[#EAF1FA]">
         {image && (
           <Image
             src={image}
@@ -217,7 +217,7 @@ export default function TeamSection({ data, teams = [] }) {
           <div>
             {text_above_title && (
               <div className="mb-6 flex items-center gap-2">
-                <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
+                <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
                 <p className="text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A] font-body">
                   {text_above_title}
                 </p>
@@ -226,7 +226,7 @@ export default function TeamSection({ data, teams = [] }) {
 
             {hero_title && (
               <h2
-                className="max-w-[620px] text-[42px] font-normal leading-[48px] tracking-[-1.04px] text-black font-heading md:text-[52px] md:leading-[60px]"
+                className="max-w-155 text-[42px] font-normal leading-[48px] tracking-[-1.04px] text-black font-heading md:text-[52px] md:leading-[60px]"
                 dangerouslySetInnerHTML={{ __html: hero_title }}
               />
             )}
@@ -278,7 +278,7 @@ export default function TeamSection({ data, teams = [] }) {
               <select
                 value={activeDepartment}
                 onChange={(event) => setActiveDepartment(event.target.value)}
-                className="h-[52px] w-full appearance-none rounded-sm border border-black/15 bg-white px-5 pr-12 text-[15px] font-medium leading-6 text-[#1A1A1A] outline-none transition-colors focus:border-[var(--color-accent)] [font-family:var(--font-nunito-sans)]"
+                className="h-13 w-full appearance-none rounded-sm border border-black/15 bg-white px-5 pr-12 text-[15px] font-medium leading-6 text-[#1A1A1A] outline-none transition-colors focus:border-[var(--color-accent)] [font-family:var(--font-nunito-sans)]"
               >
                 <option value="all">All departments</option>
                 {departmentOptions.map((department) => (

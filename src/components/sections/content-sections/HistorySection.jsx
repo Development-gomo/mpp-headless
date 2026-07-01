@@ -249,10 +249,10 @@ export default function HistorySection({ data }) {
     >
       <div className="web-width relative px-4 pt-12 pb-0 sm:px-6 md:py-20">
         <div className="mb-2 flex flex-col gap-6 md:mb-5 lg:mb-7 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-[760px]">
+          <div className="max-w-190">
             {text_above_title && (
               <div className="mb-6 flex items-center gap-2">
-                <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
+                <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
                 <p className="font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-[#000000]">
                   {text_above_title}
                 </p>
@@ -378,7 +378,7 @@ export default function HistorySection({ data }) {
                 aria-hidden="true"
                 viewBox="0 0 2 100"
                 preserveAspectRatio="none"
-                className="absolute left-1/2 top-[44px] h-[100px] w-[2px] -translate-x-1/2 overflow-visible text-black/30 md:top-[50px]"
+                className="absolute left-1/2 top-[44px] h-[100px] w-0.5 -translate-x-1/2 overflow-visible text-black/30 md:top-[50px]"
               >
                 <line
                   x1="1"
@@ -393,7 +393,7 @@ export default function HistorySection({ data }) {
                 />
               </svg>
 
-              <div className="pointer-events-none absolute inset-x-[5%] top-[31%] z-20 mx-auto max-w-[760px] px-2 text-center md:inset-x-[20%] md:top-[40%] md:px-8">
+              <div className="pointer-events-none absolute inset-x-[5%] top-[31%] z-20 mx-auto max-w-190 px-2 text-center md:inset-x-[20%] md:top-[40%] md:px-8">
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.div
                     key={activeIndex}
@@ -413,7 +413,7 @@ export default function HistorySection({ data }) {
                       duration: prefersReducedMotion ? 0 : 0.38,
                       ease: [0.22, 1, 0.36, 1],
                     }}
-                    className="mx-auto max-w-[620px]"
+                    className="mx-auto max-w-155"
                   >
                     {activeItem?.title && (
                       <h3 className="mb-2 font-heading text-[21px] font-medium leading-[27px] tracking-[-0.42px] text-black md:mb-3 md:text-[30px] md:leading-[36px]">

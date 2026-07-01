@@ -81,7 +81,7 @@ export default function ProductBreadcrumbs({
 
   return (
     <nav aria-label="Breadcrumb" className="bg-white pt-[126px] md:pt-[136px]">
-      <ol className="web-width flex flex-wrap items-center gap-2 px-6 pb-6 font-body text-[14px] leading-[22px] text-black/55">
+      <ol className="web-width flex flex-wrap items-center gap-2 px-6 pb-6 font-body text-[14px] leading-5.5 text-black/55">
         <li>
           <Link
             href={localizePath("/", language)}

@@ -66,18 +66,18 @@ export default function ProductOverviewSection({
 
   return (
     <section id="find-your-tank" className="bg-white">
-      <div className="web-width px-6 pb-20 md:pb-[120px]">
+      <div className="web-width px-6 pb-20 md:pb-30">
         <div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-[0.95fr_1fr] lg:items-start lg:gap-20">
           <div>
             <div className="mb-7 flex items-center gap-2">
-              <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
-              <p className="font-body text-[13px] font-medium uppercase leading-[22px] tracking-[0.52px] text-[#1A1A1A]">
+              <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
+              <p className="font-body text-[13px] font-medium uppercase leading-5.5 tracking-[0.52px] text-[#1A1A1A]">
                 Your ideal tank
               </p>
             </div>
 
             <h2
-              className="max-w-[520px] font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[56px] [&_span]:text-[#007DA5]"
+              className="max-w-[520px] font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-black md:text-[48px] md:leading-14 [&_span]:text-[#007DA5]"
               dangerouslySetInnerHTML={{ __html: title }}
             />
           </div>
@@ -85,7 +85,7 @@ export default function ProductOverviewSection({
           <div className="lg:pt-[54px]">
             {description && (
               <div
-                className="max-w-[560px] font-body text-[14px] leading-[22px] text-[#1A1A1A]"
+                className="max-w-[560px] font-body text-[14px] leading-5.5 text-[#1A1A1A]"
                 dangerouslySetInnerHTML={{ __html: description }}
               />
             )}
@@ -110,8 +110,8 @@ export default function ProductOverviewSection({
         </div>
 
         <div className="overflow-x-auto">
-          <div className="min-w-[900px] overflow-hidden rounded-[6px]">
-            <div className="grid grid-cols-[1.7fr_0.6fr_0.6fr_0.6fr] rounded-[6px] bg-[image:var(--mpp-gradient)] font-body text-[14px] font-normal uppercase leading-[20px] text-white">
+          <div className="min-w-[900px] overflow-hidden rounded-md">
+            <div className="grid grid-cols-[1.7fr_0.6fr_0.6fr_0.6fr] rounded-md bg-[image:var(--mpp-gradient)] font-body text-[14px] font-normal uppercase leading-[20px] text-white">
               <div className="flex min-h-[54px] items-center justify-center px-5">
                 Description and article number
               </div>
@@ -144,7 +144,7 @@ export default function ProductOverviewSection({
                         onVariationChange?.(row.index);
                       }
                     }}
-                    className={`grid min-h-[94px] cursor-pointer grid-cols-[1.7fr_0.6fr_0.6fr_0.6fr] overflow-hidden rounded-[6px] font-body ${
+                    className={`grid min-h-[94px] cursor-pointer grid-cols-[1.7fr_0.6fr_0.6fr_0.6fr] overflow-hidden rounded-md font-body ${
                       isCurrent
                         ? "bg-[var(--color-accent)] text-white"
                         : "bg-[#E5F2F7] text-black"

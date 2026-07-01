@@ -185,7 +185,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
       </div>
 
       {/* Product Card */}
-      <div className="relative overflow-hidden rounded-[8px] bg-[linear-gradient(180deg,#F3F4FB_0%,#D0D3E3_100%)] px-6 py-8 md:px-12 md:py-12">
+      <div className="relative overflow-hidden rounded-lg bg-[linear-gradient(180deg,#F3F4FB_0%,#D0D3E3_100%)] px-6 py-8 md:px-12 md:py-12">
         {/* Pattern */}
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.08]"

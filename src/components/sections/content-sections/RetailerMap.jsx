@@ -603,12 +603,12 @@ export default function RetailerMap({ stores: rawStores = [] }) {
   return (
     <>
       <div className="web-width px-6 md:px-0 pb-20">
-      <div className="overflow-hidden rounded-[8px] border border-black/10 bg-white shadow-[0_18px_50px_rgba(0,0,0,0.08)]">
+      <div className="overflow-hidden rounded-lg border border-black/10 bg-white shadow-[0_18px_50px_rgba(0,0,0,0.08)]">
         <div className="flex min-h-[720px] flex-col lg:h-[680px] lg:min-h-0 lg:flex-row">
           <div className="flex max-h-[430px] shrink-0 flex-col overflow-hidden border-b border-black/10 bg-[#F7F7F4] lg:max-h-none lg:w-[390px] lg:border-b-0 lg:border-r">
         <div className="border-b border-black/10 bg-white p-5">
           <p className="mb-3 flex items-center gap-2 text-[13px] font-medium uppercase leading-[20px] tracking-[0.56px] text-[#1A1A1A] [font-family:var(--font-body)]">
-            <span className="h-[14px] w-[2px] bg-[var(--color-yellow)]" />
+            <span className="h-[14px] w-0.5 bg-[var(--color-yellow)]" />
             Search location
           </p>
           <div className="flex gap-2">
@@ -633,7 +633,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
 
         {!directionSummary && (
           <div className="shrink-0 bg-[#445641] px-5 py-4">
-            <p className="text-[15px] font-medium leading-[22px] text-white [font-family:var(--font-heading)]">
+            <p className="text-[15px] font-medium leading-5.5 text-white [font-family:var(--font-heading)]">
               {stores.length} retailers found
             </p>
           </div>
@@ -768,7 +768,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
                 </div>
               ))
             ) : (
-              <div className="p-5 text-[15px] leading-[22px] text-[#5A5D66]">
+              <div className="p-5 text-[15px] leading-5.5 text-[#5A5D66]">
                 No store locations are available yet.
               </div>
             )}
@@ -778,7 +778,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
 
       <div className="relative min-h-[460px] flex-1 bg-[#EFF2F0]">
         {(mapsError || !baseStores.length) && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#EFF2F0] px-4 text-center text-[15px] leading-[22px] text-[#5A5D66]">
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#EFF2F0] px-4 text-center text-[15px] leading-5.5 text-[#5A5D66]">
             {mapsError || "Add latitude and longitude values to show stores on the map."}
           </div>
         )}

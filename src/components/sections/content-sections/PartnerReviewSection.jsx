@@ -142,7 +142,7 @@ export default function PartnerReviewSection({ data, themeOptions }) {
               return (
                 <article
                   key={`${name || "partner"}-${index}`}
-                  className="group relative flex min-h-[330px] flex-col overflow-hidden rounded-[8px] border border-black/[0.07] bg-white p-7 shadow-[0_12px_36px_rgba(7,24,56,0.05)] transition-transform duration-300 hover:-translate-y-1 md:p-8"
+                  className="group relative flex min-h-[330px] flex-col overflow-hidden rounded-lg border border-black/[0.07] bg-white p-7 shadow-[0_12px_36px_rgba(7,24,56,0.05)] transition-transform duration-300 hover:-translate-y-1 md:p-8"
                 >
                   <div
                     aria-hidden="true"
