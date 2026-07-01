@@ -37,6 +37,12 @@ function getCategoryLink(cat, language = DEFAULT_LANGUAGE) {
     : "#";
 }
 
+function toArray(value) {
+  if (Array.isArray(value)) return value;
+  if (value && typeof value === "object") return Object.values(value);
+  return [];
+}
+
 export default function ProductCategoriesSection({
   data,
   categoriesWithImages = [],
@@ -56,8 +62,9 @@ export default function ProductCategoriesSection({
     custom_id,
   } = data;
 
-  const buttonRow = Array.isArray(button_row) ? button_row : [];
-  const productCategories = Array.isArray(select_product_categories) ? select_product_categories : [];
+  const buttonRow = toArray(button_row);
+  const productCategories = toArray(select_product_categories);
+  const categoryImageItems = toArray(categoriesWithImages);
 
   const columnCount = Number(number_of_categories_to_show) || 2;
 
@@ -73,7 +80,7 @@ export default function ProductCategoriesSection({
     .map((cat) => {
       const catId = Number(cat?.term_id || cat?.id);
 
-      const matched = categoriesWithImages.find(
+      const matched = categoryImageItems.find(
         (item) => Number(item?.term_id || item?.id) === catId
       );
 

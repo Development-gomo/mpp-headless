@@ -277,6 +277,10 @@ export async function renderDynamicPage(params, language) {
 
   const shouldLoadStores = hasPageBuilderSection(page, "find_retailer_section");
   const shouldLoadPartners = hasPageBuilderSection(page, "partner_logo");
+  const shouldLoadProductCategories = hasPageBuilderSection(
+    page,
+    "home_product_categories"
+  );
   const shouldLoadAllPosts = hasPageBuilderSection(page, "latest_blogs");
   const shouldLoadAllCaseStudies = hasPageBuilderSection(
     page,
@@ -287,7 +291,18 @@ export async function renderDynamicPage(params, language) {
     "inner_industries",
     "industry_listing",
   ]);
-  const [latestPosts, latestCaseStudies, industries, teams, stores, themeOptions] = await Promise.all([
+  const [
+    categoriesWithImages,
+    latestPosts,
+    latestCaseStudies,
+    industries,
+    teams,
+    stores,
+    themeOptions,
+  ] = await Promise.all([
+    shouldLoadProductCategories
+      ? getProductCategoriesWithImages({ language })
+      : [],
     shouldLoadAllPosts
       ? getAllPosts({ language })
       : getLatestPosts({ language }),
@@ -315,6 +330,7 @@ export async function renderDynamicPage(params, language) {
       <main>
         <PageBuilder
           sections={page?.acf?.page_builder}
+          categoriesWithImages={categoriesWithImages}
           posts={latestPosts}
           caseStudies={latestCaseStudies}
           industries={industries}
