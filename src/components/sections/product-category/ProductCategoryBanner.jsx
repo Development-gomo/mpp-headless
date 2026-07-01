@@ -109,19 +109,19 @@ export default function ProductCategoryBanner({
         </div>
 
         {/* Content */}
-        <div className="relative z-10 web-width px-6 pt-[170px] pb-[120px] md:pt-[210px] md:pb-[150px]">
+        <div className="relative z-10 web-width px-6 pt-42.5 pb-30 md:pt-52.5 md:pb-46.25">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-[60fr_40fr] lg:items-center">
             <div>
               <h1
-                className="max-w-[720px] text-white font-heading text-[48px] leading-[56px] tracking-[-0.96px] md:text-[80px] md:leading-[88px] md:tracking-[-1.6px]"
+                className="max-w-180 text-white font-heading text-[48px] leading-14 tracking-[-0.96px] md:text-[80px] md:leading-22 md:tracking-[-1.6px]"
                 dangerouslySetInnerHTML={{ __html: bannerTitle }}
               />
             </div>
 
-            <div className="flex flex-col items-start lg:pl-10">
+            <div className="flex flex-col items-start lg:pl-10 relative lg:top-21.5">
               {bannerText && (
                 <div
-                  className="max-w-[560px] text-white font-body text-[18px] leading-[28px] md:text-[20px]"
+                  className="max-w-140 text-white font-body text-[18px] leading-7 md:text-[20px]"
                   dangerouslySetInnerHTML={{ __html: bannerText }}
                 />
               )}
@@ -139,7 +139,7 @@ export default function ProductCategoryBanner({
                     alt=""
                     width={40}
                     height={40}
-                    className="h-auto w-[40px] object-contain transition-transform"
+                    className="h-auto w-10 object-contain transition-transform"
                   />
                 </Link>
               )}
@@ -148,7 +148,7 @@ export default function ProductCategoryBanner({
                 <button
                   type="button"
                   onClick={scrollToProducts}
-                  className="group mt-8 inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 text-white font-heading text-[14px] font-normal tracking-[-0.28px] transition-opacity hover:opacity-90"
+                  className="group mt-8 inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 text-white font-heading text-[14px] font-500 tracking-[-0.28px] transition-opacity hover:opacity-90"
                 >
                   <span>{ctaText}</span>
 
@@ -157,7 +157,7 @@ export default function ProductCategoryBanner({
                     alt=""
                     width={40}
                     height={40}
-                    className="h-auto w-[40px] object-contain transition-transform"
+                    className="h-auto w-10 object-contain transition-transform"
                   />
                 </button>
               )}
@@ -168,7 +168,7 @@ export default function ProductCategoryBanner({
 
       {/* Main Category Tabs */}
       {mainCategories.length > 0 && (
-        <div className="bg-white shadow-[0_12px_22px_rgba(0,0,0,0.18)] lg:sticky lg:top-[72px] lg:z-40">
+        <div className="bg-white shadow-[0_12px_22px_rgba(0,0,0,0.18)] lg:sticky lg:top-18 lg:z-40">
           <div
             className={`grid grid-cols-1 sm:grid-cols-2 ${
               mainCategories.length >= 4
@@ -187,7 +187,7 @@ export default function ProductCategoryBanner({
                 <Link
                   key={cat.term_id || cat.id}
                   href={getCategoryLink(cat, language)}
-                  className={`flex min-h-[72px] items-center justify-center border-r border-[#D9D9D9] px-6 text-center font-heading text-[20px] leading-[28px] tracking-[-0.4px] transition-colors last:border-r-0 ${
+                  className={`flex min-h-15 items-center justify-center border-r border-[#D9D9D9] px-6 text-center font-heading text-[20px] leading-7 tracking-[-0.4px] transition-colors last:border-r-0 ${
                     isActive
                       ? "bg-[var(--color-accent)] text-white shadow-[inset_0_-3px_0_var(--color-yellow)]"
                       : "bg-white text-black hover:bg-[#F3F4FB]"

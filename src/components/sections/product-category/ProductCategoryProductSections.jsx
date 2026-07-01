@@ -35,10 +35,10 @@ function getProductImage(product) {
   const yoastImage =
     product?.yoast_head_json?.og_image?.[0]?.url ||
     product?.yoast_head_json?.schema?.["@graph"]?.find(
-      (item) => item?.["@type"] === "ImageObject"
+      (item) => item?.["@type"] === "ImageObject",
     )?.url ||
     product?.yoast_head_json?.schema?.["@graph"]?.find(
-      (item) => item?.thumbnailUrl
+      (item) => item?.thumbnailUrl,
     )?.thumbnailUrl;
 
   const directImage =
@@ -56,7 +56,12 @@ function getProductImage(product) {
     product?.acf?.featured_image ||
     product?.acf?.product_featured_image;
 
-  return embeddedImage || yoastImage || getImageUrl(directImage) || getImageUrl(acfImage);
+  return (
+    embeddedImage ||
+    yoastImage ||
+    getImageUrl(directImage) ||
+    getImageUrl(acfImage)
+  );
 }
 
 function getProductTitle(product) {
@@ -73,15 +78,16 @@ function getProductExcerpt(product) {
 }
 
 function stripHtml(value = "") {
-  return String(value).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+  return String(value)
+    .replace(/<[^>]*>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function getRepeaterValues(rows, key) {
   if (!Array.isArray(rows)) return [];
 
-  return rows
-    .map((row) => stripHtml(row?.[key] || ""))
-    .filter(Boolean);
+  return rows.map((row) => stripHtml(row?.[key] || "")).filter(Boolean);
 }
 
 function getProductLink(product, language = DEFAULT_LANGUAGE) {
@@ -101,7 +107,7 @@ export default function ProductCategoryProductSections({
 
   return (
     <section data-category-products className="scroll-mt-[144px] bg-white">
-      <div className="web-width px-6 py-20 md:py-[120px]">
+      <div className="web-width px-6 py-20 md:py-30">
         {childCategories.map((childCategory, sectionIndex) => (
           <ProductSubcategoryBlock
             key={childCategory.term_id || sectionIndex}
@@ -116,7 +122,7 @@ export default function ProductCategoryProductSections({
 }
 
 function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
-  const products = childCategory?.products || [];
+  const products = (childCategory?.products || []).slice(0, 3);
   const [activeIndex, setActiveIndex] = useState(0);
 
   if (products.length === 0) return null;
@@ -130,21 +136,25 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
 
   const capacityOptions = getRepeaterValues(
     activeProduct?.acf?.capacity_options,
-    "capacity_value"
+    "capacity_value",
   );
   const fuelCompatibility = getRepeaterValues(
     activeProduct?.acf?.fuel_compatibility,
-    "compatibility"
+    "compatibility",
   );
   const capacity =
     capacityOptions.length > 0
       ? capacityOptions.join(" | ")
-      : activeProduct?.acf?.capacity || activeProduct?.acf?.product_capacity || "";
+      : activeProduct?.acf?.capacity ||
+        activeProduct?.acf?.product_capacity ||
+        "";
 
   const fuelType =
     fuelCompatibility.length > 0
       ? fuelCompatibility.join(" | ")
-      : activeProduct?.acf?.fuel_type || activeProduct?.acf?.product_fuel_type || "";
+      : activeProduct?.acf?.fuel_type ||
+        activeProduct?.acf?.product_fuel_type ||
+        "";
 
   return (
     <div className="mb-20 last:mb-0">
@@ -152,22 +162,22 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
       <div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-20">
         <div>
           <div className="mb-6 flex items-center gap-2">
-            <span className="h-[16px] w-[2px] bg-[var(--color-yellow)]" />
+            <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
 
             <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A]">
               {currentCategory.name}
             </p>
           </div>
 
-          <h2 className="max-w-[620px] font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-black md:text-[52px] md:leading-[60px] md:tracking-[-1.04px]">
+          <h2 className="max-w-155 font-heading text-[42px] font-normal leading-12.5 tracking-[-0.84px] text-black md:text-[52px] md:leading-[60px] md:tracking-[-1.04px]">
             {childCategory.name}
           </h2>
         </div>
-        
+
         {childCategory?.description && (
-          <div className="flex items-start lg:pt-[54px]">
+          <div className="flex items-start lg:pt-13.5">
             <div
-              className="max-w-[628px] font-body text-[16px] font-normal leading-6 text-[#1A1A1A]"
+              className="max-w-[628px] font-body text-4 font-normal leading-6 text-[#1A1A1A]"
               dangerouslySetInnerHTML={{ __html: childCategory.description }}
             />
           </div>
@@ -181,42 +191,42 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
           className="pointer-events-none absolute inset-0 opacity-[0.08]"
           style={{
             backgroundImage: "url('/mpp-pattern.svg')",
-            backgroundSize: "70%",
+            backgroundSize: "50%",
             backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
+            backgroundPosition: "82% 50%",
           }}
         />
 
-        <div className="relative z-10 grid grid-cols-1 gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div className="relative z-10 grid grid-cols-1 gap-10 lg:grid-cols-[0.9fr_1.1fr] ">
           {/* Left content */}
           <div>
-            <h3 className="mb-6 font-heading text-[32px] font-medium leading-[40px] tracking-[-0.64px] text-black md:text-[40px] md:leading-[48px]">
+            <h3 className="mb-6 font-heading text-[32px] font-medium leading-10 tracking-[-0.64px] text-black md:text-10 md:leading-12">
               {activeTitle}
             </h3>
 
             {activeExcerpt && (
               <div
-                className="mb-8 max-w-[420px] font-body text-[16px] font-normal leading-6 text-[#1A1A1A]"
+                className="mb-8 max-w-105 font-body text-4 font-normal leading-6 text-[#1A1A1A]"
                 dangerouslySetInnerHTML={{ __html: activeExcerpt }}
               />
             )}
 
             {(capacity || fuelType) && (
-              <div className="mb-8 max-w-[420px] border-y border-black/15">
+              <div className="mb-8 max-w-105 border-y border-black/15">
                 {capacity && (
                   <div className="grid grid-cols-[130px_1fr] gap-4 border-b border-black/15 py-3">
-                    <div className="flex items-center gap-2 font-body text-[14px] font-bold leading-[22px] text-[var(--color-accent)]">
+                    <div className="flex items-center gap-2 font-body text-[14px] font-bold leading-5.5 text-[var(--color-accent)]">
                       <Image
                         src="/capacity-icon.svg"
                         alt=""
                         width={16}
                         height={16}
-                        className="h-[16px] w-[16px] object-contain"
+                        className="h-4 w-4 object-contain"
                       />
                       Capacity
                     </div>
 
-                    <div className="font-body text-[14px] leading-[22px] text-black">
+                    <div className="font-body text-[14px] leading-5.5 text-black">
                       {capacity}
                     </div>
                   </div>
@@ -224,18 +234,18 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
 
                 {fuelType && (
                   <div className="grid grid-cols-[130px_1fr] gap-4 py-3">
-                    <div className="flex items-center gap-2 font-body text-[14px] font-bold leading-[22px] text-[var(--color-accent)]">
+                    <div className="flex items-center gap-2 font-body text-[14px] font-bold leading-5.5 text-[var(--color-accent)]">
                       <Image
                         src="/fuel-type-icon.svg"
                         alt=""
                         width={16}
                         height={16}
-                        className="h-[16px] w-[16px] object-contain"
+                        className="h-4 w-4 object-contain"
                       />
                       Fuel type
                     </div>
 
-                    <div className="font-body text-[14px] leading-[22px] text-black">
+                    <div className="font-body text-[14px] leading-5.5 text-black">
                       {fuelType}
                     </div>
                   </div>
@@ -253,9 +263,9 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                 <Image
                   src="/black-white-arrow.svg"
                   alt=""
-                  width={40}
-                  height={40}
-                  className="h-auto w-[40px] object-contain transition-transform"
+                  width={36}
+                  height={36}
+                  className="h-auto w-9 object-contain transition-transform"
                 />
               </Link>
 
@@ -268,9 +278,9 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                 <Image
                   src="/black-white-arrow.svg"
                   alt=""
-                  width={40}
-                  height={40}
-                  className="h-auto w-[40px] object-contain transition-transform"
+                  width={36}
+                  height={36}
+                  className="h-auto w-9 object-contain transition-transform"
                 />
               </Link>
             </div>
@@ -282,18 +292,16 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                   type="button"
                   onClick={() =>
                     setActiveIndex((prev) =>
-                      prev === 0 ? products.length - 1 : prev - 1
+                      prev === 0 ? products.length - 1 : prev - 1,
                     )
                   }
-                  className="flex h-[44px] w-[44px] items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
-                  aria-label="Previous product"
-                >
+                  className="flex h-11 w-11 items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80 cursor-pointer" aria-label="Previous product">
                   <Image
                     src="/slider-arrow.svg"
                     alt=""
                     width={40}
                     height={40}
-                    className="h-auto w-[40px] rotate-180 object-contain transition-transform"
+                    className="h-auto w-10 rotate-180 object-contain transition-transform"
                   />
                 </button>
 
@@ -301,18 +309,16 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                   type="button"
                   onClick={() =>
                     setActiveIndex((prev) =>
-                      prev === products.length - 1 ? 0 : prev + 1
+                      prev === products.length - 1 ? 0 : prev + 1,
                     )
                   }
-                  className="flex h-[44px] w-[44px] items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
-                  aria-label="Next product"
-                >
+                  className="flex h-11 w-10 items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80 cursor-pointer" aria-label="Next product">
                   <Image
                     src="/slider-arrow.svg"
                     alt=""
                     width={40}
                     height={40}
-                    className="h-auto w-[40px] object-contain transition-transform"
+                    className="h-auto w-10 object-contain transition-transform"
                   />
                 </button>
               </div>
@@ -331,7 +337,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                       key={product.id || index}
                       type="button"
                       onClick={() => setActiveIndex(index)}
-                      className={`min-h-[44px] rounded-[3px] px-6 font-heading text-[16px] font-normal tracking-[-0.32px] transition-colors ${
+                      className={`min-h-11 rounded-[3px] px-6 font-heading text-4 font-normal tracking-[-0.32px] transition-colors cursor-pointer ${
                         isActive
                           ? "bg-white text-black shadow-sm"
                           : "text-black/80 hover:bg-white/40"
@@ -344,17 +350,17 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
               </div>
             )}
 
-            <div className="relative flex min-h-[280px] items-center justify-center md:min-h-[360px]">
+            <div className="relative flex min-h-70 items-center justify-center md:min-h-90">
               {activeImage ? (
                 <Image
                   src={activeImage}
                   alt={activeTitle || "Product image"}
                   width={760}
                   height={520}
-                  className="h-auto w-full max-w-[720px] object-contain drop-shadow-[0_20px_25px_rgba(0,0,0,0.25)]"
+                  className="h-auto w-full max-w-180 absolute -bottom-12 object-contain drop-shadow-[0_20px_25px_rgba(0,0,0,0.25)]"
                 />
               ) : (
-                <div className="flex min-h-[260px] w-full items-center justify-center rounded-[8px] border border-black/10 bg-white/30 font-body text-[14px] text-black/50">
+                <div className="flex min-h-65 w-full items-center justify-center rounded-lg border border-black/10 bg-white/30 font-body text-[14px] text-black/50">
                   Product image missing
                 </div>
               )}
