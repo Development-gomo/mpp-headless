@@ -312,7 +312,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                       prev === products.length - 1 ? 0 : prev + 1,
                     )
                   }
-                  className="flex h-11 w-10 items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80 cursor-pointer" aria-label="Next product">
+                  className="flex h-11 w-11 items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80 cursor-pointer" aria-label="Next product">
                   <Image
                     src="/slider-arrow.svg"
                     alt=""
