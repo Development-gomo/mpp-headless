@@ -48,13 +48,16 @@ export default function ProductCategoriesSection({
     text_above_title,
     hero_title,
     hero_description,
-    button_row = [],
-    select_product_categories = [],
+    button_row,
+    select_product_categories,
     number_of_categories_to_show = 2,
     background_color,
     custom_class,
     custom_id,
   } = data;
+
+  const buttonRow = Array.isArray(button_row) ? button_row : [];
+  const productCategories = Array.isArray(select_product_categories) ? select_product_categories : [];
 
   const columnCount = Number(number_of_categories_to_show) || 2;
 
@@ -65,7 +68,7 @@ export default function ProductCategoriesSection({
     4: "lg:grid-cols-4",
   };
 
-  const mergedCategories = select_product_categories
+  const mergedCategories = productCategories
     .filter((cat) => Number(cat?.term_id || cat?.id) !== 15)
     .map((cat) => {
       const catId = Number(cat?.term_id || cat?.id);
@@ -118,9 +121,9 @@ export default function ProductCategoriesSection({
               />
             )}
 
-            {button_row?.length > 0 && (
+            {buttonRow.length > 0 && (
               <div className="mt-8 flex flex-wrap gap-4">
-                {button_row.map((btn, i) => (
+                {buttonRow.map((btn, i) => (
                   <Link
                     key={i}
                     href={btn.button_link || "#"}
