@@ -38,6 +38,12 @@ export function getIndustryRouteSegment(language = DEFAULT_LANGUAGE) {
   return "anvandningsomraden";
 }
 
+export function getServiceRouteSegment(language = DEFAULT_LANGUAGE) {
+  if (language === ENGLISH_LANGUAGE) return "services";
+  if (language === GERMAN_LANGUAGE) return "dienstleistungen";
+  return "tjanster";
+}
+
 export function stripLanguagePrefix(path = "/") {
   const matchedLanguage = TRANSLATED_LANGUAGES.find(
     (language) => path === `/${language}` || path.startsWith(`/${language}/`)

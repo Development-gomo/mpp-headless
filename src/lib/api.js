@@ -4,6 +4,7 @@ import {
   DEFAULT_LANGUAGE,
   FALLBACK_LANGUAGES,
   getIndustryRouteSegment,
+  getServiceRouteSegment,
   localizePath,
 } from "@/lib/i18n";
 
@@ -152,8 +153,13 @@ function normalizeWordPressPath(url = "#", language = DEFAULT_LANGUAGE) {
   const normalizePathname = (pathname = "/") =>
     pathname
       .replace(/^\/headless-mpp/, "")
-      .replace(/^\/([a-z]{2})\/service(?=\/|$)/, "/$1")
-      .replace(/^\/service(?=\/|$)/, "")
+      .replace(/^\/([a-z]{2})\/service(?=\/|$)/, (_, code) => {
+        return `/${code}/${getServiceRouteSegment(code)}`;
+      })
+      .replace(
+        /^\/service(?=\/|$)/,
+        `/${getServiceRouteSegment(language)}`
+      )
       .replace(/^\/produkt-kategori(?=\/|$)/, "/product-category")
       .replace(/^\/produkt(?=\/|$)/, "/product")
       .replace(

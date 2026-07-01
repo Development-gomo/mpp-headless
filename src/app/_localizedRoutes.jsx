@@ -39,7 +39,7 @@ import {
 import { getProductCategories as getProductTerms } from "@/components/sections/product/productUtils";
 import { resolveParams } from "@/lib/params";
 import { buildMetadataFromYoast } from "@/lib/seo";
-import { getIndustryRouteSegment } from "@/lib/i18n";
+import { getIndustryRouteSegment, getServiceRouteSegment } from "@/lib/i18n";
 
 function getCategoryId(category) {
   return category?.term_id || category?.id;
@@ -228,11 +228,10 @@ export async function renderHomePage(language) {
 }
 
 export async function generateDynamicStaticParams(language) {
-  const [pages, posts, caseStudies, services] = await Promise.all([
+  const [pages, posts, caseStudies] = await Promise.all([
     getAllPages({ language }),
     getAllPosts({ language }),
     getCaseStudies({ language }),
-    getServices({ language }),
   ]);
   const pageParams = (Array.isArray(pages) ? pages : [])
     .filter((p) => !["frontpage", "home"].includes(p.slug))
@@ -250,16 +249,7 @@ export async function generateDynamicStaticParams(language) {
         !postSlugs.has(caseStudy.slug)
     )
     .map((caseStudy) => ({ slug: caseStudy.slug }));
-  const reservedSlugs = new Set([
-    ...pageSlugs,
-    ...postSlugs,
-    ...caseStudyParams.map((item) => item.slug),
-  ]);
-  const serviceParams = (Array.isArray(services) ? services : [])
-    .filter((service) => service?.slug && !reservedSlugs.has(service.slug))
-    .map((service) => ({ slug: service.slug }));
-
-  return [...pageParams, ...postParams, ...caseStudyParams, ...serviceParams];
+  return [...pageParams, ...postParams, ...caseStudyParams];
 }
 
 export async function renderDynamicPage(params, language) {
@@ -270,12 +260,7 @@ export async function renderDynamicPage(params, language) {
     const post = await getPostBySlug(slug, { language });
     if (!post) {
       const caseStudy = await getCaseStudyBySlug(slug, { language });
-      if (!caseStudy) {
-        const service = await getServiceBySlug(slug, { language });
-        if (!service) notFound();
-
-        return renderServicePage(Promise.resolve({ slug }), language);
-      }
+      if (!caseStudy) notFound();
 
       const caseStudies = await getCaseStudies({ language });
       const relatedProductId =
@@ -423,10 +408,7 @@ export async function generateDynamicMetadata(params, language) {
   if (post) return buildMetadataFromYoast(post, { fallbackTitle: slug });
 
   const caseStudy = await getCaseStudyBySlug(slug, { language });
-  if (caseStudy) return buildMetadataFromYoast(caseStudy, { fallbackTitle: slug });
-
-  const service = await getServiceBySlug(slug, { language });
-  return buildMetadataFromYoast(service, { fallbackTitle: slug });
+  return buildMetadataFromYoast(caseStudy, { fallbackTitle: slug });
 }
 
 export async function generateProductStaticParams(language) {
@@ -475,7 +457,9 @@ export async function renderServicePage(params, language) {
           type: "service",
           id: service.id,
           slug: service.slug,
-          path: `/${language === "sv" ? "" : `${language}/`}${slug}`,
+          path: `/${language === "sv" ? "" : `${language}/`}${getServiceRouteSegment(
+            language
+          )}/${slug}`,
         }}
       />
       <main>

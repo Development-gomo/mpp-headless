@@ -3,5 +3,5 @@ import { resolveParams } from "@/lib/params";
 
 export default async function ServiceRedirectPage({ params }) {
   const { slug } = resolveParams(await params);
-  redirect(slug ? `/${slug}` : "/");
+  redirect(slug ? `/tjanster/${slug}` : "/tjanster");
 }

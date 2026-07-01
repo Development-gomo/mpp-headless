@@ -5,7 +5,7 @@ import {
   getThemeOptions,
   getWpmlLanguages,
 } from "@/lib/api";
-import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
+import { DEFAULT_LANGUAGE, getServiceRouteSegment, localizePath } from "@/lib/i18n";
 import HeaderComponent from "./HeaderComponent";
 
 function extractLinksFromHtml(html, language = DEFAULT_LANGUAGE) {
@@ -29,8 +29,13 @@ function normalizeUrl(url = "#", language = DEFAULT_LANGUAGE) {
   const normalizePathname = (pathname = "/") =>
     pathname
       .replace(/^\/headless-mpp/, "")
-      .replace(/^\/([a-z]{2})\/service(?=\/|$)/, "/$1")
-      .replace(/^\/service(?=\/|$)/, "");
+      .replace(/^\/([a-z]{2})\/service(?=\/|$)/, (_, code) => {
+        return `/${code}/${getServiceRouteSegment(code)}`;
+      })
+      .replace(
+        /^\/service(?=\/|$)/,
+        `/${getServiceRouteSegment(language)}`
+      );
 
   try {
     const parsed = new URL(url);
