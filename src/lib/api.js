@@ -435,6 +435,14 @@ export async function getServiceBySlug(slug, { language } = {}) {
   return getSingleEntry("service", slug, { language });
 }
 
+export async function getServiceById(id, { language } = {}) {
+  const service = await getEntryById("service", id, { language });
+  if (!service) return null;
+
+  const [resolvedService] = await resolveEmbeddedMedia([service]);
+  return resolvedService || service;
+}
+
 export async function getServices({ language } = {}) {
   const data = await fetchWP(
     withParams(`/wp/v2/service`, {
@@ -445,7 +453,8 @@ export async function getServices({ language } = {}) {
     { language }
   );
 
-  return Array.isArray(data) ? data : [];
+  const items = Array.isArray(data) ? data : [];
+  return resolveEmbeddedMedia(items);
 }
 
 // ─── Case studies ───────────────────────────────────────────────────────────
@@ -466,7 +475,14 @@ async function resolveEmbeddedMedia(items) {
   const mediaResults = await Promise.all(
     uniqueIds.map((id) =>
       fetchWP(`/wp/v2/media/${id}`, { logErrors: false }).then((m) =>
-        m?.source_url ? { id, source_url: m.source_url } : null
+        m?.source_url
+          ? {
+              id,
+              source_url: m.source_url,
+              media_details: m.media_details,
+              alt_text: m.alt_text,
+            }
+          : null
       )
     )
   );
@@ -483,7 +499,7 @@ async function resolveEmbeddedMedia(items) {
       ...item,
       _embedded: {
         ...item._embedded,
-        "wp:featuredmedia": [{ source_url: media.source_url }],
+        "wp:featuredmedia": [media],
       },
     };
   });

@@ -16,6 +16,7 @@ const PartnerReviewSection = dynamic(() => import("../sections/content-sections/
 const InnerCaseStudy = dynamic(() => import("../sections/case-study/InnerCaseStudy"));
 const InnerIndustry = dynamic(() => import("../sections/industry/InnerIndustry"));
 const HomeServicesSection = dynamic(() => import("../sections/content-sections/HomeServicesSection")); 
+const HomeFaqSection = dynamic(() => import("../sections/content-sections/HomeFaqSection"));
 const HomeTankSection = dynamic(() => import("../sections/content-sections/HomeTankSection"));
 const HomeExpertAdviceSection = dynamic(() => import("../sections/content-sections/HomeExpertAdviceSection"));
 const ServiceOverviewSection = dynamic(() => import("../sections/content-sections/service/ServiceOverviewSection"));
@@ -26,6 +27,7 @@ const FindRetailerSection = dynamic(() => import("../sections/content-sections/F
 const FullWidthContentSection = dynamic(() => import("../sections/content-sections/FullWidthContentSection"));
 const ContactFormSection = dynamic(() => import("../sections/content-sections/ContactFormSection"));
 const ProductSection = dynamic(() => import("../sections/content-sections/ProductSection"));
+const ServicesSection = dynamic(() => import("../sections/content-sections/ServicesSection"));
 const CatalogSection = dynamic(() => import("../sections/catalog/CatalogSection"));
 
 export default function PageBuilder({
@@ -110,6 +112,8 @@ export default function PageBuilder({
             );
           case "home_services_section":
             return <HomeServicesSection key={i} data={block} />;
+          case "home_faq_section":
+            return <HomeFaqSection key={i} data={block} />;
           case "homepage_tank_section":
             return <HomeTankSection key={i} data={block} />;
           case "home_expert_advice_section":
@@ -132,6 +136,8 @@ export default function PageBuilder({
             return <ContactFormSection key={i} data={block} language={language} />;
           case "product_section":
             return <ProductSection key={i} data={block} language={language} />;
+          case "services_section":
+            return <ServicesSection key={i} data={block} language={language} />;
           case "catalog":
           case "catalog_section":
             return <CatalogSection key={i} data={block} />;
