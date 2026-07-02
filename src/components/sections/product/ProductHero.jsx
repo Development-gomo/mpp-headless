@@ -426,7 +426,7 @@ export default function ProductHero({
                       key={feature}
                       className="flex items-start gap-3 font-body text-[14px] leading-[20px] text-[#1A1A1A]"
                     >
-                      <span className="mt-[2px] flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)] text-[11px] font-bold leading-none text-white">
+                      <span className="mt-[2px] flex h-[18px] w-4.5 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)] text-[11px] font-bold leading-none text-white">
                         ✓
                       </span>
                       <span>{feature}</span>
@@ -441,7 +441,7 @@ export default function ProductHero({
                 <button
                   type="button"
                   onClick={handleRequestQuote}
-                  className="group inline-flex h-[48px] items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
+                  className="group inline-flex h-12 items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
                 >
                   <span>{primaryText}</span>
                   <Image
@@ -449,7 +449,7 @@ export default function ProductHero({
                     alt=""
                     width={36}
                     height={36}
-                    className="h-[36px] w-9 transition-transform"
+                    className="h-9 w-9 transition-transform"
                   />
                 </button>
               )}
@@ -458,7 +458,7 @@ export default function ProductHero({
                 <Link
                   href={secondaryHref}
                   target={secondaryTarget}
-                  className="group inline-flex h-[48px] items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
+                  className="group inline-flex h-12 items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
                 >
                   <span>{secondaryText}</span>
                   <Image
@@ -466,7 +466,7 @@ export default function ProductHero({
                     alt=""
                     width={36}
                     height={36}
-                    className="h-[36px] w-9 transition-transform group-hover:translate-y-0.5"
+                    className="h-9 w-9 transition-transform group-hover:translate-y-0.5"
                   />
                 </Link>
               )}

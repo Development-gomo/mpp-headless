@@ -69,7 +69,7 @@ export default function ProductSpecsSection({ product, selectedVariation = null 
             <Link
               href={productSheetHref}
               target={productSheetTarget}
-              className="group inline-flex h-[48px] w-fit items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+              className="group inline-flex h-12 w-fit items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
             >
               <span>Download Product Sheet</span>
               <Image
@@ -77,7 +77,7 @@ export default function ProductSpecsSection({ product, selectedVariation = null 
                 alt=""
                 width={36}
                 height={36}
-                className="h-[36px] w-9 transition-transform group-hover:translate-y-0.5"
+                className="h-9 w-9 transition-transform group-hover:translate-y-0.5"
               />
             </Link>
           )}

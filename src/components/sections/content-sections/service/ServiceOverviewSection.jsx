@@ -78,7 +78,7 @@ export default function ServiceOverviewSection({ data }) {
               <div className="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
                 {overview_pointers.map((item, index) => (
                   <div key={index} className="flex items-center gap-4">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[2px] bg-[var(--color-yellow)]">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xs bg-[var(--color-yellow)]">
                       <Image
                         src="/energy-orange-white-ico.svg"
                         alt=""

@@ -148,7 +148,7 @@ export default function ServiceWhyChooseSection({ data }) {
                   className="relative min-h-[320px] rounded-lg bg-white/15 p-6 text-white backdrop-blur-[3px] md:p-7"
                 >
                   {icon && (
-                    <div className="mb-16 flex h-[48px] w-[48px] items-center justify-center rounded-[2px] bg-[var(--color-yellow)]">
+                    <div className="mb-16 flex h-12 w-[48px] items-center justify-center rounded-xs bg-[var(--color-yellow)]">
                       <Image
                         src={icon}
                         alt=""

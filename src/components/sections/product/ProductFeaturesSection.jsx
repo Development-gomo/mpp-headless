@@ -98,7 +98,7 @@ function AccessoryCard({ accessory, image, onAdd }) {
       </div>
 
       {accessory.active && (
-        <span className="absolute right-3 top-3 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-[var(--color-yellow)] text-[12px] font-bold leading-none text-white">
+        <span className="absolute right-3 top-3 flex h-[18px] w-4.5 items-center justify-center rounded-full bg-[var(--color-yellow)] text-[12px] font-bold leading-none text-white">
           ✓
         </span>
       )}

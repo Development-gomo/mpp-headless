@@ -93,7 +93,7 @@ export default function HeroBannerWithFeatures({ data }) {
   return (
     <section
       id={custom_id || undefined}
-      className={`relative min-h-[720px] lg:min-h-screen flex flex-col md:flex-row md:items-center overflow-hidden ${
+      className={`relative min-h-[640px] flex flex-col md:flex-row md:items-center overflow-hidden ${
         custom_class ? ` ${custom_class}` : ""
       }`}
       style={
@@ -126,13 +126,13 @@ export default function HeroBannerWithFeatures({ data }) {
       )}
 
       {(bgImg || background_video_url) && (
-        <div className="absolute inset-0 bg-black/30 -z-10" />
+        <div className="absolute inset-0 bg-black/10 -z-10" />
       )}
 
       {/* Main Content */}
       <div
         className={`relative web-width px-6 md:px-0 pt-28 pb-16 md:pt-24 w-full ${
-          features?.length > 0 ? "md:pb-48" : "md:pb-24"
+          features?.length > 0 ? "md:pb-48" : "md:pb-0"
         }`}
       >
         <div className="max-w-4xl flex flex-col gap-6 md:gap-8 lg:mb-24">
@@ -144,7 +144,7 @@ export default function HeroBannerWithFeatures({ data }) {
 
           {hero_description && (
             <div
-              className="text-white text-[16px] leading-6 md:text-[18px] md:leading-7.5 max-w-155 font-body"
+              className="text-white text-[16px] leading-6 md:text-[20px] md:leading-7.5 max-w-155 font-body"
               dangerouslySetInnerHTML={{ __html: hero_description }}
             />
           )}

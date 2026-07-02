@@ -134,7 +134,7 @@ function TeamCard({ member }) {
               alt=""
               width={18}
               height={18}
-              className="h-[18px] w-[18px] brightness-0 invert"
+              className="h-[18px] w-4.5 brightness-0 invert"
             />
           </a>
         )}

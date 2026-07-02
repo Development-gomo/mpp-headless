@@ -58,7 +58,7 @@ export default function LatestBlogsSection({
           <div className="max-w-[560px]">
             {text_above_title && (
               <div className="flex items-center gap-2 mb-5">
-                <span className="w-0.5 h-[10px] bg-[var(--color-yellow)]" />
+                <span className="w-0.5 h-4 bg-[var(--color-yellow)]" />
                 <p className="text-[#1A1A1A] text-[14px] leading-6 font-medium tracking-[0.56px] uppercase font-body">
                     {text_above_title}
                 </p>
@@ -138,7 +138,7 @@ export default function LatestBlogsSection({
                     >
                     <div className="flex min-h-[245px] flex-1 flex-col p-6 pb-5">
                         <div className="mb-6 flex items-center gap-3">
-                        <span className="inline-flex h-[22px] items-center rounded-[2px] bg-[var(--color-accent)] px-[13px] text-[12px] font-normal tracking-[-0.24px] text-white [font-family:var(--font-heading)]">
+                        <span className="inline-flex h-[22px] items-center rounded-xs bg-[var(--color-accent)] px-[13px] text-[12px] font-normal tracking-[-0.24px] text-white [font-family:var(--font-heading)]">
                             {category}
                         </span>
 

@@ -32,7 +32,7 @@ export default function LatestCaseStudiesSection({
           <div className="max-w-155">
             {text_above_title && (
               <div className="mb-5 flex items-center gap-2">
-                <span className="h-2.5 w-0.5 bg-[var(--color-yellow)]" />
+                <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
                 <p className="text-[#1A1A1A] text-[14px] leading-6 font-medium tracking-[0.56px] uppercase font-body">
                   {text_above_title}
                 </p>

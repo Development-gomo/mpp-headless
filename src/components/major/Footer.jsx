@@ -277,7 +277,7 @@ export default async function Footer({ language = DEFAULT_LANGUAGE }) {
             <h2 className="mt-5 max-w-[680px] font-heading text-[36px] font-normal leading-11 tracking-[-0.72px] text-white md:text-[44px] md:leading-14">
               {footer.cta.heading}
             </h2>
-          </div> 
+          </div>
 
           {footer.cta.buttonText && (
             <Link
@@ -307,7 +307,7 @@ export default async function Footer({ language = DEFAULT_LANGUAGE }) {
           />
         </div>
 
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[2.1fr_1fr_1fr_1.35fr_0.85fr] lg:gap-14">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[2.1fr_1fr_1fr_1.35fr_0.85fr] lg:gap-20">
           <div>
             <ul>
               {footer.productLinks.map((item) => (
@@ -393,7 +393,7 @@ export default async function Footer({ language = DEFAULT_LANGUAGE }) {
                   href={item.url}
                   target={item.target}
                   aria-label={item.name}
-                  className="flex h-6 w-[25px] items-center justify-center rounded-[2px] bg-white transition-opacity hover:opacity-80"
+                  className="flex h-6 w-[25px] items-center justify-center rounded-xs bg-white transition-opacity hover:opacity-80"
                 >
                   {item.icon && (
                     <Image

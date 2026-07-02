@@ -35,7 +35,7 @@ export default function HomeServicesSection({ data }) {
           <div>
             {text_above_title && (
               <div className="flex items-center gap-2 mb-5">
-                <span className="w-0.5 h-[10px] bg-[var(--color-yellow)]" />
+                <span className="w-0.5 h-4 bg-[var(--color-yellow)]" />
                 <p className="text-[#1A1A1A] text-[14px] leading-6 font-medium tracking-[0.56px] uppercase font-body">
                   {text_above_title}
                 </p>
@@ -91,9 +91,9 @@ export default function HomeServicesSection({ data }) {
                       <button
                         type="button"
                         onClick={() => setActiveIndex(isActive ? -1 : index)}
-                        className="flex w-full items-center justify-between gap-6 text-left"
+                        className="flex w-full items-center justify-between gap-6 text-left cursor-pointer"
                       >
-                        <h3 className="text-black text-[26px] leading-[34px] font-medium tracking-[-0.52px] font-heading">
+                        <h3 className="text-black text-[26px] leading-8.5 font-medium tracking-[-0.52px] font-heading">
                           {service.service_title}
                         </h3>
 
@@ -104,7 +104,7 @@ export default function HomeServicesSection({ data }) {
 
                       {isActive && service.service_description && (
                         <div
-                          className="mt-5 max-w-[520px] text-[#1A1A1A] text-[16px] leading-6 font-body"
+                          className="mt-5 max-w-130 text-[#1A1A1A] text-[16px] leading-6 font-body"
                           dangerouslySetInnerHTML={{
                             __html: service.service_description,
                           }}
@@ -135,13 +135,13 @@ export default function HomeServicesSection({ data }) {
 
           {/* Right */}
           {heroImg && (
-            <div className="relative h-[620px] overflow-hidden">
+            <div className="relative h-155 overflow-hidden">
               <Image
                 src={heroImg}
                 alt={hero_title || "Services image"}
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-contain"
+                className="object-contain lg:mt-12"
               />
             </div>
           )}

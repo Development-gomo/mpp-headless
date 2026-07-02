@@ -77,9 +77,9 @@ export default function HomeTankSection({ data }) {
       />
 
       {/* Content */}
-      <div className="relative z-10 web-width grid w-full grid-cols-1 items-center gap-0 px-6 md:px-0 pb-32.5 pt-28 lg:grid-cols-[0.9fr_1.1fr] lg:pb-37.5 lg:pt-32">
+      <div className="relative z-10 web-width w-full flex flex-wrap gap-0 px-6 md:px-0 pb-32.5 pt-28 lg:pb-37.5 lg:pt-32">
         {/* LEFT — Text */}
-        <div className="flex max-w-[560px] flex-col items-start">
+        <div className="flex max-w-[760px] flex-col items-start">
           {text_above_title && (
             <div className="mb-6 flex items-center gap-3">
               <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
@@ -95,6 +95,7 @@ export default function HomeTankSection({ data }) {
               className="font-heading max-w-155 text-[40px] font-normal leading-[48px] tracking-[-0.8px] text-white md:text-[56px] md:leading-[64px] md:tracking-[-1.12px] lg:text-[64px] lg:leading-[72px] lg:tracking-[-1.28px]"
               dangerouslySetInnerHTML={{ __html: hero_title }}
             />
+          
           )}
 
           {hero_description && (
@@ -142,7 +143,7 @@ export default function HomeTankSection({ data }) {
               height={600}
               priority
               sizes="(min-width: 1024px) 58vw, 100vw"
-              className="h-auto w-full max-w-190 object-contain"
+              className="h-auto w-full max-w-190 object-contain lg:absolute -right-26 -bottom-12"
             />
           </div>
         )}

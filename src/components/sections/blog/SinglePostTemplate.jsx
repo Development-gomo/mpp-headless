@@ -148,7 +148,7 @@ function RelatedPostCard({ post }) {
     >
       <div className="flex min-h-[245px] flex-1 flex-col p-6 pb-5">
         <div className="mb-6 flex items-center gap-3">
-          <span className="inline-flex h-[22px] items-center rounded-[2px] bg-[var(--color-accent)] px-[13px] text-[12px] font-normal tracking-[-0.24px] text-white [font-family:var(--font-heading)]">
+          <span className="inline-flex h-[22px] items-center rounded-xs bg-[var(--color-accent)] px-[13px] text-[12px] font-normal tracking-[-0.24px] text-white [font-family:var(--font-heading)]">
             {category}
           </span>
           {date && (

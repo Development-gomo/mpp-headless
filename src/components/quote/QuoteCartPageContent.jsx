@@ -344,7 +344,7 @@ export default function QuoteCartPageContent() {
               <button
                 type="submit"
                 disabled={status === "submitting"}
-                className="inline-flex h-[48px] items-center justify-center rounded-sm bg-[var(--color-yellow)] px-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-60"
+                className="inline-flex h-12 items-center justify-center rounded-sm bg-[var(--color-yellow)] px-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-60"
               >
                 {status === "submitting" ? "Submitting..." : "Submit quote request"}
               </button>

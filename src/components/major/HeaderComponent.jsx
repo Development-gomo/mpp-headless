@@ -118,7 +118,7 @@ function ThreeLevelCategoryMenu({ menuRow }) {
           className="inline-flex w-fit justify-end items-center gap-4 py-1.5 pr-1.5 pl-6 rounded-sm bg-[image:var(--mpp-gradient)] text-white font-heading text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"
         >
           <span>View all Products</span>
-          <span className="flex h-[32px] w-[32px] items-center justify-center rounded-[3px] bg-white text-black">
+          <span className="flex h-8 w-8 items-center justify-center rounded-[3px] bg-white text-black">
             <ArrowUpRightIcon />
           </span>
         </Link>
@@ -165,7 +165,7 @@ function ThreeLevelCategoryMenu({ menuRow }) {
               className="group inline-flex h-11 items-center justify-between gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
             >
               <span className="whitespace-nowrap">Find your right tank</span>
-              <span className="flex h-[32px] w-[32px] shrink-0 items-center justify-center rounded-[3px] bg-white text-black">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[3px] bg-white text-black">
                 <ArrowUpRightIcon />
               </span>
             </Link>
@@ -179,7 +179,7 @@ function ThreeLevelCategoryMenu({ menuRow }) {
                 <Link
                   key={product.key}
                   href={product.href}
-                  className="group relative flex min-h-[122px] overflow-hidden rounded-[2px] bg-[#F0F0F2] p-4 transition-shadow hover:shadow-[0_16px_34px_rgba(0,0,0,0.12)]"
+                  className="group relative flex min-h-[122px] overflow-hidden rounded-xs bg-[#F0F0F2] p-4 transition-shadow hover:shadow-[0_16px_34px_rgba(0,0,0,0.12)]"
                 >
                   <span className="relative z-10 max-w-[52%] font-heading text-[16px] font-semibold leading-5.5 text-black">
                     {product.label}
@@ -199,7 +199,7 @@ function ThreeLevelCategoryMenu({ menuRow }) {
               ))}
             </div>
           ) : (
-            <div className="flex h-full items-center justify-center rounded-[2px] bg-[#F0F0F2] text-[15px] text-black/45">
+            <div className="flex h-full items-center justify-center rounded-xs bg-[#F0F0F2] text-[15px] text-black/45">
               No products found
             </div>
           )}
@@ -537,7 +537,7 @@ export default function HeaderComponent(props) {
           >
             <Link
               href={quoteHref}
-              className={`flex h-[28px] items-center justify-center rounded-sm px-3 backdrop-blur-[10px] text-[14px] leading-6 tracking-[-0.28px] font-heading ${topPillClass}`}
+              className={`flex h-7 items-center justify-center rounded-sm px-3 backdrop-blur-[10px] text-[14px] leading-6 tracking-[-0.28px] font-heading ${topPillClass}`}
             >
               RFQ{quoteCount > 0 ? ` (${quoteCount})` : ""}
             </Link>
@@ -559,7 +559,7 @@ export default function HeaderComponent(props) {
             <div className="relative">
               <button
                 type="button"
-                className={`flex h-[28px] w-[45px] items-center justify-center gap-1 rounded-sm backdrop-blur-[10px] text-[14px] leading-6 tracking-[-0.28px] font-heading ${topPillClass} ${
+                className={`flex h-7 w-[45px] items-center justify-center gap-1 rounded-sm backdrop-blur-[10px] text-[14px] leading-6 tracking-[-0.28px] font-heading ${topPillClass} ${
                   availableLanguageOptions.length === 0
                     ? "cursor-default"
                     : "cursor-pointer"
@@ -605,11 +605,11 @@ export default function HeaderComponent(props) {
           <Link
             href={cta1Url || "#"}
             target={cta1Target || "_self"}
-            className="inline-flex h-[48px] w-auto min-w-[127px] shrink-0 items-center justify-between gap-4 rounded-sm bg-[#445641] py-1.5 pr-1.5 pl-4 text-white font-heading text-[14px] leading-6 tracking-[-0.28px] hover:opacity-90 transition-opacity"
+            className="inline-flex h-12 w-auto min-w-[127px] shrink-0 items-center justify-between gap-4 rounded-sm bg-[#445641] py-1.5 pr-1.5 pl-4 text-white font-heading text-[14px] leading-6 tracking-[-0.28px] hover:opacity-90 transition-opacity"
           >
             <span className="whitespace-nowrap">{cta1Text}</span>
 
-            <span className="flex h-[36px] w-[37px] shrink-0 items-center justify-center rounded-sm bg-white">
+            <span className="flex h-9 w-[37px] shrink-0 items-center justify-center rounded-sm bg-white">
               <Image
                 src="/defence.svg"
                 alt=""
@@ -624,11 +624,11 @@ export default function HeaderComponent(props) {
           <Link
             href={cta2Url || "#"}
             target={cta2Target || "_self"}
-            className="group inline-flex h-[48px] w-[170px] items-center justify-between rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-4 text-black font-heading text-[14px] leading-6 tracking-[-0.28px] hover:opacity-90 transition-opacity"
+            className="group inline-flex h-12 w-[170px] items-center justify-between rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-4 text-black font-heading text-[14px] leading-6 tracking-[-0.28px] hover:opacity-90 transition-opacity"
           >
             <span className="whitespace-nowrap">{cta2Text}</span>
 
-            <span className="flex h-[36px] w-[37px] shrink-0 items-center justify-center rounded-sm bg-white">
+            <span className="flex h-9 w-[37px] shrink-0 items-center justify-center rounded-sm bg-white">
               <Image
                 src="/reseller.svg"
                 alt=""
@@ -823,13 +823,13 @@ export default function HeaderComponent(props) {
                   >
                     <span>{cta1Text}</span>
 
-                    <span className="flex h-[36px] w-[37px] items-center justify-center rounded-sm bg-white">
+                    <span className="flex h-9 w-[37px] items-center justify-center rounded-sm bg-white">
                       <Image
                         src="/defence.svg"
                         alt=""
                         width={18}
                         height={18}
-                        className="h-auto w-[18px]"
+                        className="h-auto w-4.5"
                       />
                     </span>
                   </Link>
@@ -843,13 +843,13 @@ export default function HeaderComponent(props) {
                   >
                     <span>{cta2Text}</span>
 
-                    <span className="flex h-[36px] w-[37px] items-center justify-center rounded-sm bg-white">
+                    <span className="flex h-9 w-[37px] items-center justify-center rounded-sm bg-white">
                       <Image
                         src="/reseller.svg"
                         alt=""
                         width={18}
                         height={18}
-                        className="h-auto w-[18px]"
+                        className="h-auto w-4.5"
                       />
                     </span>
                   </Link>
@@ -867,7 +867,7 @@ export default function HeaderComponent(props) {
                       alt=""
                       width={16}
                       height={16}
-                      className="h-auto w-[16px]"
+                      className="h-auto w-4"
                     />
                   </Link>
                 </div>

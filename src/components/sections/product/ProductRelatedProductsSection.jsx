@@ -152,7 +152,7 @@ export default function ProductRelatedProductsSection({
 
           <Link
             href={viewAllHref}
-            className="group inline-flex h-[48px] w-fit items-center gap-4 rounded-sm bg-[var(--color-accent)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+            className="group inline-flex h-12 w-fit items-center gap-4 rounded-sm bg-[var(--color-accent)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
           >
             <span>View all products</span>
             <Image
@@ -160,7 +160,7 @@ export default function ProductRelatedProductsSection({
               alt=""
               width={36}
               height={36}
-              className="h-[36px] w-9 transition-transform"
+              className="h-9 w-9 transition-transform"
             />
           </Link>
         </div>
@@ -199,7 +199,7 @@ export default function ProductRelatedProductsSection({
                           alt=""
                           width={16}
                           height={16}
-                          className="h-4 w-[16px] object-contain"
+                          className="h-4 w-4 object-contain"
                         />
                         Capacity
                       </div>
@@ -217,7 +217,7 @@ export default function ProductRelatedProductsSection({
                           alt=""
                           width={16}
                           height={16}
-                          className="h-4 w-[16px] object-contain"
+                          className="h-4 w-4 object-contain"
                         />
                         Fuel type
                       </div>

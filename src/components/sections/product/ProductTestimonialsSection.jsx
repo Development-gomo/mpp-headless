@@ -59,7 +59,7 @@ function TestimonialCard({ testimonial }) {
 
       <div className="mt-6 border-t border-[#98C8DA] pt-4">
         <div className="flex items-center gap-3">
-          <div className="relative h-[32px] w-[32px] shrink-0 overflow-hidden rounded-full bg-[#E5F2F7]">
+          <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full bg-[#E5F2F7]">
             {imageUrl && (
               <Image
                 src={imageUrl}
@@ -123,7 +123,7 @@ export default function ProductTestimonialsSection({
 
           <Link
             href={ctaHref}
-            className="group inline-flex h-[48px] w-fit items-center gap-4 rounded-sm bg-[var(--color-accent)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+            className="group inline-flex h-12 w-fit items-center gap-4 rounded-sm bg-[var(--color-accent)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
           >
             <span>{ctaText}</span>
             <Image
@@ -131,7 +131,7 @@ export default function ProductTestimonialsSection({
               alt=""
               width={36}
               height={36}
-              className="h-[36px] w-9 transition-transform"
+              className="h-9 w-9 transition-transform"
             />
           </Link>
         </div>
