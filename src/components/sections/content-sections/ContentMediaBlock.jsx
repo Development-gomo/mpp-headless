@@ -47,10 +47,12 @@ export default function ContentMediaBlock({ data }) {
   return (
     <section
       id={custom_id || undefined}
-      className={`web-width px-6 py-16 md:py-24${custom_class ? ` ${custom_class}` : ""}`}
+      className={custom_class || undefined}
       style={background_color ? { backgroundColor: background_color } : {}}
     >
-      <div className={`flex flex-col ${rowDirection} items-center gap-10 md:gap-16`}>
+      <div
+        className={`web-width flex flex-col ${rowDirection} items-center gap-10 px-6 py-16 md:gap-16 md:py-24`}
+      >
         {/* Image */}
         {imgUrl && (
           <div className="w-full md:w-1/2 relative aspect-[4/3] rounded-md overflow-hidden">
