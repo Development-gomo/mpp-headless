@@ -228,10 +228,11 @@ export async function renderHomePage(language) {
 }
 
 export async function generateDynamicStaticParams(language) {
-  const [pages, posts, caseStudies] = await Promise.all([
+  const [pages, posts, caseStudies, services] = await Promise.all([
     getAllPages({ language }),
     getAllPosts({ language }),
     getCaseStudies({ language }),
+    getServices({ language }),
   ]);
   const pageParams = (Array.isArray(pages) ? pages : [])
     .filter((p) => !["frontpage", "home"].includes(p.slug))
@@ -249,7 +250,17 @@ export async function generateDynamicStaticParams(language) {
         !postSlugs.has(caseStudy.slug)
     )
     .map((caseStudy) => ({ slug: caseStudy.slug }));
-  return [...pageParams, ...postParams, ...caseStudyParams];
+  const caseStudySlugs = new Set(caseStudyParams.map((item) => item.slug));
+  const serviceParams = (Array.isArray(services) ? services : [])
+    .filter(
+      (service) =>
+        service?.slug &&
+        !pageSlugs.has(service.slug) &&
+        !postSlugs.has(service.slug) &&
+        !caseStudySlugs.has(service.slug)
+    )
+    .map((service) => ({ slug: service.slug }));
+  return [...pageParams, ...postParams, ...caseStudyParams, ...serviceParams];
 }
 
 export async function renderDynamicPage(params, language) {
@@ -260,7 +271,12 @@ export async function renderDynamicPage(params, language) {
     const post = await getPostBySlug(slug, { language });
     if (!post) {
       const caseStudy = await getCaseStudyBySlug(slug, { language });
-      if (!caseStudy) notFound();
+      if (!caseStudy) {
+        const service = await getServiceBySlug(slug, { language });
+        if (!service) notFound();
+
+        return renderServicePage(params, language);
+      }
 
       const caseStudies = await getCaseStudies({ language });
       const relatedProductId =
@@ -408,7 +424,10 @@ export async function generateDynamicMetadata(params, language) {
   if (post) return buildMetadataFromYoast(post, { fallbackTitle: slug });
 
   const caseStudy = await getCaseStudyBySlug(slug, { language });
-  return buildMetadataFromYoast(caseStudy, { fallbackTitle: slug });
+  if (caseStudy) return buildMetadataFromYoast(caseStudy, { fallbackTitle: slug });
+
+  const service = await getServiceBySlug(slug, { language });
+  return buildMetadataFromYoast(service, { fallbackTitle: slug });
 }
 
 export async function generateProductStaticParams(language) {
