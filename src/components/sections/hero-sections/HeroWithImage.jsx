@@ -73,6 +73,7 @@ export default function HeroWithImage({ data }) {
       <div className="relative z-10 web-width px-6 py-24 w-full grid lg:grid-cols-2 gap-12 items-center">
         {/* LEFT — Text */}
         <div className="flex flex-col gap-8">
+          {text_above_title && (
           <div className="flex items-center gap-3">
             {/* Left border */}
             <span className="w-0.5 h-4 bg-[var(--color-yellow)]"></span>
@@ -82,6 +83,7 @@ export default function HeroWithImage({ data }) {
               {text_above_title}
             </p>
           </div>
+          )}
           {hero_title && (
             <h1 className="text-6xl font-bold text-white max-w-4xl">{hero_title}</h1>
           )}
