@@ -40,8 +40,8 @@ function getCategoryLink(category, language = DEFAULT_LANGUAGE) {
 const MAIN_CATEGORY_ORDER = [
   "mobila-bransletankar",
   "stationara-bransletankar",
-  "defence-products",
   "accessories",
+  "defence-products",
 ];
 
 export default function ProductCategoryBanner({
