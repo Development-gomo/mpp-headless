@@ -310,19 +310,19 @@ export default function SingleCaseStudyTemplate({
 
   return (
     <>
-      <section className="bg-white px-6 pb-14 pt-[150px] md:pt-[170px]">
+      <section className="bg-white px-6 pb-14 pt-37.5 md:pt-42.5">
         <div className="web-width">
           <p className="mb-6 text-[13px] font-medium uppercase leading-5.5 tracking-[2px] text-[#1A1A1A]">
             Case study | Reading time: {readingTime} minutes
             {fullDate ? ` | ${fullDate}` : ""}
           </p>
           <h1
-            className="max-w-[1200px] text-[42px] font-medium leading-[50px] tracking-[-0.84px] text-[#071838] md:text-[56px] md:leading-[64px]"
+            className="max-w-300 text-[42px] font-medium leading-[50px] tracking-[-0.84px] text-[#071838] md:text-[56px] md:leading-[64px]"
             dangerouslySetInnerHTML={{ __html: title }}
           />
           {intro && (
             <div
-              className="mt-7 max-w-[1200px] text-[16px] leading-6 text-[#1A1A1A]"
+              className="mt-7 max-w-300 text-[16px] leading-6 text-[#1A1A1A]"
               dangerouslySetInnerHTML={{ __html: intro }}
             />
           )}

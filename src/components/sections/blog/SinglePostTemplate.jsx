@@ -158,13 +158,11 @@ function RelatedPostCard({ post }) {
           )}
         </div>
 
-        <h3
-          className="mb-5 min-h-[84px] text-[28px] font-medium leading-[36px] tracking-[-0.56px] text-black capitalize [font-family:var(--font-heading)] line-clamp-3"
+        <h3 className="font-heading mb-5 min-h-[84px] text-[28px] font-medium leading-[36px] tracking-[-0.56px] text-black capitalize [font-family:var(--font-heading)] line-clamp-3"
           dangerouslySetInnerHTML={{ __html: title }}
         />
         {excerpt && (
-          <div
-            className="mt-auto text-[16px] leading-6 text-[#1A1A1A] font-normal [font-family:var(--font-nunito-sans)] line-clamp-2"
+          <div className="mt-auto text-[16px] leading-6 text-[#1A1A1A] font-normal [font-family:var(--font-nunito-sans)] line-clamp-2"
             dangerouslySetInnerHTML={{ __html: excerpt }}
           />
         )}
@@ -310,19 +308,19 @@ export default function SinglePostTemplate({
 
   return (
     <>
-      <section className="bg-white px-6 pb-14 pt-[150px] md:pt-[170px]">
+      <section className="bg-white px-6 pb-14 pt-37.5 md:pt-42.5">
         <div className="web-width">
           <p className="mb-6 text-[13px] font-medium uppercase leading-5.5 tracking-[2px] text-[#1A1A1A]">
             {category} | Reading time: {readingTime} minutes
             {fullDate ? ` | ${fullDate}` : ""}
           </p>
           <h1
-            className="max-w-[1200px] text-[42px] font-medium leading-[50px] tracking-[-0.84px] text-[#071838] md:text-[56px] md:leading-[64px]"
+            className="font-heading max-w-300 text-[42px] font-medium leading-[50px] tracking-[-0.84px] text-[#071838] md:text-[56px] md:leading-[64px]"
             dangerouslySetInnerHTML={{ __html: title }}
           />
           {excerpt && (
             <div
-              className="mt-7 max-w-[1200px] text-[16px] leading-6 text-[#1A1A1A]"
+              className="mt-7 max-w-300 text-[16px] leading-6 text-[#1A1A1A]"
               dangerouslySetInnerHTML={{ __html: excerpt }}
             />
           )}
@@ -351,7 +349,7 @@ export default function SinglePostTemplate({
           <aside className="lg:sticky lg:top-32 lg:self-start">
             {showToc && toc.length > 0 && (
               <div>
-                <h2 className="mb-5 text-[20px] font-bold leading-[28px] text-black">
+                <h2 className="font-heading mb-5 text-[20px] font-bold leading-[28px] text-black">
                   {tocTitle}
                 </h2>
                 <nav className="space-y-3">
@@ -373,7 +371,7 @@ export default function SinglePostTemplate({
               className="mt-10 hidden rounded-sm p-7 lg:block"
               style={{ backgroundColor: ctaBackgroundColor }}
             >
-              <h3 className="text-[22px] font-bold leading-[30px] text-white">
+              <h3 className="font-heading text-[22px] font-bold leading-[30px] text-white">
                 {ctaTitle}
               </h3>
               {ctaText && (
@@ -401,7 +399,7 @@ export default function SinglePostTemplate({
           </aside>
 
           <article
-            className="max-w-[870px] text-[16px] leading-[26px] text-black [&_a]:text-[var(--color-accent)] [&_blockquote]:relative [&_blockquote]:my-10 [&_blockquote]:overflow-hidden [&_blockquote]:rounded-md [&_blockquote]:border-l-[6px] [&_blockquote]:border-[var(--color-accent)] [&_blockquote]:bg-[#EAF1FA] [&_blockquote]:py-8 [&_blockquote]:pl-7 [&_blockquote]:pr-20 [&_blockquote]:text-[16px] [&_blockquote]:italic [&_blockquote]:font-normal [&_blockquote]:leading-[28px] [&_blockquote]:text-[#071838] [&_blockquote]:shadow-[0_18px_45px_rgba(7,24,56,0.08)] [&_blockquote:before]:pointer-events-none [&_blockquote:before]:absolute [&_blockquote:before]:right-6 [&_blockquote:before]:top-5 [&_blockquote:before]:content-['\201C'] [&_blockquote:before]:text-[70px] [&_blockquote:before]:font-bold [&_blockquote:before]:leading-none [&_blockquote:before]:text-[rgba(0,112,158,0.14)] [&_blockquote_cite]:mt-5 [&_blockquote_cite]:block [&_blockquote_cite]:text-[14px] [&_blockquote_cite]:font-bold [&_blockquote_cite]:not-italic [&_blockquote_cite]:leading-5.5 [&_blockquote_cite]:text-[var(--color-accent)] [&_blockquote_p:last-child]:mb-0 [&_h2]:mb-5 [&_h2]:mt-10 [&_h2]:text-[34px] [&_h2]:font-bold [&_h2]:leading-[42px] [&_h3]:mb-4 [&_h3]:mt-8 [&_h3]:text-[26px] [&_h3]:font-bold [&_h3]:leading-[34px] [&_li]:mb-2 [&_p]:mb-5 [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6"
+            className="max-w-[870px] text-[16px] leading-[26px] text-black [&_a]:text-[var(--color-accent)] [&_blockquote]:relative [&_blockquote]:my-10 [&_blockquote]:overflow-hidden [&_blockquote]:rounded-md [&_blockquote]:border-l-[6px] [&_blockquote]:border-[var(--color-accent)] [&_blockquote]:bg-[#EAF1FA] [&_blockquote]:py-8 [&_blockquote]:pl-7 [&_blockquote]:pr-20 [&_blockquote]:text-[16px] [&_blockquote]:italic [&_blockquote]:font-normal [&_blockquote]:leading-[28px] [&_blockquote]:text-[#071838] [&_blockquote]:shadow-[0_18px_45px_rgba(7,24,56,0.08)] [&_blockquote:before]:pointer-events-none [&_blockquote:before]:absolute [&_blockquote:before]:right-6 [&_blockquote:before]:top-5 [&_blockquote:before]:content-['\201C'] [&_blockquote:before]:text-[70px] [&_blockquote:before]:font-bold [&_blockquote:before]:leading-none [&_blockquote:before]:text-[rgba(0,112,158,0.14)] [&_blockquote_cite]:mt-5 [&_blockquote_cite]:block [&_blockquote_cite]:text-[14px] [&_blockquote_cite]:font-bold [&_blockquote_cite]:not-italic [&_blockquote_cite]:leading-5.5 [&_blockquote_cite]:text-[var(--color-accent)] [&_blockquote_p:last-child]:mb-0 [&_h2]:mb-5 [&_h2]:mt-10 [&_h2]:font-heading [&_h3]:font-heading [&_h2]:text-[34px] [&_h2]:font-normal [&_h2]:leading-[42px] [&_h3]:mb-4 [&_h3]:mt-8 [&_h3]:text-[26px] [&_h3]:font-normal [&_h3]:leading-[34px] [&_li]:mb-2 [&_p]:mb-5 [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6"
             dangerouslySetInnerHTML={{ __html: html }}
           />
         </div>
@@ -438,7 +436,7 @@ export default function SinglePostTemplate({
               className="mt-8 rounded-sm p-7 lg:hidden"
               style={{ backgroundColor: ctaBackgroundColor }}
             >
-              <h3 className="text-[22px] font-bold leading-[30px] text-white">
+              <h3 className="font-heading text-[22px] font-bold leading-[30px] text-white">
                 {ctaTitle}
               </h3>
               {ctaText && (
@@ -470,7 +468,7 @@ export default function SinglePostTemplate({
       {showRelatedPosts && related.length > 0 && (
         <section className="relative bg-[#F1F1F3]">
           <div className="web-width px-6 py-20">
-            <h2 className="mb-10 text-black text-[52px] leading-[1.05] font-normal tracking-[-1px]">
+            <h2 className="font-heading mb-10 text-black text-[52px] leading-[1.05] font-normal tracking-[-1px]">
               {relatedHeading}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

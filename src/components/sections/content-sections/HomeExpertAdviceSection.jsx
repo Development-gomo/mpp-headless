@@ -84,7 +84,7 @@ export default function HomeExpertAdviceSection({ data }) {
 
                   <div className="relative z-10 flex min-h-[255px] flex-col items-start">
                     {card.card_title && (
-                      <h3 className="mb-7 text-[38px] font-normal leading-[1.08] tracking-[-0.6px] md:text-[40px]">
+                      <h3 className="font-heading mb-7 text-[38px] font-normal leading-[1.08] tracking-[-0.6px] md:text-[40px]">
                         {card.card_title}
                       </h3>
                     )}

@@ -151,7 +151,7 @@ export default function LatestBlogsSection({
 
                         {title && (
                         <h3
-                        className="mb-5 min-h-[84px] text-[28px] font-medium leading-[36px] tracking-[-0.56px] text-black capitalize [font-family:var(--font-heading)] line-clamp-3"
+                        className="mb-5 min-h-17 text-[24px] font-medium leading-8 tracking-[-0.56px] text-black capitalize [font-family:var(--font-heading)] line-clamp-3 font-heading"
                         dangerouslySetInnerHTML={{ __html: title }}
                         />
                         )}
@@ -162,20 +162,9 @@ export default function LatestBlogsSection({
                         dangerouslySetInnerHTML={{ __html: excerpt }}
                         />
                         )}
-
-                        <span className="mt-auto inline-flex w-fit items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-black">
-                          <span>{readMoreText}</span>
-                          <Image
-                            src="/black-white-arrow.svg"
-                            alt=""
-                            width={36}
-                            height={36}
-                            className="h-auto w-9 object-contain transition-transform"
-                          />
-                        </span>
                     </div>
 
-                    <div className="relative h-[210px] overflow-hidden">
+                    <div className="relative h-52.5 overflow-hidden">
                         {image && (
                         <Image
                             src={image}
