@@ -61,7 +61,7 @@ export default function FindRetailerSection({ data = {}, stores = [] }) {
 
           {hero_title && (
             <h2
-              className="max-w-155 text-[42px] font-normal leading-[48px] tracking-[-1.04px] text-black [font-family:var(--font-heading)] md:text-[52px] md:leading-[60px]"
+              className="max-w-155 text-[42px] font-normal leading-[48px] tracking-[-1.04px] text-black [font-family:var(--font-heading)] md:text-[48px] md:leading-[58px]"
               dangerouslySetInnerHTML={{ __html: hero_title }}
             />
           )}

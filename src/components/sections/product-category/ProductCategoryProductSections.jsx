@@ -169,7 +169,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
             </p>
           </div>
 
-          <h2 className="max-w-155 font-heading text-[42px] font-normal leading-12.5 tracking-[-0.84px] text-black md:text-[52px] md:leading-[60px] md:tracking-[-1.04px]">
+          <h2 className="max-w-155 font-heading text-[42px] font-normal leading-12.5 tracking-[-0.84px] text-black md:text-[48px] md:leading-[58px] md:tracking-[-1.04px]">
             {childCategory.name}
           </h2>
         </div>

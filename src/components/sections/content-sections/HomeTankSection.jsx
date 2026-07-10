@@ -156,7 +156,7 @@ export default function HomeTankSection({ data }) {
             {[...rotating_text, ...rotating_text, ...rotating_text].map(
               (item, index) => (
                 <div key={index} className="flex items-center gap-8">
-                  <span className="font-heading text-[52px] leading-[48px] font-bold uppercase tracking-[2.8px] text-white/15 md:text-[80px] md:leading-[72px] md:tracking-[4.8px]">
+                  <span className="font-heading text-[48px] leading-[48px] font-bold uppercase tracking-[2.8px] text-white/15 md:text-[80px] md:leading-[72px] md:tracking-[4.8px]">
                     {item?.rotating_word}
                   </span>
 

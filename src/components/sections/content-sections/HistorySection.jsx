@@ -261,7 +261,7 @@ export default function HistorySection({ data }) {
 
             {hero_title && (
               <h2
-                className="font-heading text-[36px] font-normal leading-[42px] tracking-[-0.72px] text-black md:text-[52px] md:leading-[60px] md:tracking-[-1.04px]"
+                className="font-heading text-[36px] font-normal leading-[42px] tracking-[-0.72px] text-black md:text-[48px] md:leading-[58px] md:tracking-[-1.04px]"
                 dangerouslySetInnerHTML={{ __html: hero_title }}
               />
             )}

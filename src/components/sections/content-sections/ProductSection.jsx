@@ -160,7 +160,7 @@ export default async function ProductSection({
 
               {hero_title && (
                 <h2
-                  className="font-heading max-w-155 text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-black md:text-[52px] md:leading-[60px] md:tracking-[-1.04px]"
+                  className="font-heading max-w-155 text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[58px] md:tracking-[-1.04px]"
                   dangerouslySetInnerHTML={{ __html: hero_title }}
                 />
               )}

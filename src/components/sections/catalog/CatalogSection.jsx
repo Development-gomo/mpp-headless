@@ -54,7 +54,7 @@ export default function CatalogSection({ data }) {
 
             {hero_title && (
               <h2
-                className="max-w-[650px] font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-black md:text-[58px] md:leading-[68px] md:tracking-[-1.16px]"
+                className="max-w-[650px] font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[58px] md:leading-[68px] md:tracking-[-1.16px]"
                 dangerouslySetInnerHTML={{ __html: hero_title }}
               />
             )}

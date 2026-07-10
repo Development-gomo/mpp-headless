@@ -209,7 +209,7 @@ export default function ProductHero({
       <div className="web-width px-6 pb-20 pt-2 md:pb-30">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,610px)_minmax(0,1fr)] xl:gap-5">
           <div>
-            <div className="relative flex min-h-[300px] items-center justify-center overflow-hidden rounded-lg border border-[#DDD8CE] bg-white md:min-h-[392px]">
+            <div className="relative flex min-h-75 items-center justify-center overflow-hidden rounded-lg border border-[#DDD8CE] bg-white md:min-h-[392px]">
               {activeImage ? (
                 <Image
                   key={activeImage}
@@ -221,7 +221,7 @@ export default function ProductHero({
                   className="product-gallery-main-image object-contain p-10 md:p-12"
                 />
               ) : (
-                <div className="flex min-h-[300px] items-center justify-center font-body text-[14px] text-black/50 md:min-h-[392px]">
+                <div className="flex min-h-75 items-center justify-center font-body text-[14px] text-black/50 md:min-h-[392px]">
                   Product image missing
                 </div>
               )}
@@ -314,18 +314,21 @@ export default function ProductHero({
             )}
 
             {!eyebrow && categoryLabel && (
-              <p className="mb-3 font-body text-[14px] uppercase leading-5.5 text-[#1A1A1A]">
-                {categoryLabel}
+              <div className="mb-7 flex items-center gap-2">
+                <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
+                <p className="font-body text-[13px] font-medium uppercase leading-5.5 tracking-[0.52px] text-[#1A1A1A]">
+                  {categoryLabel}
               </p>
+              </div>
             )}
 
             <h1
-              className="max-w-155 font-heading text-[42px] font-normal leading-[48px] tracking-[-0.84px] text-black md:text-[52px] md:leading-[58px]"
+              className="max-w-155 font-heading text-[36px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[58px]"
               dangerouslySetInnerHTML={{ __html: title }}
             />
 
             {variationSku && (
-              <div className="max-w-155 font-heading text-[42px] font-normal leading-[48px] tracking-[-0.84px] text-black md:text-[52px] md:leading-[58px]">
+              <div className="max-w-155 font-heading text-[42px] font-normal leading-[48px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[58px]">
                 {variationSku}
               </div>
             )}

@@ -60,7 +60,7 @@ export default function ProductSpecsSection({ product, selectedVariation = null 
                 Technical data
               </p>
             </div>
-            <h2 className="max-w-155 font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[54px] [&_span]:text-[#007DA5]">
+            <h2 className="max-w-155 font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[54px] [&_span]:text-[#007DA5]">
               {title}
             </h2>
           </div>

@@ -59,7 +59,7 @@ export default function ProductCategorySeoSection({ category }) {
 
             {title && (
               <h2
-                className="max-w-[630px] text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-white md:text-[48px] md:leading-[58px] md:tracking-[-1.12px]"
+                className="max-w-[630px] text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-white md:text-[48px] md:leading-[58px] md:tracking-[-1.12px]"
                 dangerouslySetInnerHTML={{ __html: title }}
               />
             )}

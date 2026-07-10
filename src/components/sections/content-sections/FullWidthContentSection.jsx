@@ -90,7 +90,7 @@ export default function FullWidthContentSection({ data }) {
 
         {hero_title && (
           <h2
-            className={`font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] md:text-[52px] md:leading-[60px] md:tracking-[-1.04px] ${textColor}`}
+            className={`font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] md:text-[48px] md:leading-[58px] md:tracking-[-1.04px] ${textColor}`}
             dangerouslySetInnerHTML={{ __html: hero_title }}
           />
         )}

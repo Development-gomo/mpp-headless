@@ -96,7 +96,7 @@ export default function ServiceWhyChooseSection({ data }) {
 
           {hero_title && (
             <h2
-              className="font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-white md:text-[56px] md:leading-[64px] md:tracking-[-1.12px]"
+              className="font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-white md:text-[56px] md:leading-[64px] md:tracking-[-1.12px]"
               dangerouslySetInnerHTML={{ __html: hero_title }}
             />
           )}

@@ -77,7 +77,7 @@ export default function ProductOverviewSection({
             </div>
 
             <h2
-              className="max-w-[520px] font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-black md:text-[48px] md:leading-14 [&_span]:text-[#007DA5]"
+              className="max-w-[520px] font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-14 [&_span]:text-[#007DA5]"
               dangerouslySetInnerHTML={{ __html: title }}
             />
           </div>

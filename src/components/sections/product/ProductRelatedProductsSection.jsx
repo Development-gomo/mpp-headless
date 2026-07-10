@@ -145,7 +145,7 @@ export default function ProductRelatedProductsSection({
                 Related products
               </p>
             </div>
-            <h2 className="max-w-[580px] font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] md:text-[48px] md:leading-14">
+            <h2 className="max-w-[580px] font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] md:text-[48px] md:leading-14">
               Discover related fuel storage <span>products</span>
             </h2>
           </div>
