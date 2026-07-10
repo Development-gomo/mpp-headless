@@ -72,7 +72,7 @@ function CaseStudyCard({
 
   return (
     <article className="flex min-h-full flex-col overflow-hidden rounded-sm bg-[var(--color-accent)] text-white">
-      <div className="relative min-h-[220px] bg-black/15 md:min-h-[245px]">
+      <div className="relative min-h-55 bg-black/15 md:min-h-61.25">
         {image ? (
           <Image
             src={image}
@@ -82,7 +82,7 @@ function CaseStudyCard({
             className="object-cover"
           />
         ) : (
-          <div className="flex h-full min-h-[220px] items-center justify-center bg-white/10 px-6 text-center font-body text-[14px] text-white/70 md:min-h-[245px]">
+          <div className="flex h-full min-h-55 items-center justify-center bg-white/10 px-6 text-center font-body text-[14px] text-white/70 md:min-h-61.25">
             Case study image missing
           </div>
         )}
@@ -91,7 +91,7 @@ function CaseStudyCard({
       <div className="flex flex-1 flex-col p-6 md:p-7">
         {title && (
           <h3
-            className="mb-5 font-heading text-[28px] font-medium leading-[36px] tracking-[-0.56px] text-white"
+            className="mb-5 font-heading text-[24px] font-medium leading-8 tracking-[-0.56px] text-white"
             dangerouslySetInnerHTML={{ __html: title }}
           />
         )}
@@ -115,7 +115,7 @@ function CaseStudyCard({
               alt=""
               width={40}
               height={40}
-              className="h-auto w-[40px] object-contain transition-transform"
+              className="h-auto w-10 object-contain transition-transform"
             />
           </Link>
         </div>
@@ -160,7 +160,7 @@ export default function InnerCaseStudy({
       className={`relative bg-[#F3F4FB] ${custom_class || ""}`}
       style={background_color ? { backgroundColor: background_color } : undefined}
     >
-      <div className="web-width px-6 py-20 md:py-[120px]">
+      <div className="web-width px-6 py-20 md:py-30">
         <div className="mb-12 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div className="max-w-155">
             {text_above_title && (
@@ -174,7 +174,7 @@ export default function InnerCaseStudy({
 
             {hero_title && (
               <h2
-                className="font-heading text-[42px] font-normal leading-[50px] tracking-[-0.84px] text-black md:text-[52px] md:leading-[60px] md:tracking-[-1.04px]"
+                className="font-heading text-[36px] font-normal leading-10 tracking-[-0.84px] text-black md:text-[48px] md:leading-13 md:tracking-[-1.04px]"
                 dangerouslySetInnerHTML={{ __html: hero_title }}
               />
             )}
@@ -203,7 +203,7 @@ export default function InnerCaseStudy({
                     alt=""
                     width={40}
                     height={40}
-                    className="h-auto w-[40px] object-contain transition-transform"
+                    className="h-auto w-10 object-contain transition-transform"
                   />
                 </Link>
               ))}
@@ -265,7 +265,7 @@ export default function InnerCaseStudy({
                 <button
                   ref={prevRef}
                   type="button"
-                  className="flex h-11 w-[44px] items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
+                  className="flex h-11 w-11 items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
                   aria-label="Previous case study"
                 >
                   <Image
@@ -273,14 +273,14 @@ export default function InnerCaseStudy({
                     alt=""
                     width={40}
                     height={40}
-                    className="h-auto w-[40px] rotate-180 object-contain"
+                    className="h-auto w-10 rotate-180 object-contain"
                   />
                 </button>
 
                 <button
                   ref={nextRef}
                   type="button"
-                  className="flex h-11 w-[44px] items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
+                  className="flex h-11 w-11 items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
                   aria-label="Next case study"
                 >
                   <Image
@@ -288,7 +288,7 @@ export default function InnerCaseStudy({
                     alt=""
                     width={40}
                     height={40}
-                    className="h-auto w-[40px] object-contain"
+                    className="h-auto w-10 object-contain"
                   />
                 </button>
               </div>
@@ -313,7 +313,7 @@ export default function InnerCaseStudy({
                 alt=""
                 width={40}
                 height={40}
-                className="h-auto w-[40px] rotate-90 object-contain transition-transform"
+                className="h-auto w-10 rotate-90 object-contain transition-transform"
               />
             </button>
           </div>

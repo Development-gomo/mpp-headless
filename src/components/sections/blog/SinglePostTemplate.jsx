@@ -148,7 +148,7 @@ function RelatedPostCard({ post }) {
     >
       <div className="flex min-h-[245px] flex-1 flex-col p-6 pb-5">
         <div className="mb-6 flex items-center gap-3">
-          <span className="inline-flex h-[22px] items-center rounded-xs bg-[var(--color-accent)] px-[13px] text-[12px] font-normal tracking-[-0.24px] text-white [font-family:var(--font-heading)]">
+          <span className="inline-flex h-5.5 items-center rounded-xs bg-[var(--color-accent)] px-[13px] text-[12px] font-normal tracking-[-0.24px] text-white [font-family:var(--font-heading)]">
             {category}
           </span>
           {date && (
@@ -315,7 +315,7 @@ export default function SinglePostTemplate({
             {fullDate ? ` | ${fullDate}` : ""}
           </p>
           <h1
-            className="font-heading max-w-300 text-[42px] font-medium leading-[50px] tracking-[-0.84px] text-[#071838] md:text-[56px] md:leading-[64px]"
+            className="font-heading max-w-300 text-[36px] font-medium leading-[46px] tracking-[-0.84px] text-[#071838] md:text-[48px] md:leading-[58px]"
             dangerouslySetInnerHTML={{ __html: title }}
           />
           {excerpt && (
@@ -330,7 +330,7 @@ export default function SinglePostTemplate({
       {featuredImage && (
         <div className="bg-white px-6">
           <div className="web-width">
-            <div className="relative min-h-[320px] overflow-hidden rounded-[10px] md:min-h-[520px]">
+            <div className="relative min-h-80 overflow-hidden rounded-[10px] md:min-h-130">
               <Image
                 src={featuredImage}
                 alt={stripHtml(title) || "Post image"}
@@ -349,7 +349,7 @@ export default function SinglePostTemplate({
           <aside className="lg:sticky lg:top-32 lg:self-start">
             {showToc && toc.length > 0 && (
               <div>
-                <h2 className="font-heading mb-5 text-[20px] font-bold leading-[28px] text-black">
+                <h2 className="font-heading mb-5 text-[20px] font-bold leading-7 text-black">
                   {tocTitle}
                 </h2>
                 <nav className="space-y-3">
@@ -357,7 +357,7 @@ export default function SinglePostTemplate({
                     <a
                       key={item.id}
                       href={`#${item.id}`}
-                      className="block text-[14px] leading-[20px] text-[var(--color-accent)] transition-opacity hover:opacity-70"
+                      className="block text-[14px] leading-5 text-[var(--color-accent)] transition-opacity hover:opacity-70"
                     >
                       {item.label}
                     </a>
@@ -402,7 +402,7 @@ export default function SinglePostTemplate({
             className="max-w-[870px] text-[16px] leading-[26px] text-black [&_a]:text-[var(--color-accent)] [&_blockquote]:relative [&_blockquote]:my-10 [&_blockquote]:overflow-hidden [&_blockquote]:rounded-md [&_blockquote]:border-l-[6px] [&_blockquote]:border-[var(--color-accent)] [&_blockquote]:bg-[#EAF1FA] [&_blockquote]:py-8 [&_blockquote]:pl-7 [&_blockquote]:pr-20 [&_blockquote]:text-[16px] [&_blockquote]:italic [&_blockquote]:font-normal [&_blockquote]:leading-[28px] [&_blockquote]:text-[#071838] [&_blockquote]:shadow-[0_18px_45px_rgba(7,24,56,0.08)] [&_blockquote:before]:pointer-events-none [&_blockquote:before]:absolute [&_blockquote:before]:right-6 [&_blockquote:before]:top-5 [&_blockquote:before]:content-['\201C'] [&_blockquote:before]:text-[70px] [&_blockquote:before]:font-bold [&_blockquote:before]:leading-none [&_blockquote:before]:text-[rgba(0,112,158,0.14)] [&_blockquote_cite]:mt-5 [&_blockquote_cite]:block [&_blockquote_cite]:text-[14px] [&_blockquote_cite]:font-bold [&_blockquote_cite]:not-italic [&_blockquote_cite]:leading-5.5 [&_blockquote_cite]:text-[var(--color-accent)] [&_blockquote_p:last-child]:mb-0 [&_h2]:mb-5 [&_h2]:mt-10 [&_h2]:font-heading [&_h3]:font-heading [&_h2]:text-[34px] [&_h2]:font-normal [&_h2]:leading-[42px] [&_h3]:mb-4 [&_h3]:mt-8 [&_h3]:text-[26px] [&_h3]:font-normal [&_h3]:leading-[34px] [&_li]:mb-2 [&_p]:mb-5 [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6"
             dangerouslySetInnerHTML={{ __html: html }}
           />
-        </div>
+        </div> 
       </section>
 
       <AuthorCardSection
@@ -468,7 +468,7 @@ export default function SinglePostTemplate({
       {showRelatedPosts && related.length > 0 && (
         <section className="relative bg-[#F1F1F3]">
           <div className="web-width px-6 py-20">
-            <h2 className="font-heading mb-10 text-black text-[52px] leading-[1.05] font-normal tracking-[-1px]">
+            <h2 className="font-heading mb-10 text-black text-[48px] leading-[1.05] font-normal tracking-[-1px]">
               {relatedHeading}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

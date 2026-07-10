@@ -39,7 +39,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-miranda), serif;
+  font-family: var(--font-miranda-sans), serif !important;
 }
 h1>span, h2>span, h3>span, h4>span, h5>span, h6>span {
   color: var(--color-accent);
@@ -137,4 +137,12 @@ em {
 .hero-feature-cycle-progress {
   transform: scaleX(0);
   transform-origin: left;
+}
+
+.single-case-study article h2 {
+  font-family: var(--font-heading);
+}
+
+.single-case-study article h2:nth-child(1) {
+    margin-top: 0;
 }

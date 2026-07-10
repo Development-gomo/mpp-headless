@@ -67,8 +67,8 @@ export async function generateMetadata() {
   const favicon = getThemeFavicon(themeOptions) || "/favicon-mpp.png";
 
   return {
-    title: "Components Library",
-    description: "Headless WordPress + Next.js",
+    title: "MPP Headless",
+    description: "MPP Headless WordPress + Next.js",
     icons: {
       icon: favicon,
       shortcut: favicon,

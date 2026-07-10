@@ -43,15 +43,15 @@ export default function CopyLinkButton({ shareUrl }) {
       <button
         type="button"
         onClick={copyLink}
-        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-[var(--color-yellow)] text-black transition-opacity hover:opacity-85"
+        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-[var(--color-accent)] text-white transition-opacity hover:opacity-85"
         aria-label="Copy article link"
         title={copied ? "Copied" : "Copy link"}
       >
-        <FaLink aria-hidden="true" className="h-[13px] w-[13px]" />
+        <FaLink aria-hidden="true" className="h-3.25 w-3.25" />
       </button>
 
       {copied && (
-        <span className="absolute right-0 top-[calc(100%+8px)] z-10 whitespace-nowrap rounded-sm bg-black px-3 py-1 text-[12px] leading-[18px] text-white shadow-sm">
+        <span className="absolute right-0 top-[calc(100%+8px)] z-10 whitespace-nowrap rounded-sm bg-[var(--color-accent)] px-3 py-1 text-[12px] leading-4.5 text-white shadow-sm">
           Link copied
         </span>
       )}

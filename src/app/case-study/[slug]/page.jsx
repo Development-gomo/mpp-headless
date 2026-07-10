@@ -48,6 +48,7 @@ export default async function CaseStudySinglePage({ params }) {
           caseStudy={caseStudy}
           relatedCaseStudies={caseStudies}
           relatedProduct={relatedProduct}
+          language={DEFAULT_LANGUAGE}
         />
       </main>
       <Footer />

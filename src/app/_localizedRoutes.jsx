@@ -306,6 +306,7 @@ export async function renderDynamicPage(params, language) {
               caseStudy={caseStudy}
               relatedCaseStudies={caseStudies}
               relatedProduct={relatedProduct}
+              language={language}
             />
           </main>
           <Footer language={language} />
@@ -672,6 +673,7 @@ export async function renderCaseStudyPage(params, language) {
           caseStudy={caseStudy}
           relatedCaseStudies={caseStudies}
           relatedProduct={relatedProduct}
+          language={language}
         />
       </main>
       <Footer language={language} />

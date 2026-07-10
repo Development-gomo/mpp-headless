@@ -8,6 +8,19 @@ import {
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import CopyLinkButton from "../blog/CopyLinkButton";
+import { DEFAULT_LANGUAGE } from "@/lib/i18n";
+
+const MORE_CASE_STUDIES_LABELS = {
+  sv: "Fler kundcase",
+  en: "More case studies",
+  de: "Weitere Fallstudien",
+};
+
+const TABLE_OF_CONTENTS_LABELS = {
+  sv: "Innehållsförteckning",
+  en: "Table of contents",
+  de: "Inhaltsverzeichnis",
+};
 
 function stripHtml(value = "") {
   return String(value).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
@@ -208,7 +221,7 @@ function ShareIcon({ type, shareUrl, title }) {
     <a
       href={hrefByType[type]}
       target={type === "email" ? undefined : "_blank"}
-      className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-yellow)] text-black transition-opacity hover:opacity-85"
+      className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-accent)] text-white transition-opacity hover:opacity-85"
       aria-label={`Share on ${type}`}
     >
       {iconByType[type]}
@@ -283,7 +296,12 @@ export default function SingleCaseStudyTemplate({
   caseStudy,
   relatedCaseStudies = [],
   relatedProduct,
+  language = DEFAULT_LANGUAGE,
 }) {
+  const moreCaseStudiesLabel =
+    MORE_CASE_STUDIES_LABELS[language] || MORE_CASE_STUDIES_LABELS.en;
+  const tableOfContentsLabel =
+    TABLE_OF_CONTENTS_LABELS[language] || TABLE_OF_CONTENTS_LABELS.en;
   const acf = caseStudy?.acf || {};
   const title = caseStudy?.title?.rendered || "";
   const content = caseStudy?.content?.rendered || "";
@@ -317,14 +335,11 @@ export default function SingleCaseStudyTemplate({
             {fullDate ? ` | ${fullDate}` : ""}
           </p>
           <h1
-            className="max-w-300 text-[42px] font-medium leading-[50px] tracking-[-0.84px] text-[#071838] md:text-[56px] md:leading-[64px]"
+            className="font-heading max-w-300 text-[36px] font-medium leading-[46px] tracking-[-0.84px] text-[#071838] md:text-[48px] md:leading-[58px]"
             dangerouslySetInnerHTML={{ __html: title }}
           />
           {intro && (
-            <div
-              className="mt-7 max-w-300 text-[16px] leading-6 text-[#1A1A1A]"
-              dangerouslySetInnerHTML={{ __html: intro }}
-            />
+            <div className="mt-6 max-w-300 text-[16px] leading-6 text-[#1A1A1A]" dangerouslySetInnerHTML={{ __html: intro }} />
           )}
         </div>
       </section>
@@ -332,7 +347,7 @@ export default function SingleCaseStudyTemplate({
       {featuredImage && (
         <div className="bg-white px-6">
           <div className="web-width">
-            <div className="relative min-h-[320px] overflow-hidden rounded-[10px] md:min-h-[520px]">
+            <div className="relative min-h-80 overflow-hidden rounded-[10px] md:min-h-130">
               <Image
                 src={featuredImage}
                 alt={stripHtml(title) || "Case study image"}
@@ -346,20 +361,20 @@ export default function SingleCaseStudyTemplate({
         </div>
       )}
 
-      <section className="bg-white px-6 py-14 md:py-20">
+      <section className="single-case-study bg-white px-6 py-14 md:py-20">
         <div className="web-width grid grid-cols-1 gap-12 lg:grid-cols-[300px_1fr] lg:gap-20">
           <aside className="lg:sticky lg:top-32 lg:self-start">
             {toc.length > 0 && (
               <div>
-                <h2 className="mb-5 text-[20px] font-bold leading-[28px] text-black">
-                  Table of contents
+                <h2 className="mb-5 text-[20px] font-bold leading-7 text-black">
+                  {tableOfContentsLabel}
                 </h2>
                 <nav className="space-y-3">
                   {toc.map((item) => (
                     <a
                       key={item.id}
                       href={`#${item.id}`}
-                      className="block text-[14px] leading-[20px] text-[var(--color-accent)] transition-opacity hover:opacity-70"
+                      className="block text-[14px] leading-5 text-[var(--color-accent)] transition-opacity hover:opacity-70"
                     >
                       {item.label}
                     </a>
@@ -395,7 +410,7 @@ export default function SingleCaseStudyTemplate({
           </aside>
 
           <article
-            className="max-w-[870px] text-[16px] leading-[26px] text-black [&_a]:text-[var(--color-accent)] [&_blockquote]:relative [&_blockquote]:my-10 [&_blockquote]:overflow-hidden [&_blockquote]:rounded-md [&_blockquote]:border-l-[6px] [&_blockquote]:border-[var(--color-accent)] [&_blockquote]:bg-[#EAF1FA] [&_blockquote]:py-8 [&_blockquote]:pl-7 [&_blockquote]:pr-20 [&_blockquote]:text-[16px] [&_blockquote]:italic [&_blockquote]:font-normal [&_blockquote]:leading-[28px] [&_blockquote]:text-[#071838] [&_blockquote]:shadow-[0_18px_45px_rgba(7,24,56,0.08)] [&_blockquote:before]:pointer-events-none [&_blockquote:before]:absolute [&_blockquote:before]:right-6 [&_blockquote:before]:top-5 [&_blockquote:before]:content-['\201C'] [&_blockquote:before]:text-[70px] [&_blockquote:before]:font-bold [&_blockquote:before]:leading-none [&_blockquote:before]:text-[rgba(0,112,158,0.14)] [&_blockquote_cite]:mt-5 [&_blockquote_cite]:block [&_blockquote_cite]:text-[14px] [&_blockquote_cite]:font-bold [&_blockquote_cite]:not-italic [&_blockquote_cite]:leading-5.5 [&_blockquote_cite]:text-[var(--color-accent)] [&_blockquote_p:last-child]:mb-0 [&_h2]:mb-5 [&_h2]:mt-10 [&_h2]:text-[34px] [&_h2]:font-bold [&_h2]:leading-[42px] [&_h3]:mb-4 [&_h3]:mt-8 [&_h3]:text-[26px] [&_h3]:font-bold [&_h3]:leading-[34px] [&_li]:mb-2 [&_p]:mb-5 [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6"
+            className="max-w-217.5 text-[16px] leading-6.5 text-black [&_a]:text-[var(--color-accent)] [&_blockquote]:relative [&_blockquote]:my-10 [&_blockquote]:overflow-hidden [&_blockquote]:rounded-md [&_blockquote]:border-l-[6px] [&_blockquote]:border-[var(--color-accent)] [&_blockquote]:bg-[#EAF1FA] [&_blockquote]:py-8 [&_blockquote]:pl-7 [&_blockquote]:pr-20 [&_blockquote]:text-[16px] [&_blockquote]:italic [&_blockquote]:font-normal [&_blockquote]:leading-7 [&_blockquote]:text-[#071838] [&_blockquote]:shadow-[0_18px_45px_rgba(7,24,56,0.08)] [&_blockquote:before]:pointer-events-none [&_blockquote:before]:absolute [&_blockquote:before]:right-6 [&_blockquote:before]:top-5 [&_blockquote:before]:content-['\201C'] [&_blockquote:before]:text-[70px] [&_blockquote:before]:font-bold [&_blockquote:before]:leading-none [&_blockquote:before]:text-[rgba(0,112,158,0.14)] [&_blockquote_cite]:mt-5 [&_blockquote_cite]:block [&_blockquote_cite]:text-[14px] [&_blockquote_cite]:font-bold [&_blockquote_cite]:not-italic [&_blockquote_cite]:leading-5.5 [&_blockquote_cite]:text-[var(--color-accent)] [&_blockquote_p:last-child]:mb-0 [&_h2]:mb-5 [&_h2]:mt-10 [&_h2]:text-[34px] [&_h2]:font-normal [&_h2]:leading-10.5 [&_h3]:mb-4 [&_h3]:mt-8 [&_h3]:text-[26px] [&_h3]:font-bold [&_h3]:leading-8.5 [&_li]:mb-2 [&_p]:mb-5 [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6"
             dangerouslySetInnerHTML={{ __html: html }}
           />
         </div>
@@ -403,7 +418,7 @@ export default function SingleCaseStudyTemplate({
 
       <section className="bg-white px-6 pb-16">
         <div className="web-width">
-          <div className="ml-auto flex max-w-[870px] flex-col gap-4 rounded-sm bg-[#EAF1FA] px-6 py-5 md:flex-row md:items-center md:justify-between">
+          <div className="ml-auto flex max-w-225 flex-col gap-4 rounded-sm bg-[#EAF1FA] px-6 py-5 md:flex-row md:items-center md:justify-between">
             <p className="text-[14px] font-bold leading-5.5 text-black">
               Like what you see? Share this case study
             </p>
@@ -433,8 +448,8 @@ export default function SingleCaseStudyTemplate({
       {related.length > 0 && (
         <section className="relative bg-[#F1F1F3]">
           <div className="web-width px-6 py-20">
-            <h2 className="mb-10 text-[52px] font-normal leading-[1.05] tracking-[-1px] text-black">
-              More case studies
+            <h2 className="font-heading mb-10 text-[48px] font-normal leading-[1.05] tracking-[-1px] text-black">
+              {moreCaseStudiesLabel}
             </h2>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((item) => (
