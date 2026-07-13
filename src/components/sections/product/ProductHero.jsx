@@ -112,9 +112,20 @@ export default function ProductHero({
   const [localSelectedCapacity, setLocalSelectedCapacity] = useState(
     capacityOptions[0]?.value || ""
   );
+  const [isCapacityOpen, setIsCapacityOpen] = useState(false);
   const selectedCapacity = activeVariation
     ? getVariationCapacity(activeVariation)
     : localSelectedCapacity;
+  const selectedCapacityValue = variationCapacityOptions.length > 0
+    ? String(selectedVariationIndex)
+    : selectedCapacity;
+  const selectedCapacityOption =
+    capacityOptions.find((option) => option.value === selectedCapacityValue) ||
+    capacityOptions[0];
+  const selectedCapacityLabel = appendUnit(
+    selectedCapacityOption?.label || selectedCapacity,
+    "Liters"
+  );
   const fuelCompatibility = activeVariation
     ? getVariationTextValues(activeVariation.fuel_compatibility, "compatibility")
     : getRepeaterValues(acf.fuel_compatibility, "compatibility");
@@ -195,13 +206,15 @@ export default function ProductHero({
     router.push(localizePath("/rfq", language));
   };
 
-  const handleCapacityChange = (event) => {
+  const handleCapacitySelect = (value) => {
     if (variationCapacityOptions.length > 0) {
-      onVariationChange?.(Number(event.target.value));
+      onVariationChange?.(Number(value));
+      setIsCapacityOpen(false);
       return;
     }
 
-    setLocalSelectedCapacity(event.target.value);
+    setLocalSelectedCapacity(value);
+    setIsCapacityOpen(false);
   };
 
   return (
@@ -231,7 +244,7 @@ export default function ProductHero({
                   <button
                     type="button"
                     onClick={showPreviousImage}
-                    className="absolute left-4 top-1/2 z-10 flex h-10 w-[40px] -translate-y-1/2 items-center justify-center rounded-sm bg-[var(--color-accent)] text-white transition-opacity hover:opacity-90"
+                    className="absolute left-4 top-1/2 z-10 flex h-10 w-[40px] -translate-y-1/2 items-center justify-center rounded-sm bg-[image:var(--mpp-gradient)] text-white transition-opacity hover:opacity-90"
                     aria-label="Previous product image"
                   >
                     <span className="text-[28px] leading-none">‹</span>
@@ -239,7 +252,7 @@ export default function ProductHero({
                   <button
                     type="button"
                     onClick={showNextImage}
-                    className="absolute right-4 top-1/2 z-10 flex h-10 w-[40px] -translate-y-1/2 items-center justify-center rounded-sm bg-[var(--color-accent)] text-white transition-opacity hover:opacity-90"
+                    className="absolute right-4 top-1/2 z-10 flex h-10 w-[40px] -translate-y-1/2 items-center justify-center rounded-sm bg-[image:var(--mpp-gradient)] text-white transition-opacity hover:opacity-90"
                     aria-label="Next product image"
                   >
                     <span className="text-[28px] leading-none">›</span>
@@ -348,26 +361,64 @@ export default function ProductHero({
                 >
                   Capacity:
                 </label>
-                <select
-                  id="product-capacity"
-                  value={
-                    variationCapacityOptions.length > 0
-                      ? String(selectedVariationIndex)
-                      : selectedCapacity
-                  }
-                  onChange={handleCapacityChange}
-                  className="h-[56px] w-full appearance-none rounded-sm border-0 bg-[var(--color-accent)] bg-[url('/down-arrow.svg')] bg-[length:13px_8px] bg-[right_18px_center] bg-no-repeat px-4 pr-12 font-body text-[16px] font-bold text-white outline-none"
+                <div
+                  className="relative"
+                  onBlur={(event) => {
+                    if (!event.currentTarget.contains(event.relatedTarget)) {
+                      setIsCapacityOpen(false);
+                    }
+                  }}
                 >
-                  {capacityOptions.map((option) => (
-                    <option
-                      key={option.value}
-                      value={option.value}
-                      className="text-black"
+                  <button
+                    id="product-capacity"
+                    type="button"
+                    aria-haspopup="listbox"
+                    aria-expanded={isCapacityOpen}
+                    onClick={() => setIsCapacityOpen((open) => !open)}
+                    className={`flex h-[46px] w-full items-center justify-between border border-[#007DA5] bg-[#007DA5] px-4 font-body text-[14px] font-bold leading-5 text-white outline-none transition-colors hover:bg-[#007198] ${
+                      isCapacityOpen ? "rounded-t-sm" : "rounded-sm"
+                    }`}
+                  >
+                    <span>{selectedCapacityLabel}</span>
+                    <span
+                      className={`flex h-5 w-5 items-center justify-center text-[22px] font-normal leading-none transition-transform ${
+                        isCapacityOpen ? "" : "rotate-180"
+                      }`}
+                      aria-hidden="true"
                     >
-                      {appendUnit(option.label, "Liters")}
-                    </option>
-                  ))}
-                </select>
+                      ^
+                    </span>
+                  </button>
+
+                  {isCapacityOpen && (
+                    <div
+                      role="listbox"
+                      aria-labelledby="product-capacity"
+                      className="absolute left-0 top-full z-30 w-full overflow-hidden rounded-b-sm border border-t-0 border-[#80C5DD] bg-white font-body text-[14px] leading-5 text-[#1A1A1A] shadow-sm"
+                    >
+                      {capacityOptions.map((option) => {
+                        const optionLabel = appendUnit(option.label, "Liters");
+                        const isSelected = option.value === selectedCapacityValue;
+
+                        return (
+                          <button
+                            key={option.value}
+                            type="button"
+                            role="option"
+                            aria-selected={isSelected}
+                            onMouseDown={(event) => event.preventDefault()}
+                            onClick={() => handleCapacitySelect(option.value)}
+                            className={`flex h-[42px] w-full items-center border-t border-[#E5E5E5] px-4 text-left transition-colors first:border-t-0 hover:bg-[#E5F2F7] ${
+                              isSelected ? "bg-[#BEDDE8]" : "bg-white"
+                            }`}
+                          >
+                            {optionLabel}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 
