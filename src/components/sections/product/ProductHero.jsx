@@ -39,15 +39,15 @@ function SpecTile({ icon, label, value }) {
   if (!value) return null;
 
   return (
-    <div className="inline-flex min-h-[45px] items-center gap-2 rounded-sm border border-[#98C8DA] bg-[#CFE8F1] px-2 py-1">
-      <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center">
-        <Image src={icon} alt="" width={30} height={30} className="h-[30px] w-[30px] object-contain" />
+    <div className="inline-flex min-h-[58px] items-center gap-3 rounded-sm bg-[#A8D4E4] px-4 py-2">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center">
+        <Image src={icon} alt="" width={32} height={32} className="h-8 w-8 object-contain" />
       </span>
       <span>
-        <span className="block font-body text-[8px] leading-[10px] text-[#4B626A]">
+        <span className="block font-body text-[9px] leading-[12px] text-black">
           {label}
         </span>
-        <strong className="block font-body text-[14px] font-bold leading-[18px] text-black">
+        <strong className="block font-body text-[20px] font-normal leading-[24px] text-black">
           {value}
         </strong>
       </span>

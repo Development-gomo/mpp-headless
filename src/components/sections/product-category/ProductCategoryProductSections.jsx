@@ -4,6 +4,11 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
+import {
+  getProductVariations,
+  getVariationCapacity,
+  getVariationTextValues,
+} from "@/components/sections/product/productUtils";
 
 function getImageUrl(image) {
   if (!image) return "";
@@ -90,6 +95,56 @@ function getRepeaterValues(rows, key) {
   return rows.map((row) => stripHtml(row?.[key] || "")).filter(Boolean);
 }
 
+function uniqueValues(values) {
+  const seen = new Set();
+
+  return values.filter((value) => {
+    const cleanValue = stripHtml(value);
+    const key = cleanValue.toLowerCase();
+    if (!cleanValue || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function getProductCapacityMeta(product) {
+  const variationCapacities = uniqueValues(
+    getProductVariations(product).map(getVariationCapacity),
+  );
+
+  if (variationCapacities.length > 0) return variationCapacities.join(" | ");
+
+  const capacityOptions = getRepeaterValues(
+    product?.acf?.capacity_options,
+    "capacity_value",
+  );
+
+  return capacityOptions.length > 0
+    ? uniqueValues(capacityOptions).join(" | ")
+    : stripHtml(product?.acf?.capacity || product?.acf?.product_capacity || "");
+}
+
+function getProductFuelTypeMeta(product) {
+  const variationFuelTypes = uniqueValues(
+    getProductVariations(product).flatMap((variation) => [
+      ...getVariationTextValues(variation?.fuel_compatibility, "compatibility"),
+      ...getVariationTextValues(variation?.variation_fuel_type, "fuel_type"),
+      ...getVariationTextValues(variation?.fuel_type, "fuel_type"),
+    ]),
+  );
+
+  if (variationFuelTypes.length > 0) return variationFuelTypes.join(" | ");
+
+  const fuelCompatibility = getRepeaterValues(
+    product?.acf?.fuel_compatibility,
+    "compatibility",
+  );
+
+  return fuelCompatibility.length > 0
+    ? uniqueValues(fuelCompatibility).join(" | ")
+    : stripHtml(product?.acf?.fuel_type || product?.acf?.product_fuel_type || "");
+}
+
 function getProductLink(product, language = DEFAULT_LANGUAGE) {
   if (product?.slug) return localizePath(`/product/${product.slug}`, language);
 
@@ -134,27 +189,8 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
   const activeImage = getProductImage(activeProduct);
   const activeLink = getProductLink(activeProduct, language);
 
-  const capacityOptions = getRepeaterValues(
-    activeProduct?.acf?.capacity_options,
-    "capacity_value",
-  );
-  const fuelCompatibility = getRepeaterValues(
-    activeProduct?.acf?.fuel_compatibility,
-    "compatibility",
-  );
-  const capacity =
-    capacityOptions.length > 0
-      ? capacityOptions.join(" | ")
-      : activeProduct?.acf?.capacity ||
-        activeProduct?.acf?.product_capacity ||
-        "";
-
-  const fuelType =
-    fuelCompatibility.length > 0
-      ? fuelCompatibility.join(" | ")
-      : activeProduct?.acf?.fuel_type ||
-        activeProduct?.acf?.product_fuel_type ||
-        "";
+  const capacity = getProductCapacityMeta(activeProduct);
+  const fuelType = getProductFuelTypeMeta(activeProduct);
 
   return (
     <div className="mb-20 last:mb-0">
@@ -325,31 +361,8 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
             )}
           </div>
 
-          {/* Right product tabs + image */}
+          {/* Right product image */}
           <div>
-            {products.length > 1 && (
-              <div className="mb-10 flex flex-wrap justify-start gap-0 rounded-sm bg-[#D9DBE7] p-1 lg:ml-auto lg:w-fit">
-                {products.map((product, index) => {
-                  const isActive = activeIndex === index;
-
-                  return (
-                    <button
-                      key={product.id || index}
-                      type="button"
-                      onClick={() => setActiveIndex(index)}
-                      className={`min-h-11 rounded-[3px] px-6 font-heading text-4 font-normal tracking-[-0.32px] transition-colors cursor-pointer ${
-                        isActive
-                          ? "bg-white text-black shadow-sm"
-                          : "text-black/80 hover:bg-white/40"
-                      }`}
-                    >
-                      {getProductTitle(product)}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-
             <div className="relative flex min-h-70 items-center justify-center md:min-h-90">
               {activeImage ? (
                 <Image
