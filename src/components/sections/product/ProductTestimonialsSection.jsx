@@ -52,7 +52,7 @@ function TestimonialCard({ testimonial }) {
       />
 
       {text && (
-        <p className="mt-7 min-h-[110px] font-body text-[15px] leading-[23px] text-black">
+        <p className="mt-7 min-h-[110px] font-body text-[16px] leading-[23px] text-black">
           {text}
         </p>
       )}

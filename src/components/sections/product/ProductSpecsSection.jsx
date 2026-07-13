@@ -83,30 +83,32 @@ export default function ProductSpecsSection({ product, selectedVariation = null 
           )}
         </div>
 
-        <div className="grid grid-cols-1 border border-[#DEDEDE] bg-white p-2 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-px border border-[#D7D7D7] bg-[#D7D7D7] md:grid-cols-2 lg:grid-cols-4">
           {specs.map((spec, index) => (
             <div
               key={`${spec.spec_label}-${index}`}
-              className="border-[5px] border-white bg-[#F3F4FB] px-5 py-6"
+              className="bg-white p-2"
             >
-              <div className="mb-3 flex items-center gap-2 font-body text-[11px] leading-[18px] text-black">
-                {getImageUrl(spec.spec_icon) ? (
-                  <Image
-                    src={getImageUrl(spec.spec_icon)}
-                    alt=""
-                    width={10}
-                    height={10}
-                    className="h-[10px] w-[10px] object-contain"
-                  />
-                ) : (
-                  <span className="h-[4px] w-[4px] shrink-0 rounded-full bg-[var(--color-yellow)]" />
-                )}
-                {spec.spec_label}
+              <div className="h-full bg-[#F3F4FB] px-5 py-6">
+                <div className="mb-3 flex items-center gap-2 font-body text-[12px] leading-[18px] text-black">
+                  {getImageUrl(spec.spec_icon) ? (
+                    <Image
+                      src={getImageUrl(spec.spec_icon)}
+                      alt=""
+                      width={10}
+                      height={10}
+                      className="h-[10px] w-[10px] object-contain"
+                    />
+                  ) : (
+                    <span className="h-[4px] w-[4px] shrink-0 rounded-full bg-[var(--color-yellow)]" />
+                  )}
+                  {spec.spec_label}
+                </div>
+                <div
+                  className="font-body text-[20px] font-semibold leading-[28px] text-[#007DA5]"
+                  dangerouslySetInnerHTML={{ __html: spec.spec_value }}
+                />
               </div>
-              <div
-                className="font-body text-[20px] font-semibold leading-[28px] text-[#007DA5]"
-                dangerouslySetInnerHTML={{ __html: spec.spec_value }}
-              />
             </div>
           ))}
         </div>
