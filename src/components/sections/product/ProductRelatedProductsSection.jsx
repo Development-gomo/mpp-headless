@@ -177,7 +177,7 @@ export default function ProductRelatedProductsSection({
 
   return (
     <section id="related-products" className="bg-white text-black">
-      <div className="web-width px-6 py-20 md:py-[120px]">
+      <div className="web-width px-6 pt-20 md:pt-[120px]">
         <div className="mb-12 grid grid-cols-1 gap-8 md:grid-cols-[1fr_auto] md:items-end">
           <div>
             <div className="mb-7 flex items-center gap-2">
