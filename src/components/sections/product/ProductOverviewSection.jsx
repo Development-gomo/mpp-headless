@@ -66,7 +66,7 @@ export default function ProductOverviewSection({
 
   return (
     <section id="find-your-tank" className="bg-white">
-      <div className="web-width px-6 pb-20 md:pb-30">
+      <div className="web-width px-6 pb-0 md:pb-0">
         <div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-[0.95fr_1fr] lg:items-start lg:gap-20">
           <div>
             <div className="mb-7 flex items-center gap-2">
