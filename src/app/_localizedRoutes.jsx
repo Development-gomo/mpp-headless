@@ -339,6 +339,7 @@ export async function renderDynamicPage(params, language) {
             relatedPosts={latestPosts}
             blogSettings={blogSettings}
             authorCards={authorCards}
+            language={language}
           />
         </main>
         <Footer language={language} />

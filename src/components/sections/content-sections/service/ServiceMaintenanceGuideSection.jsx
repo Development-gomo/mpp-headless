@@ -1,6 +1,25 @@
 // src/components/sections/content-sections/service/ServiceMaintenanceGuideSection.jsx
 
 import Image from "next/image";
+import {
+  DEFAULT_LANGUAGE,
+  ENGLISH_LANGUAGE,
+  GERMAN_LANGUAGE,
+  normalizeLanguage,
+} from "@/lib/i18n";
+
+const MAINTENANCE_LABELS = {
+  [DEFAULT_LANGUAGE]: { pointerAlt: (index) => `Punkt ${index}` },
+  [ENGLISH_LANGUAGE]: { pointerAlt: (index) => `Pointer ${index}` },
+  [GERMAN_LANGUAGE]: { pointerAlt: (index) => `Punkt ${index}` },
+};
+
+function getLabels(language) {
+  return (
+    MAINTENANCE_LABELS[normalizeLanguage(language)] ||
+    MAINTENANCE_LABELS[DEFAULT_LANGUAGE]
+  );
+}
 
 function getImageUrl(image) {
   if (!image) return "";
@@ -8,8 +27,12 @@ function getImageUrl(image) {
   return image?.url || image?.source_url || image?.sizes?.large || "";
 }
 
-export default function ServiceMaintenanceGuideSection({ data }) {
+export default function ServiceMaintenanceGuideSection({
+  data,
+  language = DEFAULT_LANGUAGE,
+}) {
   if (!data) return null;
+  const labels = getLabels(language);
 
   const maintenance_guide_pointers =
     data.maintenance_guide_pointers ||
@@ -84,7 +107,7 @@ export default function ServiceMaintenanceGuideSection({ data }) {
 
           {hero_title && (
               <h2
-                className="font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[58px] md:tracking-[-1.04px]"
+                className="font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-14.5 md:tracking-[-1.04px]"
                 dangerouslySetInnerHTML={{ __html: hero_title }}
               />
             )}
@@ -115,7 +138,7 @@ export default function ServiceMaintenanceGuideSection({ data }) {
                             <div className="relative mb-4 h-[120px] w-full md:-mt-20">
                             <Image
                                 src={pointerImage}
-                                alt={item?.pointer_title || `Pointer ${index + 1}`}
+                                alt={item?.pointer_title || labels.pointerAlt(index + 1)}
                                 fill
                                 className="object-contain"
                             />

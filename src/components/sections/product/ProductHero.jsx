@@ -47,7 +47,7 @@ function SpecTile({ icon, label, value }) {
         <span className="block font-body text-[9px] leading-[12px] text-black">
           {label}
         </span>
-        <strong className="block font-body text-[20px] font-normal leading-[24px] text-black">
+        <strong className="block font-body text-[20px] font-normal leading-6 text-black">
           {value}
         </strong>
       </span>
@@ -244,7 +244,7 @@ export default function ProductHero({
                   <button
                     type="button"
                     onClick={showPreviousImage}
-                    className="absolute left-4 top-1/2 z-10 flex h-10 w-[40px] -translate-y-1/2 items-center justify-center rounded-sm bg-[image:var(--mpp-gradient)] text-white transition-opacity hover:opacity-90"
+                    className="absolute left-4 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-sm bg-[image:var(--mpp-gradient)] text-white transition-opacity hover:opacity-90"
                     aria-label="Previous product image"
                   >
                     <span className="text-[28px] leading-none">‹</span>
@@ -252,7 +252,7 @@ export default function ProductHero({
                   <button
                     type="button"
                     onClick={showNextImage}
-                    className="absolute right-4 top-1/2 z-10 flex h-10 w-[40px] -translate-y-1/2 items-center justify-center rounded-sm bg-[image:var(--mpp-gradient)] text-white transition-opacity hover:opacity-90"
+                    className="absolute right-4 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-sm bg-[image:var(--mpp-gradient)] text-white transition-opacity hover:opacity-90"
                     aria-label="Next product image"
                   >
                     <span className="text-[28px] leading-none">›</span>
@@ -336,12 +336,12 @@ export default function ProductHero({
             )}
 
             <h1
-              className="max-w-155 font-heading text-[36px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[58px]"
+              className="max-w-155 font-heading text-[36px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-14.5"
               dangerouslySetInnerHTML={{ __html: title }}
             />
 
             {variationSku && (
-              <div className="max-w-155 font-heading text-[42px] font-normal leading-[48px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[58px]">
+              <div className="max-w-155 font-heading text-[42px] font-normal leading-12 tracking-[-0.84px] text-black md:text-[48px] md:leading-14.5">
                 {variationSku}
               </div>
             )}

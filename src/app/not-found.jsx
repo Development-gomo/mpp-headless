@@ -2,9 +2,28 @@ import Link from "next/link";
 import Image from "next/image";
 import Header from "@/components/major/Header";
 import Footer from "@/components/major/Footer";
+import {
+  DEFAULT_LANGUAGE,
+  ENGLISH_LANGUAGE,
+  GERMAN_LANGUAGE,
+} from "@/lib/i18n";
 import ArrowSvg from "../../public/right-arrow.svg";
 
+const NOT_FOUND_LABELS = {
+  [DEFAULT_LANGUAGE]: {
+    homepage: "Gå till startsidan",
+  },
+  [ENGLISH_LANGUAGE]: {
+    homepage: "Go to Homepage",
+  },
+  [GERMAN_LANGUAGE]: {
+    homepage: "Zur Startseite",
+  },
+};
+
 export default async function NotFound() {
+  const labels = NOT_FOUND_LABELS[DEFAULT_LANGUAGE];
+
   return (
     <>
       <Header />
@@ -23,7 +42,7 @@ export default async function NotFound() {
             <span className="absolute h-2 w-2 rounded-full bg-[#27E0C0] transition-all duration-300 ease-out group-hover:opacity-0 group-hover:-translate-x-1"></span>
           </span>
           <span className="flex-1 text-[16px] leading-none whitespace-nowrap transition-all duration-300 ease-out group-hover:-translate-x-3">
-            Go to Homepage
+            {labels.homepage}
           </span>
           <span className="relative w-4 flex items-center justify-center">
             <span className="w-4 absolute opacity-0 -translate-x-4 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:-translate-x-1">

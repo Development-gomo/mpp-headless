@@ -33,7 +33,7 @@ export default function ContactFormSection({ data, language }) {
           <div>
             {text_above_title && (
               <div className="flex items-center gap-2 mb-5">
-                <span className="w-0.5 h-[10px] bg-[var(--color-yellow)]" />
+                <span className="w-0.5 h-2.5 bg-[var(--color-yellow)]" />
                 <p className="text-[#1A1A1A] text-[14px] leading-6 font-medium tracking-[0.56px] uppercase font-body">
                   {text_above_title}
                 </p>

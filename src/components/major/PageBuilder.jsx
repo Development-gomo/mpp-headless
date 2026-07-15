@@ -119,15 +119,28 @@ export default function PageBuilder({
           case "home_expert_advice_section":
             return <HomeExpertAdviceSection key={i} data={block} />;
           case "service_overview_section":
-            return <ServiceOverviewSection key={i} data={block} />;
+            return <ServiceOverviewSection key={i} data={block} language={language} />;
           case "service_process_section":
             return <ServiceProcessSection key={i} data={block} />;
           case "service_why_choose_us_section":
             return <ServiceWhyChooseSection key={i} data={block} />;
           case "service_maintenance_guide_section":
-            return <ServiceMaintenanceGuideSection key={i} data={block} />;
+            return (
+              <ServiceMaintenanceGuideSection
+                key={i}
+                data={block}
+                language={language}
+              />
+            );
           case "find_retailer_section":
-            return <FindRetailerSection key={i} data={block} stores={stores} />;
+            return (
+              <FindRetailerSection
+                key={i}
+                data={block}
+                stores={stores}
+                language={language}
+              />
+            );
           // Keep the misspelled live ACF layout slug until it is corrected in WordPress.
           case "full_with_content_section":
           case "full_width_content_section":

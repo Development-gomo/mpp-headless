@@ -9,6 +9,63 @@ import {
 import { FaXTwitter } from "react-icons/fa6";
 import AuthorCardSection from "./AuthorCardSection";
 import CopyLinkButton from "./CopyLinkButton";
+import {
+  DEFAULT_LANGUAGE,
+  ENGLISH_LANGUAGE,
+  GERMAN_LANGUAGE,
+  normalizeLanguage,
+} from "@/lib/i18n";
+
+const DATE_LOCALES = {
+  [DEFAULT_LANGUAGE]: "sv-SE",
+  [ENGLISH_LANGUAGE]: "en-US",
+  [GERMAN_LANGUAGE]: "de-DE",
+};
+
+const BLOG_LABELS = {
+  [DEFAULT_LANGUAGE]: {
+    news: "Nyheter",
+    blogImage: "Bloggbild",
+    postImage: "Inläggsbild",
+    shareOn: (type) => `Dela på ${type}`,
+    tableOfContents: "Innehållsförteckning",
+    shareArticle: "Gillar du det du ser? Dela den här artikeln",
+    relatedHeading: "Missa inte dessa",
+    ctaTitle: "Behöver du hjälp med ditt nästa projekt?",
+    ctaText: "Prata med vårt team om rätt bränslelösning för din verksamhet.",
+    ctaButton: "Kontakta oss",
+    readingTime: "Lästid",
+    minutes: "minuter",
+  },
+  [ENGLISH_LANGUAGE]: {
+    news: "News",
+    blogImage: "Blog image",
+    postImage: "Post image",
+    shareOn: (type) => `Share on ${type}`,
+    tableOfContents: "Table of contents",
+    shareArticle: "Like what you see? Share this article",
+    relatedHeading: "Don't miss out on these",
+    ctaTitle: "Need help with your next project?",
+    ctaText: "Talk to our team about the right fuel solution for your operation.",
+    ctaButton: "Contact us",
+    readingTime: "Reading time",
+    minutes: "minutes",
+  },
+  [GERMAN_LANGUAGE]: {
+    news: "Neuigkeiten",
+    blogImage: "Blogbild",
+    postImage: "Beitragsbild",
+    shareOn: (type) => `Auf ${type} teilen`,
+    tableOfContents: "Inhaltsverzeichnis",
+    shareArticle: "Gefällt Ihnen, was Sie sehen? Teilen Sie diesen Artikel",
+    relatedHeading: "Das sollten Sie nicht verpassen",
+    ctaTitle: "Benötigen Sie Hilfe bei Ihrem nächsten Projekt?",
+    ctaText: "Sprechen Sie mit unserem Team über die passende Kraftstofflösung für Ihren Betrieb.",
+    ctaButton: "Kontaktieren Sie uns",
+    readingTime: "Lesezeit",
+    minutes: "Minuten",
+  },
+};
 
 function stripHtml(value = "") {
   return String(value).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
@@ -36,19 +93,27 @@ function slugify(value = "") {
     .replace(/^-+|-+$/g, "");
 }
 
-function formatDate(date) {
+function getLabels(language) {
+  return BLOG_LABELS[normalizeLanguage(language)] || BLOG_LABELS[DEFAULT_LANGUAGE];
+}
+
+function getDateLocale(language) {
+  return DATE_LOCALES[normalizeLanguage(language)] || DATE_LOCALES[DEFAULT_LANGUAGE];
+}
+
+function formatDate(date, language) {
   if (!date) return "";
 
-  return new Date(date).toLocaleDateString("en-US", {
+  return new Date(date).toLocaleDateString(getDateLocale(language), {
     month: "long",
     year: "numeric",
   });
 }
 
-function formatFullDate(date) {
+function formatFullDate(date, language) {
   if (!date) return "";
 
-  return new Date(date).toLocaleDateString("en-US", {
+  return new Date(date).toLocaleDateString(getDateLocale(language), {
     month: "long",
     day: "numeric",
     year: "numeric",
@@ -64,8 +129,8 @@ function getFeaturedImage(post) {
   );
 }
 
-function getCategory(post) {
-  return post?._embedded?.["wp:term"]?.[0]?.[0]?.name || "News";
+function getCategory(post, labels) {
+  return post?._embedded?.["wp:term"]?.[0]?.[0]?.name || labels.news;
 }
 
 function getReadingTime(content = "") {
@@ -134,12 +199,12 @@ function getLinkTarget(link) {
   return link.target || undefined;
 }
 
-function RelatedPostCard({ post }) {
+function RelatedPostCard({ post, language, labels }) {
   const title = post?.title?.rendered || post?.title || "";
   const excerpt = cleanExcerpt(post?.excerpt?.rendered || post?.excerpt || "");
   const image = getFeaturedImage(post);
-  const category = getCategory(post);
-  const date = formatDate(post?.date);
+  const category = getCategory(post, labels);
+  const date = formatDate(post?.date, language);
 
   return (
     <Link
@@ -158,7 +223,7 @@ function RelatedPostCard({ post }) {
           )}
         </div>
 
-        <h3 className="font-heading mb-5 min-h-[84px] text-[28px] font-medium leading-[36px] tracking-[-0.56px] text-black capitalize [font-family:var(--font-heading)] line-clamp-3"
+        <h3 className="font-heading mb-5 min-h-21 text-[28px] font-medium leading-[36px] tracking-[-0.56px] text-black capitalize [font-family:var(--font-heading)] line-clamp-3"
           dangerouslySetInnerHTML={{ __html: title }}
         />
         {excerpt && (
@@ -172,7 +237,7 @@ function RelatedPostCard({ post }) {
         {image && (
           <Image
             src={image}
-            alt={title || "Blog image"}
+            alt={title || labels.blogImage}
             fill
             sizes="(min-width: 1024px) 33vw, 100vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -199,7 +264,7 @@ function normalizeShareIcons(value) {
   return ["facebook", "linkedin", "email"];
 }
 
-function ShareIcon({ type, shareUrl, title }) {
+function ShareIcon({ type, shareUrl, title, labels }) {
   const iconByType = {
     facebook: <FaFacebookF aria-hidden="true" className="h-[13px] w-[13px]" />,
     linkedin: <FaLinkedinIn aria-hidden="true" className="h-[13px] w-[13px]" />,
@@ -223,7 +288,7 @@ function ShareIcon({ type, shareUrl, title }) {
       href={hrefByType[type]}
       target={type === "email" ? undefined : "_blank"}
       className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-yellow)] text-black transition-opacity hover:opacity-85"
-      aria-label={`Share on ${type}`}
+      aria-label={labels.shareOn(type)}
     >
       {iconByType[type]}
     </a>
@@ -235,7 +300,9 @@ export default function SinglePostTemplate({
   relatedPosts = [],
   blogSettings = {},
   authorCards = [],
+  language = DEFAULT_LANGUAGE,
 }) {
+  const labels = getLabels(language);
   const postAcf = post?.acf || {};
   const title = post?.title?.rendered || "";
   const content = post?.content?.rendered || "";
@@ -249,16 +316,16 @@ export default function SinglePostTemplate({
   const featuredImage =
     getAcfImageUrl(optionValue(blogSettings, postAcf, "single_post_featured_image")) ||
     getFeaturedImage(post);
-  const category = getCategory(post);
-  const date = formatDate(post?.date);
-  const fullDate = formatFullDate(post?.date);
+  const category = getCategory(post, labels);
+  const date = formatDate(post?.date, language);
+  const fullDate = formatFullDate(post?.date, language);
   const readingTime = getReadingTime(content || excerpt);
   const { html, toc } = withHeadingAnchors(content);
   const shareUrl = `${process.env.SITE_URL || ""}${getPostUrl(post)}`;
   const tocTitle =
     optionValue(blogSettings, postAcf, "table_of_contents_heading") ||
     optionValue(blogSettings, postAcf, "table_of_content_heading") ||
-    "Table of contents";
+    labels.tableOfContents;
   const showToc = !isHidden(
     optionValue(blogSettings, postAcf, "show_table_of_contents", true)
   );
@@ -267,25 +334,25 @@ export default function SinglePostTemplate({
   );
   const shareBoxText =
     optionValue(blogSettings, postAcf, "share_box_text") ||
-    "Like what you see? Share this article";
+    labels.shareArticle;
   const shareIcons = normalizeShareIcons(
     optionValue(blogSettings, postAcf, "share_icons")
   );
   const relatedHeading =
     optionValue(blogSettings, postAcf, "related_posts_heading") ||
-    "Don't miss out on these";
+    labels.relatedHeading;
   const showRelatedPosts = !isHidden(
     optionValue(blogSettings, postAcf, "show_related_posts", true)
   );
   const ctaTitle =
     optionValue(blogSettings, postAcf, "sidebar_cta_title") ||
-    "Need help with your next project?";
+    labels.ctaTitle;
   const ctaText =
     optionValue(blogSettings, postAcf, "sidebar_cta_text") ||
-    "Talk to our team about the right fuel solution for your operation.";
+    labels.ctaText;
   const ctaButtonText =
     optionValue(blogSettings, postAcf, "sidebar_cta_button_text") ||
-    "Contact us";
+    labels.ctaButton;
   const ctaButtonLink = optionValue(
     blogSettings,
     postAcf,
@@ -311,11 +378,11 @@ export default function SinglePostTemplate({
       <section className="bg-white px-6 pb-14 pt-37.5 md:pt-42.5">
         <div className="web-width">
           <p className="mb-6 text-[13px] font-medium uppercase leading-5.5 tracking-[2px] text-[#1A1A1A]">
-            {category} | Reading time: {readingTime} minutes
+            {category} | {labels.readingTime}: {readingTime} {labels.minutes}
             {fullDate ? ` | ${fullDate}` : ""}
           </p>
           <h1
-            className="font-heading max-w-300 text-[36px] font-medium leading-[46px] tracking-[-0.84px] text-[#071838] md:text-[48px] md:leading-[58px]"
+            className="font-heading max-w-300 text-[36px] font-medium leading-[46px] tracking-[-0.84px] text-[#071838] md:text-[48px] md:leading-14.5"
             dangerouslySetInnerHTML={{ __html: title }}
           />
           {excerpt && (
@@ -333,7 +400,7 @@ export default function SinglePostTemplate({
             <div className="relative min-h-80 overflow-hidden rounded-[10px] md:min-h-130">
               <Image
                 src={featuredImage}
-                alt={stripHtml(title) || "Post image"}
+                alt={stripHtml(title) || labels.postImage}
                 fill
                 priority
                 sizes="(min-width: 1280px) 1250px, 100vw"
@@ -399,7 +466,7 @@ export default function SinglePostTemplate({
           </aside>
 
           <article
-            className="max-w-[870px] text-[16px] leading-[26px] text-black [&_a]:text-[var(--color-accent)] [&_blockquote]:relative [&_blockquote]:my-10 [&_blockquote]:overflow-hidden [&_blockquote]:rounded-md [&_blockquote]:border-l-[6px] [&_blockquote]:border-[var(--color-accent)] [&_blockquote]:bg-[#EAF1FA] [&_blockquote]:py-8 [&_blockquote]:pl-7 [&_blockquote]:pr-20 [&_blockquote]:text-[16px] [&_blockquote]:italic [&_blockquote]:font-normal [&_blockquote]:leading-[28px] [&_blockquote]:text-[#071838] [&_blockquote]:shadow-[0_18px_45px_rgba(7,24,56,0.08)] [&_blockquote:before]:pointer-events-none [&_blockquote:before]:absolute [&_blockquote:before]:right-6 [&_blockquote:before]:top-5 [&_blockquote:before]:content-['\201C'] [&_blockquote:before]:text-[70px] [&_blockquote:before]:font-bold [&_blockquote:before]:leading-none [&_blockquote:before]:text-[rgba(0,112,158,0.14)] [&_blockquote_cite]:mt-5 [&_blockquote_cite]:block [&_blockquote_cite]:text-[14px] [&_blockquote_cite]:font-bold [&_blockquote_cite]:not-italic [&_blockquote_cite]:leading-5.5 [&_blockquote_cite]:text-[var(--color-accent)] [&_blockquote_p:last-child]:mb-0 [&_h2]:mb-5 [&_h2]:mt-10 [&_h2]:font-heading [&_h3]:font-heading [&_h2]:text-[34px] [&_h2]:font-normal [&_h2]:leading-[42px] [&_h3]:mb-4 [&_h3]:mt-8 [&_h3]:text-[26px] [&_h3]:font-normal [&_h3]:leading-[34px] [&_li]:mb-2 [&_p]:mb-5 [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6"
+            className="max-w-[870px] text-[16px] leading-[26px] text-black [&_a]:text-[var(--color-accent)] [&_blockquote]:relative [&_blockquote]:my-10 [&_blockquote]:overflow-hidden [&_blockquote]:rounded-md [&_blockquote]:border-l-[6px] [&_blockquote]:border-[var(--color-accent)] [&_blockquote]:bg-[#EAF1FA] [&_blockquote]:py-8 [&_blockquote]:pl-7 [&_blockquote]:pr-20 [&_blockquote]:text-[16px] [&_blockquote]:italic [&_blockquote]:font-normal [&_blockquote]:leading-[28px] [&_blockquote]:text-[#071838] [&_blockquote]:shadow-[0_18px_45px_rgba(7,24,56,0.08)] [&_blockquote:before]:pointer-events-none [&_blockquote:before]:absolute [&_blockquote:before]:right-6 [&_blockquote:before]:top-5 [&_blockquote:before]:content-['\201C'] [&_blockquote:before]:text-[70px] [&_blockquote:before]:font-bold [&_blockquote:before]:leading-none [&_blockquote:before]:text-[rgba(0,112,158,0.14)] [&_blockquote_cite]:mt-5 [&_blockquote_cite]:block [&_blockquote_cite]:text-[14px] [&_blockquote_cite]:font-bold [&_blockquote_cite]:not-italic [&_blockquote_cite]:leading-5.5 [&_blockquote_cite]:text-[var(--color-accent)] [&_blockquote_p:last-child]:mb-0 [&_h2]:mb-5 [&_h2]:mt-10 [&_h2]:font-heading [&_h3]:font-heading [&_h2]:text-[34px] [&_h2]:font-normal [&_h2]:leading-10.5 [&_h3]:mb-4 [&_h3]:mt-8 [&_h3]:text-[26px] [&_h3]:font-normal [&_h3]:leading-[34px] [&_li]:mb-2 [&_p]:mb-5 [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6"
             dangerouslySetInnerHTML={{ __html: html }}
           />
         </div> 
@@ -408,6 +475,7 @@ export default function SinglePostTemplate({
       <AuthorCardSection
         selectedAuthor={selectedAuthor}
         authorCards={authorCards}
+        language={language}
       />
 
       {(showShareBox || showSidebarCta) && (
@@ -425,9 +493,10 @@ export default function SinglePostTemplate({
                     type={type}
                     shareUrl={shareUrl}
                     title={title}
+                    labels={labels}
                   />
                 ))}
-                <CopyLinkButton shareUrl={shareUrl} />
+                <CopyLinkButton shareUrl={shareUrl} language={language} />
               </div>
             </div>
           )}
@@ -473,7 +542,12 @@ export default function SinglePostTemplate({
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {related.map((item) => (
-                <RelatedPostCard key={item.id || item.slug} post={item} />
+                <RelatedPostCard
+                  key={item.id || item.slug}
+                  post={item}
+                  language={language}
+                  labels={labels}
+                />
               ))}
             </div>
           </div>

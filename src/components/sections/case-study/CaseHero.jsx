@@ -24,7 +24,7 @@ export default function CaseHero({ data }) {
         {bgImage &&  
           <Image
             src={bgImage}
-            alt="Hero Background"
+            alt=""
             fill
             sizes="100vw"
             className="object-cover"
@@ -71,14 +71,14 @@ export default function CaseHero({ data }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
               className="block md:inline-block w-16 h-16 text-center pt-[24px] pl-[24px] rounded-full bg-[var(--color-accent)] translate-y-2 transition-all duration-300 shadow-md hover:translate-y-[14px] cursor-pointer md:ml-8 mt-4 md:mt-0">
-                            <Image src={DownArrow} alt="arrow" width={16} height={16} />
+                            <Image src={DownArrow} alt="" width={16} height={16} />
             </motion.a>
             </h1>
         </div>
 
         {logo && (
           <div className=" bg-white/30 backdrop-blur-xl px-3 py-3 rounded-sm mt-12 md:mt-6">
-            <Image src={logo} alt="Case Study Logo" width={150} height={75} className=""/>
+            <Image src={logo} alt="" width={150} height={75} className=""/>
           </div>
         )}
         </div>

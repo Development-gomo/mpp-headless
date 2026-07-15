@@ -1,7 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getProductById } from "@/lib/api";
-import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
+import {
+  DEFAULT_LANGUAGE,
+  ENGLISH_LANGUAGE,
+  GERMAN_LANGUAGE,
+  localizePath,
+  normalizeLanguage,
+} from "@/lib/i18n";
 import {
   getButtonHref,
   getButtonTarget,
@@ -9,6 +15,28 @@ import {
   getRendered,
   stripHtml,
 } from "@/components/sections/product/productUtils";
+
+const PRODUCT_SECTION_LABELS = {
+  [DEFAULT_LANGUAGE]: {
+    viewProduct: "Visa produkt",
+    viewProducts: "Visa produkter",
+  },
+  [ENGLISH_LANGUAGE]: {
+    viewProduct: "View product",
+    viewProducts: "View products",
+  },
+  [GERMAN_LANGUAGE]: {
+    viewProduct: "Produkt ansehen",
+    viewProducts: "Produkte ansehen",
+  },
+};
+
+function getProductSectionLabels(language) {
+  return (
+    PRODUCT_SECTION_LABELS[normalizeLanguage(language)] ||
+    PRODUCT_SECTION_LABELS[DEFAULT_LANGUAGE]
+  );
+}
 
 function getProductId(product) {
   if (typeof product === "number" || typeof product === "string") return product;
@@ -59,11 +87,12 @@ async function resolveSelectedProducts(selectedProducts, language) {
   });
 }
 
-function getButtonLabel(button) {
-  return button?.button_label || button?.button_link?.title || "View products";
+function getButtonLabel(button, labels) {
+  return button?.button_label || button?.button_link?.title || labels.viewProducts;
 }
 
 function ProductCard({ product, language }) {
+  const labels = getProductSectionLabels(language);
   const title = getProductTitle(product);
   const description = getProductDescription(product);
   const image = getProductImage(product);
@@ -103,11 +132,11 @@ function ProductCard({ product, language }) {
 
         <Link
           href={href}
-          aria-label={`View product: ${title}`}
+          aria-label={`${labels.viewProduct}: ${title}`}
           className="mt-8 inline-flex w-fit items-center gap-5 rounded-[5px] bg-[var(--color-yellow)] py-1.5 pl-7 pr-1.5 font-heading text-[16px] font-normal tracking-[-0.32px] text-black transition-opacity hover:opacity-90"
         >
-          <span>View product</span>
-          <span className="flex h-11 w-11 items-center justify-center rounded-[4px] bg-white text-[22px] leading-none transition-transform group-hover:translate-x-0.5">
+          <span>{labels.viewProduct}</span>
+          <span className="flex h-11 w-11 items-center justify-center rounded-sm bg-white text-[22px] leading-none transition-transform group-hover:translate-x-0.5">
             {"\u2197"}
           </span>
         </Link>
@@ -135,6 +164,7 @@ export default async function ProductSection({
 
   const products = await resolveSelectedProducts(select_products, language);
   if (products.length === 0) return null;
+  const labels = getProductSectionLabels(language);
 
   return (
     <section
@@ -160,7 +190,7 @@ export default async function ProductSection({
 
               {hero_title && (
                 <h2
-                  className="font-heading max-w-155 text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[58px] md:tracking-[-1.04px]"
+                  className="font-heading max-w-155 text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-14.5 md:tracking-[-1.04px]"
                   dangerouslySetInnerHTML={{ __html: hero_title }}
                 />
               )}
@@ -187,7 +217,7 @@ export default async function ProductSection({
                         }
                         className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pl-6 pr-1.5 font-heading text-[14px] tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
                       >
-                        <span>{getButtonLabel(button)}</span>
+                        <span>{getButtonLabel(button, labels)}</span>
                         <Image
                           src="/black-white-arrow.svg"
                           alt=""

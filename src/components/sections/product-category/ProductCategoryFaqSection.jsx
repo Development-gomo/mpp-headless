@@ -53,7 +53,7 @@ export default function ProductCategoryFaqSection({ category }) {
 
             {title && (
               <h2
-                className="max-w-[560px] font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[58px] md:tracking-[-1.04px]"
+                className="max-w-[560px] font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-14.5 md:tracking-[-1.04px]"
                 dangerouslySetInnerHTML={{ __html: title }}
               />
             )}
@@ -78,7 +78,7 @@ export default function ProductCategoryFaqSection({ category }) {
                   alt=""
                   width={40}
                   height={40}
-                  className="h-auto w-[40px] object-contain transition-transform"
+                  className="h-auto w-10 object-contain transition-transform"
                 />
               </Link>
             )}

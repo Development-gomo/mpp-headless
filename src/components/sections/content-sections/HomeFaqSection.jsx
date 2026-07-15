@@ -112,7 +112,7 @@ export default function HomeFaqSection({ data }) {
             <div className="mb-10 max-w-[760px]">
               {text_above_title && (
                 <div className="mb-5 flex items-center gap-2">
-                  <span className="h-[10px] w-0.5 bg-[var(--color-yellow)]" />
+                  <span className="h-2.5 w-0.5 bg-[var(--color-yellow)]" />
                   <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-white">
                     {text_above_title}
                   </p>
@@ -169,7 +169,7 @@ export default function HomeFaqSection({ data }) {
                 const description = faq?.faq_description || faq?.faq_content;
 
                 return (
-                  <div key={index} className="rounded-[4px] bg-[var(--color-accent)] text-white">
+                  <div key={index} className="rounded-sm bg-[var(--color-accent)] text-white">
                     <button
                       type="button"
                       onClick={() => setActiveIndex(isActive ? -1 : index)}
@@ -242,7 +242,7 @@ export default function HomeFaqSection({ data }) {
           <div className={isFullLayout ? "max-w-none" : undefined}>
             {text_above_title && (
               <div className="mb-5 flex items-center gap-2">
-                <span className="h-[10px] w-0.5 bg-[var(--color-yellow)]" />
+                <span className="h-2.5 w-0.5 bg-[var(--color-yellow)]" />
                 <p
                   className={`font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] ${textColor}`}
                 >

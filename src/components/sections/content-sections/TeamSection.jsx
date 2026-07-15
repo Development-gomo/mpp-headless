@@ -226,7 +226,7 @@ export default function TeamSection({ data, teams = [] }) {
 
             {hero_title && (
               <h2
-                className="max-w-155 text-[42px] font-normal leading-[48px] tracking-[-1.04px] text-black font-heading md:text-[48px] md:leading-[58px]"
+                className="max-w-155 text-[42px] font-normal leading-12 tracking-[-1.04px] text-black font-heading md:text-[48px] md:leading-14.5"
                 dangerouslySetInnerHTML={{ __html: hero_title }}
               />
             )}
@@ -262,7 +262,7 @@ export default function TeamSection({ data, teams = [] }) {
                       alt=""
                       width={40}
                       height={40}
-                      className="h-auto w-[40px] object-contain transition-transform"
+                      className="h-auto w-10 object-contain transition-transform"
                     />
                   </Link>
                 );

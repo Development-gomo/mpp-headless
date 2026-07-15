@@ -12,6 +12,12 @@ import {
   FiTag,
   FiX,
 } from "react-icons/fi";
+import {
+  DEFAULT_LANGUAGE,
+  ENGLISH_LANGUAGE,
+  GERMAN_LANGUAGE,
+  normalizeLanguage,
+} from "@/lib/i18n";
 
 const GOOGLE_API_KEY =
   process.env.NEXT_PUBLIC_GOOGLE_MAP_SITE_KEY ||
@@ -43,6 +49,43 @@ const MAP_STYLES = [
     stylers: [{ color: "#d4e8ef" }],
   },
 ];
+
+const LABELS = {
+  [DEFAULT_LANGUAGE]: {
+    searchLocation: "Sökplats",
+    retailersFound: (count) => `Antal butiker: ${count}`,
+    directions: "Vägbeskrivning",
+    homepage: "Hemsida",
+    enterLocation: "Ange en plats",
+    getDirections: "FÅ VÄGBESKRIVNING",
+    from: "Från",
+    to: "Till",
+  },
+  [ENGLISH_LANGUAGE]: {
+    searchLocation: "Search location",
+    retailersFound: (count) => `${count} retailers found`,
+    directions: "Directions",
+    homepage: "Homepage",
+    enterLocation: "Enter a location",
+    getDirections: "Get Directions",
+    from: "From",
+    to: "To",
+  },
+  [GERMAN_LANGUAGE]: {
+    searchLocation: "Standort suchen",
+    retailersFound: (count) => `Anzahl Händler: ${count}`,
+    directions: "Wegbeschreibung",
+    homepage: "Webseite",
+    enterLocation: "Standort eingeben",
+    getDirections: "WEGBESCHREIBUNG",
+    from: "Von",
+    to: "Nach",
+  },
+};
+
+function getLabels(language) {
+  return LABELS[normalizeLanguage(language)] || LABELS[DEFAULT_LANGUAGE];
+}
 
 function loadScript(src, id) {
   return new Promise((resolve, reject) => {
@@ -239,7 +282,7 @@ function getMarkerIcon() {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
-function buildInfoWindowContent(store) {
+function buildInfoWindowContent(store, labels) {
   const dist =
     store.distance != null ? `${store.distance.toFixed(2)} Miles` : "";
   const website = store.website ? escapeHtml(store.website) : "";
@@ -296,13 +339,17 @@ function buildInfoWindowContent(store) {
       <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
         <button onclick="window.__rm&&window.__rm.directions('${escapeJsString(
           store.id
-        )}')" style="background:#445641;color:#fff;border:none;padding:8px 12px;border-radius:4px;font-size:12px;font-weight:700;cursor:pointer">Directions</button>
+        )}')" style="background:#445641;color:#fff;border:none;padding:8px 12px;border-radius:4px;font-size:12px;font-weight:700;cursor:pointer">${escapeHtml(
+    labels.directions
+  )}</button>
         <button onclick="window.__rm&&window.__rm.zoom(${store.lat},${
     store.lng
   })" style="background:#00709E;color:#fff;border:none;padding:8px 12px;border-radius:4px;font-size:12px;font-weight:700;cursor:pointer">Zoom</button>
         ${
           website
-            ? `<button onclick="window.open('${website}','_blank','noopener,noreferrer')" style="background:#EAAF0F;color:#111;border:none;padding:8px 12px;border-radius:4px;font-size:12px;font-weight:700;cursor:pointer">Homepage</button>`
+            ? `<button onclick="window.open('${website}','_blank','noopener,noreferrer')" style="background:#EAAF0F;color:#111;border:none;padding:8px 12px;border-radius:4px;font-size:12px;font-weight:700;cursor:pointer">${escapeHtml(
+                labels.homepage
+              )}</button>`
             : ""
         }
       </div>
@@ -310,7 +357,7 @@ function buildInfoWindowContent(store) {
   `;
 }
 
-export default function RetailerMap({ stores: rawStores = [] }) {
+export default function RetailerMap({ stores: rawStores = [], language = DEFAULT_LANGUAGE }) {
   const mapDivRef = useRef(null);
   const mapRef = useRef(null);
   const markersRef = useRef([]);
@@ -324,6 +371,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
   const fromInputRef = useRef(null);
 
   const baseStores = useMemo(() => normalizeStores(rawStores), [rawStores]);
+  const labels = useMemo(() => getLabels(language), [language]);
   const [mapsLoaded, setMapsLoaded] = useState(false);
   const [mapsError, setMapsError] = useState("");
   const [stores, setStores] = useState(baseStores);
@@ -440,7 +488,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
       });
 
       marker.addListener("click", () => {
-        infoWin.setContent(buildInfoWindowContent(store));
+        infoWin.setContent(buildInfoWindowContent(store, labels));
         infoWin.open(map, marker);
       });
 
@@ -502,7 +550,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
       clustererRef.current?.clearMarkers?.();
       dirRendererRef.current?.setMap(null);
     };
-  }, [applySearchedLocation, baseStores, mapsLoaded]);
+  }, [applySearchedLocation, baseStores, labels, mapsLoaded]);
 
   function handleSearchLocation() {
     const query = searchInputRef.current?.value?.trim();
@@ -609,13 +657,13 @@ export default function RetailerMap({ stores: rawStores = [] }) {
         <div className="border-b border-black/10 bg-white p-5">
           <p className="mb-3 flex items-center gap-2 text-[13px] font-medium uppercase leading-[20px] tracking-[0.56px] text-[#1A1A1A] [font-family:var(--font-body)]">
             <span className="h-[14px] w-0.5 bg-[var(--color-yellow)]" />
-            Search location
+            {labels.searchLocation}
           </p>
           <div className="flex gap-2">
             <input
               ref={searchInputRef}
               type="text"
-              placeholder="Enter a location"
+              placeholder={labels.enterLocation}
               onKeyDown={(event) => {
                 if (event.key === "Enter") handleSearchLocation();
               }}
@@ -634,7 +682,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
         {!directionSummary && (
           <div className="shrink-0 bg-[#445641] px-5 py-4">
             <p className="text-[15px] font-medium leading-5.5 text-white [font-family:var(--font-heading)]">
-              {stores.length} retailers found
+              {labels.retailersFound(stores.length)}
             </p>
           </div>
         )}
@@ -650,7 +698,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
               </p>
               {directionSummary.to && (
                 <p className="mt-1 text-[14px] leading-[20px] text-[#5A5D66]">
-                  to {directionSummary.to}
+                  {labels.to} {directionSummary.to}
                 </p>
               )}
               <p className="mt-4 text-[20px] font-medium leading-[26px] tracking-[-0.4px] text-black [font-family:var(--font-heading)]">
@@ -743,7 +791,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
                       className="inline-flex items-center gap-2 rounded-sm bg-[#445641] px-4 py-2 text-[13px] font-medium text-white transition-opacity hover:opacity-90 [font-family:var(--font-heading)]"
                     >
                       <FiNavigation className="h-3.5 w-3.5" />
-                      Directions
+                      {labels.directions}
                     </button>
 
                     {store.website && (
@@ -755,7 +803,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
                         className="inline-flex items-center gap-2 rounded-sm border border-black/15 bg-white px-4 py-2 text-[13px] font-medium text-[#1A1A1A] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] [font-family:var(--font-heading)]"
                       >
                         <FiExternalLink className="h-3.5 w-3.5" />
-                        Homepage
+                        {labels.homepage}
                       </a>
                     )}
 
@@ -801,7 +849,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
           <div className="w-full max-w-[460px] rounded-lg bg-white p-6 shadow-2xl">
             <div className="mb-5 flex items-center justify-between">
               <h3 className="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">
-                Get Directions
+                {labels.getDirections}
               </h3>
               <button
                 onClick={() => setDirectionsModal(null)}
@@ -815,7 +863,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
             <div className="space-y-4">
               <div>
                 <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-500">
-                  From:
+                  {labels.from}:
                 </label>
                 <input
                   ref={fromInputRef}
@@ -829,7 +877,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
 
               <div>
                 <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-500">
-                  To:
+                  {labels.to}:
                 </label>
                 <input
                   type="text"
@@ -869,7 +917,7 @@ export default function RetailerMap({ stores: rawStores = [] }) {
                 disabled={!fromAddress.trim()}
                 className="rounded bg-[var(--color-accent)] px-6 py-2.5 text-sm font-semibold uppercase tracking-wide text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
               >
-                Get Directions
+                {labels.getDirections}
               </button>
             </div>
           </div>

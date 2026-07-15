@@ -3,12 +3,43 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
+import {
+  DEFAULT_LANGUAGE,
+  ENGLISH_LANGUAGE,
+  GERMAN_LANGUAGE,
+  localizePath,
+  normalizeLanguage,
+} from "@/lib/i18n";
 import {
   getProductVariations,
   getVariationCapacity,
   getVariationTextValues,
 } from "./productUtils";
+
+const RELATED_PRODUCTS_LABELS = {
+  [DEFAULT_LANGUAGE]: {
+    findDealer: "Hitta återförsäljare",
+    viewAllProducts: "Visa alla produkter",
+    viewProduct: "Visa produkt",
+  },
+  [ENGLISH_LANGUAGE]: {
+    findDealer: "Find a dealer",
+    viewAllProducts: "View all products",
+    viewProduct: "View product",
+  },
+  [GERMAN_LANGUAGE]: {
+    findDealer: "Händler finden",
+    viewAllProducts: "Alle Produkte anzeigen",
+    viewProduct: "Produkt ansehen",
+  },
+};
+
+function getRelatedProductsLabels(language) {
+  return (
+    RELATED_PRODUCTS_LABELS[normalizeLanguage(language)] ||
+    RELATED_PRODUCTS_LABELS[DEFAULT_LANGUAGE]
+  );
+}
 
 function getImageUrl(image) {
   if (!image) return "";
@@ -169,6 +200,7 @@ export default function ProductRelatedProductsSection({
   const activeExcerpt = getProductExcerpt(activeProduct);
   const activeImage = getProductImage(activeProduct);
   const activeLink = getProductLink(activeProduct, language);
+  const labels = getRelatedProductsLabels(language);
   const capacity = getProductCapacityMeta(activeProduct);
   const fuelType = getProductFuelTypeMeta(activeProduct);
   const viewAllHref = relatedCategory?.slug
@@ -195,7 +227,7 @@ export default function ProductRelatedProductsSection({
             href={viewAllHref}
             className="group inline-flex h-12 w-fit items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
           >
-            <span>View all products</span>
+            <span>{labels.viewAllProducts}</span>
             <Image
               src="/black-white-arrow.svg"
               alt=""
@@ -219,7 +251,7 @@ export default function ProductRelatedProductsSection({
 
           <div className="relative z-10 grid grid-cols-1 gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
             <div>
-              <h3 className="mb-6 font-heading text-[32px] font-medium leading-[40px] tracking-[-0.64px] md:text-[40px] md:leading-[48px]">
+              <h3 className="mb-6 font-heading text-[32px] font-medium leading-[40px] tracking-[-0.64px] md:text-[40px] md:leading-12">
                 {activeTitle}
               </h3>
 
@@ -275,13 +307,13 @@ export default function ProductRelatedProductsSection({
                   href="#"
                   className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
                 >
-                  <span>Find a dealer</span>
+                  <span>{labels.findDealer}</span>
                   <Image
                     src="/black-white-arrow.svg"
                     alt=""
                     width={40}
                     height={40}
-                    className="h-auto w-[40px] object-contain transition-transform"
+                    className="h-auto w-10 object-contain transition-transform"
                   />
                 </Link>
 
@@ -289,13 +321,13 @@ export default function ProductRelatedProductsSection({
                   href={activeLink}
                   className="group inline-flex items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
                 >
-                  <span>View product</span>
+                  <span>{labels.viewProduct}</span>
                   <Image
                     src="/black-white-arrow.svg"
                     alt=""
                     width={40}
                     height={40}
-                    className="h-auto w-[40px] object-contain transition-transform"
+                    className="h-auto w-10 object-contain transition-transform"
                   />
                 </Link>
               </div>
@@ -317,7 +349,7 @@ export default function ProductRelatedProductsSection({
                       alt=""
                       width={40}
                       height={40}
-                      className="h-auto w-[40px] rotate-180 object-contain"
+                      className="h-auto w-10 rotate-180 object-contain"
                     />
                   </button>
 
@@ -336,7 +368,7 @@ export default function ProductRelatedProductsSection({
                       alt=""
                       width={40}
                       height={40}
-                      className="h-auto w-[40px] object-contain"
+                      className="h-auto w-10 object-contain"
                     />
                   </button>
                 </div>

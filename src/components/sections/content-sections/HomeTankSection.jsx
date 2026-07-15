@@ -92,7 +92,7 @@ export default function HomeTankSection({ data }) {
 
           {hero_title && (
             <p
-              className="font-heading max-w-155 text-[40px] font-normal leading-[48px] tracking-[-0.8px] text-white md:text-[56px] md:leading-[64px] md:tracking-[-1.12px] lg:text-[64px] lg:leading-[72px] lg:tracking-[-1.28px]"
+              className="font-heading max-w-155 text-[40px] font-normal leading-12 tracking-[-0.8px] text-white md:text-[56px] md:leading-[64px] md:tracking-[-1.12px] lg:text-[64px] lg:leading-[72px] lg:tracking-[-1.28px]"
               dangerouslySetInnerHTML={{ __html: hero_title }}
             />
           
@@ -125,7 +125,7 @@ export default function HomeTankSection({ data }) {
                     alt=""
                     width={40}
                     height={40}
-                    className="h-auto w-[40px] object-contain transition-transform"
+                    className="h-auto w-10 object-contain transition-transform"
                   />
                 </Link>
               ))}
@@ -156,7 +156,7 @@ export default function HomeTankSection({ data }) {
             {[...rotating_text, ...rotating_text, ...rotating_text].map(
               (item, index) => (
                 <div key={index} className="flex items-center gap-8">
-                  <span className="font-heading text-[48px] leading-[48px] font-bold uppercase tracking-[2.8px] text-white/15 md:text-[80px] md:leading-[72px] md:tracking-[4.8px]">
+                  <span className="font-heading text-[48px] leading-12 font-bold uppercase tracking-[2.8px] text-white/15 md:text-[80px] md:leading-[72px] md:tracking-[4.8px]">
                     {item?.rotating_word}
                   </span>
 

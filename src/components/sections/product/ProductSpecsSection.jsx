@@ -97,7 +97,7 @@ export default function ProductSpecsSection({ product, selectedVariation = null 
                       alt=""
                       width={10}
                       height={10}
-                      className="h-[10px] w-[10px] object-contain"
+                      className="h-2.5 w-[10px] object-contain"
                     />
                   ) : (
                     <span className="h-[4px] w-[4px] shrink-0 rounded-full bg-[var(--color-yellow)]" />

@@ -320,7 +320,7 @@ export default async function Footer({ language = DEFAULT_LANGUAGE }) {
                     target={item.target}
                     className="group flex items-center justify-between gap-6 py-3"
                   >
-                    <span className="font-heading text-[28px] leading-[42px] tracking-[-0.6px] text-white md:text-[26px] md:leading-[48px]">
+                    <span className="font-heading text-[28px] leading-10.5 tracking-[-0.6px] text-white md:text-[26px] md:leading-12">
                       {item.label}
                     </span>
                     <Image

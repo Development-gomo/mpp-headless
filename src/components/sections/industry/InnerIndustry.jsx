@@ -8,8 +8,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import {
   DEFAULT_LANGUAGE,
+  ENGLISH_LANGUAGE,
+  GERMAN_LANGUAGE,
   getIndustryRouteSegment,
   localizePath,
+  normalizeLanguage,
 } from "@/lib/i18n";
 
 const INDUSTRIES_PER_PAGE = 6;
@@ -19,6 +22,40 @@ const DEFAULT_LOAD_MORE_LABELS = {
   en: "Load more",
   de: "Mehr laden",
 };
+
+const INDUSTRY_LABELS = {
+  [DEFAULT_LANGUAGE]: {
+    readMore: "Läs mer",
+    viewAll: "Visa alla användningsområden",
+    loadMore: "Ladda fler",
+    imageAlt: "Användningsområdesbild",
+    imageMissing: "Användningsområdesbild saknas",
+    previous: "Föregående användningsområde",
+    next: "Nästa användningsområde",
+  },
+  [ENGLISH_LANGUAGE]: {
+    readMore: "Read more",
+    viewAll: "View all industries",
+    loadMore: "Load more",
+    imageAlt: "Industry image",
+    imageMissing: "Industry image missing",
+    previous: "Previous industry",
+    next: "Next industry",
+  },
+  [GERMAN_LANGUAGE]: {
+    readMore: "Mehr erfahren",
+    viewAll: "Alle Anwendungsbereiche anzeigen",
+    loadMore: "Mehr laden",
+    imageAlt: "Anwendungsbereichsbild",
+    imageMissing: "Anwendungsbereichsbild fehlt",
+    previous: "Vorheriger Anwendungsbereich",
+    next: "Nächster Anwendungsbereich",
+  },
+};
+
+function getLabels(language) {
+  return INDUSTRY_LABELS[normalizeLanguage(language)] || INDUSTRY_LABELS[DEFAULT_LANGUAGE];
+}
 
 function stripHtml(value = "") {
   return String(value).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
@@ -84,8 +121,9 @@ function getIndustryLayout(data) {
 
 function IndustryCard({
   item,
-  buttonText = "Read more",
+  buttonText,
   language = DEFAULT_LANGUAGE,
+  labels,
 }) {
   const title = item?.title?.rendered || item?.title || "";
   const link = item?.slug
@@ -105,14 +143,14 @@ function IndustryCard({
         {image ? (
           <Image
             src={image}
-            alt={stripHtml(title) || "Industry image"}
+            alt={stripHtml(title) || labels.imageAlt}
             fill
             sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
             className="object-cover"
           />
         ) : (
           <div className="flex h-full min-h-[220px] items-center justify-center bg-white/10 px-6 text-center font-body text-[14px] text-white/70 md:min-h-[245px]">
-            Industry image missing
+            {labels.imageMissing}
           </div>
         )}
       </div>
@@ -144,7 +182,7 @@ function IndustryCard({
               alt=""
               width={40}
               height={40}
-              className="h-auto w-[40px] object-contain transition-transform group-hover:translate-x-1"
+              className="h-auto w-10 object-contain transition-transform group-hover:translate-x-1"
             />
           </Link>
         </div>
@@ -184,9 +222,12 @@ export default function InnerIndustry({
   const items = industries.slice(0, visibleCount);
   const hasMore = visibleCount < industries.length;
   const layout = getIndustryLayout(data);
-  const readMoreButtonText = read_more_button_text || "Read more";
+  const labels = getLabels(language);
+  const readMoreButtonText = read_more_button_text || labels.readMore;
   const loadMoreButtonText =
-    load_more_button_text || DEFAULT_LOAD_MORE_LABELS[language] || "Load more";
+    load_more_button_text ||
+    DEFAULT_LOAD_MORE_LABELS[language] ||
+    labels.loadMore;
 
   return (
     <section
@@ -208,7 +249,7 @@ export default function InnerIndustry({
 
             {hero_title && (
               <h2
-                className="font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[58px] md:tracking-[-1.04px]"
+                className="font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-14.5 md:tracking-[-1.04px]"
                 dangerouslySetInnerHTML={{ __html: hero_title }}
               />
             )}
@@ -230,14 +271,14 @@ export default function InnerIndustry({
                   target={getButtonTarget(btn.button_link)}
                   className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
                 >
-                  <span>{btn.button_label || "View all industries"}</span>
+                  <span>{btn.button_label || labels.viewAll}</span>
 
                   <Image
                     src="/black-white-arrow.svg"
                     alt=""
                     width={40}
                     height={40}
-                    className="h-auto w-[40px] object-contain transition-transform group-hover:translate-x-1"
+                    className="h-auto w-10 object-contain transition-transform group-hover:translate-x-1"
                   />
                 </Link>
               ))}
@@ -253,6 +294,7 @@ export default function InnerIndustry({
                 item={item}
                 buttonText={readMoreButtonText}
                 language={language}
+                labels={labels}
               />
             ))}
           </div>
@@ -289,6 +331,7 @@ export default function InnerIndustry({
                     item={item}
                     buttonText={readMoreButtonText}
                     language={language}
+                    labels={labels}
                   />
                 </SwiperSlide>
               ))}
@@ -300,14 +343,14 @@ export default function InnerIndustry({
                   ref={prevRef}
                   type="button"
                   className="flex h-11 w-[44px] items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
-                  aria-label="Previous industry"
+                  aria-label={labels.previous}
                 >
                   <Image
                     src="/slider-arrow.svg"
                     alt=""
                     width={40}
                     height={40}
-                    className="h-auto w-[40px] rotate-180 object-contain"
+                    className="h-auto w-10 rotate-180 object-contain"
                   />
                 </button>
 
@@ -315,14 +358,14 @@ export default function InnerIndustry({
                   ref={nextRef}
                   type="button"
                   className="flex h-11 w-[44px] items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
-                  aria-label="Next industry"
+                  aria-label={labels.next}
                 >
                   <Image
                     src="/slider-arrow.svg"
                     alt=""
                     width={40}
                     height={40}
-                    className="h-auto w-[40px] object-contain"
+                    className="h-auto w-10 object-contain"
                   />
                 </button>
               </div>
@@ -347,7 +390,7 @@ export default function InnerIndustry({
                 alt=""
                 width={40}
                 height={40}
-                className="h-auto w-[40px] rotate-90 object-contain transition-transform"
+                className="h-auto w-10 rotate-90 object-contain transition-transform"
               />
             </button>
           </div>
