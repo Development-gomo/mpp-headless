@@ -30,7 +30,7 @@ export default function ProductDownloadsSection({ product }) {
               <span className="font-heading text-[24px] leading-[32px] tracking-[-0.48px] text-black">
                 {download.download_label || "Download"}
               </span>
-              <Image src="/download-ico.svg" alt="" width={40} height={40} className="h-10 w-[40px] transition-transform group-hover:translate-y-0.5" />
+              <Image src="/download-ico.svg" alt="" width={40} height={40} className="h-10 w-10 transition-transform group-hover:translate-y-0.5" />
             </Link>
           ))}
         </div>

@@ -100,7 +100,7 @@ function TimelineYear({
       onPointerDown={(event) => event.stopPropagation()}
       onClick={() => onSelect(virtualIndex)}
       style={{ left, top, rotate, scale, opacity, zIndex }}
-      className="group absolute h-[84px] w-[112px] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap will-change-transform md:h-[96px] md:w-[130px]"
+      className="group absolute h-21 w-28 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap will-change-transform md:h-[96px] md:w-[130px]"
     >
       <span
         className={`font-heading absolute bottom-[calc(50%+15px)] left-1/2 -translate-x-1/2 text-[28px] font-medium leading-none tracking-[-0.5px] transition-colors duration-300 md:bottom-[calc(50%+18px)] md:text-[40px] md:tracking-[-0.6px] ${
@@ -253,7 +253,7 @@ export default function HistorySection({ data }) {
             {text_above_title && (
               <div className="mb-6 flex items-center gap-2">
                 <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
-                <p className="font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] text-[#000000]">
+                <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#000000]">
                   {text_above_title}
                 </p>
               </div>
@@ -261,14 +261,14 @@ export default function HistorySection({ data }) {
 
             {hero_title && (
               <h2
-                className="font-heading text-[36px] font-normal leading-[42px] tracking-[-0.72px] text-black md:text-[48px] md:leading-[58px] md:tracking-[-1.04px]"
+                className="font-heading text-[36px] font-normal leading-10.5  tracking-[-0.72px] text-black md:text-[48px] md:leading-14.5 md:tracking-[-1.04px]"
                 dangerouslySetInnerHTML={{ __html: hero_title }}
               />
-            )}
+            )} 
 
             {hero_description && (
               <div
-                className="mt-6 max-w-[650px] font-body text-[16px] font-normal leading-[24px] text-[#000000]"
+                className="mt-6 max-w-162.5 font-body text-[16px] font-normal leading-6 text-[#000000]"
                 dangerouslySetInnerHTML={{ __html: hero_description }}
               />
             )}
@@ -285,7 +285,7 @@ export default function HistorySection({ data }) {
                     key={index}
                     href={href}
                     target={target}
-                    className="group inline-flex items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+                    className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
                   >
                     <span>{label}</span>
                     <Image
@@ -293,7 +293,7 @@ export default function HistorySection({ data }) {
                       alt=""
                       width={40}
                       height={40}
-                      className="h-auto w-[40px] object-contain transition-transform"
+                      className="h-auto w-10 object-contain transition-transform"
                     />
                   </Link>
                 );
@@ -303,12 +303,11 @@ export default function HistorySection({ data }) {
         </div>
 
         {items.length > 0 && (
-          <div
-            role="region"
+          <div role="region"
             aria-label="History timeline"
             tabIndex={0}
             onKeyDown={handleKeyDown}
-            className="mt-[60px] outline-none md:mt-[100px]"
+            className="mt-15 outline-none md:mt-25"
           >
             <div
               onPointerDown={handlePointerDown}
@@ -423,7 +422,7 @@ export default function HistorySection({ data }) {
 
                     {activeItem?.description && (
                       <div
-                        className="font-body space-y-2 text-[13px] font-semibold leading-[18px] text-[#000000] md:space-y-3 md:text-[16px] md:font-normal md:leading-[24px]"
+                        className="font-body space-y-2 text-[13px] font-semibold leading-[18px] text-[#000000] md:space-y-3 md:text-[16px] md:font-normal md:leading-6"
                         dangerouslySetInnerHTML={{ __html: activeItem.description }}
                       />
                     )}

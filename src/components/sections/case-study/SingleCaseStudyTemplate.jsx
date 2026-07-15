@@ -8,7 +8,13 @@ import {
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import CopyLinkButton from "../blog/CopyLinkButton";
-import { DEFAULT_LANGUAGE } from "@/lib/i18n";
+import {
+  DEFAULT_LANGUAGE,
+  ENGLISH_LANGUAGE,
+  GERMAN_LANGUAGE,
+  localizePath,
+  normalizeLanguage,
+} from "@/lib/i18n";
 
 const MORE_CASE_STUDIES_LABELS = {
   sv: "Fler kundcase",
@@ -16,11 +22,67 @@ const MORE_CASE_STUDIES_LABELS = {
   de: "Weitere Fallstudien",
 };
 
-const TABLE_OF_CONTENTS_LABELS = {
-  sv: "Innehållsförteckning",
-  en: "Table of contents",
-  de: "Inhaltsverzeichnis",
+const DATE_LOCALES = {
+  [DEFAULT_LANGUAGE]: "sv-SE",
+  [ENGLISH_LANGUAGE]: "en-US",
+  [GERMAN_LANGUAGE]: "de-DE",
 };
+
+const CASE_STUDY_LABELS = {
+  [DEFAULT_LANGUAGE]: {
+    caseStudy: "Kundcase",
+    tableOfContents: "Innehållsförteckning",
+    readingTime: "Lästid",
+    minutes: "minuter",
+    relatedProduct: "Relaterad produkt",
+    relatedProductAlt: "Relaterad produkt",
+    viewProduct: "Visa produkt",
+    readClientCase: "Läs kundcase",
+    imageAlt: "Kundcasebild",
+    imageMissing: "Kundcasebild saknas",
+    shareCaseStudy: "Gillar du det du ser? Dela detta kundcase",
+    shareOn: (type) => `Dela på ${type}`,
+  },
+  [ENGLISH_LANGUAGE]: {
+    caseStudy: "Case study",
+    tableOfContents: "Table of contents",
+    readingTime: "Reading time",
+    minutes: "minutes",
+    relatedProduct: "Related product",
+    relatedProductAlt: "Related product",
+    viewProduct: "View product",
+    readClientCase: "Read client case",
+    imageAlt: "Case study image",
+    imageMissing: "Case study image missing",
+    shareCaseStudy: "Like what you see? Share this case study",
+    shareOn: (type) => `Share on ${type}`,
+  },
+  [GERMAN_LANGUAGE]: {
+    caseStudy: "Fallstudie",
+    tableOfContents: "Inhaltsverzeichnis",
+    readingTime: "Lesezeit",
+    minutes: "Minuten",
+    relatedProduct: "Verwandtes Produkt",
+    relatedProductAlt: "Verwandtes Produkt",
+    viewProduct: "Produkt ansehen",
+    readClientCase: "Kundencase lesen",
+    imageAlt: "Fallstudienbild",
+    imageMissing: "Fallstudienbild fehlt",
+    shareCaseStudy: "Gefällt Ihnen, was Sie sehen? Teilen Sie diese Fallstudie",
+    shareOn: (type) => `Auf ${type} teilen`,
+  },
+};
+
+function getCaseStudyLabels(language) {
+  return (
+    CASE_STUDY_LABELS[normalizeLanguage(language)] ||
+    CASE_STUDY_LABELS[DEFAULT_LANGUAGE]
+  );
+}
+
+function getDateLocale(language) {
+  return DATE_LOCALES[normalizeLanguage(language)] || DATE_LOCALES[DEFAULT_LANGUAGE];
+}
 
 function stripHtml(value = "") {
   return String(value).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
@@ -43,10 +105,10 @@ function slugify(value = "") {
     .replace(/^-+|-+$/g, "");
 }
 
-function formatFullDate(date) {
+function formatFullDate(date, language) {
   if (!date) return "";
 
-  return new Date(date).toLocaleDateString("en-US", {
+  return new Date(date).toLocaleDateString(getDateLocale(language), {
     month: "long",
     day: "numeric",
     year: "numeric",
@@ -100,13 +162,13 @@ function getProductImage(product) {
   );
 }
 
-function getProductLink(product) {
-  if (product?.slug) return `/product/${product.slug}`;
-  if (product?.post_name) return `/product/${product.post_name}`;
+function getProductLink(product, language = DEFAULT_LANGUAGE) {
+  if (product?.slug) return localizePath(`/product/${product.slug}`, language);
+  if (product?.post_name) return localizePath(`/product/${product.post_name}`, language);
   return "#";
 }
 
-function RelatedProductCard({ product }) {
+function RelatedProductCard({ product, language, labels }) {
   if (!product || product === false) return null;
 
   const title = getProductTitle(product);
@@ -122,11 +184,11 @@ function RelatedProductCard({ product }) {
   return (
     <div className="overflow-hidden rounded-[10px] border border-black/10 bg-[var(--color-accent)] text-white">
       {image && (
-        <Link href={getProductLink(product)} className="group block rounded-t-[10px] bg-[#F7F6F2] p-5">
-          <div className="relative mx-auto h-[150px] max-w-[210px] rounded-[10px]">
+        <Link href={getProductLink(product, language)} className="group block rounded-t-[10px] bg-[#F7F6F2] p-5">
+          <div className="relative mx-auto h-37.5 max-w-[210px] rounded-[10px]">
             <Image
               src={image}
-              alt={stripHtml(title) || "Related product"}
+              alt={stripHtml(title) || labels.relatedProductAlt}
               fill
               sizes="300px"
               className="object-contain transition-transform duration-500 group-hover:scale-105"
@@ -151,10 +213,10 @@ function RelatedProductCard({ product }) {
         )}
 
         <Link
-          href={getProductLink(product)}
+          href={getProductLink(product, language)}
           className="group mt-6 inline-flex w-fit items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 text-black [font-family:var(--font-heading)] text-[14px] tracking-[-0.28px]"
         >
-          <span>View product</span>
+          <span>{labels.viewProduct}</span>
           <Image
             src="/black-white-arrow.svg"
             alt=""
@@ -198,7 +260,7 @@ function withHeadingAnchors(content = "") {
   return { html, toc };
 }
 
-function ShareIcon({ type, shareUrl, title }) {
+function ShareIcon({ type, shareUrl, title, labels }) {
   const iconByType = {
     facebook: <FaFacebookF aria-hidden="true" className="h-[13px] w-[13px]" />,
     linkedin: <FaLinkedinIn aria-hidden="true" className="h-[13px] w-[13px]" />,
@@ -222,14 +284,14 @@ function ShareIcon({ type, shareUrl, title }) {
       href={hrefByType[type]}
       target={type === "email" ? undefined : "_blank"}
       className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-accent)] text-white transition-opacity hover:opacity-85"
-      aria-label={`Share on ${type}`}
+      aria-label={labels.shareOn(type)}
     >
       {iconByType[type]}
     </a>
   );
 }
 
-function RelatedCaseStudyCard({ item }) {
+function RelatedCaseStudyCard({ item, language, labels }) {
   const title = item?.title?.rendered || item?.title || "";
   const excerpt = cleanExcerpt(
     item?.excerpt?.rendered ||
@@ -245,14 +307,14 @@ function RelatedCaseStudyCard({ item }) {
         {image ? (
           <Image
             src={image}
-            alt={stripHtml(title) || "Case study image"}
+            alt={stripHtml(title) || labels.imageAlt}
             fill
             sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
             className="object-cover"
           />
         ) : (
           <div className="flex h-full min-h-[220px] items-center justify-center bg-white/10 px-6 text-center text-[14px] text-white/70 md:min-h-[245px]">
-            Case study image missing
+            {labels.imageMissing}
           </div>
         )}
       </div>
@@ -274,16 +336,16 @@ function RelatedCaseStudyCard({ item }) {
 
         <div className="mt-auto">
           <Link
-            href={item?.slug ? `/${item.slug}` : "#"}
+            href={item?.slug ? localizePath(`/${item.slug}`, language) : "#"}
             className="group inline-flex w-fit items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 text-black [font-family:var(--font-heading)] text-[14px] tracking-[-0.28px]"
           >
-            <span>Read client case</span>
+            <span>{labels.readClientCase}</span>
             <Image
               src="/black-white-arrow.svg"
               alt=""
               width={40}
               height={40}
-              className="h-auto w-[40px] object-contain transition-transform"
+              className="h-auto w-10 object-contain transition-transform"
             />
           </Link>
         </div>
@@ -300,8 +362,8 @@ export default function SingleCaseStudyTemplate({
 }) {
   const moreCaseStudiesLabel =
     MORE_CASE_STUDIES_LABELS[language] || MORE_CASE_STUDIES_LABELS.en;
-  const tableOfContentsLabel =
-    TABLE_OF_CONTENTS_LABELS[language] || TABLE_OF_CONTENTS_LABELS.en;
+  const labels = getCaseStudyLabels(language);
+  const tableOfContentsLabel = labels.tableOfContents;
   const acf = caseStudy?.acf || {};
   const title = caseStudy?.title?.rendered || "";
   const content = caseStudy?.content?.rendered || "";
@@ -315,7 +377,7 @@ export default function SingleCaseStudyTemplate({
     getAcfImageUrl(acf?.single_case_study_featured_image) ||
     getImageUrl(caseStudy);
   const logo = getAcfImageUrl(acf?.logo || acf?.client_logo);
-  const fullDate = formatFullDate(caseStudy?.date);
+  const fullDate = formatFullDate(caseStudy?.date, language);
   const readingTime = getReadingTime(content || intro);
   const { html, toc } = withHeadingAnchors(content);
   const shareUrl = `${process.env.SITE_URL || ""}${
@@ -331,11 +393,11 @@ export default function SingleCaseStudyTemplate({
       <section className="bg-white px-6 pb-14 pt-37.5 md:pt-42.5">
         <div className="web-width">
           <p className="mb-6 text-[13px] font-medium uppercase leading-5.5 tracking-[2px] text-[#1A1A1A]">
-            Case study | Reading time: {readingTime} minutes
+            {labels.caseStudy} | {labels.readingTime}: {readingTime} {labels.minutes}
             {fullDate ? ` | ${fullDate}` : ""}
           </p>
           <h1
-            className="font-heading max-w-300 text-[36px] font-medium leading-[46px] tracking-[-0.84px] text-[#071838] md:text-[48px] md:leading-[58px]"
+            className="font-heading max-w-300 text-[36px] font-medium leading-[46px] tracking-[-0.84px] text-[#071838] md:text-[48px] md:leading-14.5"
             dangerouslySetInnerHTML={{ __html: title }}
           />
           {intro && (
@@ -350,7 +412,7 @@ export default function SingleCaseStudyTemplate({
             <div className="relative min-h-80 overflow-hidden rounded-[10px] md:min-h-130">
               <Image
                 src={featuredImage}
-                alt={stripHtml(title) || "Case study image"}
+                alt={stripHtml(title) || labels.imageAlt}
                 fill
                 priority
                 sizes="(min-width: 1280px) 1250px, 100vw"
@@ -402,9 +464,13 @@ export default function SingleCaseStudyTemplate({
             {selectedRelatedProduct && selectedRelatedProduct !== false && (
               <div className="mt-10 hidden lg:block">
                 <h2 className="mb-5 text-[20px] font-bold leading-[28px] text-black">
-                  Related product
+                  {labels.relatedProduct}
                 </h2>
-                <RelatedProductCard product={selectedRelatedProduct} />
+                <RelatedProductCard
+                  product={selectedRelatedProduct}
+                  language={language}
+                  labels={labels}
+                />
               </div>
             )}
           </aside>
@@ -420,7 +486,7 @@ export default function SingleCaseStudyTemplate({
         <div className="web-width">
           <div className="ml-auto flex max-w-225 flex-col gap-4 rounded-sm bg-[#EAF1FA] px-6 py-5 md:flex-row md:items-center md:justify-between">
             <p className="text-[14px] font-bold leading-5.5 text-black">
-              Like what you see? Share this case study
+              {labels.shareCaseStudy}
             </p>
             <div className="flex gap-3">
               {["facebook", "linkedin", "email"].map((type) => (
@@ -429,17 +495,22 @@ export default function SingleCaseStudyTemplate({
                   type={type}
                   shareUrl={shareUrl}
                   title={title}
+                  labels={labels}
                 />
               ))}
-              <CopyLinkButton shareUrl={shareUrl} />
+              <CopyLinkButton shareUrl={shareUrl} language={language} />
             </div>
           </div>
           {selectedRelatedProduct && selectedRelatedProduct !== false && (
             <div className="mt-8 lg:hidden">
               <h2 className="mb-5 text-[20px] font-bold leading-[28px] text-black">
-                Related product
+                {labels.relatedProduct}
               </h2>
-              <RelatedProductCard product={selectedRelatedProduct} />
+              <RelatedProductCard
+                product={selectedRelatedProduct}
+                language={language}
+                labels={labels}
+              />
             </div>
           )}
         </div>
@@ -453,7 +524,12 @@ export default function SingleCaseStudyTemplate({
             </h2>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((item) => (
-                <RelatedCaseStudyCard key={item.id || item.slug} item={item} />
+                <RelatedCaseStudyCard
+                  key={item.id || item.slug}
+                  item={item}
+                  language={language}
+                  labels={labels}
+                />
               ))}
             </div>
           </div>

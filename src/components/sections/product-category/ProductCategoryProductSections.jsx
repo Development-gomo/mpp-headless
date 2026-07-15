@@ -3,12 +3,40 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
+import {
+  DEFAULT_LANGUAGE,
+  ENGLISH_LANGUAGE,
+  GERMAN_LANGUAGE,
+  localizePath,
+  normalizeLanguage,
+} from "@/lib/i18n";
 import {
   getProductVariations,
   getVariationCapacity,
   getVariationTextValues,
 } from "@/components/sections/product/productUtils";
+
+const PRODUCT_CATEGORY_SECTION_LABELS = {
+  [DEFAULT_LANGUAGE]: {
+    findDealer: "Hitta återförsäljare",
+    viewProduct: "Visa produkt",
+  },
+  [ENGLISH_LANGUAGE]: {
+    findDealer: "Find a dealer",
+    viewProduct: "View product",
+  },
+  [GERMAN_LANGUAGE]: {
+    findDealer: "Händler finden",
+    viewProduct: "Produkt ansehen",
+  },
+};
+
+function getProductCategorySectionLabels(language) {
+  return (
+    PRODUCT_CATEGORY_SECTION_LABELS[normalizeLanguage(language)] ||
+    PRODUCT_CATEGORY_SECTION_LABELS[DEFAULT_LANGUAGE]
+  );
+}
 
 function getImageUrl(image) {
   if (!image) return "";
@@ -179,6 +207,7 @@ export default function ProductCategoryProductSections({
 function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
   const products = (childCategory?.products || []).slice(0, 3);
   const [activeIndex, setActiveIndex] = useState(0);
+  const labels = getProductCategorySectionLabels(language);
 
   if (products.length === 0) return null;
 
@@ -205,7 +234,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
             </p>
           </div>
 
-          <h2 className="max-w-155 font-heading text-[42px] font-normal leading-12.5 tracking-[-0.84px] text-black md:text-[48px] md:leading-[58px] md:tracking-[-1.04px]">
+          <h2 className="max-w-155 font-heading text-[42px] font-normal leading-12.5 tracking-[-0.84px] text-black md:text-[48px] md:leading-14.5 md:tracking-[-1.04px]">
             {childCategory.name}
           </h2>
         </div>
@@ -294,7 +323,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                 href="#"
                 className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
               >
-                <span>Find a dealer</span>
+                <span>{labels.findDealer}</span>
 
                 <Image
                   src="/black-white-arrow.svg"
@@ -309,7 +338,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                 href={activeLink}
                 className="group inline-flex items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
               >
-                <span>View product</span>
+                <span>{labels.viewProduct}</span>
 
                 <Image
                   src="/black-white-arrow.svg"

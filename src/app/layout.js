@@ -1,11 +1,16 @@
 import "./globals.css";
-import { Nunito_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import QuoteCartProvider from "@/components/quote/QuoteCartProvider";
 import { getThemeOptions } from "@/lib/api";
 
-const nunitoSans = Nunito_Sans({
-  subsets: ["latin"],
+const nunitoSans = localFont({
+  src: [
+    {
+      path: "../fonts/MirandaSans-VariableFont_wght.ttf",
+      weight: "100 400 500 700",
+      style: "normal",
+    },
+  ],
   variable: "--font-nunito-sans",
   display: "swap",
 });

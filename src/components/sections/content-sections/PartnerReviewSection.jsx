@@ -89,7 +89,7 @@ export default function PartnerReviewSection({ data, themeOptions }) {
 
             {hero_title && (
               <h2
-                className="font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[58px] md:tracking-[-1.04px]"
+                className="font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-14.5 md:tracking-[-1.04px]"
                 dangerouslySetInnerHTML={{ __html: hero_title }}
               />
             )}
@@ -149,7 +149,7 @@ export default function PartnerReviewSection({ data, themeOptions }) {
                     className="absolute inset-x-0 top-0 h-1 bg-[image:var(--mpp-gradient)]"
                   />
 
-                  <div className="mb-7 flex min-h-[84px] items-center justify-between gap-5 border-b border-black/10 pb-6">
+                  <div className="mb-7 flex min-h-21 items-center justify-between gap-5 border-b border-black/10 pb-6">
                     <div className="relative flex h-[72px] w-[126px] items-center">
                       {logo && (
                         <Image

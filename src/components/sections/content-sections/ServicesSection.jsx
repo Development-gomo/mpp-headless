@@ -7,6 +7,7 @@ import {
   GERMAN_LANGUAGE,
   getServiceRouteSegment,
   localizePath,
+  normalizeLanguage,
 } from "@/lib/i18n";
 import {
   getButtonHref,
@@ -94,17 +95,44 @@ async function resolveSelectedServices(selectedServices, language) {
   });
 }
 
-function getButtonLabel(button) {
-  return button?.button_label || button?.button_link?.title || "View services";
+const SERVICE_LABELS = {
+  [DEFAULT_LANGUAGE]: {
+    viewServices: "Visa tjänster",
+    viewService: "Visa tjänst",
+    imageAlt: "Tjänstebild",
+    imageMissing: "Tjänstebild saknas",
+  },
+  [ENGLISH_LANGUAGE]: {
+    viewServices: "View services",
+    viewService: "View service",
+    imageAlt: "Service image",
+    imageMissing: "Service image missing",
+  },
+  [GERMAN_LANGUAGE]: {
+    viewServices: "Dienste anzeigen",
+    viewService: "Dienst ansehen",
+    imageAlt: "Dienstleistungsbild",
+    imageMissing: "Dienstleistungsbild fehlt",
+  },
+};
+
+function getLabels(language) {
+  return SERVICE_LABELS[normalizeLanguage(language)] || SERVICE_LABELS[DEFAULT_LANGUAGE];
+}
+
+function getButtonLabel(button, labels) {
+  return button?.button_label || button?.button_link?.title || labels.viewServices;
 }
 
 function getServiceCtaLabel(language) {
+  if (normalizeLanguage(language) === DEFAULT_LANGUAGE) return getLabels(language).viewService;
   if (language === GERMAN_LANGUAGE) return "Dienst ansehen";
-  if (language === ENGLISH_LANGUAGE) return "View service";
+  if (language === ENGLISH_LANGUAGE) return getLabels(language).viewService;
   return "Visa tjänst";
 }
 
 function ServiceCard({ service, language }) {
+  const labels = getLabels(language);
   const title = getServiceTitle(service);
   const description = getServiceDescription(service);
   const image = getServiceImage(service);
@@ -119,14 +147,14 @@ function ServiceCard({ service, language }) {
         {image ? (
           <Image
             src={image.src}
-            alt={image.alt || title || "Service image"}
+            alt={image.alt || title || labels.imageAlt}
             fill
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         ) : (
           <span className="flex h-full items-center justify-center font-body text-[14px] text-black/45">
-            Service image missing
+            {labels.imageMissing}
           </span>
         )}
       </div>
@@ -151,7 +179,7 @@ function ServiceCard({ service, language }) {
             className="inline-flex w-fit items-center gap-5 rounded-[5px] bg-[var(--color-yellow)] py-1.5 pl-7 pr-1.5 font-heading text-[16px] font-normal tracking-[-0.32px] text-black transition-opacity hover:opacity-90"
           >
             <span>{ctaLabel}</span>
-            <span className="flex h-11 w-11 items-center justify-center rounded-[4px] bg-white text-[22px] leading-none transition-transform group-hover:translate-x-0.5">
+            <span className="flex h-11 w-11 items-center justify-center rounded-sm bg-white text-[22px] leading-none transition-transform group-hover:translate-x-0.5">
               {"\u2197"}
             </span>
           </Link>
@@ -180,6 +208,7 @@ export default async function ServicesSection({
 
   const services = await resolveSelectedServices(select_services, language);
   if (services.length === 0) return null;
+  const labels = getLabels(language);
 
   return (
     <section
@@ -205,7 +234,7 @@ export default async function ServicesSection({
 
               {hero_title && (
                 <h2
-                  className="font-heading max-w-155 text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[58px] md:tracking-[-1.04px]"
+                  className="font-heading max-w-155 text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-14.5 md:tracking-[-1.04px]"
                   dangerouslySetInnerHTML={{ __html: hero_title }}
                 />
               )}
@@ -232,7 +261,7 @@ export default async function ServicesSection({
                         }
                         className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pl-6 pr-1.5 font-heading text-[14px] tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
                       >
-                        <span>{getButtonLabel(button)}</span>
+                        <span>{getButtonLabel(button, labels)}</span>
                         <Image
                           src="/black-white-arrow.svg"
                           alt=""

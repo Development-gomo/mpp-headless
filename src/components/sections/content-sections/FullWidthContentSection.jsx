@@ -81,7 +81,7 @@ export default function FullWidthContentSection({ data }) {
           <div className="mb-6 flex items-center gap-2">
             <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
             <p
-              className={`font-body text-[14px] font-medium uppercase leading-[24px] tracking-[0.56px] ${textColor}`}
+              className={`font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] ${textColor}`}
             >
               {text_above_title}
             </p>
@@ -90,14 +90,14 @@ export default function FullWidthContentSection({ data }) {
 
         {hero_title && (
           <h2
-            className={`font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] md:text-[48px] md:leading-[58px] md:tracking-[-1.04px] ${textColor}`}
+            className={`font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] md:text-[48px] md:leading-14.5 md:tracking-[-1.04px] ${textColor}`}
             dangerouslySetInnerHTML={{ __html: hero_title }}
           />
         )}
 
         {hero_description && (
           <div
-            className={`font-body mt-6 text-[16px] font-normal space-y-4 [&_a]:text-[#00709e] [&_h2]:text-[#000] [&_h2]:text-[22px]  leading-[24px] ${textColor}`}
+            className={`font-body mt-6 text-[16px] font-normal space-y-4 [&_a]:text-[#00709e] [&_h2]:text-[#000] [&_h2]:text-[22px]  leading-6 ${textColor}`}
             dangerouslySetInnerHTML={{ __html: hero_description }}
           />
         )}
@@ -112,7 +112,7 @@ export default function FullWidthContentSection({ data }) {
                   key={index}
                   href={href}
                   target={target}
-                  className="group inline-flex items-center gap-4 rounded-[4px] bg-[image:var(--mpp-gradient)] py-[6px] pr-[6px] pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+                  className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
                 >
                   <span>{label}</span>
                   <Image
@@ -120,7 +120,7 @@ export default function FullWidthContentSection({ data }) {
                     alt=""
                     width={40}
                     height={40}
-                    className="h-auto w-[40px] object-contain transition-transform"
+                    className="h-auto w-10 object-contain transition-transform"
                   />
                 </Link>
               );

@@ -38,7 +38,7 @@ export default function ProductFaqSection({ product }) {
             )}
             {title && (
               <h2
-                className="font-heading text-[40px] font-normal leading-[48px] text-black md:text-[44px] md:leading-[54px] [&_span]:text-[#007DA5]"
+                className="font-heading text-[40px] font-normal leading-12 text-black md:text-[44px] md:leading-[54px] [&_span]:text-[#007DA5]"
                 dangerouslySetInnerHTML={{ __html: title }}
               />
             )}
@@ -88,7 +88,7 @@ export default function ProductFaqSection({ product }) {
 
                   {isActive && faq.faq_content && (
                     <div
-                      className="max-w-[650px] pb-6 font-body text-[15px] font-normal leading-[23px] text-[#1A1A1A]"
+                      className="max-w-162.5 pb-6 font-body text-[15px] font-normal leading-[23px] text-[#1A1A1A]"
                       dangerouslySetInnerHTML={{ __html: faq.faq_content }}
                     />
                   )}

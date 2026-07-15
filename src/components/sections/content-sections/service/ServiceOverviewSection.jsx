@@ -1,5 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
+import {
+  DEFAULT_LANGUAGE,
+  ENGLISH_LANGUAGE,
+  GERMAN_LANGUAGE,
+  normalizeLanguage,
+} from "@/lib/i18n";
+
+const SERVICE_OVERVIEW_LABELS = {
+  [DEFAULT_LANGUAGE]: { imageAlt: "Tjänstöversiktsbild" },
+  [ENGLISH_LANGUAGE]: { imageAlt: "Service overview image" },
+  [GERMAN_LANGUAGE]: { imageAlt: "Dienstleistungsübersichtsbild" },
+};
+
+function getLabels(language) {
+  return (
+    SERVICE_OVERVIEW_LABELS[normalizeLanguage(language)] ||
+    SERVICE_OVERVIEW_LABELS[DEFAULT_LANGUAGE]
+  );
+}
 
 function getImageUrl(image) {
   if (!image) return "";
@@ -19,8 +38,9 @@ function getImageUrl(image) {
   );
 }
 
-export default function ServiceOverviewSection({ data }) {
+export default function ServiceOverviewSection({ data, language = DEFAULT_LANGUAGE }) {
   if (!data) return null;
+  const labels = getLabels(language);
 
   const {
     text_above_title,
@@ -56,7 +76,7 @@ export default function ServiceOverviewSection({ data }) {
 
             {hero_title && (
               <h2
-                className="max-w-155 font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[58px] md:tracking-[-1.04px]"
+                className="max-w-155 font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-14.5 md:tracking-[-1.04px]"
                 dangerouslySetInnerHTML={{ __html: hero_title }}
               />
             )}
@@ -116,7 +136,7 @@ export default function ServiceOverviewSection({ data }) {
                       alt=""
                       width={40}
                       height={40}
-                      className="h-auto w-[40px] object-contain transition-transform"
+                      className="h-auto w-10 object-contain transition-transform"
                     />
                   </Link>
                 ))}
@@ -129,7 +149,7 @@ export default function ServiceOverviewSection({ data }) {
             <div className="relative h-[320px] overflow-hidden rounded-sm md:h-[460px] lg:h-[520px]">
               <Image
                 src={heroImg}
-                alt={hero_title || "Service overview image"}
+                alt={hero_title || labels.imageAlt}
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 className="object-cover"

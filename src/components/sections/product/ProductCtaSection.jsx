@@ -42,7 +42,7 @@ export default function ProductCtaSection({ product }) {
               className="group relative z-10 mt-8 inline-flex items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90 md:absolute md:right-12 md:top-1/2 md:mt-0 md:-translate-y-1/2"
             >
               <span>{buttonText}</span>
-              <Image src="/black-white-arrow.svg" alt="" width={40} height={40} className="h-auto w-[40px] transition-transform" />
+              <Image src="/black-white-arrow.svg" alt="" width={40} height={40} className="h-auto w-10 transition-transform" />
             </Link>
           )}
 

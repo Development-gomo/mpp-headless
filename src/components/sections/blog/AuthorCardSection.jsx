@@ -7,6 +7,13 @@ import {
   FaLinkedinIn,
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { DEFAULT_LANGUAGE, ENGLISH_LANGUAGE, GERMAN_LANGUAGE, normalizeLanguage } from "@/lib/i18n";
+
+const AUTHOR_LABELS = {
+  [DEFAULT_LANGUAGE]: { authorAlt: "Författare" },
+  [ENGLISH_LANGUAGE]: { authorAlt: "Author" },
+  [GERMAN_LANGUAGE]: { authorAlt: "Autor" },
+};
 
 function stripHtml(value = "") {
   return String(value).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
@@ -89,9 +96,12 @@ function getSocialIcon(name = "") {
 export default function AuthorCardSection({
   selectedAuthor,
   authorCards = [],
+  language = DEFAULT_LANGUAGE,
 }) {
   const author = getSelectedAuthor(selectedAuthor, authorCards);
   if (!author) return null;
+  const labels =
+    AUTHOR_LABELS[normalizeLanguage(language)] || AUTHOR_LABELS[DEFAULT_LANGUAGE];
 
   const acf = author?.acf || {};
   const title = getTitle(author);
@@ -108,7 +118,7 @@ export default function AuthorCardSection({
             <div className="relative h-[140px] w-[140px] overflow-hidden rounded-sm bg-white">
               <Image
                 src={image}
-                alt={stripHtml(title) || "Author"}
+                alt={stripHtml(title) || labels.authorAlt}
                 fill
                 sizes="140px"
                 className="object-cover"

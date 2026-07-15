@@ -3,8 +3,31 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { DEFAULT_LANGUAGE, FALLBACK_LANGUAGES, localizePath } from "@/lib/i18n";
+import {
+  DEFAULT_LANGUAGE,
+  ENGLISH_LANGUAGE,
+  FALLBACK_LANGUAGES,
+  GERMAN_LANGUAGE,
+  localizePath,
+  normalizeLanguage,
+} from "@/lib/i18n";
 import { useQuoteCart } from "@/components/quote/QuoteCartProvider";
+
+const HEADER_LABELS = {
+  [DEFAULT_LANGUAGE]: {
+    viewAllProducts: "Visa alla produkter",
+  },
+  [ENGLISH_LANGUAGE]: {
+    viewAllProducts: "View all Products",
+  },
+  [GERMAN_LANGUAGE]: {
+    viewAllProducts: "Alle Produkte anzeigen",
+  },
+};
+
+function getHeaderLabels(language) {
+  return HEADER_LABELS[normalizeLanguage(language)] || HEADER_LABELS[DEFAULT_LANGUAGE];
+}
 
 function getColumnClass(layoutType) {
   if (layoutType === "three_column") return "md:grid-cols-3";
@@ -52,10 +75,11 @@ function ArrowUpRightIcon({ className = "" }) {
   );
 }
 
-function ThreeLevelCategoryMenu({ menuRow }) {
+function ThreeLevelCategoryMenu({ menuRow, language = DEFAULT_LANGUAGE }) {
   const [activeState, setActiveState] = useState(() =>
     getDefaultThreeLevelState(menuRow)
   );
+  const labels = getHeaderLabels(language);
 
   const activeCategory =
     menuRow.categoryColumns.find(
@@ -117,7 +141,7 @@ function ThreeLevelCategoryMenu({ menuRow }) {
           target={menuRow.titleLink.target}
           className="inline-flex w-fit justify-end items-center gap-4 py-1.5 pr-1.5 pl-6 rounded-sm bg-[image:var(--mpp-gradient)] text-white font-heading text-[14px] font-normal leading-[normal] tracking-[-0.28px] hover:opacity-90 transition-opacity group"
         >
-          <span>View all Products</span>
+          <span>{labels.viewAllProducts}</span>
           <span className="flex h-8 w-8 items-center justify-center rounded-[3px] bg-white text-black">
             <ArrowUpRightIcon />
           </span>
@@ -378,7 +402,10 @@ export default function HeaderComponent(props) {
                     {menuRow.layoutType === "three_level_categories" ? (
                       <div className={desktopMegaMenuClass}>
                         <div className="overflow-hidden rounded-sm border border-slate-200/80 bg-white text-slate-900 shadow-[0_30px_70px_-25px_rgba(8,15,40,0.55)]">
-                          <ThreeLevelCategoryMenu menuRow={menuRow} />
+                          <ThreeLevelCategoryMenu
+                            menuRow={menuRow}
+                            language={language}
+                          />
                         </div>
                       </div>
                     ) : (

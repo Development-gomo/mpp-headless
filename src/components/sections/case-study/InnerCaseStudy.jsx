@@ -6,7 +6,13 @@ import { useRef, useState } from "react";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
+import {
+  DEFAULT_LANGUAGE,
+  ENGLISH_LANGUAGE,
+  GERMAN_LANGUAGE,
+  localizePath,
+  normalizeLanguage,
+} from "@/lib/i18n";
 
 const CASES_PER_PAGE = 6;
 
@@ -15,6 +21,40 @@ const DEFAULT_LOAD_MORE_LABELS = {
   en: "Load more",
   de: "Mehr laden",
 };
+
+const CASE_LISTING_LABELS = {
+  [DEFAULT_LANGUAGE]: {
+    readClientCase: "Läs kundcase",
+    viewAllCases: "Visa alla kundcase",
+    loadMore: "Ladda fler",
+    imageAlt: "Kundcasebild",
+    imageMissing: "Kundcasebild saknas",
+    previous: "Föregående kundcase",
+    next: "Nästa kundcase",
+  },
+  [ENGLISH_LANGUAGE]: {
+    readClientCase: "Read client case",
+    viewAllCases: "View all cases",
+    loadMore: "Load more",
+    imageAlt: "Case study image",
+    imageMissing: "Case study image missing",
+    previous: "Previous case study",
+    next: "Next case study",
+  },
+  [GERMAN_LANGUAGE]: {
+    readClientCase: "Kundencase lesen",
+    viewAllCases: "Alle Fallstudien anzeigen",
+    loadMore: "Mehr laden",
+    imageAlt: "Fallstudienbild",
+    imageMissing: "Fallstudienbild fehlt",
+    previous: "Vorherige Fallstudie",
+    next: "Nächste Fallstudie",
+  },
+};
+
+function getLabels(language) {
+  return CASE_LISTING_LABELS[normalizeLanguage(language)] || CASE_LISTING_LABELS[DEFAULT_LANGUAGE];
+}
 
 function stripHtml(value = "") {
   return String(value).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
@@ -56,8 +96,9 @@ function getCaseStudyLayout(data) {
 
 function CaseStudyCard({
   item,
-  buttonText = "Read client case",
+  buttonText,
   language = DEFAULT_LANGUAGE,
+  labels,
 }) {
   const title = item?.title?.rendered || item?.title || "";
   const link = item?.slug
@@ -76,14 +117,14 @@ function CaseStudyCard({
         {image ? (
           <Image
             src={image}
-            alt={stripHtml(title) || "Case study image"}
+            alt={stripHtml(title) || labels.imageAlt}
             fill
             sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
             className="object-cover"
           />
         ) : (
           <div className="flex h-full min-h-55 items-center justify-center bg-white/10 px-6 text-center font-body text-[14px] text-white/70 md:min-h-61.25">
-            Case study image missing
+            {labels.imageMissing}
           </div>
         )}
       </div>
@@ -150,9 +191,12 @@ export default function InnerCaseStudy({
   const items = caseStudies.slice(0, visibleCount);
   const hasMore = visibleCount < caseStudies.length;
   const layout = getCaseStudyLayout(data);
-  const readMoreButtonText = read_more_button_text || "Read client case";
+  const labels = getLabels(language);
+  const readMoreButtonText = read_more_button_text || labels.readClientCase;
   const loadMoreButtonText =
-    load_more_button_text || DEFAULT_LOAD_MORE_LABELS[language] || "Load more";
+    load_more_button_text ||
+    DEFAULT_LOAD_MORE_LABELS[language] ||
+    labels.loadMore;
 
   return (
     <section
@@ -196,7 +240,7 @@ export default function InnerCaseStudy({
                   target={getButtonTarget(btn.button_link)}
                   className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
                 >
-                  <span>{btn.button_label || "View all cases"}</span>
+                  <span>{btn.button_label || labels.viewAllCases}</span>
 
                   <Image
                     src="/black-white-arrow.svg"
@@ -219,6 +263,7 @@ export default function InnerCaseStudy({
                 item={item}
                 buttonText={readMoreButtonText}
                 language={language}
+                labels={labels}
               />
             ))}
           </div>
@@ -255,6 +300,7 @@ export default function InnerCaseStudy({
                     item={item}
                     buttonText={readMoreButtonText}
                     language={language}
+                    labels={labels}
                   />
                 </SwiperSlide>
               ))}
@@ -266,7 +312,7 @@ export default function InnerCaseStudy({
                   ref={prevRef}
                   type="button"
                   className="flex h-11 w-11 items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
-                  aria-label="Previous case study"
+                  aria-label={labels.previous}
                 >
                   <Image
                     src="/slider-arrow.svg"
@@ -281,7 +327,7 @@ export default function InnerCaseStudy({
                   ref={nextRef}
                   type="button"
                   className="flex h-11 w-11 items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80"
-                  aria-label="Next case study"
+                  aria-label={labels.next}
                 >
                   <Image
                     src="/slider-arrow.svg"

@@ -41,9 +41,13 @@ export default function LatestBlogsSection({
   } = data;
 
   const readMoreText =
-    read_more_button_text || DEFAULT_READ_MORE_LABELS[language] || "Read more";
+    read_more_button_text ||
+    DEFAULT_READ_MORE_LABELS[language] ||
+    DEFAULT_READ_MORE_LABELS[DEFAULT_LANGUAGE];
   const loadMoreText =
-    load_more_button_text || DEFAULT_LOAD_MORE_LABELS[language] || "Load more";
+    load_more_button_text ||
+    DEFAULT_LOAD_MORE_LABELS[language] ||
+    DEFAULT_LOAD_MORE_LABELS[DEFAULT_LANGUAGE];
   const visiblePosts = posts.slice(0, visibleCount);
   const hasMore = visibleCount < posts.length;
 

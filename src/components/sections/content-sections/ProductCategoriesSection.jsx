@@ -1,6 +1,31 @@
 import Image from "next/image";
 import Link from "next/link";
-import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
+import {
+  DEFAULT_LANGUAGE,
+  ENGLISH_LANGUAGE,
+  GERMAN_LANGUAGE,
+  localizePath,
+  normalizeLanguage,
+} from "@/lib/i18n";
+
+const PRODUCT_CATEGORY_LABELS = {
+  [DEFAULT_LANGUAGE]: {
+    viewProducts: "Visa produkter",
+  },
+  [ENGLISH_LANGUAGE]: {
+    viewProducts: "View products",
+  },
+  [GERMAN_LANGUAGE]: {
+    viewProducts: "Produkte ansehen",
+  },
+};
+
+function getProductCategoryLabels(language) {
+  return (
+    PRODUCT_CATEGORY_LABELS[normalizeLanguage(language)] ||
+    PRODUCT_CATEGORY_LABELS[DEFAULT_LANGUAGE]
+  );
+}
 
 function getCategoryImage(cat) {
   const image =
@@ -65,6 +90,7 @@ export default function ProductCategoriesSection({
   const buttonRow = toArray(button_row);
   const productCategories = toArray(select_product_categories);
   const categoryImageItems = toArray(categoriesWithImages);
+  const labels = getProductCategoryLabels(language);
 
   const columnCount = Number(number_of_categories_to_show) || 2;
 
@@ -148,7 +174,7 @@ export default function ProductCategoriesSection({
                       alt=""
                       width={40}
                       height={40}
-                      className="h-auto w-[40px] object-contain transition-transform"
+                      className="h-auto w-10 object-contain transition-transform"
                     />
                   </Link>
                 ))}
@@ -217,7 +243,7 @@ export default function ProductCategoriesSection({
                           </p>
 
                           <span className="inline-flex w-fit items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 text-white font-heading text-[14px] font-normal tracking-[-0.28px]">
-                            <span>View products</span>
+                            <span>{labels.viewProducts}</span>
 
                             <Image
                               src="/black-white-arrow.svg"

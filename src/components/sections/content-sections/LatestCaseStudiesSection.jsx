@@ -1,6 +1,34 @@
 import Image from "next/image";
 import Link from "next/link";
-import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
+import {
+  DEFAULT_LANGUAGE,
+  ENGLISH_LANGUAGE,
+  GERMAN_LANGUAGE,
+  localizePath,
+  normalizeLanguage,
+} from "@/lib/i18n";
+
+const CASE_STUDY_SECTION_LABELS = {
+  [DEFAULT_LANGUAGE]: {
+    readFullCase: "Läs hela caset",
+    viewAllCases: "Visa alla case",
+  },
+  [ENGLISH_LANGUAGE]: {
+    readFullCase: "Read full case",
+    viewAllCases: "View all cases",
+  },
+  [GERMAN_LANGUAGE]: {
+    readFullCase: "Ganzen Fall lesen",
+    viewAllCases: "Alle Fälle anzeigen",
+  },
+};
+
+function getCaseStudySectionLabels(language) {
+  return (
+    CASE_STUDY_SECTION_LABELS[normalizeLanguage(language)] ||
+    CASE_STUDY_SECTION_LABELS[DEFAULT_LANGUAGE]
+  );
+}
 
 export default function LatestCaseStudiesSection({
   data,
@@ -20,6 +48,7 @@ export default function LatestCaseStudiesSection({
   } = data;
 
   const latestCaseStudies = caseStudies.slice(0, 2);
+  const labels = getCaseStudySectionLabels(language);
 
   return (
     <section
@@ -62,7 +91,7 @@ export default function LatestCaseStudiesSection({
                   href={btn.button_link || "#"}
                   className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 text-white font-heading text-[14px] font-normal tracking-[-0.28px] hover:opacity-90 transition-opacity"
                 >
-                  <span>{btn.button_label || "View all cases"}</span>
+                  <span>{btn.button_label || labels.viewAllCases}</span>
 
                   <Image
                     src="/black-white-arrow.svg"
@@ -137,7 +166,7 @@ export default function LatestCaseStudiesSection({
                       href={link}
                       className="group mt-8 inline-flex w-fit items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 text-black font-heading text-[14px] tracking-[-0.28px]"
                     >
-                      <span>Read full case</span>
+                      <span>{labels.readFullCase}</span>
 
                       <Image
                         src="/black-white-arrow.svg"
