@@ -85,7 +85,14 @@ export default function PageBuilder({
               />
             );
           case "team_section":
-            return <TeamSection key={i} data={block} teams={teams} />;
+            return (
+              <TeamSection
+                key={i}
+                data={block}
+                teams={teams}
+                language={language}
+              />
+            );
           case "history_section":
             return <HistorySection key={i} data={block} />;
           case "partner_logo":

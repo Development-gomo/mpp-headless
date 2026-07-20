@@ -9,6 +9,8 @@ import {
   getProductVariations,
   stripHtml,
 } from "./productUtils";
+import { DEFAULT_LANGUAGE } from "@/lib/i18n";
+import { getLocalizedProductButtonText } from "./productLabels";
 
 function getOverviewRows(product, variations) {
   const acf = product?.acf || {};
@@ -48,6 +50,7 @@ export default function ProductOverviewSection({
   variations,
   selectedVariationIndex = 0,
   onVariationChange,
+  language = DEFAULT_LANGUAGE,
 }) {
   const acf = product?.acf || {};
   const title = acf.tank_section_title || "See which tank <span>fits your needs</span>";
@@ -56,7 +59,11 @@ export default function ProductOverviewSection({
     "Review the key specifications of each tank to choose the size that best fits your application.";
   const gallery = getProductGallery(product);
   const rowImage = gallery[0] || "";
-  const primaryText = acf.product_primary_cta_text || "Request a quote";
+  const primaryText = getLocalizedProductButtonText(
+    acf.product_primary_cta_text,
+    "requestQuote",
+    language
+  );
   const primaryHref = getButtonHref(acf.product_primary_cta_link, "#");
   const primaryTarget = getButtonTarget(acf.product_primary_cta_link);
   const rows = getOverviewRows(product, variations);

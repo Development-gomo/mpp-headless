@@ -14,6 +14,43 @@ const DEPARTMENT_LABELS = {
   sales: "Sales",
 };
 
+const TRANSLATIONS = {
+  sv: {
+    departments: {
+      management: "Ledning",
+      finance: "Ekonomi",
+      purchasing: "Inköp",
+      "design-engineering": "Design och konstruktion",
+      "operations-production-support": "Drift och produktionssupport",
+      "technical-support": "Teknisk support",
+      sales: "Försäljning",
+    },
+    allDepartments: "Alla avdelningar",
+    filterLabel: "Filtrera team efter avdelning",
+    emptyMessage: "Inga teammedlemmar hittades för denna avdelning.",
+  },
+  de: {
+    departments: {
+      management: "Geschäftsführung",
+      finance: "Finanzen",
+      purchasing: "Einkauf",
+      "design-engineering": "Konstruktion und Entwicklung",
+      "operations-production-support": "Betrieb und Produktionsunterstützung",
+      "technical-support": "Technischer Support",
+      sales: "Vertrieb",
+    },
+    allDepartments: "Alle Abteilungen",
+    filterLabel: "Team nach Abteilung filtern",
+    emptyMessage: "Keine Teammitglieder für diese Abteilung gefunden.",
+  },
+  en: {
+    departments: DEPARTMENT_LABELS,
+    allDepartments: "All departments",
+    filterLabel: "Filter team by department",
+    emptyMessage: "No team members found for this department.",
+  },
+};
+
 const DEPARTMENT_VALUES = Object.entries(DEPARTMENT_LABELS).reduce(
   (acc, [value, label]) => ({
     ...acc,
@@ -74,8 +111,14 @@ function getButtonLabel(button = {}) {
   return button.button_label || button.button_link?.title || button.link?.title || "";
 }
 
-function getDepartmentOptions(teams = [], allowedDepartments = []) {
+function getTranslation(language) {
+  return TRANSLATIONS[language] || TRANSLATIONS.sv;
+}
+
+function getDepartmentOptions(teams = [], allowedDepartments = [], language) {
   const foundDepartments = new Set();
+  const translations = getTranslation(language);
+  const departmentLabels = translations.departments || DEPARTMENT_LABELS;
 
   teams.forEach((member) => {
     normalizeList(member?.acf?.core_departments).forEach((department) => {
@@ -92,7 +135,7 @@ function getDepartmentOptions(teams = [], allowedDepartments = []) {
     .filter((department) => DEPARTMENT_LABELS[department])
     .map((department) => ({
       value: department,
-      label: DEPARTMENT_LABELS[department],
+      label: departmentLabels[department] || DEPARTMENT_LABELS[department],
       hasMembers: foundDepartments.has(department),
     }));
 }
@@ -158,9 +201,10 @@ function TeamCard({ member }) {
   );
 }
 
-export default function TeamSection({ data, teams = [] }) {
+export default function TeamSection({ data, teams = [], language }) {
   const [activeDepartment, setActiveDepartment] = useState("all");
   const sectionData = data || {};
+  const translations = getTranslation(language);
 
   const {
     text_above_title,
@@ -174,8 +218,8 @@ export default function TeamSection({ data, teams = [] }) {
 
   const selectedDepartments = getSelectedDepartments(sectionData);
   const departmentOptions = useMemo(
-    () => getDepartmentOptions(teams, selectedDepartments),
-    [teams, selectedDepartments]
+    () => getDepartmentOptions(teams, selectedDepartments, language),
+    [teams, selectedDepartments, language]
   );
 
   const allowedSet = useMemo(
@@ -274,13 +318,13 @@ export default function TeamSection({ data, teams = [] }) {
 
           {departmentOptions.length > 0 && (
             <label className="relative w-full md:ml-auto md:w-[310px]">
-              <span className="sr-only">Filter team by department</span>
+              <span className="sr-only">{translations.filterLabel}</span>
               <select
                 value={activeDepartment}
                 onChange={(event) => setActiveDepartment(event.target.value)}
                 className="h-13 w-full appearance-none rounded-sm border border-black/15 bg-white px-5 pr-12 text-[15px] font-medium leading-6 text-[#1A1A1A] outline-none transition-colors focus:border-[var(--color-accent)] [font-family:var(--font-nunito-sans)]"
               >
-                <option value="all">All departments</option>
+                <option value="all">{translations.allDepartments}</option>
                 {departmentOptions.map((department) => (
                   <option key={department.value} value={department.value}>
                     {department.label}
@@ -304,7 +348,7 @@ export default function TeamSection({ data, teams = [] }) {
 
         {filteredTeams.length === 0 && (
           <div className="rounded-sm bg-white px-6 py-10 text-[16px] leading-6 text-[#1A1A1A] [font-family:var(--font-nunito-sans)]">
-            No team members found for this department.
+            {translations.emptyMessage}
           </div>
         )}
       </div>

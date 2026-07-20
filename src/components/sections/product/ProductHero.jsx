@@ -18,6 +18,7 @@ import {
   getVariationTextValues,
   stripHtml,
 } from "./productUtils";
+import { getLocalizedProductButtonText } from "./productLabels";
 
 const VISIBLE_THUMBNAILS = 5;
 
@@ -139,9 +140,16 @@ export default function ProductHero({
   const netWeight = activeVariation?.net_weight || acf.net_weight;
   const displayVolume = appendUnit(volume, "L");
   const displayNetWeight = appendUnit(netWeight, "Kg");
-  const primaryText = acf.product_primary_cta_text || "Request a quote";
-  const secondaryText =
-    acf.product_secondary_cta_text || "Download Product Sheet";
+  const primaryText = getLocalizedProductButtonText(
+    acf.product_primary_cta_text,
+    "requestQuote",
+    language
+  );
+  const secondaryText = getLocalizedProductButtonText(
+    acf.product_secondary_cta_text,
+    "downloadProductSheet",
+    language
+  );
   const secondaryHref = getFileHref(
     acf.product_sheet,
     getButtonHref(acf.product_secondary_cta_link, "#downloads")

@@ -25,12 +25,14 @@ export default function ProductVariationSections({ product, language, children }
       <ProductSpecsSection
         product={product}
         selectedVariation={selectedVariation}
+        language={language}
       />
       <ProductOverviewSection
         product={product}
         variations={variations}
         selectedVariationIndex={selectedVariationIndex}
         onVariationChange={setSelectedVariationIndex}
+        language={language}
       />
     </>
   );

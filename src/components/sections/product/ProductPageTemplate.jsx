@@ -101,7 +101,7 @@ export default function ProductPageTemplate({
         themeOptions={themeOptions}
         language={language}
       />
-      <ProductDownloadsSection product={product} />
+      <ProductDownloadsSection product={product} language={language} />
       <ProductRelatedProductsSection
         currentProduct={product}
         relatedCategory={relatedCategory}

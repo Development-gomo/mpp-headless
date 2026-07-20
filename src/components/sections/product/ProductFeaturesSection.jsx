@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { useQuoteCart } from "@/components/quote/QuoteCartProvider";
 import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
 import { getProductGallery, getRendered, stripHtml } from "./productUtils";
+import { getProductLabels } from "./productLabels";
 
 const FILTERS = ["All", "Lid", "Flowmeter", "Elevation skids", "Refueling hose", "Hose holder"];
 
@@ -49,7 +50,7 @@ const STATIC_ACCESSORIES = [
   },
 ];
 
-function AccessoryCard({ accessory, image, onAdd }) {
+function AccessoryCard({ accessory, image, onAdd, labels }) {
   return (
     <article
       className={`relative grid min-h-[114px] grid-cols-[120px_1fr] gap-4 overflow-hidden rounded-lg p-2 ${
@@ -93,7 +94,7 @@ function AccessoryCard({ accessory, image, onAdd }) {
               : "border-[var(--color-yellow)] text-[#D79B00]"
           }`}
         >
-          Add to cart +
+          {labels.addToCart}
         </button>
       </div>
 
@@ -111,6 +112,7 @@ export default function ProductFeaturesSection({ product, language = DEFAULT_LAN
   const router = useRouter();
   const acf = product?.acf || {};
   const [activeFilter, setActiveFilter] = useState("All");
+  const labels = getProductLabels(language);
   const gallery = getProductGallery(product);
   const productTitle =
     stripHtml(getRendered(product?.title)) || product?.slug || "Product";
@@ -171,7 +173,7 @@ export default function ProductFeaturesSection({ product, language = DEFAULT_LAN
                   : "border-[var(--color-yellow)] bg-white text-black hover:bg-[var(--color-yellow)]/10"
               }`}
             >
-              {filter}
+              {labels.filters[filter] || filter}
             </button>
           ))}
         </div>
@@ -185,6 +187,7 @@ export default function ProductFeaturesSection({ product, language = DEFAULT_LAN
                 key={`${accessory.title}-${index}`}
                 accessory={accessory}
                 image={image}
+                labels={labels}
                 onAdd={() =>
                   {
                     addAccessory(productPayload, {

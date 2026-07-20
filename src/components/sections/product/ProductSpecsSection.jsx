@@ -6,6 +6,8 @@ import {
   getImageUrl,
   getVariationCapacity,
 } from "./productUtils";
+import { DEFAULT_LANGUAGE } from "@/lib/i18n";
+import { getProductLabels } from "./productLabels";
 
 function normalizeSpecs(product, selectedVariation) {
   const acf = product?.acf || {};
@@ -39,10 +41,15 @@ function normalizeSpecs(product, selectedVariation) {
   return specs.length > 0 ? specs : fallbackSpecs;
 }
 
-export default function ProductSpecsSection({ product, selectedVariation = null }) {
+export default function ProductSpecsSection({
+  product,
+  selectedVariation = null,
+  language = DEFAULT_LANGUAGE,
+}) {
   const acf = product?.acf || {};
   const specs = normalizeSpecs(product, selectedVariation);
   if (specs.length === 0) return null;
+  const labels = getProductLabels(language);
   const productSheetHref = getButtonHref(acf.product_sheet, "#");
   const title = acf.specification_section_title || "Explore the <span>product specifications</span>";
   const productSheetTarget =
@@ -71,7 +78,7 @@ export default function ProductSpecsSection({ product, selectedVariation = null 
               target={productSheetTarget}
               className="group inline-flex h-12 w-fit items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
             >
-              <span>Download Product Sheet</span>
+              <span>{labels.downloadProductSheet}</span>
               <Image
                 src="/download-ico.svg"
                 alt=""

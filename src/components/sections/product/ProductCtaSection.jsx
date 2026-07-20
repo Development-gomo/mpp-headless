@@ -1,12 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
+import { DEFAULT_LANGUAGE } from "@/lib/i18n";
 import { getButtonHref, getButtonTarget } from "./productUtils";
+import { getLocalizedProductButtonText } from "./productLabels";
 
-export default function ProductCtaSection({ product }) {
+export default function ProductCtaSection({
+  product,
+  language = DEFAULT_LANGUAGE,
+}) {
   const acf = product?.acf || {};
   const title = acf.product_cta_title || "Ready to find the right fuel solution?";
   const text = acf.product_cta_text;
-  const buttonText = acf.product_cta_button_text || "Get in touch with us";
+  const buttonText = getLocalizedProductButtonText(
+    acf.product_cta_button_text,
+    "getInTouch",
+    language
+  );
   const buttonHref = getButtonHref(acf.product_cta_button_link, "#");
   const buttonTarget = getButtonTarget(acf.product_cta_button_link);
 
