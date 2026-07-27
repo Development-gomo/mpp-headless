@@ -872,7 +872,7 @@ export async function getProductById(id, { language } = {}) {
 function getRelatedProductId(product) {
   if (!product) return null;
   if (typeof product === "number" || typeof product === "string") return product;
-  return product.ID || product.id || null;
+  return product.ID || product.id || product.value || null;
 }
 
 function getAccessoryProductReference(accessoryRow) {
@@ -888,21 +888,11 @@ function getAccessoryProductReference(accessoryRow) {
   return accessoryRow;
 }
 
-function isCheckedAcfValue(value) {
-  if (value === true) return true;
-  if (typeof value === "string") {
-    return value.trim().toLowerCase() === "checked";
-  }
-  if (Array.isArray(value)) return value.some(isCheckedAcfValue);
-  if (value && typeof value === "object") {
-    return isCheckedAcfValue(value.value) || isCheckedAcfValue(value.label);
-  }
-
-  return false;
-}
-
-function isAccessoryProduct(product) {
-  return isCheckedAcfValue(product?.acf?.product_type);
+function getAccessoryProductReferences(accessoryRows = []) {
+  return accessoryRows.flatMap((accessoryRow) => {
+    const accessoryRef = getAccessoryProductReference(accessoryRow);
+    return Array.isArray(accessoryRef) ? accessoryRef : [accessoryRef];
+  });
 }
 
 export async function getProductAccessories(product, { language } = {}) {
@@ -912,9 +902,9 @@ export async function getProductAccessories(product, { language } = {}) {
 
   if (accessoryRefs.length === 0) return [];
 
+  const accessoryProductRefs = getAccessoryProductReferences(accessoryRefs);
   const accessories = await Promise.all(
-    accessoryRefs.map(async (accessoryRow) => {
-      const accessoryRef = getAccessoryProductReference(accessoryRow);
+    accessoryProductRefs.map(async (accessoryRef) => {
       const accessoryId = getRelatedProductId(accessoryRef);
       if (!accessoryId) return null;
 
@@ -929,7 +919,7 @@ export async function getProductAccessories(product, { language } = {}) {
     if (!accessoryId || seenIds.has(String(accessoryId))) return false;
     seenIds.add(String(accessoryId));
 
-    return isAccessoryProduct(accessory);
+    return true;
   });
 }
 

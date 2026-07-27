@@ -40,6 +40,37 @@ function getAccessoryKey(accessory) {
   );
 }
 
+function getAccessoryProductFromRow(accessoryRow) {
+  if (
+    accessoryRow &&
+    typeof accessoryRow === "object" &&
+    !Array.isArray(accessoryRow) &&
+    "accessory_product" in accessoryRow
+  ) {
+    return accessoryRow.accessory_product;
+  }
+
+  return accessoryRow;
+}
+
+function getFallbackAccessories(product) {
+  const rows = Array.isArray(product?.acf?.accessories)
+    ? product.acf.accessories
+    : [];
+
+  return rows
+    .flatMap((row) => {
+      const accessoryProduct = getAccessoryProductFromRow(row);
+      return Array.isArray(accessoryProduct) ? accessoryProduct : [accessoryProduct];
+    })
+    .filter(
+      (accessory) =>
+        accessory &&
+        typeof accessory === "object" &&
+        !Array.isArray(accessory)
+    );
+}
+
 function AccessoryCard({
   accessory,
   image,
@@ -133,8 +164,12 @@ export default function ProductFeaturesSection({
     sku: product?.sku || acf.article_number || acf.product_article_number,
     image: gallery[0],
   };
+  const visibleAccessories =
+    Array.isArray(accessories) && accessories.length > 0
+      ? accessories
+      : getFallbackAccessories(product);
 
-  if (!Array.isArray(accessories) || accessories.length === 0) return null;
+  if (visibleAccessories.length === 0) return null;
 
   return (
     <section id="accessories" className="bg-white text-black">
@@ -162,7 +197,7 @@ export default function ProductFeaturesSection({
         </div>
 
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-          {accessories.map((accessory, index) => {
+          {visibleAccessories.map((accessory, index) => {
             const accessoryKey = getAccessoryKey(accessory);
             const image = getProductImage(accessory);
 
