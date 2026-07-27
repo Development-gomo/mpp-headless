@@ -1,5 +1,54 @@
+const HTML_ENTITIES = {
+  amp: "&",
+  apos: "'",
+  hellip: "...",
+  laquo: "<<",
+  ldquo: '"',
+  lsquo: "'",
+  mdash: "-",
+  ndash: "-",
+  nbsp: " ",
+  prime: "'",
+  quot: '"',
+  raquo: ">>",
+  rdquo: '"',
+  rsquo: "'",
+};
+
+function decodeHtmlEntities(value = "") {
+  return String(value).replace(/&(#x?[0-9a-f]+|[a-z]+);/gi, (entity, code) => {
+    const normalizedCode = code.toLowerCase();
+    if (normalizedCode in HTML_ENTITIES) return HTML_ENTITIES[normalizedCode];
+
+    if (normalizedCode.startsWith("#x")) {
+      const charCode = Number.parseInt(normalizedCode.slice(2), 16);
+      return Number.isNaN(charCode) ? entity : normalizeDecodedEntity(charCode);
+    }
+
+    if (normalizedCode.startsWith("#")) {
+      const charCode = Number.parseInt(normalizedCode.slice(1), 10);
+      return Number.isNaN(charCode) ? entity : normalizeDecodedEntity(charCode);
+    }
+
+    return entity;
+  });
+}
+
+function normalizeDecodedEntity(charCode) {
+  if ([0x2018, 0x2019, 0x2032].includes(charCode)) return "'";
+  if ([0x201c, 0x201d, 0x2033].includes(charCode)) return '"';
+  if ([0x2013, 0x2014].includes(charCode)) return "-";
+  if (charCode === 0x2026) return "...";
+  if (charCode === 0x00a0) return " ";
+
+  return String.fromCodePoint(charCode);
+}
+
 export function stripHtml(value = "") {
-  return String(value).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+  return decodeHtmlEntities(value)
+    .replace(/<[^>]*>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 export function getRepeaterValues(rows, key) {
