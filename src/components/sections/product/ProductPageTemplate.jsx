@@ -98,6 +98,7 @@ export default function ProductPageTemplate({
       </ProductVariationSections>
       <ProductFeaturesSection
         product={product}
+        productCategories={productCategories}
         accessories={accessories}
         language={language}
       />

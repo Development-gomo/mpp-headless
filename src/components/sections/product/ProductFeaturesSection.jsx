@@ -7,6 +7,7 @@ import { useQuoteCart } from "@/components/quote/QuoteCartProvider";
 import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
 import {
   getProductGallery,
+  getProductCategories as getProductTerms,
   getProductImage,
   getRendered,
   stripHtml,
@@ -38,6 +39,114 @@ function getAccessoryKey(accessory) {
   return String(
     accessory?.id || accessory?.ID || accessory?.slug || getAccessoryTitle(accessory)
   );
+}
+
+function getCategoryId(category) {
+  return category?.term_id || category?.id || category?.ID || null;
+}
+
+function getCategoryParentId(category) {
+  return category?.parent || category?.parent_id || 0;
+}
+
+function buildCategoryMap(categories = []) {
+  const categoryMap = new Map();
+
+  categories.forEach((category) => {
+    const categoryId = getCategoryId(category);
+    if (categoryId) categoryMap.set(String(categoryId), category);
+  });
+
+  return categoryMap;
+}
+
+function resolveCategory(category, categoryMap) {
+  const categoryId = getCategoryId(category);
+  return (categoryId && categoryMap.get(String(categoryId))) || category;
+}
+
+function getCategoryDepth(category, categoryMap) {
+  let depth = 0;
+  let currentCategory = category;
+  const visitedIds = new Set();
+
+  while (Number(getCategoryParentId(currentCategory)) > 0) {
+    const parentId = String(getCategoryParentId(currentCategory));
+    if (visitedIds.has(parentId)) break;
+    visitedIds.add(parentId);
+
+    const parentCategory = categoryMap.get(parentId);
+    if (!parentCategory) break;
+
+    depth += 1;
+    currentCategory = parentCategory;
+  }
+
+  return depth;
+}
+
+function getMainCategory(category, categoryMap) {
+  let currentCategory = category;
+  const visitedIds = new Set();
+
+  while (Number(getCategoryParentId(currentCategory)) > 0) {
+    const parentId = String(getCategoryParentId(currentCategory));
+    if (visitedIds.has(parentId)) break;
+    visitedIds.add(parentId);
+
+    const parentCategory = categoryMap.get(parentId);
+    if (!parentCategory) break;
+    currentCategory = parentCategory;
+  }
+
+  return currentCategory;
+}
+
+function getAccessoryCategories(accessory, categoryMap) {
+  return getProductTerms(accessory)
+    .map((category) => resolveCategory(category, categoryMap))
+    .filter(Boolean);
+}
+
+function getAccessoryChildCategory(accessory, categoryMap) {
+  const categories = getAccessoryCategories(accessory, categoryMap);
+
+  return (
+    categories
+      .filter((category) => Number(getCategoryParentId(category)) > 0)
+      .sort(
+        (a, b) => getCategoryDepth(b, categoryMap) - getCategoryDepth(a, categoryMap)
+      )[0] || null
+  );
+}
+
+function getAccessoryMainCategories(accessory, categoryMap) {
+  const seenIds = new Set();
+
+  return getAccessoryCategories(accessory, categoryMap)
+    .map((category) => getMainCategory(category, categoryMap))
+    .filter((category) => {
+      const categoryId = getCategoryId(category);
+      if (!categoryId || seenIds.has(String(categoryId))) return false;
+      seenIds.add(String(categoryId));
+      return true;
+    });
+}
+
+function buildMainCategoryFilters(accessories, categoryMap) {
+  const filters = [];
+  const seenIds = new Set();
+
+  accessories.forEach((accessory) => {
+    getAccessoryMainCategories(accessory, categoryMap).forEach((category) => {
+      const categoryId = getCategoryId(category);
+      if (!categoryId || seenIds.has(String(categoryId))) return;
+      seenIds.add(String(categoryId));
+      filters.push(category);
+    });
+  });
+
+  return filters;
 }
 
 function getAccessoryProductFromRow(accessoryRow) {
@@ -75,6 +184,7 @@ function AccessoryCard({
   accessory,
   image,
   isSelected,
+  childCategory,
   onSelect,
   onAdd,
   labels,
@@ -104,6 +214,15 @@ function AccessoryCard({
       </div>
 
       <div className="flex min-w-0 flex-col justify-center py-2 pr-2">
+        {childCategory?.name && (
+          <p
+            className={`mb-1 font-body text-[10px] font-bold uppercase leading-[14px] ${
+              isSelected ? "text-white/80" : "text-[#007DA5]"
+            }`}
+          >
+            {stripHtml(childCategory.name)}
+          </p>
+        )}
         <h3 className="font-heading text-[20px] font-normal leading-[26px] tracking-[-0.4px]">
           {title}
         </h3>
@@ -139,6 +258,7 @@ function AccessoryCard({
 
 export default function ProductFeaturesSection({
   product,
+  productCategories = [],
   accessories = [],
   language = DEFAULT_LANGUAGE,
 }) {
@@ -146,6 +266,7 @@ export default function ProductFeaturesSection({
   const router = useRouter();
   const acf = product?.acf || {};
   const [selectedAccessoryKey, setSelectedAccessoryKey] = useState("");
+  const [activeFilter, setActiveFilter] = useState("All");
   const labels = getProductLabels(language);
   const gallery = getProductGallery(product);
   const productTitle =
@@ -168,6 +289,19 @@ export default function ProductFeaturesSection({
     Array.isArray(accessories) && accessories.length > 0
       ? accessories
       : getFallbackAccessories(product);
+  const categoryMap = buildCategoryMap(productCategories);
+  const mainCategoryFilters = buildMainCategoryFilters(
+    visibleAccessories,
+    categoryMap
+  );
+  const filteredAccessories =
+    activeFilter === "All"
+      ? visibleAccessories
+      : visibleAccessories.filter((accessory) =>
+          getAccessoryMainCategories(accessory, categoryMap).some(
+            (category) => String(getCategoryId(category)) === activeFilter
+          )
+        );
 
   if (visibleAccessories.length === 0) return null;
 
@@ -196,10 +330,43 @@ export default function ProductFeaturesSection({
           )}
         </div>
 
+        <div className="mb-8 flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={() => setActiveFilter("All")}
+            className={`h-10 min-w-[66px] rounded-sm border px-5 font-body text-[13px] leading-[18px] transition-colors ${
+              activeFilter === "All"
+                ? "border-[var(--color-yellow)] bg-[var(--color-yellow)] text-black"
+                : "border-[var(--color-yellow)] bg-white text-black hover:bg-[var(--color-yellow)]/10"
+            }`}
+          >
+            {labels.filters.All || "All"}
+          </button>
+          {mainCategoryFilters.map((category) => {
+            const categoryId = String(getCategoryId(category));
+
+            return (
+              <button
+                key={categoryId}
+                type="button"
+                onClick={() => setActiveFilter(categoryId)}
+                className={`h-10 min-w-[66px] rounded-sm border px-5 font-body text-[13px] leading-[18px] transition-colors ${
+                  activeFilter === categoryId
+                    ? "border-[var(--color-yellow)] bg-[var(--color-yellow)] text-black"
+                    : "border-[var(--color-yellow)] bg-white text-black hover:bg-[var(--color-yellow)]/10"
+                }`}
+              >
+                {stripHtml(category.name)}
+              </button>
+            );
+          })}
+        </div>
+
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-          {visibleAccessories.map((accessory, index) => {
+          {filteredAccessories.map((accessory, index) => {
             const accessoryKey = getAccessoryKey(accessory);
             const image = getProductImage(accessory);
+            const childCategory = getAccessoryChildCategory(accessory, categoryMap);
 
             return (
               <AccessoryCard
@@ -207,6 +374,7 @@ export default function ProductFeaturesSection({
                 accessory={accessory}
                 image={image}
                 isSelected={selectedAccessoryKey === accessoryKey}
+                childCategory={childCategory}
                 labels={labels}
                 onSelect={() => setSelectedAccessoryKey(accessoryKey)}
                 onAdd={() => {
