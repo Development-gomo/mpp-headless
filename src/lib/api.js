@@ -875,6 +875,19 @@ function getRelatedProductId(product) {
   return product.ID || product.id || null;
 }
 
+function getAccessoryProductReference(accessoryRow) {
+  if (
+    accessoryRow &&
+    typeof accessoryRow === "object" &&
+    !Array.isArray(accessoryRow) &&
+    "accessory_product" in accessoryRow
+  ) {
+    return accessoryRow.accessory_product;
+  }
+
+  return accessoryRow;
+}
+
 function isCheckedAcfValue(value) {
   if (value === true) return true;
   if (typeof value === "string") {
@@ -900,7 +913,8 @@ export async function getProductAccessories(product, { language } = {}) {
   if (accessoryRefs.length === 0) return [];
 
   const accessories = await Promise.all(
-    accessoryRefs.map(async (accessoryRef) => {
+    accessoryRefs.map(async (accessoryRow) => {
+      const accessoryRef = getAccessoryProductReference(accessoryRow);
       const accessoryId = getRelatedProductId(accessoryRef);
       if (!accessoryId) return null;
 
