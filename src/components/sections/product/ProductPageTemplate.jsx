@@ -83,6 +83,7 @@ export default function ProductPageTemplate({
   themeOptions = {},
   relatedProducts = [],
   relatedCategory = null,
+  accessories = [],
   language,
 }) {
   return (
@@ -95,7 +96,11 @@ export default function ProductPageTemplate({
       <ProductVariationSections product={product} language={language}>
         <ProductAnchorNav />
       </ProductVariationSections>
-      <ProductFeaturesSection product={product} language={language} />
+      <ProductFeaturesSection
+        product={product}
+        accessories={accessories}
+        language={language}
+      />
       <ProductTestimonialsSection
         product={product}
         themeOptions={themeOptions}

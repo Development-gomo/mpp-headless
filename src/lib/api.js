@@ -869,6 +869,56 @@ export async function getProductById(id, { language } = {}) {
   return getEntryById("product", id, { language });
 }
 
+function getRelatedProductId(product) {
+  if (!product) return null;
+  if (typeof product === "number" || typeof product === "string") return product;
+  return product.ID || product.id || null;
+}
+
+function isCheckedAcfValue(value) {
+  if (value === true) return true;
+  if (typeof value === "string") {
+    return value.trim().toLowerCase() === "checked";
+  }
+  if (Array.isArray(value)) return value.some(isCheckedAcfValue);
+  if (value && typeof value === "object") {
+    return isCheckedAcfValue(value.value) || isCheckedAcfValue(value.label);
+  }
+
+  return false;
+}
+
+function isAccessoryProduct(product) {
+  return isCheckedAcfValue(product?.acf?.product_type);
+}
+
+export async function getProductAccessories(product, { language } = {}) {
+  const accessoryRefs = Array.isArray(product?.acf?.accessories)
+    ? product.acf.accessories
+    : [];
+
+  if (accessoryRefs.length === 0) return [];
+
+  const accessories = await Promise.all(
+    accessoryRefs.map(async (accessoryRef) => {
+      const accessoryId = getRelatedProductId(accessoryRef);
+      if (!accessoryId) return null;
+
+      const accessory = await getProductById(accessoryId, { language });
+      return accessory || accessoryRef;
+    })
+  );
+  const seenIds = new Set();
+
+  return accessories.filter((accessory) => {
+    const accessoryId = getRelatedProductId(accessory);
+    if (!accessoryId || seenIds.has(String(accessoryId))) return false;
+    seenIds.add(String(accessoryId));
+
+    return isAccessoryProduct(accessory);
+  });
+}
+
 export async function getAllProducts({ language } = {}) {
   const data = await fetchWP(
     withParams(`/wp/v2/product`, {

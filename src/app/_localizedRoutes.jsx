@@ -25,6 +25,7 @@ import {
   getPageBySlug,
   getPostBySlug,
   getProductById,
+  getProductAccessories,
   getProductBySlug,
   getProductCategories,
   getProductCategoriesWithImages,
@@ -514,9 +515,10 @@ export async function renderProductPage(params, language) {
   const product = await getProductBySlug(slug, { language });
   if (!product) notFound();
 
-  const [productCategories, themeOptions] = await Promise.all([
+  const [productCategories, themeOptions, accessories] = await Promise.all([
     getProductCategories({ language }),
     getThemeOptions({ language }),
+    getProductAccessories(product, { language }),
   ]);
   const relatedCategory = getDeepestProductCategory(product, productCategories);
   const relatedProducts = relatedCategory
@@ -542,6 +544,7 @@ export async function renderProductPage(params, language) {
           themeOptions={themeOptions}
           relatedCategory={relatedCategory}
           relatedProducts={relatedProducts}
+          accessories={accessories}
           language={language}
         />
       </main>
