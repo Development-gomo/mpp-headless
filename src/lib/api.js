@@ -600,7 +600,8 @@ export async function getTeams({ language } = {}) {
     { language }
   );
 
-  return Array.isArray(data) ? data : [];
+  const items = Array.isArray(data) ? data : [];
+  return resolveEmbeddedMedia(items);
 }
 
 // Author cards
