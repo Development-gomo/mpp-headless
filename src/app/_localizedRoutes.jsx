@@ -117,6 +117,33 @@ function getCategoryParentId(category) {
   return category?.parent || category?.parent_id || 0;
 }
 
+function getCategoryDescendants(categories, parentCategory) {
+  const parentId = getCategoryId(parentCategory);
+  if (!parentId) return [];
+
+  const descendantCategories = [];
+  const queuedParentIds = [String(parentId)];
+  const seenIds = new Set();
+
+  while (queuedParentIds.length > 0) {
+    const currentParentId = queuedParentIds.shift();
+    const children = categories.filter(
+      (cat) => String(getCategoryParentId(cat)) === currentParentId
+    );
+
+    children.forEach((child) => {
+      const childId = getCategoryId(child);
+      if (!childId || seenIds.has(String(childId))) return;
+
+      seenIds.add(String(childId));
+      descendantCategories.push(child);
+      queuedParentIds.push(String(childId));
+    });
+  }
+
+  return descendantCategories;
+}
+
 function getCategoryDepth(category, categoryMap) {
   let depth = 0;
   let currentCategory = category;
@@ -581,9 +608,12 @@ export async function renderProductCategoryPage(params, language) {
 
   if (!category) notFound();
 
-  const childCategories = categories.filter(
-    (cat) => Number(cat.parent) === Number(category.term_id)
-  );
+  const childCategories =
+    category.slug === "accessories"
+      ? getCategoryDescendants(categories, category)
+      : categories.filter(
+          (cat) => Number(getCategoryParentId(cat)) === Number(getCategoryId(category))
+        );
 
   const childCategoriesWithProducts = await Promise.all(
     childCategories.map(async (childCat) => {
