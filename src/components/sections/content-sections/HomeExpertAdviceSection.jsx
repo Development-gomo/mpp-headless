@@ -102,7 +102,7 @@ export default function HomeExpertAdviceSection({ data }) {
                     {card.card_cta_text && (
                       <Link
                         href={card.card_cta_link || "#"}
-                        className={`group mt-auto inline-flex h-13 items-center gap-4 rounded-sm py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] transition-opacity hover:opacity-90 ${
+                        className={`group mt-8 inline-flex h-13 items-center gap-4 rounded-sm py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] transition-opacity hover:opacity-90 ${
                           darkCard
                             ? "bg-[var(--color-yellow)] text-black"
                             : "bg-[image:var(--mpp-gradient)] text-white"
