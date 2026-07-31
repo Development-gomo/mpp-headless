@@ -19,6 +19,12 @@ const DEFAULT_LOAD_MORE_LABELS = {
   de: "Mehr laden",
 };
 
+const DATE_LOCALES = {
+  sv: "sv-SE",
+  en: "en-US",
+  de: "de-DE",
+};
+
 export default function LatestBlogsSection({
   data,
   posts = [],
@@ -128,10 +134,13 @@ export default function LatestBlogsSection({
                 post?._embedded?.["wp:term"]?.[0]?.[0]?.name || "News";
 
               const date = post?.date
-                ? new Date(post.date).toLocaleDateString("en-US", {
-                    month: "long",
-                    year: "numeric",
-                  })
+                ? new Date(post.date).toLocaleDateString(
+                    DATE_LOCALES[language] || DATE_LOCALES[DEFAULT_LANGUAGE],
+                    {
+                      month: "long",
+                      year: "numeric",
+                    }
+                  )
                 : "";
 
               return (
@@ -155,7 +164,7 @@ export default function LatestBlogsSection({
 
                         {title && (
                         <h3
-                        className="mb-5 min-h-17 text-[24px] font-medium leading-8 tracking-[-0.56px] text-black capitalize [font-family:var(--font-heading)] line-clamp-3 font-heading"
+                        className="mb-5 min-h-17 text-[24px] font-medium leading-8 tracking-[-0.56px] text-black   [font-family:var(--font-heading)] line-clamp-3 font-heading"
                         dangerouslySetInnerHTML={{ __html: title }}
                         />
                         )}
@@ -202,7 +211,7 @@ export default function LatestBlogsSection({
                   Math.min(count + POSTS_PER_PAGE, posts.length)
                 )
               }
-              className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+              className="group cursor-pointer inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
             >
               <span>{loadMoreText}</span>
               <Image
