@@ -10,7 +10,7 @@ import {
 
 const CASE_STUDY_SECTION_LABELS = {
   [DEFAULT_LANGUAGE]: {
-    readFullCase: "Läs hela caset",
+    readFullCase: "Läs caset",
     viewAllCases: "Visa alla case",
   },
   [ENGLISH_LANGUAGE]: {
