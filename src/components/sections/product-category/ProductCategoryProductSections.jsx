@@ -181,6 +181,41 @@ function getProductLink(product, language = DEFAULT_LANGUAGE) {
   return productPath ? localizePath(`/product/${productPath}`, language) : "#";
 }
 
+function getCategoryLayout(category) {
+  return String(category?.acf?.category_layout || "").toLowerCase();
+}
+
+function getProductKey(product) {
+  return String(product?.id || product?.ID || product?.slug || getProductTitle(product));
+}
+
+function getVerticalProducts(childCategories) {
+  const seenKeys = new Set();
+
+  return childCategories
+    .flatMap((childCategory) => childCategory?.products || [])
+    .filter((product) => {
+      const key = getProductKey(product);
+      if (!key || seenKeys.has(key)) return false;
+      seenKeys.add(key);
+      return true;
+    });
+}
+
+function getProductBadge(product) {
+  const acf = product?.acf || {};
+  const badge =
+    acf.product_badge ||
+    acf.badge_label ||
+    acf.product_label ||
+    acf.new_label ||
+    "";
+
+  if (badge) return stripHtml(badge);
+
+  return acf.is_new || acf.new_product || acf.show_new_badge ? "New" : "";
+}
+
 export default function ProductCategoryProductSections({
   currentCategory,
   childCategories = [],
@@ -188,19 +223,165 @@ export default function ProductCategoryProductSections({
 }) {
   if (!currentCategory || childCategories.length === 0) return null;
 
+  const isVerticalLayout = getCategoryLayout(currentCategory) === "vertical";
+  const verticalProducts = isVerticalLayout
+    ? getVerticalProducts(childCategories)
+    : [];
+
   return (
     <section data-category-products className="scroll-mt-[144px] bg-white">
       <div className="web-width px-6 py-20 md:py-30">
-        {childCategories.map((childCategory, sectionIndex) => (
-          <ProductSubcategoryBlock
-            key={childCategory.term_id || sectionIndex}
-            currentCategory={currentCategory}
-            childCategory={childCategory}
-            language={language}
-          />
-        ))}
+        {isVerticalLayout ? (
+          <ProductVerticalGrid products={verticalProducts} language={language} />
+        ) : (
+          childCategories.map((childCategory, sectionIndex) => (
+            <ProductSubcategoryBlock
+              key={childCategory.term_id || sectionIndex}
+              currentCategory={currentCategory}
+              childCategory={childCategory}
+              language={language}
+            />
+          ))
+        )}
       </div>
     </section>
+  );
+}
+
+function ProductVerticalGrid({ products, language }) {
+  if (products.length === 0) return null;
+
+  return (
+    <div className="grid grid-cols-1 gap-7 md:grid-cols-2 xl:grid-cols-3">
+      {products.map((product, index) => (
+        <ProductVerticalCard
+          key={`${getProductKey(product)}-${index}`}
+          product={product}
+          language={language}
+        />
+      ))}
+    </div>
+  );
+}
+
+function ProductVerticalCard({ product, language }) {
+  const labels = getProductCategorySectionLabels(language);
+  const title = stripHtml(getProductTitle(product));
+  const excerpt = stripHtml(getProductExcerpt(product));
+  const image = getProductImage(product);
+  const productLink = getProductLink(product, language);
+  const quoteLink = localizePath("/rfq", language);
+  const capacity = getProductCapacityMeta(product);
+  const fuelType = getProductFuelTypeMeta(product);
+  const badge = getProductBadge(product);
+  const quoteLabel = labels.requestQuote || "Request a quote";
+
+  return (
+    <article className="flex h-full flex-col rounded-lg bg-[#F3F4FB] p-3 text-black">
+      <div className="relative flex aspect-[1.42/1] items-center justify-center overflow-hidden rounded-lg bg-white p-8">
+        {badge && (
+          <span className="absolute left-3 top-0 z-10 rounded-b-sm bg-[var(--color-accent)] px-4 py-1.5 font-body text-[14px] leading-5 text-white">
+            {badge}
+          </span>
+        )}
+
+        {image ? (
+          <Image
+            src={image}
+            alt={title || "Product image"}
+            fill
+            sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+            className="object-contain p-8"
+          />
+        ) : (
+          <span className="font-body text-[14px] text-black/45">
+            Product image missing
+          </span>
+        )}
+      </div>
+
+      <div className="flex flex-1 flex-col px-4 pb-4 pt-7">
+        {title && (
+          <h3 className="font-heading text-[24px] font-medium leading-8 tracking-[-0.48px] text-black">
+            {title}
+          </h3>
+        )}
+
+        {excerpt && (
+          <p className="mt-3 font-body text-[16px] font-normal leading-7 text-[#1A1A1A]">
+            {excerpt}
+          </p>
+        )}
+
+        {(capacity || fuelType) && (
+          <div className="mt-6 border-y border-black/20">
+            {capacity && (
+              <div className="grid grid-cols-[128px_1fr] gap-3 border-b border-black/20 py-3">
+                <div className="flex items-center gap-2 font-body text-[14px] font-bold leading-5.5 text-[var(--color-accent)]">
+                  <Image
+                    src="/capacity-icon.svg"
+                    alt=""
+                    width={16}
+                    height={16}
+                    className="h-4 w-4 object-contain"
+                  />
+                  Capacity
+                </div>
+
+                <div className="text-right font-body text-[14px] leading-5.5 text-black">
+                  {capacity}
+                </div>
+              </div>
+            )}
+
+            {fuelType && (
+              <div className="grid grid-cols-[128px_1fr] gap-3 py-3">
+                <div className="flex items-center gap-2 font-body text-[14px] font-bold leading-5.5 text-[var(--color-accent)]">
+                  <Image
+                    src="/fuel-type-icon.svg"
+                    alt=""
+                    width={16}
+                    height={16}
+                    className="h-4 w-4 object-contain"
+                  />
+                  Fuel type
+                </div>
+
+                <div className="text-right font-body text-[14px] leading-5.5 text-black">
+                  {fuelType}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="mt-auto flex gap-2 pt-7">
+          <Link
+            href={quoteLink}
+            className="group inline-flex min-h-15 flex-1 items-center justify-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pl-5 pr-1.5 font-heading text-[16px] font-normal tracking-[-0.32px] text-white transition-opacity hover:opacity-90"
+          >
+            <span>{quoteLabel}</span>
+            <span className="ml-auto flex h-11 w-11 shrink-0 items-center justify-center rounded-sm bg-white text-[22px] leading-none text-black">
+              {"\u2197"}
+            </span>
+          </Link>
+
+          <Link
+            href={productLink}
+            aria-label={`${labels.viewProduct}: ${title}`}
+            className="inline-flex min-h-15 w-15 shrink-0 items-center justify-center rounded-sm bg-[var(--color-yellow)] transition-opacity hover:opacity-90"
+          >
+            <Image
+              src="/black-arrow.svg"
+              alt=""
+              width={22}
+              height={22}
+              className="h-5.5 w-5.5 object-contain"
+            />
+          </Link>
+        </div>
+      </div>
+    </article>
   );
 }
 
