@@ -292,7 +292,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                     </div>
 
                     <div className="font-body text-[14px] leading-5.5 text-black">
-                      {capacity}
+                      {capacity} L
                     </div>
                   </div>
                 )}
