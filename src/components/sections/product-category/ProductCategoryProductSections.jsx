@@ -12,6 +12,7 @@ import {
 } from "@/lib/i18n";
 import {
   getProductVariations,
+  stripHtml as stripAndDecodeHtml,
   getVariationCapacity,
   getVariationTextValues,
 } from "@/components/sections/product/productUtils";
@@ -35,6 +36,46 @@ function getProductCategorySectionLabels(language) {
   return (
     PRODUCT_CATEGORY_SECTION_LABELS[normalizeLanguage(language)] ||
     PRODUCT_CATEGORY_SECTION_LABELS[DEFAULT_LANGUAGE]
+  );
+}
+
+const PRODUCT_CATEGORY_VERTICAL_LABELS = {
+  [DEFAULT_LANGUAGE]: {
+    filters: "Filter",
+    subcategories: "Underkategorier",
+    requestQuote: "Beg\u00e4r offert",
+    capacity: "Kapacitet",
+    fuelType: "Br\u00e4nsletyp",
+    newProduct: "Ny",
+    productImageMissing: "Produktbild saknas",
+    viewProduct: "Visa produkt",
+  },
+  [ENGLISH_LANGUAGE]: {
+    filters: "Filters",
+    subcategories: "Subcategories",
+    requestQuote: "Request a quote",
+    capacity: "Capacity",
+    fuelType: "Fuel type",
+    newProduct: "New",
+    productImageMissing: "Product image missing",
+    viewProduct: "View product",
+  },
+  [GERMAN_LANGUAGE]: {
+    filters: "Filter",
+    subcategories: "Unterkategorien",
+    requestQuote: "Angebot anfordern",
+    capacity: "Kapazit\u00e4t",
+    fuelType: "Kraftstoffart",
+    newProduct: "Neu",
+    productImageMissing: "Produktbild fehlt",
+    viewProduct: "Produkt ansehen",
+  },
+};
+
+function getProductCategoryVerticalLabels(language) {
+  return (
+    PRODUCT_CATEGORY_VERTICAL_LABELS[normalizeLanguage(language)] ||
+    PRODUCT_CATEGORY_VERTICAL_LABELS[DEFAULT_LANGUAGE]
   );
 }
 
@@ -98,7 +139,7 @@ function getProductImage(product) {
 }
 
 function getProductTitle(product) {
-  return product?.title?.rendered || product?.title || "";
+  return stripHtml(product?.title?.rendered || product?.title || "");
 }
 
 function getProductExcerpt(product) {
@@ -111,10 +152,7 @@ function getProductExcerpt(product) {
 }
 
 function stripHtml(value = "") {
-  return String(value)
-    .replace(/<[^>]*>/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
+  return stripAndDecodeHtml(value);
 }
 
 function getRepeaterValues(rows, key) {
@@ -185,8 +223,60 @@ function getCategoryLayout(category) {
   return String(category?.acf?.category_layout || "").toLowerCase();
 }
 
+function getCategoryId(category) {
+  return category?.term_id || category?.id || category?.ID || null;
+}
+
+function getCategoryParentId(category) {
+  return category?.parent || category?.parent_id || 0;
+}
+
+function getCategoryLink(category, language = DEFAULT_LANGUAGE) {
+  return category?.slug
+    ? localizePath(`/product-category/${category.slug}`, language)
+    : "#";
+}
+
 function getProductKey(product) {
   return String(product?.id || product?.ID || product?.slug || getProductTitle(product));
+}
+
+function buildCategoryTree(categories, parentCategory) {
+  const parentId = getCategoryId(parentCategory);
+  if (!parentId) return [];
+
+  const categoriesByParent = new Map();
+
+  categories.forEach((category) => {
+    const categoryId = getCategoryId(category);
+    if (!categoryId) return;
+
+    const parentKey = String(getCategoryParentId(category));
+    const siblings = categoriesByParent.get(parentKey) || [];
+    siblings.push(category);
+    categoriesByParent.set(parentKey, siblings);
+  });
+
+  const buildNodes = (parentKey, visitedIds = new Set()) =>
+    (categoriesByParent.get(parentKey) || []).map((category) => {
+      const categoryId = String(getCategoryId(category));
+      if (visitedIds.has(categoryId)) {
+        return {
+          category,
+          children: [],
+        };
+      }
+
+      const nextVisitedIds = new Set(visitedIds);
+      nextVisitedIds.add(categoryId);
+
+      return {
+        category,
+        children: buildNodes(categoryId, nextVisitedIds),
+      };
+    });
+
+  return buildNodes(String(parentId));
 }
 
 function getVerticalProducts(childCategories) {
@@ -202,7 +292,7 @@ function getVerticalProducts(childCategories) {
     });
 }
 
-function getProductBadge(product) {
+function getProductBadge(product, labels) {
   const acf = product?.acf || {};
   const badge =
     acf.product_badge ||
@@ -213,7 +303,9 @@ function getProductBadge(product) {
 
   if (badge) return stripHtml(badge);
 
-  return acf.is_new || acf.new_product || acf.show_new_badge ? "New" : "";
+  return acf.is_new || acf.new_product || acf.show_new_badge
+    ? labels.newProduct
+    : "";
 }
 
 export default function ProductCategoryProductSections({
@@ -232,7 +324,12 @@ export default function ProductCategoryProductSections({
     <section data-category-products className="scroll-mt-[144px] bg-white">
       <div className="web-width px-6 py-20 md:py-30">
         {isVerticalLayout ? (
-          <ProductVerticalGrid products={verticalProducts} language={language} />
+          <ProductVerticalLayout
+            currentCategory={currentCategory}
+            categories={childCategories}
+            products={verticalProducts}
+            language={language}
+          />
         ) : (
           childCategories.map((childCategory, sectionIndex) => (
             <ProductSubcategoryBlock
@@ -248,24 +345,111 @@ export default function ProductCategoryProductSections({
   );
 }
 
-function ProductVerticalGrid({ products, language }) {
+function ProductVerticalLayout({
+  currentCategory,
+  categories,
+  products,
+  language,
+}) {
   if (products.length === 0) return null;
 
+  const labels = getProductCategoryVerticalLabels(language);
+  const categoryTree = buildCategoryTree(categories, currentCategory);
+  const hasSidebar = categoryTree.length > 0;
+
   return (
-    <div className="grid grid-cols-1 gap-7 md:grid-cols-2 xl:grid-cols-3">
-      {products.map((product, index) => (
-        <ProductVerticalCard
-          key={`${getProductKey(product)}-${index}`}
-          product={product}
-          language={language}
-        />
-      ))}
+    <div
+      className={`grid grid-cols-1 gap-8 ${
+        hasSidebar
+          ? "lg:grid-cols-[280px_1fr] xl:grid-cols-[320px_1fr]"
+          : ""
+      }`}
+    >
+      {hasSidebar && (
+        <aside className="lg:sticky lg:top-30 lg:self-start">
+          <h2 className="mb-6 font-heading text-[32px] font-normal leading-9 tracking-[-0.64px] text-black">
+            {labels.filters}
+          </h2>
+
+          <div className="rounded-lg bg-[rgba(0,112,158,0.1)] px-6 py-7">
+            <div className="flex items-center justify-between gap-4 border-b border-black/25 pb-4">
+              <h3 className="font-heading text-[20px] font-medium leading-7 tracking-[-0.4px] text-black">
+                {labels.subcategories}
+              </h3>
+
+              <Image
+                src="/down-arrow-black.svg"
+                alt=""
+                width={12}
+                height={7}
+                className="h-auto w-3"
+              />
+            </div>
+
+            <nav className="pt-4" aria-label={labels.subcategories}>
+              <CategorySidebarList items={categoryTree} language={language} />
+            </nav>
+          </div>
+        </aside>
+      )}
+
+      <div className="grid grid-cols-1 gap-7 md:grid-cols-2 xl:grid-cols-3">
+        {products.map((product, index) => (
+          <ProductVerticalCard
+            key={`${getProductKey(product)}-${index}`}
+            product={product}
+            language={language}
+          />
+        ))}
+      </div>
     </div>
   );
 }
 
+function CategorySidebarList({ items, language, level = 0 }) {
+  if (items.length === 0) return null;
+
+  return (
+    <ul className={level > 0 ? "mt-1 space-y-1 pl-5" : "space-y-2"}>
+      {items.map((item) => {
+        const category = item.category;
+        const categoryId = getCategoryId(category);
+
+        return (
+          <li key={categoryId || category?.slug}>
+            <Link
+              href={getCategoryLink(category, language)}
+              className={`group flex items-center gap-3 rounded-sm py-1.5 font-body text-[15px] leading-5.5 tracking-[-0.3px] transition-colors hover:text-[var(--color-accent)] ${
+                level === 0
+                  ? "font-semibold text-[var(--color-accent)]"
+                  : "font-normal text-black"
+              }`}
+            >
+              <span
+                className={`h-4 w-4 shrink-0 rounded-[2px] border transition-colors ${
+                  level === 0
+                    ? "border-[var(--color-yellow)] bg-[var(--color-yellow)]"
+                    : "border-black group-hover:border-[var(--color-accent)]"
+                }`}
+                aria-hidden="true"
+              />
+              <span>{stripHtml(category?.name)}</span>
+            </Link>
+
+            <CategorySidebarList
+              items={item.children}
+              language={language}
+              level={level + 1}
+            />
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
 function ProductVerticalCard({ product, language }) {
-  const labels = getProductCategorySectionLabels(language);
+  const labels = getProductCategoryVerticalLabels(language);
   const title = stripHtml(getProductTitle(product));
   const excerpt = stripHtml(getProductExcerpt(product));
   const image = getProductImage(product);
@@ -273,8 +457,7 @@ function ProductVerticalCard({ product, language }) {
   const quoteLink = localizePath("/rfq", language);
   const capacity = getProductCapacityMeta(product);
   const fuelType = getProductFuelTypeMeta(product);
-  const badge = getProductBadge(product);
-  const quoteLabel = labels.requestQuote || "Request a quote";
+  const badge = getProductBadge(product, labels);
 
   return (
     <article className="flex h-full flex-col rounded-lg bg-[#F3F4FB] p-3 text-black">
@@ -295,7 +478,7 @@ function ProductVerticalCard({ product, language }) {
           />
         ) : (
           <span className="font-body text-[14px] text-black/45">
-            Product image missing
+            {labels.productImageMissing}
           </span>
         )}
       </div>
@@ -325,7 +508,7 @@ function ProductVerticalCard({ product, language }) {
                     height={16}
                     className="h-4 w-4 object-contain"
                   />
-                  Capacity
+                  {labels.capacity}
                 </div>
 
                 <div className="text-right font-body text-[14px] leading-5.5 text-black">
@@ -344,7 +527,7 @@ function ProductVerticalCard({ product, language }) {
                     height={16}
                     className="h-4 w-4 object-contain"
                   />
-                  Fuel type
+                  {labels.fuelType}
                 </div>
 
                 <div className="text-right font-body text-[14px] leading-5.5 text-black">
@@ -360,7 +543,7 @@ function ProductVerticalCard({ product, language }) {
             href={quoteLink}
             className="group inline-flex min-h-15 flex-1 items-center justify-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pl-5 pr-1.5 font-heading text-[16px] font-normal tracking-[-0.32px] text-white transition-opacity hover:opacity-90"
           >
-            <span>{quoteLabel}</span>
+            <span>{labels.requestQuote}</span>
             <span className="ml-auto flex h-11 w-11 shrink-0 items-center justify-center rounded-sm bg-white text-[22px] leading-none text-black">
               {"\u2197"}
             </span>
@@ -389,6 +572,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
   const products = (childCategory?.products || []).slice(0, 3);
   const [activeIndex, setActiveIndex] = useState(0);
   const labels = getProductCategorySectionLabels(language);
+  const metaLabels = getProductCategoryVerticalLabels(language);
 
   if (products.length === 0) return null;
 
@@ -469,7 +653,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                         height={16}
                         className="h-4 w-4 object-contain"
                       />
-                      Capacity
+                      {metaLabels.capacity}
                     </div>
 
                     <div className="font-body text-[14px] leading-5.5 text-black">
@@ -488,7 +672,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                         height={16}
                         className="h-4 w-4 object-contain"
                       />
-                      Fuel type
+                      {metaLabels.fuelType}
                     </div>
 
                     <div className="font-body text-[14px] leading-5.5 text-black">
@@ -584,7 +768,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                 />
               ) : (
                 <div className="flex min-h-65 w-full items-center justify-center rounded-lg border border-black/10 bg-white/30 font-body text-[14px] text-black/50">
-                  Product image missing
+                  {metaLabels.productImageMissing}
                 </div>
               )}
             </div>

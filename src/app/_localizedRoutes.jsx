@@ -117,6 +117,37 @@ function getCategoryParentId(category) {
   return category?.parent || category?.parent_id || 0;
 }
 
+function getCategoryLayout(category) {
+  return String(category?.acf?.category_layout || "").toLowerCase();
+}
+
+function getCategoryDescendants(categories, parentCategory) {
+  const parentId = getCategoryId(parentCategory);
+  if (!parentId) return [];
+
+  const descendants = [];
+  const queuedParentIds = [String(parentId)];
+  const seenIds = new Set();
+
+  while (queuedParentIds.length > 0) {
+    const currentParentId = queuedParentIds.shift();
+    const children = categories.filter(
+      (cat) => String(getCategoryParentId(cat)) === currentParentId
+    );
+
+    children.forEach((child) => {
+      const childId = getCategoryId(child);
+      if (!childId || seenIds.has(String(childId))) return;
+
+      seenIds.add(String(childId));
+      descendants.push(child);
+      queuedParentIds.push(String(childId));
+    });
+  }
+
+  return descendants;
+}
+
 function getCategoryDepth(category, categoryMap) {
   let depth = 0;
   let currentCategory = category;
@@ -581,12 +612,15 @@ export async function renderProductCategoryPage(params, language) {
 
   if (!category) notFound();
 
-  const childCategories = categories.filter(
-    (cat) => Number(cat.parent) === Number(category.term_id)
-  );
+  const isVerticalLayout = getCategoryLayout(category) === "vertical";
+  const childCategories = isVerticalLayout
+    ? getCategoryDescendants(categories, category)
+    : categories.filter(
+        (cat) => Number(getCategoryParentId(cat)) === Number(getCategoryId(category))
+      );
   const productSourceCategories =
     childCategories.length > 0 ||
-    String(category?.acf?.category_layout || "").toLowerCase() !== "vertical"
+    !isVerticalLayout
       ? childCategories
       : [category];
 
