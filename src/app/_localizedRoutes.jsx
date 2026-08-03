@@ -121,6 +121,28 @@ function getCategoryLayout(category) {
   return String(category?.acf?.category_layout || "").toLowerCase();
 }
 
+function categoryHasVerticalLayoutInPath(categories, category) {
+  let currentCategory = category;
+  const visitedIds = new Set();
+
+  while (currentCategory) {
+    if (getCategoryLayout(currentCategory) === "vertical") return true;
+
+    const categoryId = getCategoryId(currentCategory);
+    if (!categoryId || visitedIds.has(String(categoryId))) break;
+    visitedIds.add(String(categoryId));
+
+    const parentId = getCategoryParentId(currentCategory);
+    if (!parentId) break;
+
+    currentCategory = categories.find(
+      (cat) => String(getCategoryId(cat)) === String(parentId)
+    );
+  }
+
+  return false;
+}
+
 function getCategoryDescendants(categories, parentCategory) {
   const parentId = getCategoryId(parentCategory);
   if (!parentId) return [];
@@ -146,6 +168,18 @@ function getCategoryDescendants(categories, parentCategory) {
   }
 
   return descendants;
+}
+
+function uniqueCategories(categories) {
+  const seenIds = new Set();
+
+  return categories.filter((category) => {
+    const categoryId = getCategoryId(category);
+    if (!categoryId || seenIds.has(String(categoryId))) return false;
+
+    seenIds.add(String(categoryId));
+    return true;
+  });
 }
 
 function getCategoryDepth(category, categoryMap) {
@@ -612,17 +646,35 @@ export async function renderProductCategoryPage(params, language) {
 
   if (!category) notFound();
 
-  const isVerticalLayout = getCategoryLayout(category) === "vertical";
+  const isVerticalLayout = categoryHasVerticalLayoutInPath(categories, category);
+  const currentCategory =
+    isVerticalLayout && getCategoryLayout(category) !== "vertical"
+      ? {
+          ...category,
+          acf: {
+            ...(category?.acf || {}),
+            category_layout: "vertical",
+          },
+        }
+      : category;
   const childCategories = isVerticalLayout
     ? getCategoryDescendants(categories, category)
     : categories.filter(
         (cat) => Number(getCategoryParentId(cat)) === Number(getCategoryId(category))
       );
   const productSourceCategories =
-    childCategories.length > 0 ||
-    !isVerticalLayout
-      ? childCategories
-      : [category];
+    isVerticalLayout
+      ? [currentCategory, ...childCategories]
+      : uniqueCategories(
+          childCategories.flatMap((childCategory) =>
+            getCategoryLayout(childCategory) === "vertical"
+              ? [
+                  childCategory,
+                  ...getCategoryDescendants(categories, childCategory),
+                ]
+              : [childCategory]
+          )
+        );
 
   const childCategoriesWithProducts = await Promise.all(
     productSourceCategories.map(async (childCat) => {
@@ -659,7 +711,7 @@ export async function renderProductCategoryPage(params, language) {
           language={language}
         />
         <ProductCategoryProductSections
-          currentCategory={category}
+          currentCategory={currentCategory}
           childCategories={childCategoriesWithProducts}
           language={language}
         />

@@ -279,6 +279,42 @@ function buildCategoryTree(categories, parentCategory) {
   return buildNodes(String(parentId));
 }
 
+function getCategoryDescendantsFromList(categories, parentCategory) {
+  const parentId = getCategoryId(parentCategory);
+  if (!parentId) return [];
+
+  const descendants = [];
+  const queuedParentIds = [String(parentId)];
+  const seenIds = new Set();
+
+  while (queuedParentIds.length > 0) {
+    const currentParentId = queuedParentIds.shift();
+    const children = categories.filter(
+      (category) => String(getCategoryParentId(category)) === currentParentId
+    );
+
+    children.forEach((child) => {
+      const childId = getCategoryId(child);
+      if (!childId || seenIds.has(String(childId))) return;
+
+      seenIds.add(String(childId));
+      descendants.push(child);
+      queuedParentIds.push(String(childId));
+    });
+  }
+
+  return descendants;
+}
+
+function getDirectChildCategories(categories, parentCategory) {
+  const parentId = getCategoryId(parentCategory);
+  if (!parentId) return [];
+
+  return categories.filter(
+    (category) => String(getCategoryParentId(category)) === String(parentId)
+  );
+}
+
 function getVerticalProducts(childCategories) {
   const seenKeys = new Set();
 
@@ -319,6 +355,9 @@ export default function ProductCategoryProductSections({
   const verticalProducts = isVerticalLayout
     ? getVerticalProducts(childCategories)
     : [];
+  const visibleChildCategories = isVerticalLayout
+    ? childCategories
+    : getDirectChildCategories(childCategories, currentCategory);
 
   return (
     <section data-category-products className="scroll-mt-[144px] bg-white">
@@ -331,14 +370,37 @@ export default function ProductCategoryProductSections({
             language={language}
           />
         ) : (
-          childCategories.map((childCategory, sectionIndex) => (
-            <ProductSubcategoryBlock
-              key={childCategory.term_id || sectionIndex}
-              currentCategory={currentCategory}
-              childCategory={childCategory}
-              language={language}
-            />
-          ))
+          visibleChildCategories.map((childCategory, sectionIndex) => {
+            if (getCategoryLayout(childCategory) === "vertical") {
+              const verticalCategories = [
+                childCategory,
+                ...getCategoryDescendantsFromList(childCategories, childCategory),
+              ];
+
+              return (
+                <div
+                  key={childCategory.term_id || sectionIndex}
+                  className="mb-20 last:mb-0"
+                >
+                  <ProductVerticalLayout
+                    currentCategory={childCategory}
+                    categories={verticalCategories}
+                    products={getVerticalProducts(verticalCategories)}
+                    language={language}
+                  />
+                </div>
+              );
+            }
+
+            return (
+              <ProductSubcategoryBlock
+                key={childCategory.term_id || sectionIndex}
+                currentCategory={currentCategory}
+                childCategory={childCategory}
+                language={language}
+              />
+            );
+          })
         )}
       </div>
     </section>
@@ -366,7 +428,7 @@ function ProductVerticalLayout({
       }`}
     >
       {hasSidebar && (
-        <aside className="lg:sticky lg:top-30 lg:self-start">
+        <aside className="lg:self-start">
           <h2 className="mb-6 font-heading text-[32px] font-normal leading-9 tracking-[-0.64px] text-black">
             {labels.filters}
           </h2>
@@ -411,40 +473,74 @@ function CategorySidebarList({ items, language, level = 0 }) {
 
   return (
     <ul className={level > 0 ? "mt-1 space-y-1 pl-5" : "space-y-2"}>
-      {items.map((item) => {
-        const category = item.category;
-        const categoryId = getCategoryId(category);
-
-        return (
-          <li key={categoryId || category?.slug}>
-            <Link
-              href={getCategoryLink(category, language)}
-              className={`group flex items-center gap-3 rounded-sm py-1.5 font-body text-[15px] leading-5.5 tracking-[-0.3px] transition-colors hover:text-[var(--color-accent)] ${
-                level === 0
-                  ? "font-semibold text-[var(--color-accent)]"
-                  : "font-normal text-black"
-              }`}
-            >
-              <span
-                className={`h-4 w-4 shrink-0 rounded-[2px] border transition-colors ${
-                  level === 0
-                    ? "border-[var(--color-yellow)] bg-[var(--color-yellow)]"
-                    : "border-black group-hover:border-[var(--color-accent)]"
-                }`}
-                aria-hidden="true"
-              />
-              <span>{stripHtml(category?.name)}</span>
-            </Link>
-
-            <CategorySidebarList
-              items={item.children}
-              language={language}
-              level={level + 1}
-            />
-          </li>
-        );
-      })}
+      {items.map((item) => (
+        <CategorySidebarItem
+          key={getCategoryId(item.category) || item.category?.slug}
+          item={item}
+          language={language}
+          level={level}
+        />
+      ))}
     </ul>
+  );
+}
+
+function CategorySidebarItem({ item, language, level }) {
+  const category = item.category;
+  const hasChildren = item.children.length > 0;
+  const [isOpen, setIsOpen] = useState(level > 0);
+
+  return (
+    <li>
+      <div
+        className={`group flex items-center gap-3 rounded-sm py-1.5 font-body text-[15px] leading-5.5 tracking-[-0.3px] transition-colors hover:text-[var(--color-accent)] ${
+          level === 0
+            ? "font-semibold text-[var(--color-accent)]"
+            : "font-normal text-black"
+        }`}
+      >
+        <span
+          className={`h-4 w-4 shrink-0 rounded-[2px] border transition-colors ${
+            level === 0
+              ? "border-[var(--color-yellow)] bg-[var(--color-yellow)]"
+              : "border-black group-hover:border-[var(--color-accent)]"
+          }`}
+          aria-hidden="true"
+        />
+
+        <Link href={getCategoryLink(category, language)} className="min-w-0 flex-1">
+          <span>{stripHtml(category?.name)}</span>
+        </Link>
+
+        {level === 0 && hasChildren && (
+          <button
+            type="button"
+            onClick={() => setIsOpen((open) => !open)}
+            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-sm transition-colors hover:bg-white/60"
+            aria-expanded={isOpen}
+            aria-label={stripHtml(category?.name)}
+          >
+            <Image
+              src="/down-arrow-black.svg"
+              alt=""
+              width={12}
+              height={7}
+              className={`h-auto w-3 transition-transform ${
+                isOpen ? "" : "-rotate-90"
+              }`}
+            />
+          </button>
+        )}
+      </div>
+
+      {hasChildren && (level > 0 || isOpen) && (
+        <CategorySidebarList
+          items={item.children}
+          language={language}
+          level={level + 1}
+        />
+      )}
+    </li>
   );
 }
 
