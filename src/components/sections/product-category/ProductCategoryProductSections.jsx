@@ -434,21 +434,7 @@ function ProductVerticalLayout({
           </h2>
 
           <div className="rounded-lg bg-[rgba(0,112,158,0.1)] px-6 py-7">
-            <div className="flex items-center justify-between gap-4 border-b border-black/25 pb-4">
-              <h3 className="font-heading text-[20px] font-medium leading-7 tracking-[-0.4px] text-black">
-                {labels.subcategories}
-              </h3>
-
-              <Image
-                src="/down-arrow-black.svg"
-                alt=""
-                width={12}
-                height={7}
-                className="h-auto w-3"
-              />
-            </div>
-
-            <nav className="pt-4" aria-label={labels.subcategories}>
+            <nav aria-label={labels.subcategories}>
               <CategorySidebarList items={categoryTree} language={language} />
             </nav>
           </div>
@@ -472,7 +458,7 @@ function CategorySidebarList({ items, language, level = 0 }) {
   if (items.length === 0) return null;
 
   return (
-    <ul className={level > 0 ? "mt-1 space-y-1 pl-5" : "space-y-2"}>
+    <ul className={level > 0 ? "mt-1 space-y-1 pl-5" : "space-y-0"}>
       {items.map((item) => (
         <CategorySidebarItem
           key={getCategoryId(item.category) || item.category?.slug}
@@ -493,20 +479,18 @@ function CategorySidebarItem({ item, language, level }) {
   return (
     <li>
       <div
-        className={`group flex items-center gap-3 rounded-sm py-1.5 font-body text-[15px] leading-5.5 tracking-[-0.3px] transition-colors hover:text-[var(--color-accent)] ${
+        className={`group flex items-center gap-3 transition-colors hover:text-[var(--color-accent)] ${
           level === 0
-            ? "font-semibold text-[var(--color-accent)]"
-            : "font-normal text-black"
+            ? "justify-between border-b border-black/25 py-4 font-heading text-[20px] font-medium leading-7 tracking-[-0.4px] text-black"
+            : "rounded-sm py-1.5 font-body text-[15px] font-normal leading-5.5 tracking-[-0.3px] text-black"
         }`}
       >
-        <span
-          className={`h-4 w-4 shrink-0 rounded-[2px] border transition-colors ${
-            level === 0
-              ? "border-[var(--color-yellow)] bg-[var(--color-yellow)]"
-              : "border-black group-hover:border-[var(--color-accent)]"
-          }`}
-          aria-hidden="true"
-        />
+        {level > 0 && (
+          <span
+            className="h-4 w-4 shrink-0 rounded-[2px] border border-black transition-colors group-hover:border-[var(--color-accent)]"
+            aria-hidden="true"
+          />
+        )}
 
         <Link href={getCategoryLink(category, language)} className="min-w-0 flex-1">
           <span>{stripHtml(category?.name)}</span>
@@ -557,7 +541,7 @@ function ProductVerticalCard({ product, language }) {
 
   return (
     <article className="flex h-full flex-col rounded-lg bg-[#F3F4FB] p-3 text-black">
-      <div className="relative flex aspect-[1.42/1] items-center justify-center overflow-hidden rounded-lg bg-white p-8">
+      <div className="relative flex aspect-[1.42/1] items-center justify-center overflow-hidden rounded-lg bg-white">
         {badge && (
           <span className="absolute left-3 top-0 z-10 rounded-b-sm bg-[var(--color-accent)] px-4 py-1.5 font-body text-[14px] leading-5 text-white">
             {badge}
@@ -570,7 +554,7 @@ function ProductVerticalCard({ product, language }) {
             alt={title || "Product image"}
             fill
             sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
-            className="object-contain p-8"
+            className="object-cover"
           />
         ) : (
           <span className="font-body text-[14px] text-black/45">
@@ -637,7 +621,7 @@ function ProductVerticalCard({ product, language }) {
         <div className="mt-auto flex gap-2 pt-7">
           <Link
             href={quoteLink}
-            className="group inline-flex min-h-15 flex-1 items-center justify-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pl-5 pr-1.5 font-heading text-[16px] font-normal tracking-[-0.32px] text-white transition-opacity hover:opacity-90"
+            className="group inline-flex min-h-15 min-w-0 flex-1 basis-1/2 items-center justify-center gap-3 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pl-4 pr-1.5 font-heading text-[15px] font-normal tracking-[-0.3px] text-white transition-opacity hover:opacity-90"
           >
             <span>{labels.requestQuote}</span>
             <span className="ml-auto flex h-11 w-11 shrink-0 items-center justify-center rounded-sm bg-white text-[22px] leading-none text-black">
@@ -648,8 +632,9 @@ function ProductVerticalCard({ product, language }) {
           <Link
             href={productLink}
             aria-label={`${labels.viewProduct}: ${title}`}
-            className="inline-flex min-h-15 w-15 shrink-0 items-center justify-center rounded-sm bg-[var(--color-yellow)] transition-opacity hover:opacity-90"
+            className="inline-flex min-h-15 min-w-0 flex-1 basis-1/2 items-center justify-center gap-3 rounded-sm bg-[var(--color-yellow)] py-1.5 pl-4 pr-1.5 font-heading text-[15px] font-normal tracking-[-0.3px] text-black transition-opacity hover:opacity-90"
           >
+            <span>{labels.viewProduct}</span>
             <Image
               src="/black-arrow.svg"
               alt=""
