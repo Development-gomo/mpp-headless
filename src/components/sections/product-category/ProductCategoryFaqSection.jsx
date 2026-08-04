@@ -37,7 +37,7 @@ export default function ProductCategoryFaqSection({ category }) {
 
   return (
     <section className="bg-white">
-      <div className="web-width px-6 py-20 md:py-[120px]">
+      <div className="web-width px-5 py-20 xl:px-0 md:py-[120px]">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
           {/* Left content */}
           <div>

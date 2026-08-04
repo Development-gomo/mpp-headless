@@ -109,7 +109,7 @@ export default function ProductCategoryBanner({
         </div>
 
         {/* Content */}
-        <div className="relative z-10 web-width px-6 pt-42.5 pb-30 md:pt-52.5 md:pb-46.25">
+        <div className="relative z-10 web-width px-5 pt-42.5 pb-30 xl:px-0 md:pt-52.5 md:pb-46.25">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-[60fr_40fr] lg:items-center">
             <div>
               <h1

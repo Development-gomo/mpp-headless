@@ -361,7 +361,7 @@ export default function ProductCategoryProductSections({
 
   return (
     <section data-category-products className="scroll-mt-[144px] bg-white">
-      <div className="web-width px-6 py-20 md:py-30">
+      <div className="web-width px-5 py-20 xl:px-0 md:py-30">
         {isVerticalLayout ? (
           <ProductVerticalLayout
             currentCategory={currentCategory}
@@ -441,7 +441,7 @@ function ProductVerticalLayout({
         </aside>
       )}
 
-      <div className="grid grid-cols-1 gap-7 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
         {products.map((product, index) => (
           <ProductVerticalCard
             key={`${getProductKey(product)}-${index}`}

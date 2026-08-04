@@ -44,7 +44,7 @@ export default function ProductCategorySeoSection({ category }) {
         />
       )}
 
-      <div className="relative z-10 web-width px-6 py-20 md:py-[120px]">
+      <div className="relative z-10 web-width px-5 py-20 xl:px-0 md:py-[120px]">
         <div className="flex">
           {/* Left content */}
           <div className="max-w-[630px]">
