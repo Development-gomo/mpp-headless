@@ -441,7 +441,11 @@ function ProductVerticalLayout({
         </aside>
       )}
 
-      <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
+      <div
+        className={`grid grid-cols-2 gap-4 sm:gap-5 ${
+          hasSidebar ? "xl:grid-cols-3" : "lg:grid-cols-3"
+        }`}
+      >
         {products.map((product, index) => (
           <ProductVerticalCard
             key={`${getProductKey(product)}-${index}`}
@@ -540,10 +544,10 @@ function ProductVerticalCard({ product, language }) {
   const badge = getProductBadge(product, labels);
 
   return (
-    <article className="flex h-full flex-col rounded-lg bg-[#F3F4FB] p-3 text-black">
+    <article className="flex h-full flex-col rounded-lg bg-[#F3F4FB] p-2 text-black">
       <div className="relative flex aspect-[1.42/1] items-center justify-center overflow-hidden rounded-lg bg-white">
         {badge && (
-          <span className="absolute left-3 top-0 z-10 rounded-b-sm bg-[var(--color-accent)] px-4 py-1.5 font-body text-[14px] leading-5 text-white">
+          <span className="absolute left-0 top-0 z-10 rounded-br-sm rounded-tl-lg bg-[var(--color-accent)] px-3 py-1 font-body text-[11px] leading-4 text-white">
             {badge}
           </span>
         )}
@@ -553,64 +557,64 @@ function ProductVerticalCard({ product, language }) {
             src={image}
             alt={title || "Product image"}
             fill
-            sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+            sizes="(min-width: 1280px) 22vw, (min-width: 768px) 33vw, 50vw"
             className="object-cover"
           />
         ) : (
-          <span className="font-body text-[14px] text-black/45">
+          <span className="font-body text-[12px] text-black/45">
             {labels.productImageMissing}
           </span>
         )}
       </div>
 
-      <div className="flex flex-1 flex-col px-4 pb-4 pt-7">
+      <div className="flex flex-1 flex-col px-2.5 pb-2.5 pt-3.5">
         {title && (
-          <h3 className="font-heading text-[24px] font-medium leading-8 tracking-[-0.48px] text-black">
+          <h3 className="font-heading text-[16px] font-medium leading-5.5 tracking-[-0.32px] text-black">
             {title}
           </h3>
         )}
 
         {excerpt && (
-          <p className="mt-3 font-body text-[16px] font-normal leading-7 text-[#1A1A1A]">
+          <p className="mt-1.5 line-clamp-2 font-body text-[12px] font-normal leading-4.5 text-[#5B5B5B]">
             {excerpt}
           </p>
         )}
 
         {(capacity || fuelType) && (
-          <div className="mt-6 border-y border-black/20">
+          <div className="mt-3 border-y border-black/20">
             {capacity && (
-              <div className="grid grid-cols-[128px_1fr] gap-3 border-b border-black/20 py-3">
-                <div className="flex items-center gap-2 font-body text-[14px] font-bold leading-5.5 text-[var(--color-accent)]">
+              <div className="grid grid-cols-[88px_1fr] gap-2 border-b border-black/20 py-1.5">
+                <div className="flex items-center gap-1.5 font-body text-[11px] font-bold leading-4 text-[var(--color-accent)]">
                   <Image
                     src="/capacity-icon.svg"
                     alt=""
-                    width={16}
-                    height={16}
-                    className="h-4 w-4 object-contain"
+                    width={13}
+                    height={13}
+                    className="h-3.5 w-3.5 object-contain"
                   />
                   {labels.capacity}
                 </div>
 
-                <div className="text-right font-body text-[14px] leading-5.5 text-black">
+                <div className="truncate text-right font-body text-[11px] leading-4 text-black">
                   {capacity}
                 </div>
               </div>
             )}
 
             {fuelType && (
-              <div className="grid grid-cols-[128px_1fr] gap-3 py-3">
-                <div className="flex items-center gap-2 font-body text-[14px] font-bold leading-5.5 text-[var(--color-accent)]">
+              <div className="grid grid-cols-[88px_1fr] gap-2 py-1.5">
+                <div className="flex items-center gap-1.5 font-body text-[11px] font-bold leading-4 text-[var(--color-accent)]">
                   <Image
                     src="/fuel-type-icon.svg"
                     alt=""
-                    width={16}
-                    height={16}
-                    className="h-4 w-4 object-contain"
+                    width={13}
+                    height={13}
+                    className="h-3.5 w-3.5 object-contain"
                   />
                   {labels.fuelType}
                 </div>
 
-                <div className="text-right font-body text-[14px] leading-5.5 text-black">
+                <div className="truncate text-right font-body text-[11px] leading-4 text-black">
                   {fuelType}
                 </div>
               </div>
@@ -618,13 +622,13 @@ function ProductVerticalCard({ product, language }) {
           </div>
         )}
 
-        <div className="mt-auto flex gap-2 pt-7">
+        <div className="mt-auto flex gap-1.5 pt-3.5">
           <Link
             href={quoteLink}
-            className="group inline-flex min-h-15 min-w-0 flex-1 basis-1/2 items-center justify-center gap-3 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pl-4 pr-1.5 font-heading text-[15px] font-normal tracking-[-0.3px] text-white transition-opacity hover:opacity-90"
+            className="group inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-2 rounded-sm bg-[image:var(--mpp-gradient)] py-1 pl-3 pr-1 font-heading text-[12px] font-normal tracking-[-0.24px] text-white transition-opacity hover:opacity-90"
           >
-            <span>{labels.requestQuote}</span>
-            <span className="ml-auto flex h-11 w-11 shrink-0 items-center justify-center rounded-sm bg-white text-[22px] leading-none text-black">
+            <span className="truncate">{labels.requestQuote}</span>
+            <span className="ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-sm bg-white text-[16px] leading-none text-black">
               {"\u2197"}
             </span>
           </Link>
@@ -632,15 +636,15 @@ function ProductVerticalCard({ product, language }) {
           <Link
             href={productLink}
             aria-label={`${labels.viewProduct}: ${title}`}
-            className="inline-flex min-h-15 min-w-0 flex-1 basis-1/2 items-center justify-center gap-3 rounded-sm bg-[var(--color-yellow)] py-1.5 pl-4 pr-1.5 font-heading text-[15px] font-normal tracking-[-0.3px] text-black transition-opacity hover:opacity-90"
+            title={labels.viewProduct}
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-sm bg-[var(--color-yellow)] transition-opacity hover:opacity-90"
           >
-            <span>{labels.viewProduct}</span>
             <Image
-              src="/black-arrow.svg"
+              src="/eye-icon.svg"
               alt=""
-              width={22}
-              height={22}
-              className="h-5.5 w-5.5 object-contain"
+              width={18}
+              height={18}
+              className="h-4.5 w-4.5 object-contain"
             />
           </Link>
         </div>
