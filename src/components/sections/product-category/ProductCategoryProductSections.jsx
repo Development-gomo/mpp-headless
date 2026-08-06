@@ -656,6 +656,7 @@ function ProductVerticalCard({ product, language }) {
 function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
   const products = (childCategory?.products || []).slice(0, 3);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isActiveImageWide, setIsActiveImageWide] = useState(true);
   const labels = getProductCategorySectionLabels(language);
   const metaLabels = getProductCategoryVerticalLabels(language);
 
@@ -742,7 +743,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                     </div>
 
                     <div className="font-body text-[14px] leading-5.5 text-black">
-                      {capacity} L
+                      {capacity}
                     </div>
                   </div>
                 )}
@@ -805,11 +806,12 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
               <div className="mt-16 flex gap-3">
                 <button
                   type="button"
-                  onClick={() =>
+                  onClick={() => {
                     setActiveIndex((prev) =>
                       prev === 0 ? products.length - 1 : prev - 1,
-                    )
-                  }
+                    );
+                    setIsActiveImageWide(true);
+                  }}
                   className="flex h-10 w-10 items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80 cursor-pointer" aria-label="Previous product">
                   <Image
                     src="/slider-arrow.svg"
@@ -822,11 +824,12 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
 
                 <button
                   type="button"
-                  onClick={() =>
+                  onClick={() => {
                     setActiveIndex((prev) =>
                       prev === products.length - 1 ? 0 : prev + 1,
-                    )
-                  }
+                    );
+                    setIsActiveImageWide(true);
+                  }}
                   className="flex h-10 w-10 items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80 cursor-pointer" aria-label="Next product">
                   <Image
                     src="/slider-arrow.svg"
@@ -841,7 +844,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
           </div>
 
           {/* Right product tabs + image */}
-          <div>
+          <div className="flex h-full flex-col">
             {products.length > 1 && (
               <div className="mb-10 flex flex-wrap justify-start gap-0 rounded-[4px] bg-[#D9DBE7] p-1 lg:ml-auto lg:w-fit">
                 {products.map((product, index) => {
@@ -851,7 +854,10 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                     <button
                       key={product.id || index}
                       type="button"
-                      onClick={() => setActiveIndex(index)}
+                      onClick={() => {
+                        setActiveIndex(index);
+                        setIsActiveImageWide(true);
+                      }}
                       className={`min-h-[44px] rounded-[3px] px-6 font-heading text-[16px] font-normal tracking-[-0.32px] transition-colors ${
                         isActive
                           ? "bg-white text-black shadow-sm"
@@ -865,14 +871,24 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
               </div>
             )}
 
-            <div className="relative flex min-h-[280px] items-center justify-center md:min-h-[360px]">
+            <div
+              className={`relative mt-auto flex min-h-[280px] items-end md:min-h-[280px] ${
+                isActiveImageWide ? "justify-end" : "justify-end"
+              }`}
+            >
               {activeImage ? (
                 <Image
                   src={activeImage}
                   alt={activeTitle || "Product image"}
                   width={760}
                   height={520}
-                  className="h-auto w-full max-w-[720px] object-contain drop-shadow-[0_20px_25px_rgba(0,0,0,0.25)]"
+                  onLoad={(event) => {
+                    const { naturalWidth, naturalHeight } = event.currentTarget;
+                    setIsActiveImageWide(naturalWidth >= naturalHeight);
+                  }}
+                  className={`h-auto w-auto max-w-full object-contain drop-shadow-[0_20px_25px_rgba(0,0,0,0.25)] ${
+                    isActiveImageWide ? "min-w-[120%]" : ""
+                  }`}
                 />
               ) : (
                 <div className="flex min-h-[260px] w-full items-center justify-center rounded-[8px] border border-black/10 bg-white/30 font-body text-[14px] text-black/50">
