@@ -840,20 +840,43 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
             )}
           </div>
 
-          {/* Right product image */}
+          {/* Right product tabs + image */}
           <div>
-            <div className="relative flex min-h-70 items-center justify-center md:min-h-90">
+            {products.length > 1 && (
+              <div className="mb-10 flex flex-wrap justify-start gap-0 rounded-[4px] bg-[#D9DBE7] p-1 lg:ml-auto lg:w-fit">
+                {products.map((product, index) => {
+                  const isActive = activeIndex === index;
+
+                  return (
+                    <button
+                      key={product.id || index}
+                      type="button"
+                      onClick={() => setActiveIndex(index)}
+                      className={`min-h-[44px] rounded-[3px] px-6 font-heading text-[16px] font-normal tracking-[-0.32px] transition-colors ${
+                        isActive
+                          ? "bg-white text-black shadow-sm"
+                          : "text-black/80 hover:bg-white/40"
+                      }`}
+                    >
+                      {getProductTitle(product)}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            <div className="relative flex min-h-[280px] items-center justify-center md:min-h-[360px]">
               {activeImage ? (
                 <Image
                   src={activeImage}
                   alt={activeTitle || "Product image"}
                   width={760}
                   height={520}
-                  className="h-auto w-full max-w-180 absolute -bottom-12 object-contain drop-shadow-[0_20px_25px_rgba(0,0,0,0.25)]"
+                  className="h-auto w-full max-w-[720px] object-contain drop-shadow-[0_20px_25px_rgba(0,0,0,0.25)]"
                 />
               ) : (
-                <div className="flex min-h-65 w-full items-center justify-center rounded-lg border border-black/10 bg-white/30 font-body text-[14px] text-black/50">
-                  {metaLabels.productImageMissing}
+                <div className="flex min-h-[260px] w-full items-center justify-center rounded-[8px] border border-black/10 bg-white/30 font-body text-[14px] text-black/50">
+                  Product image missing
                 </div>
               )}
             </div>
