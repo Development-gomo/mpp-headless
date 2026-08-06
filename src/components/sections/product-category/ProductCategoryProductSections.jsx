@@ -429,7 +429,7 @@ function ProductVerticalLayout({
     >
       {hasSidebar && (
         <aside className="lg:self-start">
-          <h2 className="mb-6 font-heading text-[32px] font-normal leading-9 tracking-[-0.64px] text-black">
+          <h2 className="mb-6 font-heading text-[22px] font-normal leading-7 tracking-[-0.44px] text-black">
             {labels.filters}
           </h2>
 
@@ -485,8 +485,8 @@ function CategorySidebarItem({ item, language, level }) {
       <div
         className={`group flex items-center gap-3 transition-colors hover:text-[var(--color-accent)] ${
           level === 0
-            ? "justify-between border-b border-black/25 py-4 font-heading text-[20px] font-medium leading-7 tracking-[-0.4px] text-black"
-            : "rounded-sm py-1.5 font-body text-[15px] font-normal leading-5.5 tracking-[-0.3px] text-black"
+            ? "justify-between border-b border-black/25 py-3 font-heading text-[15px] font-medium leading-5.5 tracking-[-0.3px] text-black"
+            : "rounded-sm py-1.5 font-body text-[13px] font-normal leading-4.5 tracking-[-0.26px] text-black"
         }`}
       >
         {level > 0 && (
