@@ -18,7 +18,7 @@ import {
   getVariationTextValues,
   stripHtml,
 } from "./productUtils";
-import { getLocalizedProductButtonText } from "./productLabels";
+import { getLocalizedProductButtonText, getProductLabels } from "./productLabels";
 
 const VISIBLE_THUMBNAILS = 5;
 
@@ -40,15 +40,15 @@ function SpecTile({ icon, label, value }) {
   if (!value) return null;
 
   return (
-    <div className="inline-flex min-h-[58px] items-center gap-3 rounded-sm bg-[#A8D4E4] px-4 py-2">
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center">
+    <div className="flex min-h-[58px] min-w-0 items-center gap-3 rounded-sm bg-[#A8D4E4] px-3 py-1.5">
+      <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center">
         <Image src={icon} alt="" width={32} height={32} className="h-8 w-8 object-contain" />
       </span>
       <span>
         <span className="block font-body text-[9px] leading-[12px] text-black">
           {label}
         </span>
-        <strong className="block font-body text-[20px] font-normal leading-6 text-black">
+        <strong className="block font-body text-[16px] font-normal leading-5 text-black">
           {value}
         </strong>
       </span>
@@ -66,6 +66,7 @@ export default function ProductHero({
 }) {
   const { addProduct } = useQuoteCart();
   const router = useRouter();
+  const labels = getProductLabels(language);
   const acf = product?.acf || {};
   const variationOptions = Array.isArray(variations)
     ? variations
@@ -77,13 +78,13 @@ export default function ProductHero({
   const productTitle = stripHtml(title) || "Product";
   const textBelowTitle = acf.text_under_title;
   const eyebrow = acf.text_over_title;
-  const intro = getRendered(product?.excerpt);
+  const intro = getRendered(product?.content) || getRendered(product?.excerpt);
   const gallery = useMemo(() => getProductGallery(product), [product]);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [thumbnailStart, setThumbnailStart] = useState(0);
 
   const categories = getProductCategories(product);
-  const categoryLabel = categories[0]?.name || "Mobile fuel tanks";
+  const categoryLabel = categories[0]?.name || labels.defaultCategory;
   const variationCapacityOptions = variationOptions
     .map((variation, index) => ({
       label: getVariationCapacity(variation),
@@ -125,7 +126,7 @@ export default function ProductHero({
     capacityOptions[0];
   const selectedCapacityLabel = appendUnit(
     selectedCapacityOption?.label || selectedCapacity,
-    "Liters"
+    labels.hero.liters
   );
   const fuelCompatibility = activeVariation
     ? getVariationTextValues(activeVariation.fuel_compatibility, "compatibility")
@@ -239,11 +240,11 @@ export default function ProductHero({
                   fill
                   priority
                   sizes="(min-width: 1024px) 610px, 100vw"
-                  className="product-gallery-main-image object-contain p-10 md:p-12"
+                  className="product-gallery-main-image object-cover"
                 />
               ) : (
                 <div className="flex min-h-75 items-center justify-center font-body text-[14px] text-black/50 md:min-h-[392px]">
-                  Product image missing
+                  {labels.imageMissing}
                 </div>
               )}
 
@@ -253,7 +254,7 @@ export default function ProductHero({
                     type="button"
                     onClick={showPreviousImage}
                     className="absolute left-4 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-sm bg-[image:var(--mpp-gradient)] text-white transition-opacity hover:opacity-90"
-                    aria-label="Previous product image"
+                    aria-label={labels.hero.previousImage}
                   >
                     <span className="text-[28px] leading-none">‹</span>
                   </button>
@@ -261,7 +262,7 @@ export default function ProductHero({
                     type="button"
                     onClick={showNextImage}
                     className="absolute right-4 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-sm bg-[image:var(--mpp-gradient)] text-white transition-opacity hover:opacity-90"
-                    aria-label="Next product image"
+                    aria-label={labels.hero.nextImage}
                   >
                     <span className="text-[28px] leading-none">›</span>
                   </button>
@@ -276,7 +277,7 @@ export default function ProductHero({
                     type="button"
                     onClick={showPreviousThumbnails}
                     className="flex h-11 w-9 shrink-0 items-center justify-center rounded-sm border border-[#DDD8CE] bg-white font-heading text-[22px] leading-none text-black transition-colors hover:border-[var(--color-yellow)]"
-                    aria-label="Show previous gallery thumbnails"
+                    aria-label={labels.hero.previousThumbnails}
                   >
                     &lt;
                   </button>
@@ -296,7 +297,7 @@ export default function ProductHero({
                             ? "border-[var(--color-yellow)]"
                             : "border-[#DDD8CE] hover:border-[var(--color-yellow)]/70"
                         }`}
-                        aria-label={`Show product image ${imageIndex + 1}`}
+                        aria-label={labels.hero.showImage(imageIndex + 1)}
                       >
                         <Image
                           src={image}
@@ -315,7 +316,7 @@ export default function ProductHero({
                     type="button"
                     onClick={showNextThumbnails}
                     className="flex h-11 w-9 shrink-0 items-center justify-center rounded-sm border border-[#DDD8CE] bg-white font-heading text-[22px] leading-none text-black transition-colors hover:border-[var(--color-yellow)]"
-                    aria-label="Show next gallery thumbnails"
+                    aria-label={labels.hero.nextThumbnails}
                   >
                     &gt;
                   </button>
@@ -367,7 +368,7 @@ export default function ProductHero({
                   htmlFor="product-capacity"
                   className="mb-2 block font-heading text-[18px] leading-6 tracking-[-0.36px] text-black"
                 >
-                  Capacity:
+                  {labels.hero.capacity}:
                 </label>
                 <div
                   className="relative"
@@ -388,14 +389,15 @@ export default function ProductHero({
                     }`}
                   >
                     <span>{selectedCapacityLabel}</span>
-                    <span
-                      className={`flex h-5 w-5 items-center justify-center text-[22px] font-normal leading-none transition-transform ${
-                        isCapacityOpen ? "" : "rotate-180"
+                    <Image
+                      src="/down-arrow.svg"
+                      alt=""
+                      width={11}
+                      height={7}
+                      className={`h-auto w-[11px] shrink-0 transition-transform ${
+                        isCapacityOpen ? "rotate-180" : ""
                       }`}
-                      aria-hidden="true"
-                    >
-                      ^
-                    </span>
+                    />
                   </button>
 
                   {isCapacityOpen && (
@@ -405,7 +407,7 @@ export default function ProductHero({
                       className="absolute left-0 top-full z-30 w-full overflow-hidden rounded-b-sm border border-t-0 border-[#80C5DD] bg-white font-body text-[14px] leading-5 text-[#1A1A1A] shadow-sm"
                     >
                       {capacityOptions.map((option) => {
-                        const optionLabel = appendUnit(option.label, "Liters");
+                        const optionLabel = appendUnit(option.label, labels.hero.liters);
                         const isSelected = option.value === selectedCapacityValue;
 
                         return (
@@ -430,17 +432,17 @@ export default function ProductHero({
               </div>
             )}
 
-            <div className="mt-7 flex flex-wrap gap-6">
-              <SpecTile icon="/volume-ico.svg" label="Volume" value={displayVolume} />
-              <SpecTile icon="/dimention-ico.svg" label="Dimensions" value={dimensions} />
-              <SpecTile icon="/weight-ico.svg" label="Net Weight" value={displayNetWeight} />
+            <div className="mt-7 flex flex-wrap gap-3 md:gap-4">
+              <SpecTile icon="/volume-ico.svg" label={labels.hero.volume} value={displayVolume} />
+              <SpecTile icon="/dimention-ico.svg" label={labels.hero.dimensions} value={dimensions} />
+              <SpecTile icon="/weight-ico.svg" label={labels.hero.netWeight} value={displayNetWeight} />
             </div>
 
             {(fuelCompatibility.length > 0 || applicationAreas.length > 0) && (
               <div className="mt-6 border-y border-black/15 py-5 font-body text-[15px] leading-6 text-black">
                 {fuelCompatibility.length > 0 && (
                   <div className="flex flex-wrap items-center gap-2">
-                    <strong className="mr-2 font-semibold">Fuel compatibility:</strong>
+                    <strong className="mr-2 font-semibold">{labels.hero.fuelCompatibility}:</strong>
                     {fuelCompatibility.map((item) => (
                       <span
                         key={item}
@@ -454,7 +456,7 @@ export default function ProductHero({
 
                 {applicationAreas.length > 0 && (
                   <div className="mt-4 grid gap-2 sm:grid-cols-[140px_1fr]">
-                    <strong className="font-semibold">Application areas:</strong>
+                    <strong className="font-semibold">{labels.hero.applicationAreas}:</strong>
                     <div className="flex flex-wrap gap-x-4 gap-y-1">
                       {applicationAreas.map((item) => (
                         <span
@@ -480,7 +482,7 @@ export default function ProductHero({
             {keyFeatures.length > 0 && (
               <div className="mt-5">
                 <h2 className="font-heading text-[18px] leading-6 tracking-[-0.36px] text-black">
-                  Key features:
+                  {labels.hero.keyFeatures}:
                 </h2>
                 <div className="mt-4 grid gap-x-8 gap-y-3 md:grid-cols-2">
                   {keyFeatures.map((feature) => (

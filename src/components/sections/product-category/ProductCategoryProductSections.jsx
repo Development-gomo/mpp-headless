@@ -871,11 +871,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
               </div>
             )}
 
-            <div
-              className={`relative mt-auto flex min-h-[280px] items-end md:min-h-[280px] ${
-                isActiveImageWide ? "justify-end" : "justify-end"
-              }`}
-            >
+            <div className="relative mt-auto flex min-h-[280px] items-end justify-end md:min-h-[280px]">
               {activeImage ? (
                 <Image
                   src={activeImage}

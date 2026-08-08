@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
 import { getButtonHref, getImageUrl, stripHtml } from "./productUtils";
+import { getProductLabels } from "./productLabels";
 
 function pickFirstObject(candidates = []) {
   return (
@@ -96,10 +97,11 @@ export default function ProductTestimonialsSection({
   const testimonials = getTestimonials(themeOptions);
   if (testimonials.length === 0) return null;
 
+  const labels = getProductLabels(language);
   const ctaText =
     product?.acf?.testimonial_cta_text ||
     product?.acf?.product_primary_cta_text ||
-    "Talk to our experts";
+    labels.testimonials.cta;
   const ctaHref = getButtonHref(
     product?.acf?.testimonial_cta_link || product?.acf?.product_primary_cta_link,
     localizePath("/rfq", language)
@@ -113,12 +115,13 @@ export default function ProductTestimonialsSection({
             <div className="mb-7 flex items-center gap-2">
               <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
               <p className="font-body text-[13px] font-medium uppercase leading-5.5 tracking-[0.52px] text-[#1A1A1A]">
-                Testimonials
+                {labels.testimonials.eyebrow}
               </p>
             </div>
-            <h2 className="font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] md:text-[48px] md:leading-14">
-              What our <span>customers say</span>
-            </h2>
+            <h2
+              className="font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] md:text-[48px] md:leading-14 [&_span]:text-[#007DA5]"
+              dangerouslySetInnerHTML={{ __html: labels.testimonials.title }}
+            />
           </div>
 
           <Link

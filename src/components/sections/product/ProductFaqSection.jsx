@@ -4,15 +4,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { getButtonHref, getButtonTarget, stripHtml } from "./productUtils";
+import { DEFAULT_LANGUAGE } from "@/lib/i18n";
+import { getProductLabels } from "./productLabels";
 
-export default function ProductFaqSection({ product }) {
+export default function ProductFaqSection({ product, language = DEFAULT_LANGUAGE }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const acf = product?.acf || {};
+  const labels = getProductLabels(language);
   const eyebrow = stripHtml(
     acf.faq_section_eyebrow ||
       acf.faq_section_label ||
       acf.faq_text_over_title ||
-      "FAQS"
+      labels.nav.faqs
   );
   const title = acf.faq_section_title;
   const description = acf.faq_section_description;

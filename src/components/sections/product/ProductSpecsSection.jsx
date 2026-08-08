@@ -9,7 +9,7 @@ import {
 import { DEFAULT_LANGUAGE } from "@/lib/i18n";
 import { getProductLabels } from "./productLabels";
 
-function normalizeSpecs(product, selectedVariation) {
+function normalizeSpecs(product, selectedVariation, labels) {
   const acf = product?.acf || {};
   const variationSpecs = Array.isArray(selectedVariation?.product_specs)
     ? selectedVariation.product_specs
@@ -17,17 +17,21 @@ function normalizeSpecs(product, selectedVariation) {
   const specs = Array.isArray(acf.product_specs) ? acf.product_specs : [];
   const fallbackSpecs = [
     {
-      spec_label: "Capacity",
+      spec_label: labels.specs.capacity,
       spec_value:
         getVariationCapacity(selectedVariation) ||
         acf.capacity ||
         acf.product_capacity,
       spec_icon: "/capacity-icon.svg",
     },
-    { spec_label: "Fuel type", spec_value: acf.fuel_type || acf.product_fuel_type, spec_icon: "/fuel-type-icon.svg" },
-    { spec_label: "Material", spec_value: acf.product_material },
     {
-      spec_label: "Dimensions",
+      spec_label: labels.specs.fuelType,
+      spec_value: acf.fuel_type || acf.product_fuel_type,
+      spec_icon: "/fuel-type-icon.svg",
+    },
+    { spec_label: labels.specs.material, spec_value: acf.product_material },
+    {
+      spec_label: labels.specs.dimensions,
       spec_value:
         selectedVariation?.dimensions ||
         acf.product_dimensions ||
@@ -47,11 +51,11 @@ export default function ProductSpecsSection({
   language = DEFAULT_LANGUAGE,
 }) {
   const acf = product?.acf || {};
-  const specs = normalizeSpecs(product, selectedVariation);
-  if (specs.length === 0) return null;
   const labels = getProductLabels(language);
+  const specs = normalizeSpecs(product, selectedVariation, labels);
+  if (specs.length === 0) return null;
   const productSheetHref = getButtonHref(acf.product_sheet, "#");
-  const title = acf.specification_section_title || "Explore the <span>product specifications</span>";
+  const title = acf.specification_section_title || labels.specs.title;
   const productSheetTarget =
     getButtonTarget(acf.product_sheet) ||
     (productSheetHref !== "#" ? "_blank" : undefined);
@@ -64,12 +68,13 @@ export default function ProductSpecsSection({
             <div className="mb-8 flex items-center gap-2">
               <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
               <p className="font-body text-[13px] font-medium uppercase leading-5.5 tracking-[0.52px] text-[#1A1A1A]">
-                Technical data
+                {labels.specs.eyebrow}
               </p>
             </div>
-            <h2 className="max-w-155 font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[54px] [&_span]:text-[#007DA5]">
-              {title}
-            </h2>
+            <h2
+              className="max-w-155 font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] text-black md:text-[48px] md:leading-[54px] [&_span]:text-[#007DA5]"
+              dangerouslySetInnerHTML={{ __html: title }}
+            />
           </div>
 
           {productSheetHref !== "#" && (

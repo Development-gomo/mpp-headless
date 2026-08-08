@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useQuoteCart } from "./QuoteCartProvider";
+import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
+import { getQuoteLabels } from "./quoteLabels";
 
 const emptyForm = {
   name: "",
@@ -29,22 +31,22 @@ function ProductImage({ src, alt }) {
   );
 }
 
-function validateForm(form, items) {
+function validateForm(form, items, errorLabels) {
   const nextErrors = {};
 
-  if (!items.length) nextErrors.items = "Add at least one product to request a quote.";
-  if (!form.name.trim()) nextErrors.name = "Name is required.";
+  if (!items.length) nextErrors.items = errorLabels.items;
+  if (!form.name.trim()) nextErrors.name = errorLabels.name;
   if (!form.email.trim()) {
-    nextErrors.email = "Email is required.";
+    nextErrors.email = errorLabels.email;
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
-    nextErrors.email = "Enter a valid email address.";
+    nextErrors.email = errorLabels.emailInvalid;
   }
-  if (!form.phone.trim()) nextErrors.phone = "Phone number is required.";
+  if (!form.phone.trim()) nextErrors.phone = errorLabels.phone;
 
   return nextErrors;
 }
 
-export default function QuoteCartPageContent() {
+export default function QuoteCartPageContent({ language = DEFAULT_LANGUAGE }) {
   const {
     items,
     updateProductQuantity,
@@ -53,6 +55,7 @@ export default function QuoteCartPageContent() {
     removeAccessory,
     clearCart,
   } = useQuoteCart();
+  const labels = getQuoteLabels(language);
   const [form, setForm] = useState(emptyForm);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle");
@@ -61,7 +64,7 @@ export default function QuoteCartPageContent() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const nextErrors = validateForm(form, items);
+    const nextErrors = validateForm(form, items, labels.errors);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
@@ -100,19 +103,20 @@ export default function QuoteCartPageContent() {
           <div className="mb-4 flex items-center gap-2">
             <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
             <p className="font-body text-[13px] font-medium uppercase leading-5.5 tracking-[0.52px]">
-              RFQ
+              {labels.eyebrow}
             </p>
           </div>
-          <h1 className="max-w-155 font-heading text-[48px] font-normal leading-14 tracking-[-0.96px] md:text-[64px] md:leading-[70px]">
-            Request a <span>quote</span>
-          </h1>
+          <h1
+            className="max-w-155 font-heading text-[48px] font-normal leading-14 tracking-[-0.96px] md:text-[64px] md:leading-[70px] [&_span]:text-[#007DA5]"
+            dangerouslySetInnerHTML={{ __html: labels.title }}
+          />
         </div>
 
         <div className="grid grid-cols-1 overflow-hidden rounded-lg border border-[#D7E4EA] lg:grid-cols-[1.15fr_0.85fr]">
           <div className="border-b border-[#D7E4EA] bg-white p-5 md:p-8 lg:border-b-0 lg:border-r">
             <div className="mb-6 flex items-center justify-between gap-4">
               <h2 className="font-heading text-[30px] leading-[36px] tracking-[-0.6px]">
-                Quotation cart
+                {labels.cart.heading}
               </h2>
               {items.length > 0 && (
                 <button
@@ -120,7 +124,7 @@ export default function QuoteCartPageContent() {
                   onClick={clearCart}
                   className="border-b border-black/30 font-body text-[13px] text-black/60 hover:text-black"
                 >
-                  Clear cart
+                  {labels.cart.clearCart}
                 </button>
               )}
             </div>
@@ -134,12 +138,12 @@ export default function QuoteCartPageContent() {
             {confirmation ? (
               <div className="rounded-lg bg-[#E5F2F7] p-6">
                 <h3 className="font-heading text-[28px] leading-[34px]">
-                  Quote request sent
+                  {labels.confirmation.heading}
                 </h3>
                 <p className="mt-3 font-body text-[15px] leading-[23px] text-[#1A1A1A]">
-                  Thank you. Your WooCommerce order has been created
+                  {labels.confirmation.thankYou}
                   {confirmation.orderNumber
-                    ? ` with order number ${confirmation.orderNumber}`
+                    ? labels.confirmation.withOrderNumber(confirmation.orderNumber)
                     : ""}
                   .
                 </p>
@@ -148,13 +152,13 @@ export default function QuoteCartPageContent() {
               <div className="flex min-h-70 items-center justify-center rounded-lg border border-dashed border-black/20 bg-[#F8FAFC] p-8 text-center">
                 <div>
                   <p className="mx-auto max-w-[420px] font-body text-[15px] leading-[23px] text-black/60">
-                    Add a product or accessory to start your quote request.
+                    {labels.cart.emptyText}
                   </p>
                   <Link
-                    href="/product/pickuptank"
+                    href={localizePath("/product/pickuptank", language)}
                     className="mt-5 inline-flex h-11 items-center justify-center rounded-sm bg-[var(--color-yellow)] px-5 font-heading text-[14px] text-black"
                   >
-                    Explore products
+                    {labels.cart.exploreProducts}
                   </Link>
                 </div>
               </div>
@@ -177,12 +181,12 @@ export default function QuoteCartPageContent() {
                             </h3>
                             {item.capacity && (
                               <p className="mt-1 font-body text-[14px] text-[#007DA5]">
-                                Capacity: {item.capacity}
+                                {labels.cart.capacity}: {item.capacity}
                               </p>
                             )}
                             {item.sku && (
                               <p className="mt-1 font-body text-[13px] text-black/55">
-                                Article: {item.sku}
+                                {labels.cart.article}: {item.sku}
                               </p>
                             )}
                           </div>
@@ -191,13 +195,13 @@ export default function QuoteCartPageContent() {
                             onClick={() => removeProduct(item.key)}
                             className="h-fit border-b border-black/30 font-body text-[13px] text-black/60 hover:text-black"
                           >
-                            Remove
+                            {labels.cart.remove}
                           </button>
                         </div>
 
                         <div className="mt-4 flex items-center gap-3">
                           <span className="font-body text-[13px] text-black/60">
-                            Quantity
+                            {labels.cart.quantity}
                           </span>
                           <input
                             type="number"
@@ -218,7 +222,7 @@ export default function QuoteCartPageContent() {
                     {item.accessories.length > 0 && (
                       <div className="mt-5 border-t border-black/10 pt-4">
                         <p className="mb-3 font-body text-[12px] font-bold uppercase tracking-[0.48px] text-black/55">
-                          Accessories
+                          {labels.cart.accessories}
                         </p>
                         <div className="space-y-3">
                           {item.accessories.map((accessory) => (
@@ -262,7 +266,7 @@ export default function QuoteCartPageContent() {
                                     removeAccessory(item.key, accessory.key)
                                   }
                                   className="h-8 w-8 rounded-sm border border-black/15 font-body text-[16px] leading-none hover:bg-black/5"
-                                  aria-label={`Remove ${accessory.name}`}
+                                  aria-label={labels.cart.removeItem(accessory.name)}
                                 >
                                   x
                                 </button>
@@ -280,19 +284,18 @@ export default function QuoteCartPageContent() {
 
           <form onSubmit={handleSubmit} className="bg-[#E5F2F7] p-5 md:p-8">
             <h2 className="font-heading text-[30px] leading-[36px] tracking-[-0.6px]">
-              Contact details
+              {labels.form.heading}
             </h2>
             <p className="mt-2 font-body text-[14px] leading-5.5 text-[#1A1A1A]">
-              Send us your selected products and contact details. We will review
-              the request and get back to you.
+              {labels.form.description}
             </p>
 
             <div className="mt-6 space-y-4">
               {[
-                { key: "name", label: "Name", type: "text" },
-                { key: "email", label: "Email", type: "email" },
-                { key: "phone", label: "Phone", type: "tel" },
-                { key: "company", label: "Company", type: "text" },
+                { key: "name", label: labels.form.name, type: "text" },
+                { key: "email", label: labels.form.email, type: "email" },
+                { key: "phone", label: labels.form.phone, type: "tel" },
+                { key: "company", label: labels.form.company, type: "text" },
               ].map((field) => (
                 <label key={field.key} className="block">
                   <span className="mb-1 block font-body text-[13px] font-bold">
@@ -320,7 +323,7 @@ export default function QuoteCartPageContent() {
 
               <label className="block">
                 <span className="mb-1 block font-body text-[13px] font-bold">
-                  Message
+                  {labels.form.message}
                 </span>
                 <textarea
                   value={form.message}
@@ -346,7 +349,7 @@ export default function QuoteCartPageContent() {
                 disabled={status === "submitting"}
                 className="inline-flex h-12 items-center justify-center rounded-sm bg-[var(--color-yellow)] px-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-60"
               >
-                {status === "submitting" ? "Submitting..." : "Submit quote request"}
+                {status === "submitting" ? labels.form.submitting : labels.form.submit}
               </button>
             </div>
           </form>

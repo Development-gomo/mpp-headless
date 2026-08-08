@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
 import { getProductCategories, getRendered, stripHtml } from "./productUtils";
+import { getProductLabels } from "./productLabels";
 
 function getCategoryId(category) {
   return category?.term_id || category?.id;
@@ -78,6 +79,7 @@ export default function ProductBreadcrumbs({
   const title = stripHtml(getRendered(product?.title));
   const categories = getProductCategories(product);
   const primaryCategory = getMainProductCategory(categories, productCategories);
+  const labels = getProductLabels(language);
 
   return (
     <nav aria-label="Breadcrumb" className="bg-white pt-[126px] md:pt-[136px]">
@@ -87,7 +89,7 @@ export default function ProductBreadcrumbs({
             href={localizePath("/", language)}
             className="transition-colors hover:text-black"
           >
-            Home
+            {labels.home}
           </Link>
         </li>
         <li aria-hidden="true">/</li>

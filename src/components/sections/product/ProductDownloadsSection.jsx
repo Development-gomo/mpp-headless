@@ -21,7 +21,7 @@ export default function ProductDownloadsSection({
         <div className="mb-10 flex items-center gap-2">
           <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
           <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-[#1A1A1A]">
-            Downloads
+            {labels.downloads}
           </p>
         </div>
 

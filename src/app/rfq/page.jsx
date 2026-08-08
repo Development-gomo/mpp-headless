@@ -16,7 +16,7 @@ export default function RfqPage() {
         translationContext={{ path: "/rfq" }}
       />
       <main>
-        <QuoteCartPageContent />
+        <QuoteCartPageContent language={DEFAULT_LANGUAGE} />
       </main>
       <Footer />
     </>

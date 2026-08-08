@@ -10,7 +10,7 @@ import {
   stripHtml,
 } from "./productUtils";
 import { DEFAULT_LANGUAGE } from "@/lib/i18n";
-import { getLocalizedProductButtonText } from "./productLabels";
+import { getLocalizedProductButtonText, getProductLabels } from "./productLabels";
 
 function getOverviewRows(product, variations) {
   const acf = product?.acf || {};
@@ -53,10 +53,9 @@ export default function ProductOverviewSection({
   language = DEFAULT_LANGUAGE,
 }) {
   const acf = product?.acf || {};
-  const title = acf.tank_section_title || "See which tank <span>fits your needs</span>";
-  const description =
-    acf.tank_section_description ||
-    "Review the key specifications of each tank to choose the size that best fits your application.";
+  const labels = getProductLabels(language);
+  const title = acf.tank_section_title || labels.overview.title;
+  const description = acf.tank_section_description || labels.overview.description;
   const gallery = getProductGallery(product);
   const rowImage = gallery[0] || "";
   const primaryText = getLocalizedProductButtonText(
@@ -79,7 +78,7 @@ export default function ProductOverviewSection({
             <div className="mb-7 flex items-center gap-2">
               <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
               <p className="font-body text-[13px] font-medium uppercase leading-5.5 tracking-[0.52px] text-[#1A1A1A]">
-                Your ideal tank
+                {labels.overview.eyebrow}
               </p>
             </div>
 
@@ -120,18 +119,18 @@ export default function ProductOverviewSection({
           <div className="min-w-[900px] overflow-hidden rounded-md">
             <div className="grid grid-cols-[1.7fr_0.6fr_0.6fr_0.6fr] rounded-md bg-[image:var(--mpp-gradient)] font-body text-[14px] font-normal uppercase leading-[20px] text-white">
               <div className="flex min-h-[54px] items-center justify-center px-5">
-                Description and article number
+                {labels.overview.descriptionCol}
               </div>
               <div className="flex min-h-[54px] items-center justify-center border-l border-white/80 px-5 text-center">
-                Dimensions (cm)
+                {labels.overview.dimensionsCol}
                 <br />
-                L x W x H
+                {labels.overview.dimensionsSub}
               </div>
               <div className="flex min-h-[54px] items-center justify-center border-l border-white/80 px-5 text-center">
-                Volume (L)
+                {labels.overview.volumeCol}
               </div>
               <div className="flex min-h-[54px] items-center justify-center border-l border-white/80 px-5 text-center">
-                Weight (kg)
+                {labels.overview.weightCol}
               </div>
             </div>
 
@@ -172,7 +171,7 @@ export default function ProductOverviewSection({
                       <div>
                         {isCurrent && (
                           <p className="mb-1 text-[11px] leading-[14px] text-white before:mr-1 before:text-[var(--color-yellow)] before:content-['•']">
-                            Current product
+                            {labels.overview.currentProduct}
                           </p>
                         )}
                         <p className="font-body text-[20px] leading-[26px]">

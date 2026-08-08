@@ -1,30 +1,40 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ProductBreadcrumbs from "./ProductBreadcrumbs";
+import ProductAccessoryOverview from "./ProductAccessoryOverview";
 import ProductVariationSections from "./ProductVariationSections";
 import ProductFeaturesSection from "./ProductFeaturesSection";
 import ProductTestimonialsSection from "./ProductTestimonialsSection";
 import ProductDownloadsSection from "./ProductDownloadsSection";
 import ProductFaqSection from "./ProductFaqSection";
 import ProductRelatedProductsSection from "./ProductRelatedProductsSection";
+import ProductCtaSection from "./ProductCtaSection";
+import { DEFAULT_LANGUAGE } from "@/lib/i18n";
+import { getProductLabels } from "./productLabels";
 
-const PRODUCT_ANCHOR_LINKS = [
-  { href: "#technical-data", label: "Technical data" },
-  { href: "#find-your-tank", label: "Find your tank" },
-  { href: "#accessories", label: "Accessories" },
-  { href: "#testimonials", label: "Testimonials" },
-  { href: "#faqs", label: "FAQs" },
-];
+function getAnchorLinks(labels) {
+  return [
+    { href: "#technical-data", label: labels.nav.technicalData },
+    { href: "#find-your-tank", label: labels.nav.findYourTank },
+    { href: "#accessories", label: labels.nav.accessories },
+    { href: "#testimonials", label: labels.nav.testimonials },
+    { href: "#faqs", label: labels.nav.faqs },
+  ];
+}
 
-function ProductAnchorNav() {
-  const [activeHref, setActiveHref] = useState(PRODUCT_ANCHOR_LINKS[0].href);
+function ProductAnchorNav({ language = DEFAULT_LANGUAGE }) {
+  const anchorLinks = useMemo(
+    () => getAnchorLinks(getProductLabels(language)),
+    [language]
+  );
+  const [activeHref, setActiveHref] = useState(anchorLinks[0].href);
 
   useEffect(() => {
     const sectionOffset = 150;
 
     const updateActiveLink = () => {
-      const availableLinks = PRODUCT_ANCHOR_LINKS.filter((link) =>
+      const availableLinks = anchorLinks.filter((link) =>
         document.getElementById(link.href.slice(1))
       );
       const activeLink =
@@ -49,12 +59,12 @@ function ProductAnchorNav() {
       window.removeEventListener("scroll", updateActiveLink);
       window.removeEventListener("resize", updateActiveLink);
     };
-  }, []);
+  }, [anchorLinks]);
 
   return (
     <nav className="sticky top-[72px] z-30 bg-[var(--color-accent)] text-white shadow-sm" aria-label="Product sections">
       <div className="web-width flex gap-8 overflow-x-auto px-6">
-        {PRODUCT_ANCHOR_LINKS.map((link) => {
+        {anchorLinks.map((link) => {
           const isActive = activeHref === link.href;
 
           return (
@@ -86,6 +96,21 @@ export default function ProductPageTemplate({
   accessories = [],
   language,
 }) {
+  const isMainProduct = product?.acf?.product_type === true;
+
+  if (!isMainProduct) {
+    return (
+      <>
+        <ProductBreadcrumbs
+          product={product}
+          productCategories={productCategories}
+          language={language}
+        />
+        <ProductAccessoryOverview product={product} language={language} />
+      </>
+    );
+  }
+
   return (
     <>
       <ProductBreadcrumbs
@@ -94,7 +119,7 @@ export default function ProductPageTemplate({
         language={language}
       />
       <ProductVariationSections product={product} language={language}>
-        <ProductAnchorNav />
+        <ProductAnchorNav language={language} />
       </ProductVariationSections>
       <ProductFeaturesSection
         product={product}
@@ -114,7 +139,8 @@ export default function ProductPageTemplate({
         products={relatedProducts}
         language={language}
       />
-      <ProductFaqSection product={product} />
+      <ProductFaqSection product={product} language={language} />
+      <ProductCtaSection product={product} language={language} />
     </>
   );
 }

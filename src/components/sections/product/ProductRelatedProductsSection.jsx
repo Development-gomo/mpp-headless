@@ -21,16 +21,37 @@ const RELATED_PRODUCTS_LABELS = {
     findDealer: "Hitta återförsäljare",
     viewAllProducts: "Visa alla produkter",
     viewProduct: "Visa produkt",
+    eyebrow: "Relaterade produkter",
+    title: "Upptäck relaterade <span>bränsleprodukter</span>",
+    capacity: "Kapacitet",
+    fuelType: "Bränsletyp",
+    previousProduct: "Föregående produkt",
+    nextProduct: "Nästa produkt",
+    imageMissing: "Produktbild saknas",
   },
   [ENGLISH_LANGUAGE]: {
     findDealer: "Find a dealer",
     viewAllProducts: "View all products",
     viewProduct: "View product",
+    eyebrow: "Related products",
+    title: "Discover related fuel storage <span>products</span>",
+    capacity: "Capacity",
+    fuelType: "Fuel type",
+    previousProduct: "Previous product",
+    nextProduct: "Next product",
+    imageMissing: "Product image missing",
   },
   [GERMAN_LANGUAGE]: {
     findDealer: "Händler finden",
     viewAllProducts: "Alle Produkte anzeigen",
     viewProduct: "Produkt ansehen",
+    eyebrow: "Verwandte Produkte",
+    title: "Entdecken Sie verwandte <span>Kraftstoffprodukte</span>",
+    capacity: "Kapazität",
+    fuelType: "Kraftstoffart",
+    previousProduct: "Vorheriges Produkt",
+    nextProduct: "Nächstes Produkt",
+    imageMissing: "Produktbild fehlt",
   },
 };
 
@@ -215,12 +236,13 @@ export default function ProductRelatedProductsSection({
             <div className="mb-7 flex items-center gap-2">
               <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
               <p className="font-body text-[13px] font-medium uppercase leading-5.5 tracking-[0.52px]">
-                Related products
+                {labels.eyebrow}
               </p>
             </div>
-            <h2 className="max-w-[580px] font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] md:text-[48px] md:leading-14">
-              Discover related fuel storage <span>products</span>
-            </h2>
+            <h2
+              className="max-w-[580px] font-heading text-[34px] font-normal leading-[46px] tracking-[-0.84px] md:text-[48px] md:leading-14"
+              dangerouslySetInnerHTML={{ __html: labels.title }}
+            />
           </div>
 
           <Link
@@ -274,7 +296,7 @@ export default function ProductRelatedProductsSection({
                           height={16}
                           className="h-4 w-4 object-contain"
                         />
-                        Capacity
+                        {labels.capacity}
                       </div>
                       <div className="font-body text-[14px] leading-5.5">
                         {capacity}
@@ -292,7 +314,7 @@ export default function ProductRelatedProductsSection({
                           height={16}
                           className="h-4 w-4 object-contain"
                         />
-                        Fuel type
+                        {labels.fuelType}
                       </div>
                       <div className="font-body text-[14px] leading-5.5">
                         {fuelType}
@@ -342,7 +364,7 @@ export default function ProductRelatedProductsSection({
                       )
                     }
                     className="flex h-11 w-[44px] items-center justify-center rounded-sm bg-white transition-opacity hover:opacity-80"
-                    aria-label="Previous product"
+                    aria-label={labels.previousProduct}
                   >
                     <Image
                       src="/slider-arrow.svg"
@@ -361,7 +383,7 @@ export default function ProductRelatedProductsSection({
                       )
                     }
                     className="flex h-11 w-[44px] items-center justify-center rounded-sm bg-white transition-opacity hover:opacity-80"
-                    aria-label="Next product"
+                    aria-label={labels.nextProduct}
                   >
                     <Image
                       src="/slider-arrow.svg"
@@ -387,7 +409,7 @@ export default function ProductRelatedProductsSection({
                   />
                 ) : (
                   <div className="flex min-h-[260px] w-full items-center justify-center rounded-lg border border-black/10 bg-white/30 font-body text-[14px] text-black/50">
-                    Product image missing
+                    {labels.imageMissing}
                   </div>
                 )}
               </div>

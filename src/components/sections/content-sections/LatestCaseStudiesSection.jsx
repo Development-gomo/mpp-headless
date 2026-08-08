@@ -173,7 +173,7 @@ export default function LatestCaseStudiesSection({
                         alt=""
                         width={36}
                         height={36}
-                        className="object-contain transition-transform"
+                        className="h-auto w-9 object-contain transition-transform"
                       />
                     </Link>
                   </div>

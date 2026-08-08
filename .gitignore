@@ -40,3 +40,13 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 acf-json
+
+# logs
+*.log
+dev-server*.log
+
+# local debug dumps
+themeOptions-debug.json
+
+# editor / tool local config
+.claude/settings.local.json

@@ -75,7 +75,13 @@ function ArrowUpRightIcon({ className = "" }) {
   );
 }
 
-function ThreeLevelCategoryMenu({ menuRow, language = DEFAULT_LANGUAGE }) {
+function ThreeLevelCategoryMenu({
+  menuRow,
+  language = DEFAULT_LANGUAGE,
+  cta2Text = "Reseller",
+  cta2Url = "#",
+  cta2Target = "_self",
+}) {
   const [activeState, setActiveState] = useState(() =>
     getDefaultThreeLevelState(menuRow)
   );
@@ -183,12 +189,13 @@ function ThreeLevelCategoryMenu({ menuRow, language = DEFAULT_LANGUAGE }) {
             )}
           </ul>
 
-          {activeCategory?.href && activeCategory.href !== "#" && (
+          {cta2Url && cta2Url !== "#" && (
             <Link
-              href={activeCategory.href}
+              href={cta2Url}
+              target={cta2Target || "_self"}
               className="group inline-flex h-11 items-center justify-between gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
             >
-              <span className="whitespace-nowrap">Find your right tank</span>
+              <span className="whitespace-nowrap">{cta2Text}</span>
               <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[3px] bg-white text-black">
                 <ArrowUpRightIcon />
               </span>
@@ -290,6 +297,7 @@ export default function HeaderComponent(props) {
   const homeHref = language === DEFAULT_LANGUAGE ? "/" : `/${language}`;
   const quoteHref = localizePath("/rfq", language);
   const callIcon = isDark ? "/call-dark.svg" : "/call.svg";
+  const cartIcon = isDark ? "/cart-icon-dark.svg" : "/cart-icon.svg";
   const languageArrowIcon = isDark ? "/down-arrow-black.svg" : "/down-arrow.svg";
   const menuLinkClass = `inline-flex h-6 items-center gap-1 text-[14px] font-normal leading-6 tracking-[-0.28px] font-heading transition-colors ${
     isDark ? "text-black hover:text-[var(--color-accent)]" : "text-white hover:text-white/80"
@@ -405,6 +413,9 @@ export default function HeaderComponent(props) {
                           <ThreeLevelCategoryMenu
                             menuRow={menuRow}
                             language={language}
+                            cta2Text={cta2Text}
+                            cta2Url={cta2Url}
+                            cta2Target={cta2Target}
                           />
                         </div>
                       </div>
@@ -564,8 +575,9 @@ export default function HeaderComponent(props) {
           >
             <Link
               href={quoteHref}
-              className={`flex h-7 items-center justify-center rounded-sm px-3 backdrop-blur-[10px] text-[14px] leading-6 tracking-[-0.28px] font-heading ${topPillClass}`}
+              className={`flex h-7 items-center justify-center gap-1.5 rounded-sm px-3 backdrop-blur-[10px] text-[14px] leading-6 tracking-[-0.28px] font-heading ${topPillClass}`}
             >
+              <Image src={cartIcon} alt="" width={16} height={16} className="h-4 w-4 shrink-0" />
               RFQ{quoteCount > 0 ? ` (${quoteCount})` : ""}
             </Link>
 
@@ -833,7 +845,10 @@ export default function HeaderComponent(props) {
                     className="inline-flex items-center justify-between rounded-sm bg-[#E5F2F7] py-3 px-5 text-slate-900 font-heading text-[14px]"
                     onClick={() => setMobileOpen(false)}
                   >
-                    <span>RFQ</span>
+                    <span className="inline-flex items-center gap-2">
+                      <Image src="/cart-icon-dark.svg" alt="" width={18} height={18} className="h-4.5 w-4.5 shrink-0" />
+                      RFQ
+                    </span>
                     {quoteCount > 0 && (
                       <span className="rounded-full bg-[var(--color-yellow)] px-2 py-0.5 text-[12px] leading-none text-black">
                         {quoteCount}

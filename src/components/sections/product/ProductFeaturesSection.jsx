@@ -1,10 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useQuoteCart } from "@/components/quote/QuoteCartProvider";
-import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
+import { DEFAULT_LANGUAGE } from "@/lib/i18n";
 import {
   getProductGallery,
   getProductCategories as getProductTerms,
@@ -85,65 +84,40 @@ function getCategoryDepth(category, categoryMap) {
   return depth;
 }
 
-function getMainCategory(category, categoryMap) {
-  let currentCategory = category;
-  const visitedIds = new Set();
-
-  while (Number(getCategoryParentId(currentCategory)) > 0) {
-    const parentId = String(getCategoryParentId(currentCategory));
-    if (visitedIds.has(parentId)) break;
-    visitedIds.add(parentId);
-
-    const parentCategory = categoryMap.get(parentId);
-    if (!parentCategory) break;
-    currentCategory = parentCategory;
-  }
-
-  return currentCategory;
-}
-
 function getAccessoryCategories(accessory, categoryMap) {
   return getProductTerms(accessory)
     .map((category) => resolveCategory(category, categoryMap))
     .filter(Boolean);
 }
 
-function getAccessoryChildCategory(accessory, categoryMap) {
+// Prefers the most specific (deepest) category attached to the accessory,
+// but falls back to a top-level category rather than showing nothing.
+function getAccessoryDisplayCategory(accessory, categoryMap) {
   const categories = getAccessoryCategories(accessory, categoryMap);
+  if (categories.length === 0) return null;
 
-  return (
-    categories
-      .filter((category) => Number(getCategoryParentId(category)) > 0)
-      .sort(
-        (a, b) => getCategoryDepth(b, categoryMap) - getCategoryDepth(a, categoryMap)
-      )[0] || null
-  );
+  const childCategory = categories
+    .filter((category) => Number(getCategoryParentId(category)) > 0)
+    .sort(
+      (a, b) => getCategoryDepth(b, categoryMap) - getCategoryDepth(a, categoryMap)
+    )[0];
+
+  return childCategory || categories[0];
 }
 
-function getAccessoryMainCategories(accessory, categoryMap) {
-  const seenIds = new Set();
-
-  return getAccessoryCategories(accessory, categoryMap)
-    .map((category) => getMainCategory(category, categoryMap))
-    .filter((category) => {
-      const categoryId = getCategoryId(category);
-      if (!categoryId || seenIds.has(String(categoryId))) return false;
-      seenIds.add(String(categoryId));
-      return true;
-    });
-}
-
-function buildMainCategoryFilters(accessories, categoryMap) {
+// Filters use the same category resolution as the per-card label, so the
+// filter a user picks always matches what's displayed above each card.
+function buildCategoryFilters(accessories, categoryMap) {
   const filters = [];
   const seenIds = new Set();
 
   accessories.forEach((accessory) => {
-    getAccessoryMainCategories(accessory, categoryMap).forEach((category) => {
-      const categoryId = getCategoryId(category);
-      if (!categoryId || seenIds.has(String(categoryId))) return;
-      seenIds.add(String(categoryId));
-      filters.push(category);
-    });
+    const category = getAccessoryDisplayCategory(accessory, categoryMap);
+    const categoryId = category && getCategoryId(category);
+    if (!categoryId || seenIds.has(String(categoryId))) return;
+
+    seenIds.add(String(categoryId));
+    filters.push(category);
   });
 
   return filters;
@@ -183,9 +157,8 @@ function getFallbackAccessories(product) {
 function AccessoryCard({
   accessory,
   image,
-  isSelected,
+  isAdded,
   childCategory,
-  onSelect,
   onAdd,
   labels,
 }) {
@@ -194,22 +167,25 @@ function AccessoryCard({
 
   return (
     <article
-      onClick={onSelect}
-      className={`relative grid min-h-[114px] cursor-pointer grid-cols-[120px_1fr] gap-4 overflow-hidden rounded-lg p-2 transition-colors ${
-        isSelected
+      className={`relative grid min-h-[114px] grid-cols-[120px_1fr] gap-4 overflow-hidden rounded-lg p-2 transition-colors ${
+        isAdded
           ? "bg-[var(--color-accent)] text-white"
           : "bg-[#F3F4FB] text-black"
       }`}
     >
       <div className="relative overflow-hidden rounded-md bg-white">
-        {image && (
+        {image ? (
           <Image
             src={image}
             alt={title}
             fill
             sizes="120px"
-            className="object-contain p-2"
+            className="object-cover"
           />
+        ) : (
+          <div className="flex h-full min-h-[110px] w-full items-center justify-center px-2 text-center font-body text-[10px] leading-[14px] text-black/40">
+            {labels.imageMissing}
+          </div>
         )}
       </div>
 
@@ -217,7 +193,7 @@ function AccessoryCard({
         {childCategory?.name && (
           <p
             className={`mb-1 font-body text-[10px] font-bold uppercase leading-[14px] ${
-              isSelected ? "text-white/80" : "text-[#007DA5]"
+              isAdded ? "text-white/80" : "text-[#007DA5]"
             }`}
           >
             {stripHtml(childCategory.name)}
@@ -233,21 +209,18 @@ function AccessoryCard({
         )}
         <button
           type="button"
-          onClick={(event) => {
-            event.stopPropagation();
-            onAdd();
-          }}
-          className={`mt-3 w-fit border-b font-heading text-[13px] font-normal uppercase leading-[18px] tracking-[-0.26px] ${
-            isSelected
+          onClick={onAdd}
+          className={`mt-3 w-fit cursor-pointer border-b font-heading text-[13px] font-normal uppercase leading-[18px] tracking-[-0.26px] ${
+            isAdded
               ? "border-[var(--color-yellow)] text-[var(--color-yellow)]"
               : "border-[var(--color-yellow)] text-[#D79B00]"
           }`}
         >
-          {labels.addToCart}
+          {isAdded ? labels.added : labels.addToCart}
         </button>
       </div>
 
-      {isSelected && (
+      {isAdded && (
         <span className="absolute right-3 top-3 flex h-[18px] w-4.5 items-center justify-center rounded-full bg-[var(--color-yellow)] text-[12px] font-bold leading-none text-white">
           &#10003;
         </span>
@@ -262,21 +235,16 @@ export default function ProductFeaturesSection({
   accessories = [],
   language = DEFAULT_LANGUAGE,
 }) {
-  const { addAccessory } = useQuoteCart();
-  const router = useRouter();
+  const { items, addAccessory } = useQuoteCart();
   const acf = product?.acf || {};
-  const [selectedAccessoryKey, setSelectedAccessoryKey] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
   const labels = getProductLabels(language);
   const gallery = getProductGallery(product);
   const productTitle =
     stripHtml(getRendered(product?.title)) || product?.slug || "Product";
-  const title =
-    acf.accessories_section_title ||
-    "Select <span>accessories</span> for your tank";
+  const title = acf.accessories_section_title || labels.accessories.title;
   const description =
-    acf.accessories_section_description ||
-    "Select the accessories you need and add them to your configuration. You can review and adjust quantities anytime in the quote panel.";
+    acf.accessories_section_description || labels.accessories.description;
 
   const productPayload = {
     productId: product?.id,
@@ -285,23 +253,24 @@ export default function ProductFeaturesSection({
     sku: product?.sku || acf.article_number || acf.product_article_number,
     image: gallery[0],
   };
+  const cartProductKey = String(product?.id || product?.slug || "product");
+  const cartProduct = items.find((item) => item.key === cartProductKey);
+  const addedAccessoryKeys = new Set(
+    (cartProduct?.accessories || []).map((accessory) => accessory.key)
+  );
   const visibleAccessories =
     Array.isArray(accessories) && accessories.length > 0
       ? accessories
       : getFallbackAccessories(product);
   const categoryMap = buildCategoryMap(productCategories);
-  const mainCategoryFilters = buildMainCategoryFilters(
-    visibleAccessories,
-    categoryMap
-  );
+  const categoryFilters = buildCategoryFilters(visibleAccessories, categoryMap);
   const filteredAccessories =
     activeFilter === "All"
       ? visibleAccessories
-      : visibleAccessories.filter((accessory) =>
-          getAccessoryMainCategories(accessory, categoryMap).some(
-            (category) => String(getCategoryId(category)) === activeFilter
-          )
-        );
+      : visibleAccessories.filter((accessory) => {
+          const category = getAccessoryDisplayCategory(accessory, categoryMap);
+          return category && String(getCategoryId(category)) === activeFilter;
+        });
 
   if (visibleAccessories.length === 0) return null;
 
@@ -313,7 +282,7 @@ export default function ProductFeaturesSection({
             <div className="mb-7 flex items-center gap-2">
               <span className="h-4 w-0.5 bg-[var(--color-yellow)]" />
               <p className="font-body text-[13px] font-medium uppercase leading-5.5 tracking-[0.52px] text-[#1A1A1A]">
-                Accessories
+                {labels.accessories.eyebrow}
               </p>
             </div>
             <h2
@@ -342,7 +311,7 @@ export default function ProductFeaturesSection({
           >
             {labels.filters.All || "All"}
           </button>
-          {mainCategoryFilters.map((category) => {
+          {categoryFilters.map((category) => {
             const categoryId = String(getCategoryId(category));
 
             return (
@@ -366,28 +335,25 @@ export default function ProductFeaturesSection({
           {filteredAccessories.map((accessory, index) => {
             const accessoryKey = getAccessoryKey(accessory);
             const image = getProductImage(accessory);
-            const childCategory = getAccessoryChildCategory(accessory, categoryMap);
+            const childCategory = getAccessoryDisplayCategory(accessory, categoryMap);
 
             return (
               <AccessoryCard
                 key={`${accessoryKey}-${index}`}
                 accessory={accessory}
                 image={image}
-                isSelected={selectedAccessoryKey === accessoryKey}
+                isAdded={addedAccessoryKeys.has(accessoryKey)}
                 childCategory={childCategory}
                 labels={labels}
-                onSelect={() => setSelectedAccessoryKey(accessoryKey)}
                 onAdd={() => {
                   const articleNumber = getAccessoryArticleNumber(accessory);
 
-                  setSelectedAccessoryKey(accessoryKey);
                   addAccessory(productPayload, {
                     key: accessoryKey,
                     name: getAccessoryTitle(accessory),
                     meta: articleNumber,
                     image,
                   });
-                  router.push(localizePath("/rfq", language));
                 }}
               />
             );

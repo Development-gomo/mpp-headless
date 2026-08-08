@@ -29,6 +29,7 @@ export default function ProductCategoryFaqSection({ category }) {
   const text = acf?.faq_section_text;
   const ctaText = acf?.faq_section_cta_text;
   const ctaLink = getButtonLink(acf?.faq_section_cta_link);
+  const hasCustomCtaLink = ctaLink !== "#";
   const ctaTarget = getButtonTarget(acf?.faq_section_cta_link);
 
   const faqs = Array.isArray(acf?.faqs) ? acf.faqs : [];
@@ -65,7 +66,7 @@ export default function ProductCategoryFaqSection({ category }) {
               />
             )}
 
-            {ctaText && (
+            {ctaText && hasCustomCtaLink && (
               <Link
                 href={ctaLink}
                 target={ctaTarget}

@@ -32,16 +32,19 @@ export default function ProductCategorySeoSection({ category }) {
   if (!title && !content && features.length === 0) return null;
 
   return (
-    <section className="relative overflow-hidden text-white">
+    <section className="relative overflow-hidden bg-black text-white">
       {/* Background image */}
       {backgroundImage && (
-        <Image
-          src={backgroundImage}
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover"
-        />
+        <>
+          <Image
+            src={backgroundImage}
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-black/65" />
+        </>
       )}
 
       <div className="relative z-10 web-width px-5 py-20 xl:px-0 md:py-[120px]">

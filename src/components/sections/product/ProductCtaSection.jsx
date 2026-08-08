@@ -2,14 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { DEFAULT_LANGUAGE } from "@/lib/i18n";
 import { getButtonHref, getButtonTarget } from "./productUtils";
-import { getLocalizedProductButtonText } from "./productLabels";
+import { getLocalizedProductButtonText, getProductLabels } from "./productLabels";
 
 export default function ProductCtaSection({
   product,
   language = DEFAULT_LANGUAGE,
 }) {
   const acf = product?.acf || {};
-  const title = acf.product_cta_title || "Ready to find the right fuel solution?";
+  const labels = getProductLabels(language);
+  const title = acf.product_cta_title || labels.cta.title;
   const text = acf.product_cta_text;
   const buttonText = getLocalizedProductButtonText(
     acf.product_cta_button_text,
@@ -29,7 +30,7 @@ export default function ProductCtaSection({
             <div className="mb-5 flex items-center gap-2">
               <span className="h-[12px] w-0.5 bg-[var(--color-yellow)]" />
               <p className="font-body text-[14px] font-medium uppercase leading-6 tracking-[0.56px] text-white">
-                Get started
+                {labels.cta.eyebrow}
               </p>
             </div>
             <h2
