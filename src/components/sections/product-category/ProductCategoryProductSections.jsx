@@ -858,7 +858,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                         setActiveIndex(index);
                         setIsActiveImageWide(true);
                       }}
-                      className={`min-h-[44px] rounded-[3px] px-6 font-heading text-[16px] font-normal tracking-[-0.32px] transition-colors ${
+                      className={`min-h-[44px] rounded-[3px] px-4 font-heading text-[16px] font-normal tracking-[-0.32px] transition-colors ${
                         isActive
                           ? "bg-white text-black shadow-sm"
                           : "text-black/80 hover:bg-white/40"
