@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -42,6 +42,7 @@ function getProductCategorySectionLabels(language) {
 const PRODUCT_CATEGORY_VERTICAL_LABELS = {
   [DEFAULT_LANGUAGE]: {
     filters: "Filter",
+    all: "Alla",
     subcategories: "Underkategorier",
     requestQuote: "Beg\u00e4r offert",
     capacity: "Kapacitet",
@@ -52,6 +53,7 @@ const PRODUCT_CATEGORY_VERTICAL_LABELS = {
   },
   [ENGLISH_LANGUAGE]: {
     filters: "Filters",
+    all: "All",
     subcategories: "Subcategories",
     requestQuote: "Request a quote",
     capacity: "Capacity",
@@ -62,6 +64,7 @@ const PRODUCT_CATEGORY_VERTICAL_LABELS = {
   },
   [GERMAN_LANGUAGE]: {
     filters: "Filter",
+    all: "Alle",
     subcategories: "Unterkategorien",
     requestQuote: "Angebot anfordern",
     capacity: "Kapazit\u00e4t",
@@ -279,6 +282,48 @@ function buildCategoryTree(categories, parentCategory) {
   return buildNodes(String(parentId));
 }
 
+// Maps each category id (including nested subcategories) to the set of
+// product keys visible under it, aggregating its own products with every
+// descendant's products so filtering a parent shows its whole subtree.
+function buildCategoryProductKeyMap(tree, map = new Map()) {
+  tree.forEach((node) => {
+    const categoryId = String(getCategoryId(node.category));
+    const keySet = new Set(
+      (node.category?.products || []).map((product) => getProductKey(product))
+    );
+
+    if (node.children.length > 0) {
+      buildCategoryProductKeyMap(node.children, map);
+      node.children.forEach((child) => {
+        const childKeys = map.get(String(getCategoryId(child.category)));
+        childKeys?.forEach((key) => keySet.add(key));
+      });
+    }
+
+    map.set(categoryId, keySet);
+  });
+
+  return map;
+}
+
+// Drops any category (and its whole subtree) that has no products of its
+// own and none among its descendants, so the sidebar only lists categories
+// that actually lead to visible products.
+function pruneEmptyCategoryNodes(tree, categoryProductKeyMap) {
+  return tree
+    .map((node) => {
+      const categoryId = String(getCategoryId(node.category));
+      const keys = categoryProductKeyMap.get(categoryId);
+      if (!keys || keys.size === 0) return null;
+
+      return {
+        ...node,
+        children: pruneEmptyCategoryNodes(node.children, categoryProductKeyMap),
+      };
+    })
+    .filter(Boolean);
+}
+
 function getCategoryDescendantsFromList(categories, parentCategory) {
   const parentId = getCategoryId(parentCategory);
   if (!parentId) return [];
@@ -413,11 +458,32 @@ function ProductVerticalLayout({
   products,
   language,
 }) {
+  const [activeCategoryId, setActiveCategoryId] = useState("all");
+  const categoryTree = useMemo(
+    () => buildCategoryTree(categories, currentCategory),
+    [categories, currentCategory]
+  );
+  const categoryProductKeyMap = useMemo(
+    () => buildCategoryProductKeyMap(categoryTree),
+    [categoryTree]
+  );
+  const visibleCategoryTree = useMemo(
+    () => pruneEmptyCategoryNodes(categoryTree, categoryProductKeyMap),
+    [categoryTree, categoryProductKeyMap]
+  );
+  const filteredProducts = useMemo(() => {
+    if (activeCategoryId === "all") return products;
+
+    const activeKeys = categoryProductKeyMap.get(activeCategoryId);
+    if (!activeKeys) return products;
+
+    return products.filter((product) => activeKeys.has(getProductKey(product)));
+  }, [activeCategoryId, categoryProductKeyMap, products]);
+
   if (products.length === 0) return null;
 
   const labels = getProductCategoryVerticalLabels(language);
-  const categoryTree = buildCategoryTree(categories, currentCategory);
-  const hasSidebar = categoryTree.length > 0;
+  const hasSidebar = visibleCategoryTree.length > 0;
 
   return (
     <div
@@ -435,18 +501,38 @@ function ProductVerticalLayout({
 
           <div className="rounded-lg bg-[rgba(0,112,158,0.1)] px-6 py-7">
             <nav aria-label={labels.subcategories}>
-              <CategorySidebarList items={categoryTree} language={language} />
+              <ul className="space-y-0">
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => setActiveCategoryId("all")}
+                    className={`w-full border-b border-black/25 py-3 text-left font-heading text-[15px] leading-5.5 tracking-[-0.3px] transition-colors hover:text-[var(--color-accent)] ${
+                      activeCategoryId === "all"
+                        ? "font-semibold text-[var(--color-accent)]"
+                        : "font-medium text-black"
+                    }`}
+                  >
+                    {labels.all}
+                  </button>
+                </li>
+              </ul>
+              <CategorySidebarList
+                items={visibleCategoryTree}
+                language={language}
+                activeCategoryId={activeCategoryId}
+                onSelectCategory={setActiveCategoryId}
+              />
             </nav>
           </div>
         </aside>
       )}
 
       <div
-        className={`grid grid-cols-2 gap-4 sm:gap-5 ${
+        className={`grid grid-cols-2 gap-4 sm:gap-5 lg:self-start ${
           hasSidebar ? "xl:grid-cols-3" : "lg:grid-cols-3"
         }`}
       >
-        {products.map((product, index) => (
+        {filteredProducts.map((product, index) => (
           <ProductVerticalCard
             key={`${getProductKey(product)}-${index}`}
             product={product}
@@ -458,7 +544,13 @@ function ProductVerticalLayout({
   );
 }
 
-function CategorySidebarList({ items, language, level = 0 }) {
+function CategorySidebarList({
+  items,
+  language,
+  level = 0,
+  activeCategoryId,
+  onSelectCategory,
+}) {
   if (items.length === 0) return null;
 
   return (
@@ -469,16 +561,33 @@ function CategorySidebarList({ items, language, level = 0 }) {
           item={item}
           language={language}
           level={level}
+          activeCategoryId={activeCategoryId}
+          onSelectCategory={onSelectCategory}
         />
       ))}
     </ul>
   );
 }
 
-function CategorySidebarItem({ item, language, level }) {
+function CategorySidebarItem({
+  item,
+  language,
+  level,
+  activeCategoryId,
+  onSelectCategory,
+}) {
   const category = item.category;
+  const categoryId = String(getCategoryId(category));
+  const isActive = activeCategoryId === categoryId;
   const hasChildren = item.children.length > 0;
   const [isOpen, setIsOpen] = useState(level > 0);
+
+  const handleSelect = (event) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+    event.preventDefault();
+    onSelectCategory?.(categoryId);
+  };
 
   return (
     <li>
@@ -487,16 +596,30 @@ function CategorySidebarItem({ item, language, level }) {
           level === 0
             ? "justify-between border-b border-black/25 py-3 font-heading text-[15px] font-medium leading-5.5 tracking-[-0.3px] text-black"
             : "rounded-sm py-1.5 font-body text-[13px] font-normal leading-4.5 tracking-[-0.26px] text-black"
-        }`}
+        } ${isActive ? "text-[var(--color-accent)]" : ""}`}
       >
         {level > 0 && (
           <span
-            className="h-4 w-4 shrink-0 rounded-[2px] border border-black transition-colors group-hover:border-[var(--color-accent)]"
+            className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-[2px] border transition-colors ${
+              isActive
+                ? "border-[var(--color-yellow)] bg-[var(--color-yellow)]"
+                : "border-black group-hover:border-[var(--color-accent)]"
+            }`}
             aria-hidden="true"
-          />
+          >
+            {isActive && (
+              <span className="text-[10px] font-bold leading-none text-white">
+                &#10003;
+              </span>
+            )}
+          </span>
         )}
 
-        <Link href={getCategoryLink(category, language)} className="min-w-0 flex-1">
+        <Link
+          href={getCategoryLink(category, language)}
+          onClick={handleSelect}
+          className={`min-w-0 flex-1 ${isActive ? "font-semibold" : ""}`}
+        >
           <span>{stripHtml(category?.name)}</span>
         </Link>
 
@@ -526,6 +649,8 @@ function CategorySidebarItem({ item, language, level }) {
           items={item.children}
           language={language}
           level={level + 1}
+          activeCategoryId={activeCategoryId}
+          onSelectCategory={onSelectCategory}
         />
       )}
     </li>
@@ -544,7 +669,7 @@ function ProductVerticalCard({ product, language }) {
   const badge = getProductBadge(product, labels);
 
   return (
-    <article className="flex h-full flex-col rounded-lg bg-[#F3F4FB] p-2 text-black">
+    <article className="flex flex-col rounded-lg bg-[#F3F4FB] p-2 text-black">
       <div className="relative flex aspect-[1.42/1] items-center justify-center overflow-hidden rounded-lg bg-white">
         {badge && (
           <span className="absolute left-0 top-0 z-10 rounded-br-sm rounded-tl-lg bg-[var(--color-accent)] px-3 py-1 font-body text-[11px] leading-4 text-white">
