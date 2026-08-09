@@ -68,6 +68,8 @@ export const PRODUCT_LABELS = {
     },
     accessoryOverview: {
       specifications: "Specifikationer",
+      dimensions: "Mått",
+      weight: "Vikt",
     },
     cta: {
       eyebrow: "Kom igång",
@@ -156,6 +158,8 @@ export const PRODUCT_LABELS = {
     },
     accessoryOverview: {
       specifications: "Specifications",
+      dimensions: "Dimensions",
+      weight: "Weight",
     },
     cta: {
       eyebrow: "Get started",
@@ -244,6 +248,8 @@ export const PRODUCT_LABELS = {
     },
     accessoryOverview: {
       specifications: "Spezifikationen",
+      dimensions: "Abmessungen",
+      weight: "Gewicht",
     },
     cta: {
       eyebrow: "Loslegen",

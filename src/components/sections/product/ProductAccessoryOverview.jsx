@@ -45,10 +45,8 @@ export default function ProductAccessoryOverview({
       acf.article_number ||
       ""
   );
-  const dimensions = stripHtml(
-    fields.dimention || fields.dimension || acf.dimention || acf.dimension || ""
-  );
-  const weight = stripHtml(fields.weight || fields.net_weight || acf.net_weight || "");
+  const dimensions = stripHtml(fields.dimention || "");
+  const weight = stripHtml(fields.weight || "");
   const applicationAreas = getRepeaterValues(
     fields.application_areas,
     "application_area"
@@ -91,12 +89,12 @@ export default function ProductAccessoryOverview({
               <div className="mt-7 flex flex-wrap gap-3 md:gap-4">
                 <SpecTile
                   icon="/dimention-ico.svg"
-                  label={labels.hero.dimensions}
+                  label={labels.accessoryOverview.dimensions}
                   value={dimensions}
                 />
                 <SpecTile
                   icon="/weight-ico.svg"
-                  label={labels.hero.netWeight}
+                  label={labels.accessoryOverview.weight}
                   value={weight}
                 />
               </div>
