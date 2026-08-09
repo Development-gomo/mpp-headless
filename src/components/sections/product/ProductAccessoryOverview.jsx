@@ -37,6 +37,7 @@ export default function ProductAccessoryOverview({
   const labels = getProductLabels(language);
 
   const title = stripHtml(getRendered(product?.title)) || "Product";
+  const description = getRendered(product?.content) || getRendered(product?.excerpt);
   const image = getProductImage(product);
   const articleNumber = stripHtml(
     fields.artical_number ||
@@ -85,6 +86,13 @@ export default function ProductAccessoryOverview({
               </div>
             )}
 
+            {description && (
+              <div
+                className="mt-5 border-b border-black/15 pb-5 font-body text-[15px] leading-[23px] text-[#1A1A1A]"
+                dangerouslySetInnerHTML={{ __html: description }}
+              />
+            )}
+
             {(dimensions || weight) && (
               <div className="mt-7 flex flex-wrap gap-3 md:gap-4">
                 <SpecTile
@@ -102,7 +110,7 @@ export default function ProductAccessoryOverview({
 
             {applicationAreas.length > 0 && (
               <div className="mt-6 border-y border-black/15 py-5 font-body text-[15px] leading-6 text-black">
-                <div className="grid gap-2 sm:grid-cols-[140px_1fr]">
+                <div className="grid gap-2 sm:grid-cols-[auto_1fr]">
                   <strong className="font-semibold">
                     {labels.hero.applicationAreas}:
                   </strong>

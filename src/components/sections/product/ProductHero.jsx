@@ -455,7 +455,7 @@ export default function ProductHero({
                 )}
 
                 {applicationAreas.length > 0 && (
-                  <div className="mt-4 grid gap-2 sm:grid-cols-[140px_1fr]">
+                  <div className="mt-4 grid gap-2 sm:grid-cols-[auto_1fr]">
                     <strong className="font-semibold">{labels.hero.applicationAreas}:</strong>
                     <div className="flex flex-wrap gap-x-4 gap-y-1">
                       {applicationAreas.map((item) => (
