@@ -631,15 +631,9 @@ function CategorySidebarItem({
             aria-expanded={isOpen}
             aria-label={stripHtml(category?.name)}
           >
-            <Image
-              src="/down-arrow-black.svg"
-              alt=""
-              width={12}
-              height={7}
-              className={`h-auto w-3 transition-transform ${
-                isOpen ? "" : "-rotate-90"
-              }`}
-            />
+            <span className="font-heading text-[18px] leading-none text-black" aria-hidden="true">
+              {isOpen ? "−" : "+"}
+            </span>
           </button>
         )}
       </div>
