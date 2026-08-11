@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   DEFAULT_LANGUAGE,
   ENGLISH_LANGUAGE,
@@ -16,6 +17,7 @@ import {
   getVariationCapacity,
   getVariationTextValues,
 } from "@/components/sections/product/productUtils";
+import { useQuoteCart } from "@/components/quote/QuoteCartProvider";
 
 const PRODUCT_CATEGORY_SECTION_LABELS = {
   [DEFAULT_LANGUAGE]: {
@@ -652,6 +654,8 @@ function CategorySidebarItem({
 }
 
 function ProductVerticalCard({ product, language }) {
+  const { addProduct } = useQuoteCart();
+  const router = useRouter();
   const labels = getProductCategoryVerticalLabels(language);
   const title = stripHtml(getProductTitle(product));
   const excerpt = stripHtml(getProductExcerpt(product));
@@ -661,6 +665,17 @@ function ProductVerticalCard({ product, language }) {
   const capacity = getProductCapacityMeta(product);
   const fuelType = getProductFuelTypeMeta(product);
   const badge = getProductBadge(product, labels);
+
+  const handleRequestQuote = () => {
+    addProduct({
+      productId: product?.id,
+      slug: product?.slug,
+      name: title,
+      sku: product?.sku || product?.acf?.article_number || product?.acf?.product_article_number,
+      image,
+    });
+    router.push(quoteLink);
+  };
 
   return (
     <article className="flex flex-col rounded-lg bg-[#F3F4FB] p-2 text-black">
@@ -742,15 +757,16 @@ function ProductVerticalCard({ product, language }) {
         )}
 
         <div className="mt-auto flex gap-1.5 pt-3.5">
-          <Link
-            href={quoteLink}
-            className="group inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-2 rounded-sm bg-[image:var(--mpp-gradient)] py-1 pl-3 pr-1 font-heading text-[12px] font-normal tracking-[-0.24px] text-white transition-opacity hover:opacity-90"
+          <button
+            type="button"
+            onClick={handleRequestQuote}
+            className="group inline-flex min-h-11 min-w-0 flex-1 cursor-pointer items-center justify-center gap-2 rounded-sm bg-[image:var(--mpp-gradient)] py-1 pl-3 pr-1 font-heading text-[12px] font-normal tracking-[-0.24px] text-white transition-opacity hover:opacity-90"
           >
             <span className="truncate">{labels.requestQuote}</span>
             <span className="ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-sm bg-white text-[16px] leading-none text-black">
               {"\u2197"}
             </span>
-          </Link>
+          </button>
 
           <Link
             href={productLink}

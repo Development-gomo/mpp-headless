@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { useQuoteCart } from "@/components/quote/QuoteCartProvider";
+import { getProductKey, useQuoteCart } from "@/components/quote/QuoteCartProvider";
 import { DEFAULT_LANGUAGE } from "@/lib/i18n";
 import {
   getProductGallery,
@@ -234,6 +234,7 @@ export default function ProductFeaturesSection({
   productCategories = [],
   accessories = [],
   language = DEFAULT_LANGUAGE,
+  selectedCapacity = "",
 }) {
   const { items, addAccessory } = useQuoteCart();
   const acf = product?.acf || {};
@@ -252,8 +253,9 @@ export default function ProductFeaturesSection({
     name: productTitle,
     sku: product?.sku || acf.article_number || acf.product_article_number,
     image: gallery[0],
+    capacity: selectedCapacity,
   };
-  const cartProductKey = String(product?.id || product?.slug || "product");
+  const cartProductKey = getProductKey(productPayload);
   const cartProduct = items.find((item) => item.key === cartProductKey);
   const addedAccessoryKeys = new Set(
     (cartProduct?.accessories || []).map((accessory) => accessory.key)

@@ -6,7 +6,12 @@ import ProductSpecsSection from "./ProductSpecsSection";
 import ProductOverviewSection from "./ProductOverviewSection";
 import { getProductVariations } from "./productUtils";
 
-export default function ProductVariationSections({ product, language, children }) {
+export default function ProductVariationSections({
+  product,
+  language,
+  children,
+  onCapacityChange,
+}) {
   const variations = useMemo(() => getProductVariations(product), [product]);
   const [selectedVariationIndex, setSelectedVariationIndex] = useState(0);
   const selectedVariation = variations[selectedVariationIndex] || null;
@@ -20,6 +25,7 @@ export default function ProductVariationSections({ product, language, children }
         selectedVariation={selectedVariation}
         selectedVariationIndex={selectedVariationIndex}
         onVariationChange={setSelectedVariationIndex}
+        onCapacityChange={onCapacityChange}
       />
       {children}
       <ProductSpecsSection

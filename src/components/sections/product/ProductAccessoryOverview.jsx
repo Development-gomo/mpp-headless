@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { getProductKey, useQuoteCart } from "@/components/quote/QuoteCartProvider";
 import { DEFAULT_LANGUAGE } from "@/lib/i18n";
 import {
   getProductImage,
@@ -32,6 +35,7 @@ export default function ProductAccessoryOverview({
   product,
   language = DEFAULT_LANGUAGE,
 }) {
+  const { items, addProduct } = useQuoteCart();
   const acf = product?.acf || {};
   const fields = acf.accessory_type_product_fields || {};
   const labels = getProductLabels(language);
@@ -45,6 +49,16 @@ export default function ProductAccessoryOverview({
       product?.sku ||
       acf.article_number ||
       ""
+  );
+  const productPayload = {
+    productId: product?.id,
+    slug: product?.slug,
+    name: title,
+    sku: articleNumber,
+    image,
+  };
+  const isAdded = items.some(
+    (item) => item.key === getProductKey(productPayload)
   );
   const dimensions = stripHtml(fields.dimention || "");
   const weight = stripHtml(fields.weight || "");
@@ -151,6 +165,25 @@ export default function ProductAccessoryOverview({
                 </div>
               </div>
             )}
+
+            <button
+              type="button"
+              onClick={() => addProduct(productPayload)}
+              className={`group mt-8 inline-flex h-12 items-center gap-4 rounded-sm py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] transition-opacity hover:opacity-90 ${
+                isAdded
+                  ? "bg-[var(--color-accent)] text-white"
+                  : "bg-[var(--color-yellow)] text-black"
+              }`}
+            >
+              <span>{isAdded ? labels.added : labels.addToCart}</span>
+              <Image
+                src="/black-white-arrow.svg"
+                alt=""
+                width={36}
+                height={36}
+                className="h-9 w-9 transition-transform"
+              />
+            </button>
           </div>
         </div>
       </div>

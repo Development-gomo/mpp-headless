@@ -20,8 +20,11 @@ function normalizeKey(value, fallback = "item") {
     .replace(/^-+|-+$/g, "");
 }
 
-function getProductKey(product) {
-  return String(product?.productId || product?.id || product?.slug || "product");
+export function getProductKey(product) {
+  const baseKey = String(product?.productId || product?.id || product?.slug || "product");
+  const capacity = String(product?.capacity || "").trim();
+
+  return capacity ? `${baseKey}::${capacity}` : baseKey;
 }
 
 function normalizeProduct(product) {

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuoteCart } from "@/components/quote/QuoteCartProvider";
 import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
 import {
@@ -63,6 +63,7 @@ export default function ProductHero({
   selectedVariation,
   selectedVariationIndex = 0,
   onVariationChange,
+  onCapacityChange,
 }) {
   const { addProduct } = useQuoteCart();
   const router = useRouter();
@@ -128,6 +129,11 @@ export default function ProductHero({
     selectedCapacityOption?.label || selectedCapacity,
     labels.hero.liters
   );
+
+  useEffect(() => {
+    onCapacityChange?.(selectedCapacity);
+  }, [onCapacityChange, selectedCapacity]);
+
   const fuelCompatibility = activeVariation
     ? getVariationTextValues(activeVariation.fuel_compatibility, "compatibility")
     : getRepeaterValues(acf.fuel_compatibility, "compatibility");

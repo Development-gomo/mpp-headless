@@ -97,6 +97,7 @@ export default function ProductPageTemplate({
   language,
 }) {
   const isMainProduct = product?.acf?.product_type === true;
+  const [selectedCapacity, setSelectedCapacity] = useState("");
 
   if (!isMainProduct) {
     return (
@@ -118,7 +119,11 @@ export default function ProductPageTemplate({
         productCategories={productCategories}
         language={language}
       />
-      <ProductVariationSections product={product} language={language}>
+      <ProductVariationSections
+        product={product}
+        language={language}
+        onCapacityChange={setSelectedCapacity}
+      >
         <ProductAnchorNav language={language} />
       </ProductVariationSections>
       <ProductFeaturesSection
@@ -126,6 +131,7 @@ export default function ProductPageTemplate({
         productCategories={productCategories}
         accessories={accessories}
         language={language}
+        selectedCapacity={selectedCapacity}
       />
       <ProductTestimonialsSection
         product={product}
