@@ -6,6 +6,7 @@ import {
   getWpmlLanguages,
 } from "@/lib/api";
 import { DEFAULT_LANGUAGE, getServiceRouteSegment, localizePath } from "@/lib/i18n";
+import { toSentenceCase } from "@/components/sections/product/productUtils";
 import HeaderComponent from "./HeaderComponent";
 
 function extractLinksFromHtml(html, language = DEFAULT_LANGUAGE) {
@@ -221,7 +222,7 @@ async function buildThreeLevelCategoriesMenu(row, rowIndex, language) {
                 product?.id || productIndex
               }`,
               id: product?.id || null,
-              label: getEntityName(product, `Product ${productIndex + 1}`),
+              label: toSentenceCase(getEntityName(product, `Product ${productIndex + 1}`)),
               href: getProductHref(product, language),
               image: getProductImage(product),
             })),

@@ -14,6 +14,7 @@ import {
   getProductVariations,
   getVariationCapacity,
   getVariationTextValues,
+  toSentenceCase,
 } from "./productUtils";
 
 const RELATED_PRODUCTS_LABELS = {
@@ -178,7 +179,7 @@ function getProductFuelTypeMeta(product) {
 }
 
 function getProductTitle(product) {
-  return stripHtml(product?.title?.rendered || product?.title || "");
+  return toSentenceCase(stripHtml(product?.title?.rendered || product?.title || ""));
 }
 
 function getProductExcerpt(product) {

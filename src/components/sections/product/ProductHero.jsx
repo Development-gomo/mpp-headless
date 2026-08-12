@@ -17,6 +17,7 @@ import {
   getVariationCapacity,
   getVariationTextValues,
   stripHtml,
+  toSentenceCase,
 } from "./productUtils";
 import { getLocalizedProductButtonText, getProductLabels } from "./productLabels";
 
@@ -74,7 +75,9 @@ export default function ProductHero({
     : getProductVariations(product);
   const activeVariation =
     selectedVariation || variationOptions[selectedVariationIndex] || null;
-  const title = activeVariation?.variation_title || getRendered(product?.title);
+  const title = toSentenceCase(
+    activeVariation?.variation_title || getRendered(product?.title)
+  );
   const variationSku = stripHtml(activeVariation?.variation_sku || "");
   const productTitle = stripHtml(title) || "Product";
   const textBelowTitle = acf.text_under_title;

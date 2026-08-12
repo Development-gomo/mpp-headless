@@ -95,7 +95,7 @@ export default function ProductSpecsSection({
           )}
         </div>
 
-        <div className="grid grid-cols-1 gap-px border border-[#D7D7D7] bg-[#D7D7D7] md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-px border border-[#D7D7D7] bg-white md:grid-cols-2 lg:grid-cols-4">
           {specs.map((spec, index) => (
             <div
               key={`${spec.spec_label}-${index}`}

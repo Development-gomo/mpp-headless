@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useQuoteCart } from "./QuoteCartProvider";
 import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
 import { getQuoteLabels } from "./quoteLabels";
+import { toSentenceCase } from "../sections/product/productUtils";
 
 const emptyForm = {
   name: "",
@@ -171,13 +172,13 @@ export default function QuoteCartPageContent({ language = DEFAULT_LANGUAGE }) {
                   >
                     <div className="grid grid-cols-[90px_1fr] gap-4">
                       <div className="h-[90px] overflow-hidden rounded-md border border-black/10 bg-white">
-                        <ProductImage src={item.image} alt={item.name} />
+                        <ProductImage src={item.image} alt={toSentenceCase(item.name)} />
                       </div>
                       <div className="min-w-0">
                         <div className="flex gap-3">
                           <div className="min-w-0 flex-1">
                             <h3 className="font-heading text-[22px] leading-[28px] tracking-[-0.44px]">
-                              {item.name}
+                              {toSentenceCase(item.name)}
                             </h3>
                             {item.capacity && (
                               <p className="mt-1 font-body text-[14px] text-[#007DA5]">
@@ -233,12 +234,12 @@ export default function QuoteCartPageContent({ language = DEFAULT_LANGUAGE }) {
                               <div className="h-[58px] overflow-hidden rounded-sm border border-black/10">
                                 <ProductImage
                                   src={accessory.image}
-                                  alt={accessory.name}
+                                  alt={toSentenceCase(accessory.name)}
                                 />
                               </div>
                               <div className="min-w-0">
                                 <p className="font-heading text-[17px] leading-5.5">
-                                  {accessory.name}
+                                  {toSentenceCase(accessory.name)}
                                 </p>
                                 <p className="font-body text-[12px] leading-[18px] text-black/55">
                                   {[accessory.category, accessory.meta]
@@ -266,7 +267,9 @@ export default function QuoteCartPageContent({ language = DEFAULT_LANGUAGE }) {
                                     removeAccessory(item.key, accessory.key)
                                   }
                                   className="h-8 w-8 rounded-sm border border-black/15 font-body text-[16px] leading-none hover:bg-black/5"
-                                  aria-label={labels.cart.removeItem(accessory.name)}
+                                  aria-label={labels.cart.removeItem(
+                                    toSentenceCase(accessory.name)
+                                  )}
                                 >
                                   x
                                 </button>

@@ -8,6 +8,7 @@ import {
   getRendered,
   getRepeaterValues,
   stripHtml,
+  toSentenceCase,
 } from "./productUtils";
 import { getProductLabels } from "./productLabels";
 
@@ -40,7 +41,7 @@ export default function ProductAccessoryOverview({
   const fields = acf.accessory_type_product_fields || {};
   const labels = getProductLabels(language);
 
-  const title = stripHtml(getRendered(product?.title)) || "Product";
+  const title = toSentenceCase(stripHtml(getRendered(product?.title))) || "Product";
   const description = getRendered(product?.content) || getRendered(product?.excerpt);
   const image = getProductImage(product);
   const articleNumber = stripHtml(
@@ -66,7 +67,6 @@ export default function ProductAccessoryOverview({
     fields.application_areas,
     "application_area"
   );
-  const specs = Array.isArray(acf.product_specs) ? acf.product_specs : [];
 
   return (
     <section className="bg-white text-black">
@@ -138,30 +138,6 @@ export default function ProductAccessoryOverview({
                       </span>
                     ))}
                   </div>
-                </div>
-              </div>
-            )}
-
-            {specs.length > 0 && (
-              <div className="mt-6">
-                <h2 className="font-heading text-[18px] leading-6 tracking-[-0.36px] text-black">
-                  {labels.accessoryOverview.specifications}
-                </h2>
-                <div className="mt-4 flex gap-x-4">
-                  {specs.map((spec, index) => (
-                    <div
-                      key={`${spec.spec_label}-${index}`}
-                      className="border-b border-black/10 pb-2"
-                    >
-                      <p className="font-body text-[12px] uppercase tracking-[0.4px] text-black/60">
-                        {spec.spec_label}
-                      </p>
-                      <p
-                        className="font-body text-[15px] font-medium text-black"
-                        dangerouslySetInnerHTML={{ __html: spec.spec_value }}
-                      />
-                    </div>
-                  ))}
                 </div>
               </div>
             )}

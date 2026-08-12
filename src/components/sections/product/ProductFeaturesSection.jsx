@@ -10,15 +10,16 @@ import {
   getProductImage,
   getRendered,
   stripHtml,
+  toSentenceCase,
 } from "./productUtils";
 import { getProductLabels } from "./productLabels";
 
 function getAccessoryTitle(accessory) {
-  return (
+  return toSentenceCase(
     stripHtml(getRendered(accessory?.title)) ||
-    accessory?.name ||
-    accessory?.slug ||
-    "Accessory"
+      accessory?.name ||
+      accessory?.slug ||
+      "Accessory"
   );
 }
 
@@ -242,7 +243,9 @@ export default function ProductFeaturesSection({
   const labels = getProductLabels(language);
   const gallery = getProductGallery(product);
   const productTitle =
-    stripHtml(getRendered(product?.title)) || product?.slug || "Product";
+    toSentenceCase(stripHtml(getRendered(product?.title))) ||
+    product?.slug ||
+    "Product";
   const title = acf.accessories_section_title || labels.accessories.title;
   const description =
     acf.accessories_section_description || labels.accessories.description;

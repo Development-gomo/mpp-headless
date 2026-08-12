@@ -51,6 +51,23 @@ export function stripHtml(value = "") {
     .trim();
 }
 
+// Forces sentence case (first letter capitalized, rest lowercase) regardless
+// of how the title is cased in the CMS, e.g. "ALL CAPS TITLE" -> "All caps title".
+export function toSentenceCase(value = "") {
+  const text = String(value || "");
+  if (!text) return text;
+
+  const lower = text.toLowerCase();
+  const firstLetterIndex = lower.search(/[a-zà-ɏ]/i);
+  if (firstLetterIndex === -1) return lower;
+
+  return (
+    lower.slice(0, firstLetterIndex) +
+    lower.charAt(firstLetterIndex).toUpperCase() +
+    lower.slice(firstLetterIndex + 1)
+  );
+}
+
 export function getRepeaterValues(rows, key) {
   if (!Array.isArray(rows)) return [];
   return rows.map((row) => stripHtml(row?.[key] || "")).filter(Boolean);

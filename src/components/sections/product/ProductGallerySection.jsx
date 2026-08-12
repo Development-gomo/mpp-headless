@@ -1,12 +1,17 @@
 import Image from "next/image";
-import { getProductGallery, getRendered, stripHtml } from "./productUtils";
+import {
+  getProductGallery,
+  getRendered,
+  stripHtml,
+  toSentenceCase,
+} from "./productUtils";
 
 export default function ProductGallerySection({ product }) {
   const gallery = getProductGallery(product);
   if (gallery.length <= 1) return null;
 
   const title = product?.acf?.product_gallery_title || "Discover related fuel storage products";
-  const productTitle = stripHtml(getRendered(product?.title));
+  const productTitle = toSentenceCase(stripHtml(getRendered(product?.title)));
 
   return (
     <section id="product-gallery" className="bg-white">

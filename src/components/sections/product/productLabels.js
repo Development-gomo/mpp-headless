@@ -67,7 +67,6 @@ export const PRODUCT_LABELS = {
         "Välj de tillbehör du behöver och lägg till dem i din konfiguration. Du kan granska och justera antal när som helst i offertpanelen.",
     },
     accessoryOverview: {
-      specifications: "Specifikationer",
       dimensions: "Mått",
       weight: "Vikt",
     },
@@ -157,7 +156,6 @@ export const PRODUCT_LABELS = {
         "Select the accessories you need and add them to your configuration. You can review and adjust quantities anytime in the quote panel.",
     },
     accessoryOverview: {
-      specifications: "Specifications",
       dimensions: "Dimensions",
       weight: "Weight",
     },
@@ -247,7 +245,6 @@ export const PRODUCT_LABELS = {
         "Wählen Sie das benötigte Zubehör aus und fügen Sie es Ihrer Konfiguration hinzu. Sie können Mengen jederzeit im Angebotsbereich überprüfen und anpassen.",
     },
     accessoryOverview: {
-      specifications: "Spezifikationen",
       dimensions: "Abmessungen",
       weight: "Gewicht",
     },

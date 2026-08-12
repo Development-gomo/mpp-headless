@@ -16,6 +16,7 @@ import {
   stripHtml as stripAndDecodeHtml,
   getVariationCapacity,
   getVariationTextValues,
+  toSentenceCase,
 } from "@/components/sections/product/productUtils";
 import { useQuoteCart } from "@/components/quote/QuoteCartProvider";
 
@@ -144,7 +145,7 @@ function getProductImage(product) {
 }
 
 function getProductTitle(product) {
-  return stripHtml(product?.title?.rendered || product?.title || "");
+  return toSentenceCase(stripHtml(product?.title?.rendered || product?.title || ""));
 }
 
 function getProductExcerpt(product) {
@@ -488,59 +489,63 @@ function ProductVerticalLayout({
   const hasSidebar = visibleCategoryTree.length > 0;
 
   return (
-    <div
-      className={`grid grid-cols-1 gap-8 ${
-        hasSidebar
-          ? "lg:grid-cols-[280px_1fr] xl:grid-cols-[320px_1fr]"
-          : ""
-      }`}
-    >
+    <div>
       {hasSidebar && (
-        <aside className="lg:self-start">
-          <h2 className="mb-6 font-heading text-[22px] font-normal leading-7 tracking-[-0.44px] text-black">
-            {labels.filters}
-          </h2>
-
-          <div className="rounded-lg bg-[rgba(0,112,158,0.1)] px-6 py-7">
-            <nav aria-label={labels.subcategories}>
-              <ul className="space-y-0">
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => setActiveCategoryId("all")}
-                    className={`w-full border-b border-black/25 py-3 text-left font-heading text-[15px] leading-5.5 tracking-[-0.3px] transition-colors hover:text-[var(--color-accent)] ${
-                      activeCategoryId === "all"
-                        ? "font-semibold text-[var(--color-accent)]"
-                        : "font-medium text-black"
-                    }`}
-                  >
-                    {labels.all}
-                  </button>
-                </li>
-              </ul>
-              <CategorySidebarList
-                items={visibleCategoryTree}
-                language={language}
-                activeCategoryId={activeCategoryId}
-                onSelectCategory={setActiveCategoryId}
-              />
-            </nav>
-          </div>
-        </aside>
+        <h2 className="mb-6 font-heading text-[22px] font-normal leading-7 tracking-[-0.44px] text-black">
+          {labels.filters}
+        </h2>
       )}
 
       <div
-        className={`grid grid-cols-2 gap-4 sm:gap-5 lg:self-start ${
-          hasSidebar ? "xl:grid-cols-3" : "lg:grid-cols-3"
+        className={`grid grid-cols-1 gap-8 ${
+          hasSidebar
+            ? "lg:grid-cols-[280px_1fr] xl:grid-cols-[320px_1fr]"
+            : ""
         }`}
       >
-        {filteredProducts.map((product, index) => (
-          <ProductVerticalCard
-            key={`${getProductKey(product)}-${index}`}
-            product={product}
-            language={language}
-          />
-        ))}
+        {hasSidebar && (
+          <aside className="lg:self-start">
+            <div className="rounded-lg bg-[rgba(0,112,158,0.1)] px-6 py-7">
+              <nav aria-label={labels.subcategories}>
+                <ul className="space-y-0">
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => setActiveCategoryId("all")}
+                      className={`w-full border-b border-black/25 py-3 text-left font-heading text-[15px] leading-5.5 tracking-[-0.3px] transition-colors hover:text-[var(--color-accent)] ${
+                        activeCategoryId === "all"
+                          ? "font-semibold text-[var(--color-accent)]"
+                          : "font-medium text-black"
+                      }`}
+                    >
+                      {labels.all}
+                    </button>
+                  </li>
+                </ul>
+                <CategorySidebarList
+                  items={visibleCategoryTree}
+                  language={language}
+                  activeCategoryId={activeCategoryId}
+                  onSelectCategory={setActiveCategoryId}
+                />
+              </nav>
+            </div>
+          </aside>
+        )}
+
+        <div
+          className={`grid grid-cols-2 gap-4 sm:gap-5 lg:self-start ${
+            hasSidebar ? "xl:grid-cols-3" : "lg:grid-cols-3"
+          }`}
+        >
+          {filteredProducts.map((product, index) => (
+            <ProductVerticalCard
+              key={`${getProductKey(product)}-${index}`}
+              product={product}
+              language={language}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

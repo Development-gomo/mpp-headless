@@ -8,6 +8,7 @@ import {
   getProductGallery,
   getProductVariations,
   stripHtml,
+  toSentenceCase,
 } from "./productUtils";
 import { DEFAULT_LANGUAGE } from "@/lib/i18n";
 import { getLocalizedProductButtonText, getProductLabels } from "./productLabels";
@@ -22,7 +23,7 @@ function getOverviewRows(product, variations) {
     return variationRows.map((variation, index) => ({
       index,
       article: stripHtml(variation?.variation_sku || ""),
-      name: stripHtml(variation?.variation_title || ""),
+      name: toSentenceCase(stripHtml(variation?.variation_title || "")),
       dimensions: stripHtml(variation?.dimensions || ""),
       volume: stripHtml(variation?.volume || ""),
       weight: stripHtml(variation?.net_weight || ""),
@@ -35,7 +36,7 @@ function getOverviewRows(product, variations) {
       article: stripHtml(
         product?.sku || acf.article_number || acf.product_article_number || ""
       ),
-      name: stripHtml(product?.title?.rendered || product?.title || ""),
+      name: toSentenceCase(stripHtml(product?.title?.rendered || product?.title || "")),
       dimensions: stripHtml(acf.dimention || acf.dimension || ""),
       volume: stripHtml(acf.volume || ""),
       weight: stripHtml(acf.net_weight || ""),

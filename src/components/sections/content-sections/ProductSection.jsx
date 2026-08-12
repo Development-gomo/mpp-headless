@@ -14,6 +14,7 @@ import {
   getProductImage,
   getRendered,
   stripHtml,
+  toSentenceCase,
 } from "@/components/sections/product/productUtils";
 
 const PRODUCT_SECTION_LABELS = {
@@ -48,8 +49,10 @@ function getProductSlug(product) {
 }
 
 function getProductTitle(product) {
-  return stripHtml(
-    getRendered(product?.title) || product?.post_title || product?.name || ""
+  return toSentenceCase(
+    stripHtml(
+      getRendered(product?.title) || product?.post_title || product?.name || ""
+    )
   );
 }
 

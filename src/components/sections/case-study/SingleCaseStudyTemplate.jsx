@@ -15,6 +15,7 @@ import {
   localizePath,
   normalizeLanguage,
 } from "@/lib/i18n";
+import { toSentenceCase } from "../product/productUtils";
 
 const MORE_CASE_STUDIES_LABELS = {
   sv: "Fler kundcase",
@@ -140,12 +141,14 @@ function getAcfImageUrl(image) {
 }
 
 function getProductTitle(product) {
-  return (
-    product?.title?.rendered ||
-    product?.title ||
-    product?.post_title ||
-    product?.name ||
-    ""
+  return toSentenceCase(
+    stripHtml(
+      product?.title?.rendered ||
+        product?.title ||
+        product?.post_title ||
+        product?.name ||
+        ""
+    )
   );
 }
 

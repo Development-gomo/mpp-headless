@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
-import { getProductCategories, getRendered, stripHtml } from "./productUtils";
+import {
+  getProductCategories,
+  getRendered,
+  stripHtml,
+  toSentenceCase,
+} from "./productUtils";
 import { getProductLabels } from "./productLabels";
 
 function getCategoryId(category) {
@@ -76,7 +81,7 @@ export default function ProductBreadcrumbs({
   productCategories = [],
   language = DEFAULT_LANGUAGE,
 }) {
-  const title = stripHtml(getRendered(product?.title));
+  const title = toSentenceCase(stripHtml(getRendered(product?.title)));
   const categories = getProductCategories(product);
   const primaryCategory = getMainProductCategory(categories, productCategories);
   const labels = getProductLabels(language);

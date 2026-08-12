@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import ProductBreadcrumbs from "./ProductBreadcrumbs";
 import ProductAccessoryOverview from "./ProductAccessoryOverview";
+import ProductSpecsSection from "./ProductSpecsSection";
 import ProductVariationSections from "./ProductVariationSections";
 import ProductFeaturesSection from "./ProductFeaturesSection";
 import ProductTestimonialsSection from "./ProductTestimonialsSection";
@@ -108,6 +109,7 @@ export default function ProductPageTemplate({
           language={language}
         />
         <ProductAccessoryOverview product={product} language={language} />
+        <ProductSpecsSection product={product} language={language} />
       </>
     );
   }
