@@ -11,6 +11,7 @@ export default function ProductVariationSections({
   language,
   children,
   onCapacityChange,
+  hasAccessories = false,
 }) {
   const variations = useMemo(() => getProductVariations(product), [product]);
   const [selectedVariationIndex, setSelectedVariationIndex] = useState(0);
@@ -26,6 +27,7 @@ export default function ProductVariationSections({
         selectedVariationIndex={selectedVariationIndex}
         onVariationChange={setSelectedVariationIndex}
         onCapacityChange={onCapacityChange}
+        hasAccessories={hasAccessories}
       />
       {children}
       <ProductSpecsSection

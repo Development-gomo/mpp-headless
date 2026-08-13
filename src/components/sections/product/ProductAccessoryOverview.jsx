@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { getProductKey, useQuoteCart } from "@/components/quote/QuoteCartProvider";
+import { useEffect, useRef, useState } from "react";
+import { useQuoteCart } from "@/components/quote/QuoteCartProvider";
 import { DEFAULT_LANGUAGE } from "@/lib/i18n";
 import {
   getProductImage,
@@ -36,10 +37,14 @@ export default function ProductAccessoryOverview({
   product,
   language = DEFAULT_LANGUAGE,
 }) {
-  const { items, addProduct } = useQuoteCart();
+  const { addProduct } = useQuoteCart();
   const acf = product?.acf || {};
   const fields = acf.accessory_type_product_fields || {};
   const labels = getProductLabels(language);
+  const [isAddedMessageVisible, setIsAddedMessageVisible] = useState(false);
+  const addedMessageTimeoutRef = useRef(null);
+
+  useEffect(() => () => clearTimeout(addedMessageTimeoutRef.current), []);
 
   const title = toSentenceCase(stripHtml(getRendered(product?.title))) || "Product";
   const description = getRendered(product?.content) || getRendered(product?.excerpt);
@@ -58,9 +63,17 @@ export default function ProductAccessoryOverview({
     sku: articleNumber,
     image,
   };
-  const isAdded = items.some(
-    (item) => item.key === getProductKey(productPayload)
-  );
+
+  const handleRequestQuote = () => {
+    addProduct(productPayload);
+
+    setIsAddedMessageVisible(true);
+    clearTimeout(addedMessageTimeoutRef.current);
+    addedMessageTimeoutRef.current = setTimeout(
+      () => setIsAddedMessageVisible(false),
+      3000
+    );
+  };
   const dimensions = stripHtml(fields.dimention || "");
   const weight = stripHtml(fields.weight || "");
   const applicationAreas = getRepeaterValues(
@@ -142,24 +155,34 @@ export default function ProductAccessoryOverview({
               </div>
             )}
 
-            <button
-              type="button"
-              onClick={() => addProduct(productPayload)}
-              className={`group mt-8 inline-flex h-12 items-center gap-4 rounded-sm py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] transition-opacity hover:opacity-90 ${
-                isAdded
-                  ? "bg-[var(--color-accent)] text-white"
-                  : "bg-[var(--color-yellow)] text-black"
-              }`}
-            >
-              <span>{isAdded ? labels.added : labels.addToCart}</span>
-              <Image
-                src="/black-white-arrow.svg"
-                alt=""
-                width={36}
-                height={36}
-                className="h-9 w-9 transition-transform"
-              />
-            </button>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <button
+                type="button"
+                onClick={handleRequestQuote}
+                className="group inline-flex h-12 items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
+              >
+                <span>{labels.requestQuote}</span>
+                <Image
+                  src="/black-white-arrow.svg"
+                  alt=""
+                  width={36}
+                  height={36}
+                  className="h-9 w-9 transition-transform"
+                />
+              </button>
+            </div>
+
+            {isAddedMessageVisible && (
+              <p
+                className="mt-3 flex items-center gap-2 font-body text-[14px] font-semibold text-[#1B8A3D]"
+                role="status"
+              >
+                <span className="flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-[#1B8A3D]">
+                  <Image src="/check.svg" alt="" width={11} height={8} className="h-2 w-2.5 object-contain brightness-0 invert" />
+                </span>
+                {labels.addedToQuote}
+              </p>
+            )}
           </div>
         </div>
       </div>

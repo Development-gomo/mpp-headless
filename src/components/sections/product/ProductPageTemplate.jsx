@@ -99,6 +99,9 @@ export default function ProductPageTemplate({
 }) {
   const isMainProduct = product?.acf?.product_type === true;
   const [selectedCapacity, setSelectedCapacity] = useState("");
+  const hasAccessories =
+    (Array.isArray(accessories) && accessories.length > 0) ||
+    (Array.isArray(product?.acf?.accessories) && product.acf.accessories.length > 0);
 
   if (!isMainProduct) {
     return (
@@ -125,6 +128,7 @@ export default function ProductPageTemplate({
         product={product}
         language={language}
         onCapacityChange={setSelectedCapacity}
+        hasAccessories={hasAccessories}
       >
         <ProductAnchorNav language={language} />
       </ProductVariationSections>

@@ -8,6 +8,11 @@ export const PRODUCT_LABELS = {
     getInTouch: "Kontakta oss",
     addToCart: "Lägg till i varukorgen +",
     added: "Tillagd",
+    addedToQuote: "Produkten har lagts till i offerten",
+    accessoriesPrompt: {
+      prefix: "Vill du lägga till tillbehör? ",
+      linkText: "Klicka här",
+    },
     home: "Hem",
     downloads: "Nedladdningar",
     filters: {
@@ -97,6 +102,11 @@ export const PRODUCT_LABELS = {
     getInTouch: "Get in touch with us",
     addToCart: "Add to cart +",
     added: "Added",
+    addedToQuote: "Product added to Quote",
+    accessoriesPrompt: {
+      prefix: "Do you want to add accessories? ",
+      linkText: "Click here",
+    },
     home: "Home",
     downloads: "Downloads",
     filters: {
@@ -186,6 +196,11 @@ export const PRODUCT_LABELS = {
     getInTouch: "Kontakt aufnehmen",
     addToCart: "In den Warenkorb +",
     added: "Hinzugefügt",
+    addedToQuote: "Produkt zum Angebot hinzugefügt",
+    accessoriesPrompt: {
+      prefix: "Möchten Sie Zubehör hinzufügen? ",
+      linkText: "Hier klicken",
+    },
     home: "Startseite",
     downloads: "Downloads",
     filters: {

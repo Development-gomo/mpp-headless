@@ -2,10 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuoteCart } from "@/components/quote/QuoteCartProvider";
-import { DEFAULT_LANGUAGE, localizePath } from "@/lib/i18n";
+import { DEFAULT_LANGUAGE } from "@/lib/i18n";
 import {
   getButtonHref,
   getButtonTarget,
@@ -65,10 +64,14 @@ export default function ProductHero({
   selectedVariationIndex = 0,
   onVariationChange,
   onCapacityChange,
+  hasAccessories = false,
 }) {
   const { addProduct } = useQuoteCart();
-  const router = useRouter();
   const labels = getProductLabels(language);
+  const [isAddedMessageVisible, setIsAddedMessageVisible] = useState(false);
+  const addedMessageTimeoutRef = useRef(null);
+
+  useEffect(() => () => clearTimeout(addedMessageTimeoutRef.current), []);
   const acf = product?.acf || {};
   const variationOptions = Array.isArray(variations)
     ? variations
@@ -221,7 +224,13 @@ export default function ProductHero({
       capacity: selectedCapacity,
       image: activeImage || gallery[0],
     });
-    router.push(localizePath("/rfq", language));
+
+    setIsAddedMessageVisible(true);
+    clearTimeout(addedMessageTimeoutRef.current);
+    addedMessageTimeoutRef.current = setTimeout(
+      () => setIsAddedMessageVisible(false),
+      3000
+    );
   };
 
   const handleCapacitySelect = (value) => {
@@ -544,6 +553,30 @@ export default function ProductHero({
                 </Link>
               )}
             </div>
+
+            {isAddedMessageVisible && (
+              <p
+                className="mt-3 flex items-center gap-2 font-body text-[14px] font-semibold text-[#1B8A3D]"
+                role="status"
+              >
+                <span className="flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-[#1B8A3D]">
+                  <Image src="/check.svg" alt="" width={11} height={8} className="h-2 w-2.5 object-contain brightness-0 invert" />
+                </span>
+                {labels.addedToQuote}
+              </p>
+            )}
+
+            {hasAccessories && (
+              <p className="mt-3 font-body text-[14px] text-[#1A1A1A]">
+                {labels.accessoriesPrompt.prefix}
+                <a
+                  href="#accessories"
+                  className="font-semibold text-[var(--color-accent)] underline hover:no-underline"
+                >
+                  {labels.accessoriesPrompt.linkText}
+                </a>
+              </p>
+            )}
           </div>
         </div>
       </div>

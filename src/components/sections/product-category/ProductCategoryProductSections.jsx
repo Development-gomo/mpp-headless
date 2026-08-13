@@ -1,9 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   DEFAULT_LANGUAGE,
   ENGLISH_LANGUAGE,
@@ -48,6 +47,7 @@ const PRODUCT_CATEGORY_VERTICAL_LABELS = {
     all: "Alla",
     subcategories: "Underkategorier",
     requestQuote: "Beg\u00e4r offert",
+    addedToQuote: "Produkten har lagts till i offerten",
     capacity: "Kapacitet",
     fuelType: "Br\u00e4nsletyp",
     newProduct: "Ny",
@@ -59,6 +59,7 @@ const PRODUCT_CATEGORY_VERTICAL_LABELS = {
     all: "All",
     subcategories: "Subcategories",
     requestQuote: "Request a quote",
+    addedToQuote: "Product added to Quote",
     capacity: "Capacity",
     fuelType: "Fuel type",
     newProduct: "New",
@@ -70,6 +71,7 @@ const PRODUCT_CATEGORY_VERTICAL_LABELS = {
     all: "Alle",
     subcategories: "Unterkategorien",
     requestQuote: "Angebot anfordern",
+    addedToQuote: "Produkt zum Angebot hinzugef\u00fcgt",
     capacity: "Kapazit\u00e4t",
     fuelType: "Kraftstoffart",
     newProduct: "Neu",
@@ -660,16 +662,18 @@ function CategorySidebarItem({
 
 function ProductVerticalCard({ product, language }) {
   const { addProduct } = useQuoteCart();
-  const router = useRouter();
   const labels = getProductCategoryVerticalLabels(language);
   const title = stripHtml(getProductTitle(product));
   const excerpt = stripHtml(getProductExcerpt(product));
   const image = getProductImage(product);
   const productLink = getProductLink(product, language);
-  const quoteLink = localizePath("/rfq", language);
   const capacity = getProductCapacityMeta(product);
   const fuelType = getProductFuelTypeMeta(product);
   const badge = getProductBadge(product, labels);
+  const [isAddedMessageVisible, setIsAddedMessageVisible] = useState(false);
+  const addedMessageTimeoutRef = useRef(null);
+
+  useEffect(() => () => clearTimeout(addedMessageTimeoutRef.current), []);
 
   const handleRequestQuote = () => {
     addProduct({
@@ -679,7 +683,13 @@ function ProductVerticalCard({ product, language }) {
       sku: product?.sku || product?.acf?.article_number || product?.acf?.product_article_number,
       image,
     });
-    router.push(quoteLink);
+
+    setIsAddedMessageVisible(true);
+    clearTimeout(addedMessageTimeoutRef.current);
+    addedMessageTimeoutRef.current = setTimeout(
+      () => setIsAddedMessageVisible(false),
+      3000
+    );
   };
 
   return (
@@ -788,6 +798,18 @@ function ProductVerticalCard({ product, language }) {
             />
           </Link>
         </div>
+
+        {isAddedMessageVisible && (
+          <p
+            className="mt-2 flex items-center gap-1.5 font-body text-[12px] font-semibold text-[#1B8A3D]"
+            role="status"
+          >
+            <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#1B8A3D]">
+              <Image src="/check.svg" alt="" width={11} height={8} className="h-2 w-2.5 object-contain brightness-0 invert" />
+            </span>
+            {labels.addedToQuote}
+          </p>
+        )}
       </div>
     </article>
   );
