@@ -205,30 +205,35 @@ async function buildThreeLevelCategoriesMenu(row, rowIndex, language) {
           products: [],
         }));
 
-      const childrenWithProducts = await Promise.all(
-        children.map(async (child, childIndex) => {
-          const childId = getEntityId(child);
-          const products = childId
-            ? await getProductsByCategory(childId, { language })
-            : [];
+      const childrenWithProducts = (
+        await Promise.all(
+          children.map(async (child, childIndex) => {
+            const childId = getEntityId(child);
+            // Note: WP's REST product_cat filter already includes products
+            // from descendant categories, so this also covers products
+            // nested under this subcategory's own child categories.
+            const products = childId
+              ? await getProductsByCategory(childId, { language })
+              : [];
 
-          return {
-            key: `${rowIndex}-category-${categoryId}-child-${childId || childIndex}`,
-            id: childId,
-            label: getEntityName(child, `Category ${childIndex + 1}`),
-            href: getCategoryHref(child, language),
-            products: products.map((product, productIndex) => ({
-              key: `${rowIndex}-category-${categoryId}-child-${childId || childIndex}-product-${
-                product?.id || productIndex
-              }`,
-              id: product?.id || null,
-              label: toSentenceCase(getEntityName(product, `Product ${productIndex + 1}`)),
-              href: getProductHref(product, language),
-              image: getProductImage(product),
-            })),
-          };
-        })
-      );
+            return {
+              key: `${rowIndex}-category-${categoryId}-child-${childId || childIndex}`,
+              id: childId,
+              label: getEntityName(child, `Category ${childIndex + 1}`),
+              href: getCategoryHref(child, language),
+              products: products.map((product, productIndex) => ({
+                key: `${rowIndex}-category-${categoryId}-child-${childId || childIndex}-product-${
+                  product?.id || productIndex
+                }`,
+                id: product?.id || null,
+                label: toSentenceCase(getEntityName(product, `Product ${productIndex + 1}`)),
+                href: getProductHref(product, language),
+                image: getProductImage(product),
+              })),
+            };
+          })
+        )
+      ).filter((child) => child.products.length > 0);
 
       return {
         key: `${rowIndex}-category-${categoryId}`,

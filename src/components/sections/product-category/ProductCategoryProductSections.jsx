@@ -397,11 +397,17 @@ function getProductBadge(product, labels) {
 export default function ProductCategoryProductSections({
   currentCategory,
   childCategories = [],
+  currentCategoryProducts = [],
   language = DEFAULT_LANGUAGE,
 }) {
-  if (!currentCategory || childCategories.length === 0) return null;
-
   const isVerticalLayout = getCategoryLayout(currentCategory) === "vertical";
+  const isLeafCategory = !isVerticalLayout && childCategories.length === 0;
+
+  if (!currentCategory) return null;
+  if (!isVerticalLayout && childCategories.length === 0 && currentCategoryProducts.length === 0) {
+    return null;
+  }
+
   const verticalProducts = isVerticalLayout
     ? getVerticalProducts(childCategories)
     : [];
@@ -417,6 +423,15 @@ export default function ProductCategoryProductSections({
             currentCategory={currentCategory}
             categories={childCategories}
             products={verticalProducts}
+            language={language}
+          />
+        ) : isLeafCategory ? (
+          // No subcategories under this category: show its own products
+          // as a plain grid instead of the per-subcategory blocks below.
+          <ProductVerticalLayout
+            currentCategory={currentCategory}
+            categories={[]}
+            products={currentCategoryProducts}
             language={language}
           />
         ) : (

@@ -689,6 +689,13 @@ export async function renderProductCategoryPage(params, language) {
     })
   );
 
+  // Leaf category (no subcategories, non-vertical layout): show its own
+  // products directly on the page instead of rendering nothing.
+  const currentCategoryProducts =
+    !isVerticalLayout && childCategories.length === 0
+      ? await getProductsByCategory(category.term_id, { language })
+      : [];
+
   const tabCategories = categories.filter(
     (cat) => cat.slug !== "uncategorized" && Number(cat.term_id) !== 15
   );
@@ -713,6 +720,7 @@ export async function renderProductCategoryPage(params, language) {
         <ProductCategoryProductSections
           currentCategory={currentCategory}
           childCategories={childCategoriesWithProducts}
+          currentCategoryProducts={currentCategoryProducts}
           language={language}
         />
         <ProductCategorySeoSection category={category} />
