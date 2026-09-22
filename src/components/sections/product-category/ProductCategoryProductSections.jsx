@@ -585,7 +585,7 @@ function ProductVerticalLayout({
         )}
 
         <div
-          className={`grid grid-cols-2 gap-4 sm:gap-5 lg:self-start ${
+          className={`grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:self-start ${
             hasSidebar
               ? (GRID_COLUMN_CLASSES[columns] || GRID_COLUMN_CLASSES[3]).withSidebar
               : (GRID_COLUMN_CLASSES[columns] || GRID_COLUMN_CLASSES[3]).withoutSidebar
@@ -1028,9 +1028,9 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
               </Link>
             </div>
 
-            {/* Arrows: desktop only, hidden below the product card on mobile */}
+            {/* Arrows: the only way to switch products on mobile since the tabs are hidden there */}
             {products.length > 1 && (
-              <div className="mt-16 hidden gap-3 lg:flex">
+              <div className="mt-8 flex gap-3 lg:mt-16">
                 <button
                   type="button"
                   onClick={() => {
