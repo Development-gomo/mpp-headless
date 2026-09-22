@@ -258,7 +258,7 @@ export default function ProductHero({
                   fill
                   priority
                   sizes="(min-width: 1024px) 610px, 100vw"
-                  className="product-gallery-main-image object-cover"
+                  className="product-gallery-main-image object-contain p-6"
                 />
               ) : (
                 <div className="flex min-h-75 items-center justify-center font-body text-[14px] text-black/50 md:min-h-[392px]">

@@ -133,7 +133,7 @@ function EmployeeCard({ member }) {
       )}
 
       {position && (
-        <p className="mt-2 text-[16px] font-normal leading-[22px] text-[var(--color-accent)] [font-family:var(--font-nunito-sans)]">
+        <p className="mt-2 text-[14px] font-normal leading-[22px] text-[var(--color-accent)] [font-family:var(--font-nunito-sans)]">
           {position}
         </p>
       )}
