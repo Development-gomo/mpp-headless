@@ -833,7 +833,6 @@ function ProductVerticalCard({ product, language }) {
 function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
   const products = (childCategory?.products || []).slice(0, 3);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isActiveImageWide, setIsActiveImageWide] = useState(true);
   const labels = getProductCategorySectionLabels(language);
   const metaLabels = getProductCategoryVerticalLabels(language);
 
@@ -987,7 +986,6 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                     setActiveIndex((prev) =>
                       prev === 0 ? products.length - 1 : prev - 1,
                     );
-                    setIsActiveImageWide(true);
                   }}
                   className="flex h-10 w-10 items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80 cursor-pointer" aria-label="Previous product">
                   <Image
@@ -1005,7 +1003,6 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                     setActiveIndex((prev) =>
                       prev === products.length - 1 ? 0 : prev + 1,
                     );
-                    setIsActiveImageWide(true);
                   }}
                   className="flex h-10 w-10 items-center justify-center rounded-sm bg-white text-black transition-opacity hover:opacity-80 cursor-pointer" aria-label="Next product">
                   <Image
@@ -1031,10 +1028,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                     <button
                       key={product.id || index}
                       type="button"
-                      onClick={() => {
-                        setActiveIndex(index);
-                        setIsActiveImageWide(true);
-                      }}
+                      onClick={() => setActiveIndex(index)}
                       className={`min-h-[44px] rounded-[3px] px-4 font-heading text-[16px] font-normal tracking-[-0.32px] transition-colors ${
                         isActive
                           ? "bg-white text-black shadow-sm"
@@ -1055,13 +1049,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                   alt={activeTitle || "Product image"}
                   width={760}
                   height={520}
-                  onLoad={(event) => {
-                    const { naturalWidth, naturalHeight } = event.currentTarget;
-                    setIsActiveImageWide(naturalWidth >= naturalHeight);
-                  }}
-                  className={`h-auto w-auto max-w-full object-contain drop-shadow-[0_20px_25px_rgba(0,0,0,0.25)] ${
-                    isActiveImageWide ? "min-w-[120%]" : ""
-                  }`}
+                  className="h-auto max-h-[220px] w-auto max-w-full object-contain drop-shadow-[0_20px_25px_rgba(0,0,0,0.25)] md:max-h-[280px]"
                 />
               ) : (
                 <div className="flex min-h-[260px] w-full items-center justify-center rounded-[8px] border border-black/10 bg-white/30 font-body text-[14px] text-black/50">
