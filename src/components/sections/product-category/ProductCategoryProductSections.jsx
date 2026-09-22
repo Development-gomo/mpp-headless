@@ -231,6 +231,12 @@ function getCategoryLayout(category) {
   return String(category?.acf?.category_layout || "").toLowerCase();
 }
 
+// Defence always shows every product in a single 4-column grid; every other
+// vertical-layout category keeps the standard 3-column grid.
+function isDefenceCategory(category) {
+  return category?.slug === "defence";
+}
+
 function getCategoryId(category) {
   return category?.term_id || category?.id || category?.ID || null;
 }
@@ -424,6 +430,7 @@ export default function ProductCategoryProductSections({
             categories={childCategories}
             products={verticalProducts}
             language={language}
+            columns={isDefenceCategory(currentCategory) ? 4 : 3}
           />
         ) : isLeafCategory ? (
           // No subcategories under this category: show its own products
@@ -433,6 +440,7 @@ export default function ProductCategoryProductSections({
             categories={[]}
             products={currentCategoryProducts}
             language={language}
+            columns={isDefenceCategory(currentCategory) ? 4 : 3}
           />
         ) : (
           visibleChildCategories.map((childCategory, sectionIndex) => {
@@ -452,6 +460,7 @@ export default function ProductCategoryProductSections({
                     categories={verticalCategories}
                     products={getVerticalProducts(verticalCategories)}
                     language={language}
+                    columns={isDefenceCategory(childCategory) ? 4 : 3}
                   />
                 </div>
               );
@@ -472,11 +481,17 @@ export default function ProductCategoryProductSections({
   );
 }
 
+const GRID_COLUMN_CLASSES = {
+  3: { withSidebar: "xl:grid-cols-3", withoutSidebar: "lg:grid-cols-3" },
+  4: { withSidebar: "xl:grid-cols-4", withoutSidebar: "lg:grid-cols-4" },
+};
+
 function ProductVerticalLayout({
   currentCategory,
   categories,
   products,
   language,
+  columns = 3,
 }) {
   const [activeCategoryId, setActiveCategoryId] = useState("all");
   const categoryTree = useMemo(
@@ -552,7 +567,9 @@ function ProductVerticalLayout({
 
         <div
           className={`grid grid-cols-2 gap-4 sm:gap-5 lg:self-start ${
-            hasSidebar ? "xl:grid-cols-3" : "lg:grid-cols-3"
+            hasSidebar
+              ? (GRID_COLUMN_CLASSES[columns] || GRID_COLUMN_CLASSES[3]).withSidebar
+              : (GRID_COLUMN_CLASSES[columns] || GRID_COLUMN_CLASSES[3]).withoutSidebar
           }`}
         >
           {filteredProducts.map((product, index) => (

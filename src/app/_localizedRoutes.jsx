@@ -121,12 +121,24 @@ function getCategoryLayout(category) {
   return String(category?.acf?.category_layout || "").toLowerCase();
 }
 
+// The Defence category is set up as "horizontal" (tabbed hero blocks) in
+// WP, but should always show all of its products in a single grid instead,
+// regardless of that setting.
+function isDefenceCategory(category) {
+  return category?.slug === "defence";
+}
+
 function categoryHasVerticalLayoutInPath(categories, category) {
   let currentCategory = category;
   const visitedIds = new Set();
 
   while (currentCategory) {
-    if (getCategoryLayout(currentCategory) === "vertical") return true;
+    if (
+      getCategoryLayout(currentCategory) === "vertical" ||
+      isDefenceCategory(currentCategory)
+    ) {
+      return true;
+    }
 
     const categoryId = getCategoryId(currentCategory);
     if (!categoryId || visitedIds.has(String(categoryId))) break;
