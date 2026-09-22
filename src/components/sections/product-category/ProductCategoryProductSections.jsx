@@ -431,6 +431,7 @@ export default function ProductCategoryProductSections({
             products={verticalProducts}
             language={language}
             columns={isDefenceCategory(currentCategory) ? 4 : 3}
+            compactFilters={isDefenceCategory(currentCategory)}
           />
         ) : isLeafCategory ? (
           // No subcategories under this category: show its own products
@@ -441,6 +442,7 @@ export default function ProductCategoryProductSections({
             products={currentCategoryProducts}
             language={language}
             columns={isDefenceCategory(currentCategory) ? 4 : 3}
+            compactFilters={isDefenceCategory(currentCategory)}
           />
         ) : (
           visibleChildCategories.map((childCategory, sectionIndex) => {
@@ -461,6 +463,7 @@ export default function ProductCategoryProductSections({
                     products={getVerticalProducts(verticalCategories)}
                     language={language}
                     columns={isDefenceCategory(childCategory) ? 4 : 3}
+                    compactFilters={isDefenceCategory(childCategory)}
                   />
                 </div>
               );
@@ -492,6 +495,7 @@ function ProductVerticalLayout({
   products,
   language,
   columns = 3,
+  compactFilters = false,
 }) {
   const [activeCategoryId, setActiveCategoryId] = useState("all");
   const categoryTree = useMemo(
@@ -523,7 +527,13 @@ function ProductVerticalLayout({
   return (
     <div>
       {hasSidebar && (
-        <h2 className="mb-6 font-heading text-[22px] font-normal leading-7 tracking-[-0.44px] text-black">
+        <h2
+          className={`font-heading font-normal text-black ${
+            compactFilters
+              ? "mb-4 text-[18px] leading-6"
+              : "mb-6 text-[22px] leading-7 tracking-[-0.44px]"
+          }`}
+        >
           {labels.filters}
         </h2>
       )}
@@ -531,20 +541,28 @@ function ProductVerticalLayout({
       <div
         className={`grid grid-cols-1 gap-8 ${
           hasSidebar
-            ? "lg:grid-cols-[280px_1fr] xl:grid-cols-[320px_1fr]"
+            ? compactFilters
+              ? "lg:grid-cols-[200px_1fr] xl:grid-cols-[220px_1fr]"
+              : "lg:grid-cols-[280px_1fr] xl:grid-cols-[320px_1fr]"
             : ""
         }`}
       >
         {hasSidebar && (
           <aside className="lg:self-start">
-            <div className="rounded-lg bg-[rgba(0,112,158,0.1)] px-6 py-7">
+            <div
+              className={`rounded-lg bg-[rgba(0,112,158,0.1)] ${
+                compactFilters ? "px-4 py-4" : "px-6 py-7"
+              }`}
+            >
               <nav aria-label={labels.subcategories}>
                 <ul className="space-y-0">
                   <li>
                     <button
                       type="button"
                       onClick={() => setActiveCategoryId("all")}
-                      className={`w-full border-b border-black/25 py-3 text-left font-heading text-[15px] leading-5.5 tracking-[-0.3px] transition-colors hover:text-[var(--color-accent)] ${
+                      className={`w-full border-b border-black/25 text-left font-heading tracking-[-0.3px] transition-colors hover:text-[var(--color-accent)] ${
+                        compactFilters ? "py-2 text-[13px] leading-5" : "py-3 text-[15px] leading-5.5"
+                      } ${
                         activeCategoryId === "all"
                           ? "font-semibold text-[var(--color-accent)]"
                           : "font-medium text-black"
@@ -559,6 +577,7 @@ function ProductVerticalLayout({
                   language={language}
                   activeCategoryId={activeCategoryId}
                   onSelectCategory={setActiveCategoryId}
+                  compact={compactFilters}
                 />
               </nav>
             </div>
@@ -591,6 +610,7 @@ function CategorySidebarList({
   level = 0,
   activeCategoryId,
   onSelectCategory,
+  compact = false,
 }) {
   if (items.length === 0) return null;
 
@@ -604,6 +624,7 @@ function CategorySidebarList({
           level={level}
           activeCategoryId={activeCategoryId}
           onSelectCategory={onSelectCategory}
+          compact={compact}
         />
       ))}
     </ul>
@@ -616,6 +637,7 @@ function CategorySidebarItem({
   level,
   activeCategoryId,
   onSelectCategory,
+  compact = false,
 }) {
   const category = item.category;
   const categoryId = String(getCategoryId(category));
@@ -635,13 +657,19 @@ function CategorySidebarItem({
       <div
         className={`group flex items-center gap-3 transition-colors hover:text-[var(--color-accent)] ${
           level === 0
-            ? "justify-between border-b border-black/25 py-3 font-heading text-[15px] font-medium leading-5.5 tracking-[-0.3px] text-black"
-            : "rounded-sm py-1.5 font-body text-[13px] font-normal leading-4.5 tracking-[-0.26px] text-black"
+            ? `justify-between border-b border-black/25 font-heading font-medium tracking-[-0.3px] text-black ${
+                compact ? "py-2 text-[13px] leading-5" : "py-3 text-[15px] leading-5.5"
+              }`
+            : `rounded-sm font-body font-normal tracking-[-0.26px] text-black ${
+                compact ? "py-1 text-[12px] leading-4" : "py-1.5 text-[13px] leading-4.5"
+              }`
         } ${isActive ? "text-[var(--color-accent)]" : ""}`}
       >
         {level > 0 && (
           <span
-            className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-[2px] border transition-colors ${
+            className={`flex shrink-0 items-center justify-center rounded-[2px] border transition-colors ${
+              compact ? "h-3.5 w-3.5" : "h-4 w-4"
+            } ${
               isActive
                 ? "border-[var(--color-yellow)] bg-[var(--color-yellow)]"
                 : "border-black group-hover:border-[var(--color-accent)]"
@@ -668,11 +696,16 @@ function CategorySidebarItem({
           <button
             type="button"
             onClick={() => setIsOpen((open) => !open)}
-            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-sm transition-colors hover:bg-white/60"
+            className={`flex shrink-0 items-center justify-center rounded-sm transition-colors hover:bg-white/60 ${
+              compact ? "h-6 w-6" : "h-7 w-7"
+            }`}
             aria-expanded={isOpen}
             aria-label={stripHtml(category?.name)}
           >
-            <span className="font-heading text-[18px] leading-none text-black" aria-hidden="true">
+            <span
+              className={`font-heading leading-none text-black ${compact ? "text-[15px]" : "text-[18px]"}`}
+              aria-hidden="true"
+            >
               {isOpen ? "−" : "+"}
             </span>
           </button>
@@ -686,6 +719,7 @@ function CategorySidebarItem({
           level={level + 1}
           activeCategoryId={activeCategoryId}
           onSelectCategory={onSelectCategory}
+          compact={compact}
         />
       )}
     </li>

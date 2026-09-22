@@ -37,10 +37,17 @@ function getCategoryLink(category, language = DEFAULT_LANGUAGE) {
     : "#";
 }
 
+// Slugs differ per WPML language, so every localized variant of each
+// category needs to be listed here in the desired display order (only the
+// variants for the active language will ever be present at once).
 const MAIN_CATEGORY_ORDER = [
   "mobila-bransletankar",
+  "mobile-fuel-tanks",
   "stationara-bransletankar",
+  "stationary-fuel-tanks",
   "accessories",
+  "defence",
+  "defence-en",
   "defence-products",
 ];
 
