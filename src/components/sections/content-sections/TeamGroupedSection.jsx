@@ -8,13 +8,23 @@ import {
   getTranslation,
 } from "./team-utils";
 
-// Outer grid is 4 columns on desktop; a department block spans as many
-// columns as it has members (capped at 4), matching mpp.se/medarbetare.
+// Each row of the grid is 4 columns on desktop; a department block spans as
+// many columns as it has members (capped at 4), matching mpp.se/medarbetare.
 const SPAN_CLASSES = {
   1: "lg:col-span-1",
   2: "lg:col-span-2",
   3: "lg:col-span-3",
   4: "lg:col-span-4",
+};
+
+// When a row's departments don't fill all 4 columns, the first block is
+// pushed in from this column line so the group centers itself in the row
+// (e.g. Management on its own, matching mpp.se/medarbetare).
+const START_CLASSES = {
+  1: "",
+  2: "lg:col-start-2",
+  3: "lg:col-start-3",
+  4: "lg:col-start-4",
 };
 
 const INNER_COLS_CLASSES = {
@@ -23,6 +33,35 @@ const INNER_COLS_CLASSES = {
   3: "sm:grid-cols-2 lg:grid-cols-3",
   4: "sm:grid-cols-2 lg:grid-cols-4",
 };
+
+// Manually curated row layout matching the live site: Management sits alone
+// on its own (centered) row, Finance/Purchasing/Design & Engineering share
+// the next row, Operations and Technical Support share the one after, and
+// Sales gets its own full row. Any department not listed here (e.g. a new
+// one added later) simply gets its own trailing row.
+const DEPARTMENT_ROWS = [
+  ["management"],
+  ["finance", "purchasing", "design-engineering"],
+  ["operations-production-support", "technical-support"],
+  ["sales"],
+];
+
+function buildRows(groups = []) {
+  const byKey = new Map(groups.map((group) => [group.key, group]));
+  const used = new Set();
+
+  const rows = DEPARTMENT_ROWS.map((rowKeys) =>
+    rowKeys.map((key) => byKey.get(key)).filter(Boolean)
+  ).filter((row) => row.length > 0);
+
+  rows.forEach((row) => row.forEach((group) => used.add(group.key)));
+
+  groups
+    .filter((group) => !used.has(group.key))
+    .forEach((group) => rows.push([group]));
+
+  return rows;
+}
 
 function groupByDepartment(teams = [], language) {
   const translations = getTranslation(language);
@@ -111,17 +150,37 @@ function EmployeeCard({ member }) {
   );
 }
 
-function DepartmentGroup({ group }) {
+function DepartmentGroup({ group, startClass = "" }) {
   const span = Math.min(group.members.length, 4);
 
   return (
-    <div className={`col-span-1 sm:col-span-2 ${SPAN_CLASSES[span]}`}>
+    <div className={`col-span-1 sm:col-span-2 ${SPAN_CLASSES[span]} ${startClass}`}>
       <DepartmentHeading label={group.label} />
       <div className={`grid grid-cols-1 gap-6 ${INNER_COLS_CLASSES[span]}`}>
         {group.members.map((member, index) => (
           <EmployeeCard key={member?.id || index} member={member} />
         ))}
       </div>
+    </div>
+  );
+}
+
+function DepartmentRow({ row }) {
+  const total = Math.min(
+    row.reduce((sum, group) => sum + Math.min(group.members.length, 4), 0),
+    4
+  );
+  const offset = total < 4 ? Math.floor((4 - total) / 2) + 1 : 1;
+
+  return (
+    <div className="grid grid-cols-1 gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
+      {row.map((group, index) => (
+        <DepartmentGroup
+          key={group.key}
+          group={group}
+          startClass={index === 0 ? START_CLASSES[offset] : ""}
+        />
+      ))}
     </div>
   );
 }
@@ -140,6 +199,7 @@ export default function TeamGroupedSection({ data, teams = [], language }) {
   const groups = groupByDepartment(teams, language).filter(
     (group) => group.members?.length
   );
+  const rows = buildRows(groups);
 
   return (
     <section
@@ -179,10 +239,10 @@ export default function TeamGroupedSection({ data, teams = [], language }) {
           </div>
         )}
 
-        {groups.length > 0 && (
-          <div className="grid grid-cols-1 gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
-            {groups.map((group) => (
-              <DepartmentGroup key={group.key} group={group} />
+        {rows.length > 0 && (
+          <div className="flex flex-col gap-14">
+            {rows.map((row, index) => (
+              <DepartmentRow key={row.map((group) => group.key).join("-") || index} row={row} />
             ))}
           </div>
         )}
