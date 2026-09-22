@@ -996,10 +996,10 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
               </div>
             )}
 
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-nowrap gap-2 sm:gap-4 lg:flex-wrap">
               <Link
                 href="#"
-                className="group inline-flex items-center gap-4 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90"
+                className="group inline-flex items-center gap-2 rounded-sm bg-[image:var(--mpp-gradient)] py-1.5 pr-1.5 pl-4 font-heading text-[13px] font-normal tracking-[-0.28px] text-white transition-opacity hover:opacity-90 sm:gap-4 sm:pl-6 sm:text-[14px]"
               >
                 <span>{labels.findDealer}</span>
 
@@ -1008,13 +1008,13 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                   alt=""
                   width={36}
                   height={36}
-                  className="h-auto w-9 object-contain transition-transform"
+                  className="h-auto w-7 object-contain transition-transform sm:w-9"
                 />
               </Link>
 
               <Link
                 href={activeLink}
-                className="group inline-flex items-center gap-4 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-6 font-heading text-[14px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90"
+                className="group inline-flex items-center gap-2 rounded-sm bg-[var(--color-yellow)] py-1.5 pr-1.5 pl-4 font-heading text-[13px] font-normal tracking-[-0.28px] text-black transition-opacity hover:opacity-90 sm:gap-4 sm:pl-6 sm:text-[14px]"
               >
                 <span>{labels.viewProduct}</span>
 
@@ -1023,14 +1023,14 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
                   alt=""
                   width={36}
                   height={36}
-                  className="h-auto w-9 object-contain transition-transform"
+                  className="h-auto w-7 object-contain transition-transform sm:w-9"
                 />
               </Link>
             </div>
 
-            {/* Arrows */}
+            {/* Arrows: desktop only, hidden below the product card on mobile */}
             {products.length > 1 && (
-              <div className="mt-16 flex gap-3">
+              <div className="mt-16 hidden gap-3 lg:flex">
                 <button
                   type="button"
                   onClick={() => {
@@ -1068,10 +1068,10 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
             )}
           </div>
 
-          {/* Right product tabs + image */}
-          <div className="flex h-full flex-col">
+          {/* Right product tabs + image: image shown first on mobile, tabs desktop-only */}
+          <div className="order-first flex h-full flex-col lg:order-none">
             {products.length > 1 && (
-              <div className="mb-10 flex flex-wrap justify-start gap-0 rounded-[4px] bg-[#D9DBE7] p-1 lg:ml-auto lg:w-fit">
+              <div className="mb-10 hidden justify-start gap-0 rounded-[4px] bg-[#D9DBE7] p-1 lg:flex lg:flex-wrap lg:ml-auto lg:w-fit">
                 {products.map((product, index) => {
                   const isActive = activeIndex === index;
 
@@ -1093,7 +1093,7 @@ function ProductSubcategoryBlock({ currentCategory, childCategory, language }) {
               </div>
             )}
 
-            <div className="relative mt-auto flex min-h-[280px] items-end justify-end md:min-h-[280px]">
+            <div className="relative mt-0 flex min-h-[220px] items-end justify-end lg:mt-auto lg:min-h-[280px]">
               {activeImage ? (
                 <Image
                   src={activeImage}
