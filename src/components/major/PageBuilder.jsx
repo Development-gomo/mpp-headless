@@ -11,6 +11,7 @@ const ProductCategoriesSection = dynamic(() => import("../sections/content-secti
 const LatestBlogsSection = dynamic(() => import("../sections/content-sections/LatestBlogsSection"));
 const LatestCaseStudiesSection = dynamic(() => import("../sections/content-sections/LatestCaseStudiesSection"));
 const TeamSection = dynamic(() => import("../sections/content-sections/TeamSection"));
+const TeamGroupedSection = dynamic(() => import("../sections/content-sections/TeamGroupedSection"));
 const HistorySection = dynamic(() => import("../sections/content-sections/HistorySection"));
 const PartnerReviewSection = dynamic(() => import("../sections/content-sections/PartnerReviewSection"));
 const InnerCaseStudy = dynamic(() => import("../sections/case-study/InnerCaseStudy"));
@@ -87,6 +88,15 @@ export default function PageBuilder({
           case "team_section":
             return (
               <TeamSection
+                key={i}
+                data={block}
+                teams={teams}
+                language={language}
+              />
+            );
+          case "team_grouped_section":
+            return (
+              <TeamGroupedSection
                 key={i}
                 data={block}
                 teams={teams}

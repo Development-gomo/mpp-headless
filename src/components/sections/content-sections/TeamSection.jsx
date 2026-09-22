@@ -3,117 +3,16 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
-const DEPARTMENT_LABELS = {
-  management: "Management",
-  finance: "Finance",
-  purchasing: "Purchasing",
-  "design-engineering": "Design & Engineering",
-  "operations-production-support": "Operations & Production Support",
-  "technical-support": "Technical Support",
-  sales: "Sales",
-};
-
-const TRANSLATIONS = {
-  sv: {
-    departments: {
-      management: "Ledning",
-      finance: "Ekonomi",
-      purchasing: "Inköp",
-      "design-engineering": "Design och konstruktion",
-      "operations-production-support": "Drift och produktionssupport",
-      "technical-support": "Teknisk support",
-      sales: "Försäljning",
-    },
-    allDepartments: "Alla avdelningar",
-    filterLabel: "Filtrera team efter avdelning",
-    emptyMessage: "Inga teammedlemmar hittades för denna avdelning.",
-  },
-  de: {
-    departments: {
-      management: "Geschäftsführung",
-      finance: "Finanzen",
-      purchasing: "Einkauf",
-      "design-engineering": "Konstruktion und Entwicklung",
-      "operations-production-support": "Betrieb und Produktionsunterstützung",
-      "technical-support": "Technischer Support",
-      sales: "Vertrieb",
-    },
-    allDepartments: "Alle Abteilungen",
-    filterLabel: "Team nach Abteilung filtern",
-    emptyMessage: "Keine Teammitglieder für diese Abteilung gefunden.",
-  },
-  en: {
-    departments: DEPARTMENT_LABELS,
-    allDepartments: "All departments",
-    filterLabel: "Filter team by department",
-    emptyMessage: "No team members found for this department.",
-  },
-};
-
-const DEPARTMENT_VALUES = Object.entries(DEPARTMENT_LABELS).reduce(
-  (acc, [value, label]) => ({
-    ...acc,
-    [label.toLowerCase()]: value,
-  }),
-  {}
-);
-
-function stripHtml(value = "") {
-  return String(value).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
-}
-
-function normalizeDepartmentKey(value = "") {
-  const normalized = String(value).trim();
-  const lower = normalized.toLowerCase();
-
-  return DEPARTMENT_VALUES[lower] || lower.replace(/&/g, "and").replace(/\s+/g, "-");
-}
-
-function normalizeList(value) {
-  if (!value) return [];
-  const list = Array.isArray(value) ? value : [value];
-
-  return list
-    .map((item) => {
-      if (typeof item === "string") return item;
-      return item?.value || item?.slug || item?.name || item?.label || "";
-    })
-    .map(normalizeDepartmentKey)
-    .filter(Boolean);
-}
-
-function getSelectedDepartments(data = {}) {
-  return normalizeList(
-    data.selected_core_departments ||
-      data.select_core_departments ||
-      data.core_departments ||
-      data.departments ||
-      data.department_filter
-  );
-}
-
-function getImageUrl(item) {
-  return (
-    item?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ||
-    item?.featured_image ||
-    item?.featured_image_url ||
-    ""
-  );
-}
-
-function getButtonHref(button = {}) {
-  if (typeof button.button_link === "string") return button.button_link;
-  return button.button_link?.url || button.link?.url || "#";
-}
-
-function getButtonLabel(button = {}) {
-  return button.button_label || button.button_link?.title || button.link?.title || "";
-}
-
-function getTranslation(language) {
-  return TRANSLATIONS[language] || TRANSLATIONS.sv;
-}
+import {
+  DEPARTMENT_LABELS,
+  stripHtml,
+  normalizeList,
+  getSelectedDepartments,
+  getImageUrl,
+  getButtonHref,
+  getButtonLabel,
+  getTranslation,
+} from "./team-utils";
 
 function getDepartmentOptions(teams = [], allowedDepartments = [], language) {
   const foundDepartments = new Set();
