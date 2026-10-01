@@ -317,6 +317,12 @@ export const getLanguageLinks = cache(async function getLanguageLinks(
         return;
       }
 
+      // Static routes (no WordPress entry) exist under the same path in every language.
+      if (context?.staticPath) {
+        links[targetLanguage] = localizePath(context.staticPath, targetLanguage);
+        return;
+      }
+
       // Keep every active language available when a page has no translation.
       links[targetLanguage] =
         targetLanguage === DEFAULT_LANGUAGE ? "/" : `/${targetLanguage}`;

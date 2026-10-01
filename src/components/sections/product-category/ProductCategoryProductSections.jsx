@@ -726,7 +726,7 @@ function CategorySidebarItem({
   );
 }
 
-function ProductVerticalCard({ product, language }) {
+export function ProductVerticalCard({ product, language }) {
   const { addProduct } = useQuoteCart();
   const labels = getProductCategoryVerticalLabels(language);
   const title = stripHtml(getProductTitle(product));
