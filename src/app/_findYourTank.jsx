@@ -16,7 +16,11 @@ import {
   localizePath,
 } from "@/lib/i18n";
 
-const STATIC_PATH = "/find-your-tank";
+const STATIC_PATHS = {
+  sv: "/hitta-din-tank",
+  en: "/find-your-tank",
+  de: "/find-your-tank",
+};
 
 const PAGE_TITLES = {
   sv: "Hitta din tank",
@@ -121,9 +125,9 @@ export function generateFindYourTankMetadata(language) {
   return {
     title: PAGE_TITLES[language] || PAGE_TITLES.en,
     alternates: {
-      canonical: localizePath(STATIC_PATH, language),
+      canonical: localizePath(STATIC_PATHS[language], language),
       languages: Object.fromEntries(
-        SUPPORTED_LANGUAGES.map((code) => [code, localizePath(STATIC_PATH, code)])
+        SUPPORTED_LANGUAGES.map((code) => [code, localizePath(STATIC_PATHS[code] || STATIC_PATHS.en, code)])
       ),
     },
   };
@@ -155,14 +159,14 @@ export async function renderFindYourTankPage(language) {
     )
   );
 
-  const path = `${getLanguagePrefix(language)}${STATIC_PATH}`;
+  const path = `${getLanguagePrefix(language)}${STATIC_PATHS[language]}`;
 
   return (
     <>
       <Header
         variant="dark"
         language={language}
-        translationContext={{ language, path, staticPath: STATIC_PATH }}
+        translationContext={{ language, path, staticPaths: STATIC_PATHS }}
       />
       <main>
         <FindYourTankSection

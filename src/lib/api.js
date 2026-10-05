@@ -317,9 +317,14 @@ export const getLanguageLinks = cache(async function getLanguageLinks(
         return;
       }
 
-      // Static routes (no WordPress entry) exist under the same path in every language.
-      if (context?.staticPath) {
-        links[targetLanguage] = localizePath(context.staticPath, targetLanguage);
+      // Static routes (no WordPress entry) are resolved from a per-language path map.
+      // staticPaths maps a language to its own path when the slug is translated.
+      if (context?.staticPaths) {
+        links[targetLanguage] = localizePath(
+          context.staticPaths[targetLanguage] ||
+            context.staticPaths[DEFAULT_LANGUAGE],
+          targetLanguage
+        );
         return;
       }
 
