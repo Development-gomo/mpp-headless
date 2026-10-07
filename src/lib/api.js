@@ -23,6 +23,26 @@ function timeoutSignal(timeoutMs) {
   return controller.signal;
 }
 
+// Cap concurrent requests per process so a build can't overwhelm WordPress.
+const MAX_CONCURRENT = 4;
+const MAX_ATTEMPTS = 3;
+let active = 0;
+const waiting = [];
+
+function acquireSlot() {
+  if (active < MAX_CONCURRENT) {
+    active++;
+    return Promise.resolve();
+  }
+  return new Promise((resolve) => waiting.push(resolve));
+}
+
+function releaseSlot() {
+  const next = waiting.shift();
+  if (next) next();
+  else active--;
+}
+
 // Generic fetch helper with ISR revalidation.
 export async function fetchWP(
   endpoint,
@@ -40,10 +60,28 @@ export async function fetchWP(
       localizedEndpoint.startsWith("/") ? "" : "/"
     }${localizedEndpoint}`;
 
-    const res = await fetch(url, {
-      next: { revalidate },
-      signal: timeoutSignal(timeoutMs),
-    });
+    let res;
+    for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+      await acquireSlot();
+      try {
+        res = await fetch(url, {
+          next: { revalidate },
+          signal: timeoutSignal(timeoutMs),
+        });
+      } catch (error) {
+        if (attempt === MAX_ATTEMPTS - 1) throw error;
+        res = null;
+      } finally {
+        releaseSlot();
+      }
+
+      // Retry transient backend overload (502/503/504/timeouts) with backoff.
+      const transient = !res || [502, 503, 504].includes(res.status);
+      if (!transient) break;
+      if (attempt < MAX_ATTEMPTS - 1) {
+        await new Promise((r) => setTimeout(r, 500 * 2 ** attempt));
+      }
+    }
 
     if (!res.ok) {
       if (logErrors) console.log("WP fetch failed:", res.status, url);
