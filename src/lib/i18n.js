@@ -5,7 +5,6 @@ export const GERMAN_LANGUAGE = "de";
 export const FALLBACK_LANGUAGES = [
   { code: DEFAULT_LANGUAGE, name: "Swedish", native_name: "Svenska" },
   { code: ENGLISH_LANGUAGE, name: "English", native_name: "English" },
-  { code: GERMAN_LANGUAGE, name: "German", native_name: "Deutsch" },
 ];
 
 export const SUPPORTED_LANGUAGES = (
@@ -19,6 +18,11 @@ export const SUPPORTED_LANGUAGES = (
 export const TRANSLATED_LANGUAGES = SUPPORTED_LANGUAGES.filter(
   (language) => language !== DEFAULT_LANGUAGE
 );
+
+// German is disabled in WPML; add "de" to NEXT_PUBLIC_SITE_LANGUAGES to re-enable.
+export function isLanguageEnabled(language) {
+  return SUPPORTED_LANGUAGES.includes(language);
+}
 
 export function normalizeLanguage(language) {
   return SUPPORTED_LANGUAGES.includes(language) ? language : DEFAULT_LANGUAGE;

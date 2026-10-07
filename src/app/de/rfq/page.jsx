@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+import { GERMAN_LANGUAGE, isLanguageEnabled } from "@/lib/i18n";
 import Footer from "@/components/major/Footer";
 import Header from "@/components/major/Header";
 import QuoteCartPageContent from "@/components/quote/QuoteCartPageContent";
@@ -7,6 +9,7 @@ export const metadata = {
 };
 
 export default function RfqPage() {
+  if (!isLanguageEnabled(GERMAN_LANGUAGE)) notFound();
   return (
     <>
       <Header

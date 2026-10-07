@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import Footer from "@/components/major/Footer";
 import Header from "@/components/major/Header";
 import FindYourTankSection from "@/components/sections/find-your-tank/FindYourTankSection";
@@ -13,6 +14,7 @@ import {
   DEFAULT_LANGUAGE,
   SUPPORTED_LANGUAGES,
   getLanguagePrefix,
+  isLanguageEnabled,
   localizePath,
 } from "@/lib/i18n";
 
@@ -122,6 +124,7 @@ function toTankProduct(product, categoriesById) {
 }
 
 export function generateFindYourTankMetadata(language) {
+  if (!isLanguageEnabled(language)) notFound();
   return {
     title: PAGE_TITLES[language] || PAGE_TITLES.en,
     alternates: {
@@ -134,6 +137,7 @@ export function generateFindYourTankMetadata(language) {
 }
 
 export async function renderFindYourTankPage(language) {
+  if (!isLanguageEnabled(language)) notFound();
   const [products, categories] = await Promise.all([
     getAllProducts({ language }),
     getProductCategories({ language }),

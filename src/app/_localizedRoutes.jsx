@@ -37,6 +37,7 @@ import {
   getTeams,
   getStores,
 } from "@/lib/api";
+import { isLanguageEnabled } from "@/lib/i18n";
 import { getProductCategories as getProductTerms } from "@/components/sections/product/productUtils";
 import { resolveParams } from "@/lib/params";
 import { buildMetadataFromYoast } from "@/lib/seo";
@@ -246,11 +247,15 @@ function getDeepestProductCategory(product, allCategories = []) {
 }
 
 export async function generateHomeMetadata(language) {
+  if (!isLanguageEnabled(language)) notFound();
+
   const page = await getPageBySlug("frontpage", { language });
   return buildMetadataFromYoast(page, { fallbackTitle: "Home" });
 }
 
 export async function renderHomePage(language) {
+  if (!isLanguageEnabled(language)) notFound();
+
   const page = await getPageBySlug("frontpage", { language });
   if (!page) notFound();
 
@@ -306,6 +311,8 @@ export async function renderHomePage(language) {
 }
 
 export async function generateDynamicStaticParams(language) {
+  if (!isLanguageEnabled(language)) return [];
+
   const [pages, posts, caseStudies, services] = await Promise.all([
     getAllPages({ language }),
     getAllPosts({ language }),
@@ -342,6 +349,8 @@ export async function generateDynamicStaticParams(language) {
 }
 
 export async function renderDynamicPage(params, language) {
+  if (!isLanguageEnabled(language)) notFound();
+
   const { slug } = await params;
   const page = await getPageBySlug(slug, { language });
 
@@ -496,6 +505,8 @@ export async function renderDynamicPage(params, language) {
 }
 
 export async function generateDynamicMetadata(params, language) {
+  if (!isLanguageEnabled(language)) notFound();
+
   const { slug } = await params;
   const page = await getPageBySlug(slug, { language });
   if (page) return buildMetadataFromYoast(page, { fallbackTitle: slug });
@@ -511,6 +522,8 @@ export async function generateDynamicMetadata(params, language) {
 }
 
 export async function generateProductStaticParams(language) {
+  if (!isLanguageEnabled(language)) return [];
+
   const products = await getAllProducts({ language });
   return (Array.isArray(products) ? products : []).map((product) => ({
     slug: product.slug,
@@ -518,6 +531,8 @@ export async function generateProductStaticParams(language) {
 }
 
 export async function generateServiceStaticParams(language) {
+  if (!isLanguageEnabled(language)) return [];
+
   const services = await getServices({ language });
   return (Array.isArray(services) ? services : []).map((service) => ({
     slug: service.slug,
@@ -525,12 +540,16 @@ export async function generateServiceStaticParams(language) {
 }
 
 export async function generateServiceMetadata(params, language) {
+  if (!isLanguageEnabled(language)) notFound();
+
   const { slug } = resolveParams(await params);
   const service = await getServiceBySlug(slug, { language });
   return buildMetadataFromYoast(service, { fallbackTitle: slug });
 }
 
 export async function renderServicePage(params, language) {
+  if (!isLanguageEnabled(language)) notFound();
+
   const { slug } = resolveParams(await params);
   if (!slug) notFound();
 
@@ -580,12 +599,16 @@ export async function renderServicePage(params, language) {
 }
 
 export async function generateProductMetadata(params, language) {
+  if (!isLanguageEnabled(language)) notFound();
+
   const { slug } = resolveParams(await params);
   const product = await getProductBySlug(slug, { language });
   return buildMetadataFromYoast(product, { fallbackTitle: slug });
 }
 
 export async function renderProductPage(params, language) {
+  if (!isLanguageEnabled(language)) notFound();
+
   const { slug } = resolveParams(await params);
   if (!slug) notFound();
 
@@ -631,6 +654,8 @@ export async function renderProductPage(params, language) {
 }
 
 export async function generateProductCategoryStaticParams(language) {
+  if (!isLanguageEnabled(language)) return [];
+
   const categories = await getProductCategories({ language });
 
   return categories
@@ -641,6 +666,8 @@ export async function generateProductCategoryStaticParams(language) {
 }
 
 export async function generateProductCategoryMetadata(params, language) {
+  if (!isLanguageEnabled(language)) notFound();
+
   const { slug } = await params;
   const category = await getProductCategoryBySlug(slug, { language });
 
@@ -651,6 +678,8 @@ export async function generateProductCategoryMetadata(params, language) {
 }
 
 export async function renderProductCategoryPage(params, language) {
+  if (!isLanguageEnabled(language)) notFound();
+
   const { slug } = await params;
 
   const categories = await getProductCategories({ language });
@@ -744,17 +773,23 @@ export async function renderProductCategoryPage(params, language) {
 }
 
 export async function generateCaseStudyStaticParams(language) {
+  if (!isLanguageEnabled(language)) return [];
+
   const cases = await getCaseStudies({ language });
   return (Array.isArray(cases) ? cases : []).map((c) => ({ slug: c.slug }));
 }
 
 export async function generateCaseStudyMetadata(params, language) {
+  if (!isLanguageEnabled(language)) notFound();
+
   const { slug } = resolveParams(await params);
   const caseStudy = await getCaseStudyBySlug(slug, { language });
   return buildMetadataFromYoast(caseStudy, { fallbackTitle: slug });
 }
 
 export async function renderCaseStudyPage(params, language) {
+  if (!isLanguageEnabled(language)) notFound();
+
   const { slug } = resolveParams(await params);
   if (!slug) notFound();
 
@@ -797,17 +832,23 @@ export async function renderCaseStudyPage(params, language) {
 }
 
 export async function generateIndustryStaticParams(language) {
+  if (!isLanguageEnabled(language)) return [];
+
   const industries = await getIndustries({ language });
   return industries.map((industry) => ({ slug: industry.slug }));
 }
 
 export async function generateIndustryMetadata(params, language) {
+  if (!isLanguageEnabled(language)) notFound();
+
   const { slug } = resolveParams(await params);
   const industry = await getIndustryBySlug(slug, { language });
   return buildMetadataFromYoast(industry, { fallbackTitle: slug });
 }
 
 export async function renderIndustryPage(params, language) {
+  if (!isLanguageEnabled(language)) notFound();
+
   const { slug } = resolveParams(await params);
   if (!slug) notFound();
 
